@@ -1,0 +1,124 @@
+const express = require('express');
+const app = express();
+const path = require("path");
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const expresssession = require('express-session');
+const flash = require('connect-flash');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+
+
+
+
+
+//lets require/import the mongodb native drivers.
+var mongodb = require('mongodb');
+
+//We need to work with "MongoClient" interface in order to connect to a mongodb server.
+var MongoClient = mongodb.MongoClient;
+
+// Connection URL. This is where your mongodb server is running.
+var url = 'mongodb://localhost:27017/usercom';
+
+// Use connect method to connect to the Server
+MongoClient.connect(url, function (err, db) {
+  if (err) {
+    console.log('Unable to connect to the mongoDB server. Error:', err);
+  } else {
+    //HURRAY!! We are connected. :)
+    //HURRAY!! We are connected. :)
+    console.log('Connection established to', url);
+
+    global.db = db;
+
+  }
+});
+
+const PUBLIC_SRC_PATH = path.resolve(__dirname, '../WebContent');
+
+global.appRoot = path.resolve(__dirname);
+
+
+app.set('views', path.join(PUBLIC_SRC_PATH, '/ui'));
+app.set('view engine', 'ejs');
+
+app.use(express.static(PUBLIC_SRC_PATH));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use(expresssession({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+
+app.listen(3000, function() {
+  console.log('listening on 3000')
+})
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+
+
+    // Get the documents collection
+    var User = global.db.collection('users');
+
+
+    User.findOne({ username: username }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!(user.password == password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+
+
+
+app.get('/', function(req, res) {
+
+  if (req.isAuthenticated())
+  {
+    res.render('index')
+  }
+  else
+  {
+    res.redirect('login');
+  }
+})
+
+app.post('/logout', function (req, res){
+  req.logOut();
+  res.render('login');
+});
+
+
+exports.passport = passport;
+exports.app = app;
+
+
+var controllerList = {};
+
+
+fs.readdirSync(path.join(__dirname, "controllers")).forEach(function (file) {
+    if (file.substr(-3) === ".js") {
+        var basePath = path.basename(file, ".js");
+        var Controller = require(`./controllers/${file}`);
+        controllerList[basePath] = new Controller[basePath]();
+        app.use(`/${basePath}`, controllerList[basePath].router);
+    }
+});

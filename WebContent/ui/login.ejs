@@ -1,0 +1,32 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="<%= global.appRoot %>/css/app.css" />
+
+    <!-- external scripts -->
+    <% include commonscripts.ejs %>
+
+    <!--- internal scripts --->
+    <script type="text/javascript" src="<%= global.appRoot %>/js/src/internal/login.js"></script>
+</head>
+  <body>
+    <div>
+      <div class="input-container">
+        <label>Username:</label>
+        <input id="uclogin_usernameinput" type="text" name="username" />
+        <br/>
+      </div>
+      <div class="input-container">
+        <label>Password:</label>
+        <input id="uclogin_passwordinput" type="password" name="password" />
+      </div>
+      <div class="input-container">
+        <input type="button"  id="uclogin_submitbtn" value="Submit" />
+      </div>
+    </div>
+    <a href="user/register">register if new user</a>
+  </body>
+  <script>
+    var uc_login  = new UC_LoginController();
+    uc_login.constructor();
+  </script>
+</html>
