@@ -1,0 +1,23 @@
+{
+  "name": "usercom",
+  "version": "1.0.0",
+  "description": "Customer Support Tool",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon NodeSrc/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "connect-flash": "^0.1.1",
+    "ejs": "^2.5.5",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "mongodb": "^2.2.20"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
