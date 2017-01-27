@@ -29,8 +29,15 @@ function UC_AJAXController()
   this.post = function(reqObj,successCallback)
   {
     var url = thisClass.getUrl(reqObj.endpoint);
-
-    $.post(url,reqObj.data).done(function(data,status,xhr)
+    
+    $.ajax({
+    	url:url,
+    	type:"POST",
+    	data:reqObj.data,
+		contentType:"application/json; charset=utf-8",
+		dataType:"json"
+		  
+    }).done(function(data,status,xhr)
     {
       successCallback(data,status,xhr);
 
@@ -50,6 +57,16 @@ function UC_AJAXController()
     }
 
     return url;
+  }
+  
+  this.call = function(endpoint,param,callback)
+  {
+	  var reqObj = {
+			   endpoint : endpoint,
+			   data : JSON.stringify(param),
+		 }
+	  
+	  thisClass.post(reqObj,callback);
   }
 
   this.ajaxError =  function(error)

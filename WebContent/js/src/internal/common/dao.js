@@ -23,20 +23,53 @@
  }
 
 
- function UC_User()
+ /**
+  * @desc Logged in user object
+  */
+ function UC_User() 
  {
-
-   var thisClass = this;
-
-   this.id = null;
-   this.username = null;
-   this.password = null;
-
-   this.cast = function(obj)
-   {
-      this.id = obj._id;  
-      this.username = obj.username;
-      this.password = obj.password;
-   }
-
- }
+ 	var thisClass = this;
+ 		
+ 	this.firstName = "";
+ 	this.lastName = "";
+ 	this.createDate = null;
+ 	this.username = "";
+ 	this.password = "";
+ 	this.company = "";
+ 	
+ 	this.cast = function(obj)
+ 	{
+ 		this.firstName = obj.firstName;
+ 		this.lastName = obj.lastName;
+ 		this.createDate = new Date(obj.createDate);
+ 		this.username = obj.username;
+ 		this.password = obj.password;
+ 		this.company = obj.company;
+ 	}
+ 	
+ };
+ 
+ /**
+  * @desc App Data object
+  */
+ function UC_App() 
+ {
+ 	var thisClass = this;
+ 		
+ 	this.id = "";
+ 	this.name = "";
+ 	this.clientid = "";
+ 	this.createDate = null;
+ 	this.creator = "";
+ 	
+ 	
+ 	this.cast = function(obj)
+ 	{
+ 		this.id = obj.id;
+ 	 	this.name = obj.name;
+ 	 	this.clientid = obj.clientid;
+ 	 	this.createDate = new Date(obj.createDate);
+ 	 	this.creator = obj.creator;
+ 	}
+ 	
+ };

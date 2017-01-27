@@ -7,8 +7,8 @@ const expresssession = require('express-session');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-
-
+const cookieParser = require('cookie-parser');
+const utils = require('./core/utils').utils;
 
 
 
@@ -37,13 +37,13 @@ MongoClient.connect(url, function (err, db) {
 
 const PUBLIC_SRC_PATH = path.resolve(__dirname, '../WebContent');
 
-global.appRoot = path.resolve(__dirname);
-
 
 app.set('views', path.join(PUBLIC_SRC_PATH, '/ui'));
 app.set('view engine', 'ejs');
 
 app.use(express.static(PUBLIC_SRC_PATH));
+app.use(cookieParser());
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(expresssession({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
@@ -78,7 +78,7 @@ passport.use(new LocalStrategy(
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
       }
-      if (!(user.password == password)) {
+      if (!(user.password == utils.encrypt(password))) {
         return done(null, false, { message: 'Incorrect password.' });
       }
       return done(null, user);
@@ -89,35 +89,20 @@ passport.use(new LocalStrategy(
 
 
 
-app.get('/', function(req, res) {
-
-  if (req.isAuthenticated())
-  {
-    res.render('index')
-  }
-  else
-  {
-    res.redirect('login');
-  }
-})
-
-app.post('/logout', function (req, res){
-  req.logOut();
-  res.render('login');
-});
-
-
 exports.passport = passport;
 exports.app = app;
 
 
+var viewRender =  require('./viewrenderer').ViewRenderer;
+var views = new viewRender();
+
 var controllerList = {};
 
 
-fs.readdirSync(path.join(__dirname, "controllers")).forEach(function (file) {
+fs.readdirSync(path.join(__dirname, "managers")).forEach(function (file) {
     if (file.substr(-3) === ".js") {
         var basePath = path.basename(file, ".js");
-        var Controller = require(`./controllers/${file}`);
+        var Controller = require(`./managers/${file}`);
         controllerList[basePath] = new Controller[basePath]();
         app.use(`/${basePath}`, controllerList[basePath].router);
     }
