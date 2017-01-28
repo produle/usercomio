@@ -1,0 +1,28 @@
+body
+{
+	width:100%;
+	height:100%;
+}
+
+.UC_UserRegistrationContainerCls
+{
+	width: 500px;
+    height: 600px;
+    overflow: hidden;
+    transform: translateX(-50%) translateY(-50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.input-container
+{
+  margin-top:10px;
+}
+
+form
+{
+  margin: 0 auto;
+  width: 300px;
+  margin-top: 300px;
+}

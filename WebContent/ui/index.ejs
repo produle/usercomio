@@ -3,13 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <title>MY APP</title>
+      <!-- external scripts -->
+    <% include commoncss.ejs %>
+    
+        <link rel="stylesheet" type="text/css" href="/css/internal/app.css" />
+    
+    
+    <% include commonscripts.ejs %>
+    
+    <script type="text/javascript" src="./js/src/internal/app.js"></script>
+ 	 <script type="text/javascript" src="./js/src/internal/main.js"></script>
+ 	 
 </head>
 <body>
-  Success !
+  
+  <div class="container">
+  		
+  		<div class="innerContainer">
+  			
+  			 <button type="button" class="btn btn-primary" id="uc_create_newapp_modalopen_btn">Create New App</button>
+  			 
+  			 <table class="table table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>App Id</th>
+						<th>App Name</th>
+						<th>Create Date</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody id="uc_apps_detail_table_body">
+					
+				</tbody>
+			</table>
 
-  <form action="/logout" method="post">
-      <input type="submit" value="logout" />
-  </form>
+			  <form action="/logout" method="post">
+			      <input type="submit" value="logout" />
+			  </form>
+  			
+  		</div>
+  		
+  
+  		
+  </div>
+ 
+ 	    <% include dialogs.ejs %>
+ 	    
+  <script>
+  	
+ 	
+  	
+  UC_UserSession.user = <%- JSON.stringify(user) %>
+ 	 
+  var mainController = new UC_MainController();
+  mainController.constructor();
+ 	 
+  
+  </script>
 
 </body>
 </html>

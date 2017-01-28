@@ -29,8 +29,7 @@ function UC_LoginController()
 
     var loginObj = {
         username : username,
-        password : password,
-        successCallback : thisClass.loginSuccess
+        password : password
     }
 
     thisClass.sendLoginRequest(loginObj);
@@ -43,34 +42,39 @@ function UC_LoginController()
   {
     if(loginObj.username && loginObj.password)
     {
-      var reqObj =  {
-          endpoint : 'login/validateuser',
-          data : {username:loginObj.username,password:loginObj.password}
-      }
-
-      UC_AJAX.post(reqObj,loginObj.successCallback);
+	    UC_AJAX.call('LoginManager/validateUser',{username:loginObj.username,password:loginObj.password},function(data,status,xhr)
+	      {
+	    	  if(data)
+	          {
+	    		  
+	    		  if(data.error)
+	    		  {
+	    			  alert(data.error)
+	    		  }
+	    		  else
+    			  {
+	    			var uc_user = new UC_User();
+	    				
+	  	            uc_user.cast(data);
+	  	
+	  	            UC_UserSession.user = uc_user;
+	  	
+	  	            location.href  = "/"
+    			  }
+	            
+	          }
+	
+	      });
+	      
+      
     }
     else
     {
         throw "username or password  was not provided."
     }
 
-  },
-
-  this.loginSuccess = function(data,status,xhr)
-  {
-
-      if(data)
-      {
-        var uc_user = new UC_User();
-
-        uc_user.cast(data);
-
-        UC_UserSession.user = uc_user;
-
-        location.href  = "/"
-      }
-
   }
+
+ 
 
 }
