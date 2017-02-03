@@ -13,10 +13,12 @@
     "body-parser": "^1.15.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
+    "cors": "^2.8.1",
     "ejs": "^2.5.5",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
-     "mongodb": "^2.2.20"
+    "express-useragent": "^1.0.6",
+    "mongodb": "^2.2.20"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
