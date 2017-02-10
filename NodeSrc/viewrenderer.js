@@ -68,6 +68,15 @@ class ViewRenderer
 		  
 		  
 		});
+		
+		
+		/*
+		 * @desc Renders Password Reset Page
+		 */
+		app.get('/passwordreset',function(req,res){
+			res.render('passwordreset');
+		});
+		
 
 	}
 	

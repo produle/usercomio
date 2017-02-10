@@ -7,6 +7,7 @@
 var express = require("express");
 var app = require("../server").app;
 var passport = require("../server").passport;
+var utils = require("../core/utils").utils;
 
 
 class LoginManager {
@@ -22,7 +23,9 @@ class LoginManager {
 
         // Route definitions for this controller
         this.router.post("/validateUser", (req,res) => { this.validateUser(req,res) });
-        
+        this.router.post("/forgotPassword", (req,res) => { this.forgotPassword(req,res) });
+        this.router.post("/resetPassword", (req,res) => { this.resetPassword(req,res) });
+                
         
     }
 
@@ -54,6 +57,73 @@ class LoginManager {
             
       })(req, res);
   
+    }
+    
+    /*
+     * @desc Handles forgot password and inserts the token that was sent by email
+     */
+    forgotPassword(req,res)
+    {
+    	 // Get the documents collection
+        var userCollection = global.db.collection('users');
+
+        var email = req.body.email;
+        var token = req.body.token;
+        
+        userCollection.findOne({ _id: email },function(err,user)
+        {
+      	  if(err)
+      	  {
+      		  return res.send({status:"failure"})
+      	  }
+      	  
+      	  if(user)
+      	  {
+      		    userCollection.update({_id:email},{$set:{token:token}},function(err,count,result)
+	      		{
+      		    	if(err)
+      		    	{
+      		    		 return res.send({status:"failure"})
+      		    	}
+      		    	
+      		    	 return res.send({status:"success"});
+	      		})
+      	  }
+        });
+    }
+    
+    /*
+     * @desc Updates the new password
+     */
+    resetPassword(req,res)
+    {
+    	 // Get the documents collection
+        var userCollection = global.db.collection('users');
+
+        var password = req.body.password;
+        var token = req.body.token;
+        
+        userCollection.findOne({ token: token },function(err,user)
+        {
+      	  if(err)
+      	  {
+      		  return res.send({status:"failure"})
+      	  }
+      	  
+      	  if(user)
+    	  {
+    		    userCollection.update({ _id: user._id },{$set:{token:null,password:utils.encrypt(password)}},function(err,count,result)
+	      		{
+    		    	if(err)
+    		    	{
+    		    		 return res.send({status:"failure"})
+    		    	}
+    		    	
+    		    	 return res.send({status:"success"});
+	      		})
+    	  }
+      	  
+        });
     }
 
 }

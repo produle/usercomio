@@ -9,13 +9,13 @@ import {
   Example:
 
   ```javascript
-  let promise1 = new Promise(function(resolve, reject){
+  var promise1 = new Promise(function(resolve, reject){
     setTimeout(function(){
       resolve('promise 1');
     }, 200);
   });
 
-  let promise2 = new Promise(function(resolve, reject){
+  var promise2 = new Promise(function(resolve, reject){
     setTimeout(function(){
       resolve('promise 2');
     }, 100);
@@ -34,13 +34,13 @@ import {
   promise will become rejected:
 
   ```javascript
-  let promise1 = new Promise(function(resolve, reject){
+  var promise1 = new Promise(function(resolve, reject){
     setTimeout(function(){
       resolve('promise 1');
     }, 200);
   });
 
-  let promise2 = new Promise(function(resolve, reject){
+  var promise2 = new Promise(function(resolve, reject){
     setTimeout(function(){
       reject(new Error('promise 2'));
     }, 100);
@@ -69,14 +69,16 @@ import {
 */
 export default function race(entries) {
   /*jshint validthis:true */
-  let Constructor = this;
+  var Constructor = this;
 
   if (!isArray(entries)) {
-    return new Constructor((_, reject) => reject(new TypeError('You must pass an array to race.')));
+    return new Constructor(function(resolve, reject) {
+      reject(new TypeError('You must pass an array to race.'));
+    });
   } else {
-    return new Constructor((resolve, reject) => {
-      let length = entries.length;
-      for (let i = 0; i < length; i++) {
+    return new Constructor(function(resolve, reject) {
+      var length = entries.length;
+      for (var i = 0; i < length; i++) {
         Constructor.resolve(entries[i]).then(resolve, reject);
       }
     });

@@ -30,6 +30,7 @@ function needsNew() {
   throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
 }
 
+export default Promise;
 /**
   Promise objects represent the eventual result of an asynchronous operation. The
   primary way of interacting with a promise is through its `then` method, which
@@ -63,7 +64,7 @@ function needsNew() {
   ------------
 
   ```js
-  let promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function(resolve, reject) {
     // on success
     resolve(value);
 
@@ -87,7 +88,7 @@ function needsNew() {
   ```js
   function getJSON(url) {
     return new Promise(function(resolve, reject){
-      let xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpRequest();
 
       xhr.open('GET', url);
       xhr.onreadystatechange = handler;
@@ -133,7 +134,7 @@ function needsNew() {
   Useful for tooling.
   @constructor
 */
-export default function Promise(resolver) {
+function Promise(resolver) {
   this[PROMISE_ID] = nextId();
   this._result = this._state = undefined;
   this._subscribers = [];
@@ -244,7 +245,7 @@ Promise.prototype = {
   Synchronous Example
 
   ```javascript
-  let result;
+  var result;
 
   try {
     result = findResult();
@@ -282,7 +283,7 @@ Promise.prototype = {
   Synchronous Example
 
   ```javascript
-  let author, books;
+  var author, books;
 
   try {
     author = findAuthor();
@@ -377,7 +378,7 @@ Promise.prototype = {
   Useful for tooling.
   @return {Promise}
 */
-  catch(onRejection) {
+  'catch': function(onRejection) {
     return this.then(null, onRejection);
   }
 };

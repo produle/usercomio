@@ -17,6 +17,7 @@ function UC_LoginController()
   this.bindUIEvents = function()
   {
     $('#uclogin_submitbtn').on('click',thisClass.handleLoginBtnAction);
+    $('#uclogin_forgotpasswrodbtn').on('click',thisClass.handleForgotPasswordBtnAction)
   }
 
   /*
@@ -33,7 +34,7 @@ function UC_LoginController()
     }
 
     thisClass.sendLoginRequest(loginObj);
-  }
+  };
 
   /*
   *  @desc Makes an ajax request to login function
@@ -72,7 +73,45 @@ function UC_LoginController()
     {
         throw "username or password  was not provided."
     }
-
+    
+    
+  };
+  
+  /*
+   * @desc Handles forgot password btn click event
+   */
+  this.handleForgotPasswordBtnAction = function()
+  {
+  	var email = $('#uclogin_usernameinput').val();
+  	var token = UC_Utils.guidGenerator();
+  	
+  	
+  	if($.trim(email).length == 0)
+  	{
+  		alert('Email is required !')
+  		return;
+  	}
+  	
+  	 UC_AJAX.call('LoginManager/forgotPassword',{email:email,token:token},function(data,status,xhr)
+  		      {
+  		    	  if(data)
+  		          {
+  		    		  if(data.status == "success")
+  		    		  {
+  		    			  alert('Check E-mail for resetting Password.  (If not received check Spam folder) ');
+  		    			  return;
+  		    		  }
+  		    		  
+  		    		  if(data.status == "failure")
+  		    		  {
+  		    			  alert('An error accured !');
+		    			  return;
+  		    		  }
+  		    		  
+  		          }
+  		      
+  		      });
+  		          
   }
 
  

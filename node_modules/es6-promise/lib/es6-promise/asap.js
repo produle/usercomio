@@ -1,6 +1,6 @@
-let len = 0;
-let vertxNext;
-let customSchedulerFn;
+var len = 0;
+var vertxNext;
+var customSchedulerFn;
 
 export var asap = function asap(callback, arg) {
   queue[len] = callback;
@@ -26,13 +26,13 @@ export function setAsap(asapFn) {
   asap = asapFn;
 }
 
-const browserWindow = (typeof window !== 'undefined') ? window : undefined;
-const browserGlobal = browserWindow || {};
-const BrowserMutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
-const isNode = typeof self === 'undefined' && typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
+var browserWindow = (typeof window !== 'undefined') ? window : undefined;
+var browserGlobal = browserWindow || {};
+var BrowserMutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
+var isNode = typeof self === 'undefined' && typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
 
 // test for web worker but not in IE10
-const isWorker = typeof Uint8ClampedArray !== 'undefined' &&
+var isWorker = typeof Uint8ClampedArray !== 'undefined' &&
   typeof importScripts !== 'undefined' &&
   typeof MessageChannel !== 'undefined';
 
@@ -40,7 +40,9 @@ const isWorker = typeof Uint8ClampedArray !== 'undefined' &&
 function useNextTick() {
   // node version 0.10.x displays a deprecation warning when nextTick is used recursively
   // see https://github.com/cujojs/when/issues/410 for details
-  return () => process.nextTick(flush);
+  return function() {
+    process.nextTick(flush);
+  };
 }
 
 // vertx
@@ -51,35 +53,36 @@ function useVertxTimer() {
 }
 
 function useMutationObserver() {
-  let iterations = 0;
-  const observer = new BrowserMutationObserver(flush);
-  const node = document.createTextNode('');
+  var iterations = 0;
+  var observer = new BrowserMutationObserver(flush);
+  var node = document.createTextNode('');
   observer.observe(node, { characterData: true });
 
-  return () => {
+  return function() {
     node.data = (iterations = ++iterations % 2);
   };
 }
 
 // web worker
 function useMessageChannel() {
-  const channel = new MessageChannel();
+  var channel = new MessageChannel();
   channel.port1.onmessage = flush;
-  return () => channel.port2.postMessage(0);
+  return function () {
+    channel.port2.postMessage(0);
+  };
 }
 
 function useSetTimeout() {
-  // Store setTimeout reference so es6-promise will be unaffected by
-  // other code modifying setTimeout (like sinon.useFakeTimers())
-  const globalSetTimeout = setTimeout;
-  return () => globalSetTimeout(flush, 1);
+  return function() {
+    setTimeout(flush, 1);
+  };
 }
 
-const queue = new Array(1000);
+var queue = new Array(1000);
 function flush() {
-  for (let i = 0; i < len; i+=2) {
-    let callback = queue[i];
-    let arg = queue[i+1];
+  for (var i = 0; i < len; i+=2) {
+    var callback = queue[i];
+    var arg = queue[i+1];
 
     callback(arg);
 
@@ -92,8 +95,8 @@ function flush() {
 
 function attemptVertx() {
   try {
-    const r = require;
-    const vertx = r('vertx');
+    var r = require;
+    var vertx = r('vertx');
     vertxNext = vertx.runOnLoop || vertx.runOnContext;
     return useVertxTimer();
   } catch(e) {
@@ -101,7 +104,7 @@ function attemptVertx() {
   }
 }
 
-let scheduleFlush;
+var scheduleFlush;
 // Decide what async method to use to triggering processing of queued callbacks:
 if (isNode) {
   scheduleFlush = useNextTick();
