@@ -40,7 +40,37 @@
 				   
 				   return parentObj;
 			}
-	}
+	};
+	
+	var cookie = 
+	{
+			 createCookie : function(name,value,days) {
+			    var expires = "";
+			    if (days) {
+			        var date = new Date();
+			        date.setTime(date.getTime() + (days*24*60*60*1000));
+			        expires = "; expires=" + date.toUTCString();
+			    }
+			    document.cookie = name + "=" + value + expires + "; path=/";
+			},
+
+			 readCookie : function(name) {
+			    var nameEQ = name + "=";
+			    var ca = document.cookie.split(';');
+			    for(var i=0;i < ca.length;i++) {
+			        var c = ca[i];
+			        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+			        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+			    }
+			    return null;
+			},
+
+			 eraseCookie: function(name) 
+			 {
+			    createCookie(name,"",-1);
+			 }
+
+	};
 	
 	/*
 	 * AJAX Utility
@@ -96,7 +126,7 @@
 						window.console && console.log(e);
 					}
 				},
-	}
+	};
 	
 	/*
 	 * UserCom Library object
@@ -115,13 +145,21 @@
 					return;
 				}
 				
+				var requestObj = {
+						appid : this.appid,
+						userdata : this.userData,
+						properties:properties,
+						eventname:eventName,
+						uid:utils.guidGenerator()
+				}
+				
+				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/event', JSON.stringify(requestObj),function(data){
+					console.log(data);
+				})
 			}
 			
-	}
+	};
 	
-	/*
-	 * 
-	 */
 	var Usercom = {
 			
 			init : function(appid,userComSettings)
@@ -140,8 +178,7 @@
 				var requestObj = {
 						appid : appid,
 						userdata : userComSettings,
-						platform : "web",
-						uid : utils.guidGenerator()
+						uid:utils.guidGenerator()
 				}
 				
 				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/ping', JSON.stringify(requestObj),function(data){
@@ -150,12 +187,52 @@
 				
 				window.Usercom = UsercomLib;
 				
+				if(!cookie.readCookie("usercomio_session"))
+				{
+					cookie.createCookie("usercomio_session",utils.guidGenerator());
+				}
 				
+				this.bindGlobalErrorHandler(UsercomLib);
+				
+			},
+			
+			bindGlobalErrorHandler : function(UsercomLib)
+			{
+				var oldOnError = window.onerror;
+
+				window.onerror = function(msg, url, lineNo, columnNo, error)
+				{
+					if(oldOnError) oldOnError.apply(this, arguments);	// Call any previously assigned handler
+					
+					 var message = [
+					                'Message: ' + msg,
+					                'URL: ' + url,
+					                'Line: ' + lineNo,
+					                'Column: ' + columnNo,
+					                'Error object: ' + JSON.stringify(error)
+					            ].join(' - ');
+
+
+					var requestObj = {
+							appid : UsercomLib.appid,
+							userdata : UsercomLib.userData,
+							errormsg : message,
+							uid:utils.guidGenerator()
+					}
+					
+					xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/error', JSON.stringify(requestObj),function(data){
+						console.log(data);
+					});
+					
+					return false;
+				}
 			}
 	}
 	
 	
 	window.Usercom = Usercom;
+	
+	
 	
 	
 	

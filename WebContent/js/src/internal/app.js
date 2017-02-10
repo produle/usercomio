@@ -283,4 +283,9 @@ function UC_AppController()
 		
 		return msg;
 	}
+	
+	this.add = function()
+	{
+		err();
+	}
 }

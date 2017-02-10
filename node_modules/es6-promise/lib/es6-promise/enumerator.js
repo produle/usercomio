@@ -56,19 +56,20 @@ function validationError() {
 };
 
 Enumerator.prototype._enumerate = function() {
-  let { length, _input } = this;
+  var length  = this.length;
+  var input   = this._input;
 
-  for (let i = 0; this._state === PENDING && i < length; i++) {
-    this._eachEntry(_input[i], i);
+  for (var i = 0; this._state === PENDING && i < length; i++) {
+    this._eachEntry(input[i], i);
   }
 };
 
 Enumerator.prototype._eachEntry = function(entry, i) {
-  let c = this._instanceConstructor;
-  let { resolve } = c;
+  var c = this._instanceConstructor;
+  var resolve = c.resolve;
 
   if (resolve === originalResolve) {
-    let then = getThen(entry);
+    var then = getThen(entry);
 
     if (then === originalThen &&
         entry._state !== PENDING) {
@@ -77,11 +78,11 @@ Enumerator.prototype._eachEntry = function(entry, i) {
       this._remaining--;
       this._result[i] = entry;
     } else if (c === Promise) {
-      let promise = new c(noop);
+      var promise = new c(noop);
       handleMaybeThenable(promise, entry, then);
       this._willSettleAt(promise, i);
     } else {
-      this._willSettleAt(new c(resolve => resolve(entry)), i);
+      this._willSettleAt(new c(function(resolve) { resolve(entry); }), i);
     }
   } else {
     this._willSettleAt(resolve(entry), i);
@@ -89,7 +90,7 @@ Enumerator.prototype._eachEntry = function(entry, i) {
 };
 
 Enumerator.prototype._settledAt = function(state, i, value) {
-  let { promise } = this;
+  var promise = this.promise;
 
   if (promise._state === PENDING) {
     this._remaining--;
@@ -107,8 +108,11 @@ Enumerator.prototype._settledAt = function(state, i, value) {
 };
 
 Enumerator.prototype._willSettleAt = function(promise, i) {
-  let enumerator = this;
+  var enumerator = this;
 
-  subscribe(promise, undefined, value => enumerator._settledAt(FULFILLED, i, value),
-                               reason => enumerator._settledAt(REJECTED, i, reason));
+  subscribe(promise, undefined, function(value) {
+    enumerator._settledAt(FULFILLED, i, value);
+  }, function(reason) {
+    enumerator._settledAt(REJECTED, i, reason);
+  });
 };

@@ -12,6 +12,7 @@ var useragent = require('express-useragent');
 var BrowserInfo = require("../dao/BrowserInfo").BrowserInfo;
 var GeoLocation = require("../dao/GeoLocation").GeoLocation;
 var VisitorMetaInfo = require("../dao/VisitorMetaInfo").VisitorMetaInfo;
+var utils = require("../core/utils.js").utils;
 
 class VisitorTrackingManager {
 
@@ -26,6 +27,8 @@ class VisitorTrackingManager {
 
         
         this.router.post("/ping",(req, res) => { this.handlePing(req,res); });
+        this.router.post("/event",(req, res) => { this.handleEvents(req,res); });
+        this.router.post("/error",(req, res) => { this.handleError(req,res); });
         
     }
   	
@@ -39,6 +42,8 @@ class VisitorTrackingManager {
   		var visitorDetail = {};
   		
   		var uid = null;
+  		
+  		var sessioncookie = req.cookies["usercomio_session"];
   		
   		if(!req.body.userdata.email || req.body.userdata.email.length == 0)
   		{
@@ -55,8 +60,22 @@ class VisitorTrackingManager {
   		{
   			uid = req.body.userdata.email;
   		}
+  	
+  		
   		
   		visitorDetail["_id"] = uid;
+  		
+  		if(!sessioncookie)
+  		{
+  			visitorDetail["sessionid"] = utils.guidGenerator();
+  		}
+  		else
+  		{
+  			visitorDetail["sessionid"] = sessioncookie;
+  		}
+  		
+  		
+  		
   		
   		var browserInfo = new BrowserInfo();
   		var geolocation = new GeoLocation();
@@ -66,14 +85,11 @@ class VisitorTrackingManager {
   		browserInfo.version =  agent.version;
   		browserInfo.os =  agent.os;
   		browserInfo.platform= agent.platform;
+  		browserInfo.browserlanguagae = req.headers["accept-language"].split(',')[0];
   		
-  		visitorMetaInfo.firstseen = new Date();
-  		visitorMetaInfo.lastseen = new Date();
-  		visitorMetaInfo.websessions = 0;
-		
-  		visitorDetail["agentinfo"]  = browserInfo;
+  		
+		visitorDetail["agentinfo"]  = browserInfo;
   		visitorDetail["geolocationinfo"]  = geolocation;
-  		visitorDetail["visitormetainfo"]  = visitorMetaInfo;
   		visitorDetail["visitordata"]  = req.body.userdata;
   		
   		
@@ -92,8 +108,11 @@ class VisitorTrackingManager {
       	  
       	  if(visitor)
       	  {
-      		  console.log(visitor.visitormetainfo.websessions);
-      		  	var websession = Number(visitor.visitormetainfo.websessions) + 1;
+      	  		if(!sessioncookie)
+	      		{
+      	  			res.cookie('usercomio_session',visitorDetail["sessionid"], { httpOnly: true });
+	      		}
+      	  		
       		  	var lastseen = new Date();
       		  	
       		  	
@@ -102,7 +121,7 @@ class VisitorTrackingManager {
       		  		visitorDetail["visitordata"][key] = req.body.userdata[key];
       		  	}
       		  	
-  		  		visitorCollection.update({_id:uid},{$set:{'visitormetainfo.websessions':websession,'visitormetainfo.lastseen':lastseen,visitordata:visitorDetail["visitordata"]}},function(err,count,result)
+  		  		visitorCollection.update({_id:uid},{$set:{agentinfo:browserInfo,'visitormetainfo.lastseen':lastseen,visitordata:visitorDetail["visitordata"]}},function(err,count,result)
 	      		{
 	  		  		if (err)
 	  	            {
@@ -116,6 +135,13 @@ class VisitorTrackingManager {
       	  }
       	  else
       	  {
+      		visitorMetaInfo.firstseen = new Date();
+      		visitorMetaInfo.lastseen = new Date();
+      		
+      		visitorDetail["visitormetainfo"]  = visitorMetaInfo;  
+      		
+      		res.cookie('usercomio_session',visitorDetail["sessionid"], { httpOnly: true });
+      		
       		visitorCollection.insert([visitorDetail], function (err, result) 
                 {
       	            if (err)
@@ -135,7 +161,111 @@ class VisitorTrackingManager {
         });
   		
        
-  	} 
+  	}
+  	
+  	/*
+  	 * @desc Handles events
+  	 */
+  	handleEvents(req,res)
+  	{
+  		var uid = null;
+  		
+  		if(!req.body.userdata.email || req.body.userdata.email.length == 0)
+  		{
+  			if(!req.body.userdata.userid || req.body.userdata.userid.length == 0)
+  			{
+  				return res.send({status:'failure',msg:'Either email or userid should be provided'})
+  			}
+  			else
+  			{
+  				uid = req.body.userdata.userid
+  			}
+  		}
+  		else
+  		{
+  			uid = req.body.userdata.email;
+  		}
+  		
+  		var visitorEventDetail = {};
+  		
+  		visitorEventDetail["_id"] =  req.body.uid;
+  		visitorEventDetail["sessionid"] = req.cookies["usercomio_session"];
+  		visitorEventDetail["appid"] =  req.body.appid;
+  		visitorEventDetail["createdate"] = new Date();
+  		visitorEventDetail["userid"]  = uid;
+  		visitorEventDetail["eventname"] = req.body.eventname;
+  		visitorEventDetail["eventproperties"] = req.body.properties;
+  		
+  		
+  		
+  		
+  		// Get the documents collection
+        var visitorEventCollection = global.db.collection('visitorevents');
+
+        visitorEventCollection.insert([visitorEventDetail], function (err, result) 
+                {
+      	            if (err)
+      	            {
+      	            	res.status(500);
+      	      		  	return res.send({status:'failure'});
+      	            }
+      	            else
+      	            {
+      	            	return res.send({status:'success'});
+      	            }
+      	            
+      	           
+      	        });
+  		
+  	}
+  	
+  	handleError(req,res)
+  	{
+         var uid = null;
+  		
+  		if(!req.body.userdata.email || req.body.userdata.email.length == 0)
+  		{
+  			if(!req.body.userdata.userid || req.body.userdata.userid.length == 0)
+  			{
+  				return res.send({status:'failure',msg:'Either email or userid should be provided'})
+  			}
+  			else
+  			{
+  				uid = req.body.userdata.userid
+  			}
+  		}
+  		else
+  		{
+  			uid = req.body.userdata.email;
+  		}
+  		
+  		var visitorPageErrorDetail = {};
+  		
+  		visitorPageErrorDetail["_id"] =  req.body.uid;
+  		visitorPageErrorDetail["sessionid"] = req.cookies["usercomio_session"];
+  		visitorPageErrorDetail["appid"] =  req.body.appid;
+  		visitorPageErrorDetail["occuredon"] = new Date();
+  		visitorPageErrorDetail["userid"]  = uid;
+  		visitorPageErrorDetail["error"] = req.body.errormsg;
+  		
+  		// Get the documents collection
+        var visitorPageErrorCollection = global.db.collection('visitorpageerror');
+
+        visitorPageErrorCollection.insert([visitorPageErrorDetail], function (err, result) 
+                {
+      	            if (err)
+      	            {
+      	            	res.status(500);
+      	      		  	return res.send({status:'failure'});
+      	            }
+      	            else
+      	            {
+      	            	return res.send({status:'success'});
+      	            }
+      	            
+      	           
+      	        });
+  	}
   
   	
 }
