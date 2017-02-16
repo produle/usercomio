@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MY APP</title>
+  <title>Usercom</title>
       <!-- external scripts -->
     <% include commoncss.ejs %>
     
@@ -16,34 +16,14 @@
  	 
 </head>
 <body>
-  
-  <div class="container">
-  		
-  		<div class="innerContainer">
-  			
-  			 <button type="button" class="btn btn-primary" id="uc_create_newapp_modalopen_btn">Create New App</button>
-  			 
-  			 <table class="table table-striped">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>App Id</th>
-						<th>App Name</th>
-						<th>Create Date</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody id="uc_apps_detail_table_body">
-					
-				</tbody>
-			</table>
 
-			  <form action="/logout" method="post">
-			      <input type="submit" value="logout" />
-			  </form>
-  			
-  		</div>
+    <% include navigation.ejs %>
+
+
+  <div class="container">
+
   		
+  		<% include app/app.ejs %>
   
   		
   </div>

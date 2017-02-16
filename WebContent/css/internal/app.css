@@ -4,12 +4,100 @@ body
 	height:100%;
 }
 
-.innerContainer
-{
-	margin:10px;
-}
-
 .ucapp_editbtncls,.ucapp_deletebtncls
 {
 	cursor:pointer;
+}
+
+.navbar-brand>img
+{
+    display: inline-block;
+    margin-top: -7px;
+    margin-right: 20px;
+}
+
+.btn:focus
+{
+    outline: none !important;
+}
+
+.uc_mt_small
+{
+    margin-top: 10px;
+}
+
+.uc_mt_medium
+{
+    margin-top: 30px;
+}
+
+.uc_mt_large
+{
+    margin-top: 50px;
+}
+
+.uc_table thead tr
+{
+    background-color: #666;
+    color: #FFF;
+}
+
+.uc_table_input_control
+{
+    width: 50px;
+    text-align: center;
+}
+
+.uc_tile
+{
+    height: 100px;
+    background-color: #e7e7e7;
+    color: #777;
+    cursor: pointer;
+}
+
+.uc_tile_heading
+{
+    font-size: 18px;
+    margin: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.uc_tile_value
+{
+    font-size: 49px;
+    text-align: right;
+    margin: 15px;
+}
+
+.uc_tile_primary
+{
+    background-color: #428bca;
+    color: #FFF;
+}
+
+.uc_tile_info
+{
+    background-color: #5bc0de;
+    color: #FFF;
+}
+
+.uc_tile_success
+{
+    background-color: #5cb85c;
+    color: #FFF;
+}
+
+.uc_tile_warning
+{
+    background-color: #ffbb33;
+    color: #FFF;
+}
+
+.uc_tile_danger
+{
+    background-color: #d9534f;
+    color: #FFF;
 }

@@ -51,7 +51,7 @@ class ViewRenderer
 		 /*
 		 * @desc Clears all cookies and renders login page
 		 */
-		app.post('/logout', function (req, res){
+		app.get('/logout', function (req, res){
 		  
 			req.logOut();
 			

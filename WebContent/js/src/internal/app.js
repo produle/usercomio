@@ -10,6 +10,8 @@ function UC_AppController()
 	var thisClass = this;
 	
 	this.apps = [];
+
+    this.currentAppId = null;
 	
 	this.constructor = function()
 	{
@@ -18,7 +20,7 @@ function UC_AppController()
 	
 	this.bindUIEvents = function()
 	{
-		$('#uc_create_newapp_modalopen_btn').on('click',function(){
+		$(document).on('click','#uc_create_newapp_modalopen_btn',function(){
 			$('#uc_newapp_creation_modal').modal('show')
 		});
 		
@@ -32,6 +34,11 @@ function UC_AppController()
 		})
 		
 		thisClass.getAllUserApps();
+
+        $(".uc_tab_data_container").hide();
+        $("#uc_tab_data_dashboard").show();
+
+        $(".uc_tab_trigger").on("click",thisClass.toggleTabs);
 	}
 	
 	/*
@@ -51,6 +58,8 @@ function UC_AppController()
 				{
 					thisClass.apps = data.status;
 					thisClass.listApps(thisClass.apps);
+
+                    thisClass.currentAppId = thisClass.apps[0].id;
 				}
 			}
 		});
@@ -90,7 +99,8 @@ function UC_AppController()
 					 thisClass.apps.push(data.status);
 					 thisClass.listApps([data.status]);
 					 $('#uc_newapp_creation_modal').modal('hide');
-					 
+
+                     thisClass.currentAppId = thisClass.apps[0].id;
 				 }
 				
 			});
@@ -107,27 +117,15 @@ function UC_AppController()
 	 */
 	this.listApps = function(apps)
 	{
-		var ele = $('#uc_apps_detail_table_body');
-		
-		for(var i=0;i<apps.length;i++)
-		{
-			var app = apps[i];
-			
-			var totaltr = ele.find('tr').length;
-			
-			var htmlTblTr = "<tr id='app_"+app.id+"'>"+
-							"<th scope='row'>"+ (totaltr + 1) +"</th>"+
-							"<td class='ucapp_idcls'>"+app.id+"</td>"+
-							"<td class='ucapp_namecls'>"+app.name+"</td>"+
-							"<td class='ucapp_createcls'>"+moment(app.createDate).format("YYYY-MM-DD")+"</td>"+
-							"<td><span class='ucapp_editbtncls' data-appid='"+app.id+"' data-appname='"+app.name+"' >Edit</span> <span  data-appid='"+app.id+"' data-appname='"+app.name+"'  class='ucapp_deletebtncls' >Delete</span></td>"+
-							"</tr>";
-			
-			ele.append(htmlTblTr);
-			//Todo Change to each element
-			thisClass.bindAppDetailModificationOperationEvents();
-			
-		}
+        var list = {appList:apps};
+
+        rivets.bind(
+            document.querySelector('#uc_app_list'), {
+                list: list
+            }
+        );
+
+        thisClass.bindAppDetailModificationOperationEvents();
 		
 	}
 	
@@ -288,4 +286,16 @@ function UC_AppController()
 	{
 		err();
 	}
+
+    /**
+     * @desc Toggles between tabs. This is a global function, not specific to specific tab group
+     */
+    this.toggleTabs = function()
+    {
+        $("."+$(this).attr("data-tabgroup-class")).hide();
+        $("#"+$(this).attr("data-tabgroup-tabid")).show();
+
+        $(this).closest(".btn-group").find(".btn").removeClass("active");
+        $(this).addClass("active");
+    };
 }
