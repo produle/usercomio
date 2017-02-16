@@ -14,5 +14,17 @@ function UC_MainController()
 	this.constructor = function()
 	{
 		thisClass.appController.constructor();
+
+        rivets.bind(
+            document.querySelector('#uc_currentuser_name'), {
+                currentUserName: UC_UserSession.user.firstName+" "+UC_UserSession.user.lastName
+            }
+        );
+
+        rivets.bind(
+            document.querySelector('#uc_currentapp_name'), {
+                currentAppName: "Select an App";//thisClass.appController.currentAppId
+            }
+        );
 	}
 }
