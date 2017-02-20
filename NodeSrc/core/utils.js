@@ -1,3 +1,10 @@
+/**
+ * Copyright - A Produle Systems Private Limited. All Rights Reserved.
+ *
+ * @desc Common Utility functions shared across classes
+ *
+ */
+
 var crypto = require('crypto');
 
 var utils = {

@@ -22,10 +22,10 @@ function UC_DashboardController()
 	this.getAllVisitors = function()
 	{
 
-        if(mainController.appController.currentAppId)
+        if(uc_main.appController.currentAppId)
         {
 
-            UC_AJAX.call('DashboardManager/visitorlist',{appid:mainController.appController.currentAppId},function(data,status,xhr){
+            UC_AJAX.call('DashboardManager/visitorlist',{appid:uc_main.appController.currentAppId},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {

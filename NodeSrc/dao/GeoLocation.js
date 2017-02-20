@@ -1,7 +1,7 @@
 /**
  * Copyright - A Produle Systems Private Limited. All Rights Reserved.
- * @desc Geolocation of the IP
- * Data  Objects (DAO) for server side processing
+ *
+ * @desc Geolocation of the IP, Data  Objects (DAO) for server side processing
  *
  */
 

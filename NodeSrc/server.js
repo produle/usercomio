@@ -1,3 +1,10 @@
+/**
+ * Copyright - A Produle Systems Private Limited. All Rights Reserved.
+ *
+ * @desc The main server file that runs the application and handles all the requests
+ *
+ */
+
 const express = require('express');
 const app = express();
 const path = require("path");
