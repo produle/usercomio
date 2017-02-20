@@ -12,10 +12,18 @@ function UC_AppController()
 	this.apps = [];
 
     this.currentAppId = null;
+
+    this.rivetAppNameObj = null;
 	
 	this.constructor = function()
 	{
 		this.bindUIEvents();
+
+        thisClass.rivetAppNameObj = rivets.bind(
+            document.querySelector('#uc_currentapp_name'), {
+                currentAppName: thisClass.currentAppId
+            }
+        );
 	}
 	
 	this.bindUIEvents = function()
@@ -37,8 +45,6 @@ function UC_AppController()
 
         $(".uc_tab_data_container").hide();
         $("#uc_tab_data_dashboard").show();
-
-        $(".uc_tab_trigger").on("click",thisClass.toggleTabs);
 	}
 	
 	/*
@@ -59,7 +65,7 @@ function UC_AppController()
 					thisClass.apps = data.status;
 					thisClass.listApps(thisClass.apps);
 
-                    thisClass.currentAppId = thisClass.apps[0].id;
+                    thisClass.switchApp(thisClass.apps[0]);
 				}
 			}
 		});
@@ -100,7 +106,7 @@ function UC_AppController()
 					 thisClass.listApps([data.status]);
 					 $('#uc_newapp_creation_modal').modal('hide');
 
-                     thisClass.currentAppId = thisClass.apps[0].id;
+                     thisClass.switchApp(thisClass.apps[0]);
 				 }
 				
 			});
@@ -288,14 +294,13 @@ function UC_AppController()
 	}
 
     /**
-     * @desc Toggles between tabs. This is a global function, not specific to specific tab group
+     * @desc Changes the appid and related data
      */
-    this.toggleTabs = function()
+    this.switchApp = function(app)
     {
-        $("."+$(this).attr("data-tabgroup-class")).hide();
-        $("#"+$(this).attr("data-tabgroup-tabid")).show();
+        thisClass.currentAppId = app.id;
+        thisClass.rivetAppNameObj.models.currentAppName = app.name;
 
-        $(this).closest(".btn-group").find(".btn").removeClass("active");
-        $(this).addClass("active");
+        mainController.dashboardController.getAllVisitors();
     };
 }

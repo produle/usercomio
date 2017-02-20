@@ -64,6 +64,7 @@ class VisitorTrackingManager {
   		
   		
   		visitorDetail["_id"] = uid;
+        visitorDetail["appid"] = req.body.appid;
   		
   		if(!sessioncookie)
   		{

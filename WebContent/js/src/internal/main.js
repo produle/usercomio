@@ -10,10 +10,12 @@ function UC_MainController()
 	var thisClass = this;
 	
 	this.appController = new UC_AppController();
+	this.dashboardController = new UC_DashboardController();
 	
 	this.constructor = function()
 	{
 		thisClass.appController.constructor();
+		thisClass.dashboardController.constructor();
 
         rivets.bind(
             document.querySelector('#uc_currentuser_name'), {
@@ -21,10 +23,19 @@ function UC_MainController()
             }
         );
 
-        rivets.bind(
-            document.querySelector('#uc_currentapp_name'), {
-                currentAppName: "Select an App";//thisClass.appController.currentAppId
-            }
-        );
-	}
+        $(".uc_tab_trigger").on("click",thisClass.toggleTabs);
+
+	};
+
+    /**
+     * @desc Toggles between tabs. This is a global function, not specific to specific tab group
+     */
+    this.toggleTabs = function()
+    {
+        $("."+$(this).attr("data-tabgroup-class")).hide();
+        $("#"+$(this).attr("data-tabgroup-tabid")).show();
+
+        $(this).closest(".btn-group").find(".btn").removeClass("active");
+        $(this).addClass("active");
+    };
 }
