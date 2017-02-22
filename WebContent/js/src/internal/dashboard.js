@@ -11,9 +11,30 @@ function UC_DashboardController()
 
 	this.visitors = [];
 
+    this.visitorListPageLimit = 10;
+
+    this.visitorListSkipIndex = 0;
+
+    this.visitorListLoaded = false;
+
+    this.rivetVisitorListObj = null;
+
 	this.constructor = function()
 	{
+        thisClass.rivetVisitorListObj = rivets.bind(
+            document.querySelector('#uc_visitor_list'), {
+                list: thisClass.visitors
+            }
+        );
 
+        $(window).scroll(function() {
+           if($(window).scrollTop() + $(window).height() == $(document).height()) {
+               if(!thisClass.visitorListLoaded)
+               {
+                   thisClass.getAllVisitors();
+               }
+           }
+        });
 	};
 
 	/*
@@ -25,7 +46,7 @@ function UC_DashboardController()
         if(uc_main.appController.currentAppId)
         {
 
-            UC_AJAX.call('DashboardManager/visitorlist',{appid:uc_main.appController.currentAppId},function(data,status,xhr){
+            UC_AJAX.call('DashboardManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {
@@ -33,12 +54,16 @@ function UC_DashboardController()
                 }
                 else
                 {
-                    if(data.status.length > 0)
+                    thisClass.visitors = thisClass.visitors.concat(data.status);
+                    thisClass.visitorListSkipIndex = thisClass.visitorListSkipIndex + data.status.length;
+
+                    if(data.status.length == 0)
                     {
-                        thisClass.visitors = data.status;
-                        thisClass.listVisitors();
-                        thisClass.listMetrics();
+                        thisClass.visitorListLoaded = true;
                     }
+
+                    thisClass.listVisitors();
+                    thisClass.listMetrics();
                 }
             });
         }
@@ -49,13 +74,8 @@ function UC_DashboardController()
 	 */
 	this.listVisitors = function()
 	{
-        var list = {visitorList:thisClass.visitors};
 
-        rivets.bind(
-            document.querySelector('#uc_visitor_list'), {
-                list: list
-            }
-        );
+        thisClass.rivetVisitorListObj.models.list = thisClass.visitors;
 
 	};
 

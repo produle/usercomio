@@ -8,19 +8,19 @@
                             <th class="text-center uc_table_input_control"><input type="checkbox" id="uc_users_list_selectall" /></th>
                             <th class="text-center">Name</th>
                             <th class="text-center">Email</th>
-                            <th class="text-center">Browser</th>
-                            <th class="text-center">Operating System</th>
-                            <th class="text-center">Location</th>
+                            <th class="text-center">Session</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr rv-each-visitor="list.visitorList">
+                        <tr rv-each-visitor="list">
                             <td class="text-center uc_table_input_control"><input type="checkbox" class="uc_users_list_selectentry" /></td>
-                            <td rv-text="visitor.visitordata.name"></td>
+                            <td>{visitor.visitordata.name}</td>
                             <td rv-text="visitor.visitordata.email"></td>
-                            <td rv-text="visitor.agentinfo.browser"></td>
-                            <td rv-text="visitor.agentinfo.os"></td>
-                            <td>{visitor.geolocationinfo.city}<span rv-show="visitor.geolocationinfo.city"><span rv-show="visitor.geolocationinfo.country">,</span></span> {visitor.geolocationinfo.country}</td>
+                            <td>
+                                <div rv-each-session="visitor.sessions">
+                                    {session.agentinfo.browser} | {session.agentinfo.os} | {session.geolocationinfo.city}<span rv-show="session.geolocationinfo.city"><span rv-show="session.geolocationinfo.country">,</span></span> {session.geolocationinfo.country}
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

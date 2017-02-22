@@ -40,6 +40,8 @@ class VisitorTrackingManager {
   		var agent = req.useragent;
   		
   		var visitorDetail = {};
+
+  		var sessionDetail = {};
   		
   		var uid = null;
   		
@@ -68,11 +70,11 @@ class VisitorTrackingManager {
   		
   		if(!sessioncookie)
   		{
-  			visitorDetail["sessionid"] = utils.guidGenerator();
+  			sessionDetail["sessionid"] = utils.guidGenerator();
   		}
   		else
   		{
-  			visitorDetail["sessionid"] = sessioncookie;
+  			sessionDetail["sessionid"] = sessioncookie;
   		}
   		
   		
@@ -89,8 +91,9 @@ class VisitorTrackingManager {
   		browserInfo.browserlanguagae = req.headers["accept-language"].split(',')[0];
   		
   		
-		visitorDetail["agentinfo"]  = browserInfo;
-  		visitorDetail["geolocationinfo"]  = geolocation;
+		sessionDetail["agentinfo"]  = browserInfo;
+  		sessionDetail["geolocationinfo"]  = geolocation;
+  		sessionDetail["visitorid"]  = uid;
   		visitorDetail["visitordata"]  = req.body.userdata;
   		
   		
@@ -111,7 +114,7 @@ class VisitorTrackingManager {
       	  {
       	  		if(!sessioncookie)
 	      		{
-      	  			res.cookie('usercomio_session',visitorDetail["sessionid"], { httpOnly: true });
+      	  			res.cookie('usercomio_session',sessionDetail["sessionid"], { httpOnly: true });
 	      		}
       	  		
       		  	var lastseen = new Date();
@@ -122,15 +125,11 @@ class VisitorTrackingManager {
       		  		visitorDetail["visitordata"][key] = req.body.userdata[key];
       		  	}
       		  	
-  		  		visitorCollection.update({_id:uid},{$set:{agentinfo:browserInfo,'visitormetainfo.lastseen':lastseen,visitordata:visitorDetail["visitordata"]}},function(err,count,result)
+  		  		visitorCollection.update({_id:uid},{$set:{'visitormetainfo.lastseen':lastseen,visitordata:visitorDetail["visitordata"]}},function(err,count,result)
 	      		{
 	  		  		if (err)
 	  	            {
 	  	            	return res.send({status:'failure'});
-	  	            }
-	  	            else
-	  	            {
-	  	            	return res.send({status:visitor});
 	  	            }
 	      		});
       	  }
@@ -141,7 +140,7 @@ class VisitorTrackingManager {
       		
       		visitorDetail["visitormetainfo"]  = visitorMetaInfo;  
       		
-      		res.cookie('usercomio_session',visitorDetail["sessionid"], { httpOnly: true });
+      		res.cookie('usercomio_session',sessionDetail["sessionid"], { httpOnly: true });
       		
       		visitorCollection.insert([visitorDetail], function (err, result) 
                 {
@@ -150,14 +149,27 @@ class VisitorTrackingManager {
       	            	res.status(500);
       	      		  	return res.send({status:'failure'});
       	            }
-      	            else
-      	            {
-      	            	return res.send({status:visitorDetail});
-      	            }
       	            
       	           
       	        });
       	  }
+
+            var sessionCollection = global.db.collection('sessions');
+
+      		sessionCollection.insert([sessionDetail], function (err, result) {
+
+      	        if (err)
+                {
+                    res.status(500);
+                    return res.send({status:'failure'});
+                }
+                else
+                {
+                    return res.send({status:visitorDetail});
+                }
+
+
+            });
       	  
         });
   		

@@ -24,23 +24,35 @@ class DashboardManager {
   	 */
   	getAllVisitors(req,res)
   	{
-  		var visitorCollection = global.db.collection('visitors');
-  		var appid = req.body.appid;
+        var skipIndex = req.body.skipindex;
+        var pageLimit = req.body.pagelimit;
 
-        visitorCollection.find({appid:appid},{_id:0}).toArray(function(err,visitors)
-        {
-      	  if(err)
-      	  {
-      		  res.status(500);
-      		  return res.send({status:'failure'});
-      	  }
+  		var visitorCollection = global.db.collection('visitors').aggregate([
+            { $sort :
+                { "visitormetainfo.lastseen" : -1 }
+            },
+            { $skip : skipIndex },
+            { $limit : pageLimit },
+            {
+              $lookup:
+                {
+                  from: "sessions",
+                  localField: "_id",
+                  foreignField: "visitorid",
+                  as: "sessions"
+                }
+            }
+        ]).toArray(function(err,visitors)
+            {
+                if(err)
+                {
+                    res.status(500);
+                    return res.send({status:'failure'});
+                }
 
-      	  if(visitors)
-      	  {
-            	return res.send({status:visitors});
-      	  }
-
-        });
+                return res.send({status:visitors});
+            }
+        );
   	}
 }
 
