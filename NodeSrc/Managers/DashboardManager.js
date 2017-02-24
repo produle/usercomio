@@ -17,6 +17,7 @@ class DashboardManager {
 
 
         this.router.post("/visitorlist",(req, res) => { this.getAllVisitors(req,res); });
+        this.router.post("/metrics",(req, res) => { this.getDashboardMetrics(req,res); });
     }
 
   	/*
@@ -24,10 +25,14 @@ class DashboardManager {
   	 */
   	getAllVisitors(req,res)
   	{
+        var appid = req.body.appid;
         var skipIndex = req.body.skipindex;
         var pageLimit = req.body.pagelimit;
 
   		var visitorCollection = global.db.collection('visitors').aggregate([
+            { $match :
+                { appid : appid }
+            },
             { $sort :
                 { "visitormetainfo.lastseen" : -1 }
             },
@@ -41,6 +46,31 @@ class DashboardManager {
                   foreignField: "visitorid",
                   as: "sessions"
                 }
+            }
+        ]).toArray(function(err,visitors)
+            {
+                if(err)
+                {
+                    res.status(500);
+                    return res.send({status:'failure'});
+                }
+
+                return res.send({status:visitors});
+            }
+        );
+  	}
+
+  	/*
+  	 * @desc Returns all visitors of the app
+  	 */
+  	getDashboardMetrics(req,res)
+  	{
+
+        var appid = req.body.appid;
+
+  		var visitorCollection = global.db.collection('visitors').aggregate([
+            { $group:
+                { _id: null, count: { $sum: 1 } }
             }
         ]).toArray(function(err,visitors)
             {

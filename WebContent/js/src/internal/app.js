@@ -302,5 +302,6 @@ function UC_AppController()
         thisClass.rivetAppNameObj.models.currentAppName = app.name;
 
         uc_main.dashboardController.getAllVisitors();
+        uc_main.dashboardController.getDashboardMetrics();
     };
 }

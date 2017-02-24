@@ -70,6 +70,30 @@ function UC_DashboardController()
 	};
 
 	/*
+	 * @desc Gets all dashboard metrics information from server
+	 */
+	this.getDashboardMetrics = function()
+	{
+
+        if(uc_main.appController.currentAppId)
+        {
+
+            UC_AJAX.call('DashboardManager/metrics',{appid:uc_main.appController.currentAppId},function(data,status,xhr){
+
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while fetching visitors list !");
+                }
+                else
+                {
+                    console.log(status);
+                    //thisClass.listMetrics();
+                }
+            });
+        }
+	};
+
+	/*
 	 * @desc List visitor entries to UI
 	 */
 	this.listVisitors = function()
