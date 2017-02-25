@@ -2,39 +2,25 @@
 
   		<div class="row uc_mt_medium uc_tab_data_container" id="uc_tab_data_listuser">
             <div class="col-md-12">
-                <table class="table table-bordered table-striped uc_table">
+                <table class="table table-bordered table-striped uc_table" id="uc_visitor_list">
                     <thead>
                         <tr>
                             <th class="text-center uc_table_input_control"><input type="checkbox" id="uc_users_list_selectall" /></th>
-                            <th class="text-center">User</th>
-                            <th class="text-center">Event</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Email</th>
+                            <th class="text-center">Session</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr rv-each-visitor="list">
                             <td class="text-center uc_table_input_control"><input type="checkbox" class="uc_users_list_selectentry" /></td>
-                            <td>John Smith</td>
-                            <td>Logged in to the Application</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center uc_table_input_control"><input type="checkbox" class="uc_users_list_selectentry" /></td>
-                            <td>John Smith</td>
-                            <td>Logged in to the Application</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center uc_table_input_control"><input type="checkbox" class="uc_users_list_selectentry" /></td>
-                            <td>John Smith</td>
-                            <td>Logged in to the Application</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center uc_table_input_control"><input type="checkbox" class="uc_users_list_selectentry" /></td>
-                            <td>John Smith</td>
-                            <td>Logged in to the Application</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center uc_table_input_control"><input type="checkbox" class="uc_users_list_selectentry" /></td>
-                            <td>John Smith</td>
-                            <td>Logged in to the Application</td>
+                            <td>{visitor.visitordata.name}</td>
+                            <td rv-text="visitor.visitordata.email"></td>
+                            <td>
+                                <div rv-each-session="visitor.sessions">
+                                    {session.agentinfo.browser} | {session.agentinfo.os} | {session.geolocationinfo.city}<span rv-show="session.geolocationinfo.city"><span rv-show="session.geolocationinfo.country">,</span></span> {session.geolocationinfo.country}
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

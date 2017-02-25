@@ -12,7 +12,8 @@
     <% include commonscripts.ejs %>
     
     <script type="text/javascript" src="./js/src/internal/app.js"></script>
- 	 <script type="text/javascript" src="./js/src/internal/main.js"></script>
+    <script type="text/javascript" src="./js/src/internal/dashboard.js"></script>
+    <script type="text/javascript" src="./js/src/internal/main.js"></script>
  	 
 </head>
 <body>
@@ -36,8 +37,8 @@
   	
   UC_UserSession.user = <%- JSON.stringify(user) %>
  	 
-  var mainController = new UC_MainController();
-  mainController.constructor();
+  var uc_main = new UC_MainController();
+  uc_main.constructor();
  	 
   
   </script>

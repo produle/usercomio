@@ -1,3 +1,10 @@
+/**
+ * Copyright - A Produle Systems Private Limited. All Rights Reserved.
+ *
+ * @desc Contains end points accessed by the users and renders respective views
+ *
+ */
+
 var express = require("express");
 var app = require("./server").app;
 var userManager = require("./Managers/UserManager").UserManager;
