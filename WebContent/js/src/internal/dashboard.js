@@ -11,13 +11,15 @@ function UC_DashboardController()
 
 	this.visitors = [];
 
-    this.visitorListPageLimit = 10;
+    this.visitorListPageLimit = 30;
 
     this.visitorListSkipIndex = 0;
 
     this.visitorListLoaded = false;
 
     this.rivetVisitorListObj = null;
+
+    this.metrics = {};
 
 	this.constructor = function()
 	{
@@ -86,8 +88,8 @@ function UC_DashboardController()
                 }
                 else
                 {
-                    console.log(status);
-                    //thisClass.listMetrics();
+                    thisClass.metrics = data.metrics;
+                    thisClass.listMetrics();
                 }
             });
         }
@@ -109,33 +111,6 @@ function UC_DashboardController()
 	this.listMetrics = function()
 	{
 
-        var newUsers = 0;
-        var slippingAway = 0;
-
-        //Total Users
-        var totalUsers = thisClass.visitors.length;
-
-        for(var iter = 0; iter < thisClass.visitors.length; iter++)
-        {
-            if(new Date(thisClass.visitors[iter].visitormetainfo.lastseen).getTime() < (new Date().getTime()-(30 * 24 * 60 * 60 * 1000)))
-            {
-                //Slipping Away
-                slippingAway++;
-            }
-            else if(thisClass.visitors[iter].visitormetainfo.firstseen == thisClass.visitors[iter].visitormetainfo.lastseen)
-            {
-                //New Users
-                newUsers++;
-            }
-        }
-
-
-        //Current Users
-
-        //Top Browser
-
-        //Open Issues
-
         rivets.binders.faiconclass = function (el, value) {
             el.className = 'fa fa-' + value.toLowerCase();
         };
@@ -143,10 +118,10 @@ function UC_DashboardController()
 		rivets.bind(
             document.querySelector('#uc_tab_data_dashboard'), {
                 currentUsers: 10,
-                totalUsers: totalUsers,
-                slippingAway: slippingAway,
+                totalUsers: thisClass.metrics.totalUsers,
+                slippingAway: thisClass.metrics.slippingAway,
                 topBrowser: "Chrome",
-                newUsers: newUsers,
+                newUsers: thisClass.metrics.newUsers,
                 openIssues: 10
             }
         );

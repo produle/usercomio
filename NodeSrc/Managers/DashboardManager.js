@@ -68,11 +68,14 @@ class DashboardManager {
 
         var appid = req.body.appid;
 
-  		var visitorCollection = global.db.collection('visitors').aggregate([
+  		global.db.collection('visitors').aggregate([
+            { $match :
+                { appid : appid }
+            },
             { $group:
                 { _id: null, count: { $sum: 1 } }
             }
-        ]).toArray(function(err,visitors)
+        ]).toArray(function(err,totalUsers)
             {
                 if(err)
                 {
@@ -80,7 +83,57 @@ class DashboardManager {
                     return res.send({status:'failure'});
                 }
 
-                return res.send({status:visitors});
+                    global.db.collection('visitors').aggregate([
+                        { $project: {
+                            visitormetainfo : [{ lastseen : 1 } , { firstseen : 1 }],
+                            appid: 1,
+                            isUpdated: { $cmp:["$visitormetainfo.lastseen","$visitormetainfo.firstseen"] }
+                        }},
+                        { $match : {
+                            $and : [
+                                { isUpdated : 0 },
+                                { appid : appid }
+                            ]
+                            }
+                        },
+                        { $group:
+                            { _id: null, count: { $sum: 1 } }
+                        }
+                    ]).toArray(function(err1,newUsers)
+                    {
+                        if(err1)
+                        {
+                            res.status(500);
+                            return res.send({status:'failure'});
+                        }
+
+                        global.db.collection('visitors').aggregate([
+                            { $match : {
+                                $and : [
+                                    { "visitormetainfo.lastseen" : {$lt: new Date((new Date())-(1000*60*60*24*30))} },
+                                    { appid : appid }
+                                ]
+                                }
+                            },
+                            { $group:
+                                { _id: null, count: { $sum: 1 } }
+                            }
+                        ]).toArray(function(err2,slippingAway)
+                        {
+                            if(err2)
+                            {
+                                res.status(500);
+                                return res.send({status:'failure'});
+                            }
+
+                            return res.send({status:"success",metrics:{
+                                totalUsers:totalUsers[0].count,
+                                newUsers:newUsers[0].count,
+                                slippingAway:slippingAway[0].count
+                            }});
+                        });
+
+                    });
             }
         );
   	}
