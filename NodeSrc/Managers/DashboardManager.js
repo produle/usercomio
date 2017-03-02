@@ -83,6 +83,12 @@ class DashboardManager {
                     return res.send({status:'failure'});
                 }
 
+                var responseTU = 0;
+                if(totalUsers.length > 0)
+                {
+                	responseTU = totalUsers[0].count;
+                }
+
                     global.db.collection('visitors').aggregate([
                         { $project: {
                             visitormetainfo : [{ lastseen : 1 } , { firstseen : 1 }],
@@ -107,6 +113,12 @@ class DashboardManager {
                             return res.send({status:'failure'});
                         }
 
+                        var responseNU = 0;
+                        if(newUsers.length > 0)
+                        {
+                        	responseNU = newUsers[0].count;
+                        }
+
                         global.db.collection('visitors').aggregate([
                             { $match : {
                                 $and : [
@@ -126,10 +138,15 @@ class DashboardManager {
                                 return res.send({status:'failure'});
                             }
 
+                            var responseSA = 0;
+                            if(slippingAway.length > 0)
+                            {
+                            	responseSA = slippingAway[0].count;
+                            }
                             return res.send({status:"success",metrics:{
-                                totalUsers:totalUsers[0].count,
-                                newUsers:newUsers[0].count,
-                                slippingAway:slippingAway[0].count
+                                totalUsers:responseTU,
+                                newUsers:responseNU,
+                                slippingAway:responseSA
                             }});
                         });
 
