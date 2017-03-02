@@ -25,22 +25,48 @@ var mongodb = require('mongodb');
 //We need to work with "MongoClient" interface in order to connect to a mongodb server.
 var MongoClient = mongodb.MongoClient;
 
-// Connection URL. This is where your mongodb server is running.
-var url = 'mongodb://localhost:27017/usercom';
+var config = require('config');
 
-// Use connect method to connect to the Server
-MongoClient.connect(url, function (err, db) {
-  if (err) {
-    console.log('Unable to connect to the mongoDB server. Error:', err);
-  } else {
-    //HURRAY!! We are connected. :)
-    //HURRAY!! We are connected. :)
-    console.log('Connection established to', url);
+if(config.has("database")) {
 
-    global.db = db;
+    var dbhost = config.get("database.host");
+    var dbport = config.get("database.port");
+    var dbuser = config.get("database.user");
+    var dbpass = config.get("database.pass");
+    var dbname = config.get("database.name");
 
-  }
-});
+    var credentials = "";
+    if(dbuser != "")
+    {
+        credentials = dbuser;
+        if(dbpass != "")
+        {
+            credentials = credentials + ':' + dbpass;
+        }
+        credentials = credentials + '@';
+    }
+
+    // Connection URL. This is where your mongodb server is running.
+    var url = 'mongodb://'+credentials+dbhost+':'+dbport+'/'+dbname;
+
+    // Use connect method to connect to the Server
+    MongoClient.connect(url, function (err, db) {
+      if (err) {
+        console.log('Unable to connect to the mongoDB server. Error:', err);
+      } else {
+        //HURRAY!! We are connected. :)
+        //HURRAY!! We are connected. :)
+        console.log('Connection established to', url);
+
+        global.db = db;
+
+      }
+    });
+}
+else {
+    console.log("Config not found");
+}
+
 
 const PUBLIC_SRC_PATH = path.resolve(__dirname, '../WebContent');
 
@@ -53,7 +79,7 @@ app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(expresssession({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(expresssession({ secret: 'ilovescotchscotchyscotchscotch', resave: true, saveUninitialized: true })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session

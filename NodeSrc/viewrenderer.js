@@ -32,27 +32,39 @@ class ViewRenderer
 		 */
 		app.get('/', function(req, res)
 		{
-			if (req.isAuthenticated())
-			  {
-				var uname = req.cookies.uname;
-				if(uname)
-				{
-					
-					var userManagerObj = new userManager();
-					
-					var user = userManagerObj.getUserByUsername(uname,function(user){
-						res.render('index',{user:user})
-					})
-				}
-				else
-				{
-					res.redirect('login');
-				}
-			  }
-			  else
-			  {
-			    res.redirect('login');
-			  }
+
+
+            var config = require('config');
+
+            if(config.has("database")) {
+
+                if (req.isAuthenticated())
+                {
+                    var uname = req.cookies.uname;
+                    if(uname)
+                    {
+
+                        var userManagerObj = new userManager();
+
+                        var user = userManagerObj.getUserByUsername(uname,function(user){
+                            res.render('index',{user:user})
+                        })
+                    }
+                    else
+                    {
+                        res.redirect('login');
+                    }
+                }
+                else
+                {
+                    res.redirect('login');
+                }
+            }
+            else {
+                res.redirect('setup');
+            }
+
+
 		 })
 
 		 /*
@@ -84,6 +96,13 @@ class ViewRenderer
 			res.render('passwordreset');
 		});
 		
+		/*
+		 * @desc Renders Setup Page
+		 */
+		app.get('/setup',function(req,res){
+            res.render('setup');
+		});
+
 
 	}
 	
