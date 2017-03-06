@@ -1,0 +1,243 @@
+/**
+ * Copyright - A Produle Systems Private Limited. All Rights Reserved.
+ *
+ * @desc Styles included for the listing
+ *
+ */
+.ucTabBtnGroup .btn
+{
+	border-radius: 30px;
+	padding: 8px 20px;
+}
+.ucTabBtnGroup .btn-default
+{
+	color: #a7a6a6;
+	font-weight: normal;
+	transition: 0.5s all ease;
+}
+.ucTabBtnGroup .btn-default.active, .ucTabBtnGroup .btn-default.active:hover
+{
+	color: #fff;
+    background-color: #2B9AF3;
+    border-color: #1f78bf;
+    box-shadow: none;
+}
+
+.ucTabBtnGroup  .btn-default:hover
+{
+	background-color:#fff;
+	color: #333;
+}
+
+.uc_table th
+{
+	background: #fff;
+	border-bottom:1px solid #e8eced !important;
+	color: #8ea4b1;
+	text-transform: uppercase;
+	text-align:left;
+	font-size:13px;
+	font-weight: normal;
+	padding:15px 8px !important;
+	vertical-align: middle;
+}
+ .uc_table tr:hover td {
+       box-shadow: inset 0px -8px 18px -13px rgba(0,0,0,0.4);
+    } 
+/* .uc_table tr:hover td
+{
+	-webkit-box-shadow: 0px 4px 17px -2px rgba(0,0,0,0.59);
+-moz-box-shadow: 0px 4px 17px -2px rgba(0,0,0,0.59);
+box-shadow: 0px 4px 17px -2px rgba(0,0,0,0.59);
+} */
+.uc_table td
+{
+	background: #fff;
+	border-bottom:1px solid #e8eced !important;
+	color: #253238;
+	text-align:left;
+	font-size:13px;
+	font-weight: normal;
+	padding:15px 8px !important;
+	vertical-align:middle !important;
+	height: 40px;
+}
+.ucUsersListMoreOptions
+{
+	color: #8ea4b1;
+}
+.uc_table td label, .uc_table th label
+{
+	margin: 0;
+	padding: 0;
+	line-height:0;
+}
+.uc_table th.text-center
+{
+	text-align:center !important; 
+}
+.uc_table th.uc_table_input_control
+{
+	padding-bottom: 12px !important;
+}
+#uc_visitor_list input[type="checkbox"] {
+    display: none;
+}
+
+#uc_visitor_list input[type="checkbox"] + label:before {
+    content: '';
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    font-size: 16px;
+    font-family: 'Arial Unicode MS';
+    background:url(../../images/app/listing/ucCheckBoxUnselected.png) no-repeat center center;
+    color: #000;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 3px;
+}   
+    
+#uc_visitor_list input[type="checkbox"]:checked + label:before {
+    content: '';
+    background:url(../../images/app/listing/ucCheckBoxSelected.png) no-repeat center center;
+}
+.uc_td_input_control
+{
+	padding-top: 25px !important;	
+}
+.ucUserOnline , .ucUserOffline 
+{
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	float: left;
+    margin-top: 15px;
+}
+.ucUserOnline
+{
+	background-color: #52CA73;
+}
+.ucUserOffline
+{
+	background-color: #adbec6;
+}
+
+.ucUserPicWrapper , .ucUserPicWrapper img
+{
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+    float: left;
+    background: #ccc;
+}
+.ucUserPicWithText
+{
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+    float: left;
+    background: #EF6191;
+    text-align:center;
+    color:#fff;
+    line-height: 39px;
+    font-size: 18px;
+}
+.ucUserPicWrapper
+{
+	margin: 0 12px;
+}
+.ucUserNameAndEmail
+{
+	float:left;
+}
+.ucUserName
+{
+	display: block;
+	font-size:14px;
+	color: #273238;
+}
+.ucUserEmail
+{
+	display:block;
+	font-size:13px;
+	color: #788f9d;
+	font-weight:300;
+}
+.ucUserBrowserIcon, .ucUserOSIcon
+{
+	padding-left:25px;
+	color: #253238;
+	line-height: 20px;
+}
+.ucUserDeviceIcon
+{
+	width:30px;
+	height:30px;
+	margin:0 auto;
+}
+.ucUserBrowserIcon span, .ucUserOSIcon span
+{
+	font-size:13px;
+	color: #788f9d;
+	font-weight:300;
+	font-style: italic;
+	font-size: 12px;
+	padding-left:5px;
+}
+.ucUserBrowserIcon.chrome
+{
+	background:url(../../images/app/listing/browser/ucBrowserChromeIcon.png) no-repeat top left;
+}
+.ucUserBrowserIcon.safari
+{
+	background:url(../../images/app/listing/browser/ucBrowserSafariIcon.png) no-repeat top left;
+}
+.ucUserBrowserIcon.firefox
+{
+	background:url(../../images/app/listing/browser/ucBrowserFirefoxIcon.png) no-repeat top left;
+}
+.ucUserBrowserIcon.edge
+{
+	background:url(../../images/app/listing/browser/ucBrowserEdgeIcon.png) no-repeat top left;
+}
+.ucUserBrowserIcon.ie
+{
+	background:url(../../images/app/listing/browser/ucBrowserIeIcon.png) no-repeat top left;
+}
+.ucUserOSIcon.ios
+{
+	background:url(../../images/app/listing/os/ucOSiosIcon.png) no-repeat top left;
+}
+.ucUserOSIcon.android
+{
+	background:url(../../images/app/listing/os/ucOSAndroidIcon.png) no-repeat top left;
+}
+.ucUserOSIcon.windows
+{
+	background:url(../../images/app/listing/os/ucOSwindowsIcon.png) no-repeat top left;
+}
+.ucUserOSIcon.linux
+{
+	background:url(../../images/app/listing/os/ucOSlinuxIcon.png) no-repeat top left;
+}
+.ucUserDeviceIcon.desktop
+{
+	background:url(../../images/app/listing/device/ucDeviceDesktopIcon.png) no-repeat top left;
+}
+.ucUserDeviceIcon.laptop
+{
+	background:url(../../images/app/listing/device/ucDeviceLaptopIcon.png) no-repeat top left;
+}
+.ucUserDeviceIcon.tablet
+{
+	background:url(../../images/app/listing/device/ucDeviceTabletIcon.png) no-repeat top left;
+}
+.ucUserDeviceIcon.mobile
+{
+	background:url(../../images/app/listing/device/ucDeviceMobileIcon.png) no-repeat top left;
+}
+.ucUsersListMoreOptions:hover
+{
+	cursor: pointer;
+}

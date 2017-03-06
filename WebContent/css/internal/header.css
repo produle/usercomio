@@ -1,0 +1,100 @@
+/**
+ * Copyright - A Produle Systems Private Limited. All Rights Reserved.
+ *
+ * @desc Styles included for the header
+ *
+ */
+#ucHeader
+{
+	padding:10px;
+	background-color: #fff;
+	border-bottom: 1px solid #E9EDEE;
+}
+
+#ucHeader .logo img
+{
+    display: inline-block;
+    margin-top: -7px;
+    margin-right: 8px;
+}
+#ucHeader .navbar-nav>li>a
+{
+	color: #7c848a;
+	transition: 0.5s color ease;
+}
+#ucHeader .navbar-nav>li>a:hover
+{
+	color: #2B9AF3;
+}
+#ucHeader .navbar-nav>.open>a, #ucHeader .navbar-nav>.open>a:focus, #ucHeader .navbar-nav>.open>a:hover
+{
+	color: #2B9AF3;
+	background-color: transparent;
+}
+.uc_currentuser_submenu li
+{
+	padding: 8px 12px;
+}
+.uc_app_submenu li
+{
+	padding: 8px 12px;
+}
+
+.uc_currentuser_submenu li a, .uc_app_submenu li a 
+{
+	color:#626262;
+	opacity:0.6;
+	transition: 0.5s all ease;
+	padding: 0px 0px 0px 25px;
+}
+ .uc_app_submenu li a
+{
+	padding:0 !important;
+}
+.uc_currentuser_submenu li a:hover, .uc_app_submenu li a:hover
+{
+	opacity:1;
+	background-color: transparent;
+}
+.uc_currentuser_submenu, .uc_app_submenu
+{
+	padding:0 !important;
+	border:none !important;
+	-webkit-box-shadow: 0px 2px 3px 0px rgba(196,196,196,0.5) !important;
+	-moz-box-shadow: 0px 2px 3px 0px rgba(196,196,196,0.5) !important;
+	box-shadow: 0px 2px 3px 0px rgba(196,196,196,0.5) !important;
+}
+.uc_currentuser_submenu .ucEditProfile
+{
+	background: url(../../images/app/header/editIcon.png) no-repeat left top;
+	padding-left: 25px;
+	font-size:13px;
+}
+.uc_currentuser_submenu .ucChangePassword
+{
+	background: url(../../images/app/header/passwordIcon.png) no-repeat left top;
+	padding-left: 25px;
+	font-size:13px;
+}
+.ucLogoutBtn, .ucAddNewAppBtn
+{
+	padding:0;
+	background-color: #f0f0f0;
+	border-top:1px solid rgba(196,196,196,0.15);
+	font-size: 13px;
+	margin-top: 8px;
+}
+.ucLogoutBtn a 
+{
+	background: url(../../images/app/header/logoutIcon.png) no-repeat right top;
+	padding:0 !important;
+}
+.ucAddNewAppBtn a
+{
+	background: url(../../images/app/header/addIcon.png) no-repeat right top;
+	padding:0 !important;
+}
+.ucAddNewAppBtn
+{
+	padding:8px !important;
+}
