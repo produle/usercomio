@@ -11,13 +11,14 @@ function UC_MainController()
 	
 	this.appController = new UC_AppController();
 	this.dashboardController = new UC_DashboardController();
+	this.userController = new UC_UserController();
+
+    this.rivetUserNameObj = null;
 	
 	this.constructor = function()
 	{
-		thisClass.appController.constructor();
-		thisClass.dashboardController.constructor();
 
-        rivets.bind(
+        thisClass.rivetUserNameObj = rivets.bind(
             document.querySelector('#uc_currentuser_name'), {
                 currentUserName: UC_UserSession.user.firstName+" "+UC_UserSession.user.lastName
             }

@@ -20,6 +20,16 @@ mongod  /* This will start mongodb server with default port 27017 */
 npm run dev /* Starts the usercom application at port 3000 */
 ```
 
+## Setup
+1. Goto `http://localhost:3000/setup` for the setup process.
+2. Fill in the Database, SMTP Email, Admin User and Basic settings in the wizard.
+3. Once setup is completed, you can login at `http://localhost:3000/login`.
+
+## Create AppID in Usercom
+1. Login to Usercom.
+2. Click the dropdown menu at top-right corner, near the name and click the gear icon next to the application.
+3. A popup will appear with the App details.
+
 ## Using the trackingcode
 1. Copy the file `WebContent/js/src/internal/tracking/track.js` to your application.
 2. Include the below snippets in your application to start recording the visitors.
@@ -35,10 +45,3 @@ npm run dev /* Starts the usercom application at port 3000 */
     })
     </script>
     ```
-
-
-## Create AppID in Usercom
-1. Goto `http://localhost:3000/register` to register as new user.
-2. Login with the credentials entered.
-3. Click `Select an App` at the top navigation bar, then *Add New App*.
-4. Enter the details to obtain an AppID.
