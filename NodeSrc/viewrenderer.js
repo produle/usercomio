@@ -32,28 +32,40 @@ class ViewRenderer
 		 */
 		app.get('/', function(req, res)
 		{
-			if (req.isAuthenticated())
-			  {
-				var uname = req.cookies.uname;
-				if(uname)
-				{
-					
-					var userManagerObj = new userManager();
-					
-					var user = userManagerObj.getUserByUsername(uname,function(user){
-						res.render('index',{user:user})
-					})
-				}
-				else
-				{
-					res.redirect('login');
-				}
-			  }
-			  else
-			  {
-			    res.redirect('login');
-			  }
-		 })
+
+
+            var config = require('config');
+
+            if(config.has("database")) {
+
+                if (req.isAuthenticated())
+                {
+                    var uname = req.cookies.uname;
+                    if(uname)
+                    {
+
+                        var userManagerObj = new userManager();
+
+                        var user = userManagerObj.getUserByUsername(uname,function(user){
+                            res.render('index',{user:user})
+                        })
+                    }
+                    else
+                    {
+                        res.redirect('login');
+                    }
+                }
+                else
+                {
+                    res.redirect('login');
+                }
+            }
+            else {
+                res.redirect('setup');
+            }
+
+
+		 });
 
 		 /*
 		 * @desc Clears all cookies and renders login page
@@ -76,6 +88,68 @@ class ViewRenderer
 		  
 		});
 		
+		/*
+		 * @desc Renders edit profile page
+		 */
+		app.get('/edit-profile', function(req, res)
+		{
+
+            if (req.isAuthenticated())
+            {
+                var uname = req.cookies.uname;
+                if(uname)
+                {
+
+                    var userManagerObj = new userManager();
+
+                    var user = userManagerObj.getUserByUsername(uname,function(user){
+                        res.render('editprofile',{user:user})
+                    })
+                }
+                else
+                {
+                    res.redirect('login');
+                }
+            }
+            else
+            {
+                res.redirect('login');
+            }
+
+
+		 });
+
+		/*
+		 * @desc Renders change password page
+		 */
+		app.get('/change-password', function(req, res)
+		{
+
+            if (req.isAuthenticated())
+            {
+                var uname = req.cookies.uname;
+                if(uname)
+                {
+
+                    var userManagerObj = new userManager();
+
+                    var user = userManagerObj.getUserByUsername(uname,function(user){
+                        res.render('changepassword',{user:user})
+                    })
+                }
+                else
+                {
+                    res.redirect('login');
+                }
+            }
+            else
+            {
+                res.redirect('login');
+            }
+
+
+		 });
+
 		
 		/*
 		 * @desc Renders Password Reset Page
@@ -84,6 +158,13 @@ class ViewRenderer
 			res.render('passwordreset');
 		});
 		
+		/*
+		 * @desc Renders Setup Page
+		 */
+		app.get('/setup',function(req,res){
+            res.render('setup');
+		});
+
 
 	}
 	

@@ -267,6 +267,7 @@ function UC_AppController()
 				
 				$('#ucapp_update_nameinput').val(app.name);
 				$('#ucapp_update_appid').val(app.id);
+				$('#ucapp_update_appid_display').text(app.id);
 			}
 		}
 	}

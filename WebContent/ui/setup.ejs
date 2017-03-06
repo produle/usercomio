@@ -1,0 +1,183 @@
+<html>
+
+<head>
+	 <% include commoncss.ejs %>
+
+    <link rel="stylesheet" type="text/css" href="/css/internal/userregistration.css" />
+
+    <!-- external scripts -->
+    <% include commonscripts.ejs %>
+
+    <!--- internal scripts --->
+    <script type="text/javascript" src="/js/src/internal/userregistration.js"></script>
+  </head>
+  <body>
+  	<div class="UC_SetupContainerCls" id="UC_Setup_Database">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>MongoDB Database Details</h1>
+            </div>
+        </div>
+        <br/><br/>
+
+    	<div class="form-group row">
+			<label for="ucsetup_dbhostinput" class="col-sm-3 control-label text-right">MongoDB Host</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" id="ucsetup_dbhostinput" placeholder="127.0.0.1, localhost, etc">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="ucsetup_dbportinput" class="col-sm-3 control-label text-right">MongoDB Port</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" id="ucsetup_dbportinput" placeholder="27017">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="ucsetup_dbuserinput" class="col-sm-3 control-label text-right">MongoDB Username</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" id="ucsetup_dbuserinput" placeholder="root">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="ucsetup_dbpassinput" class="col-sm-3 control-label text-right">MongoDB Password</label>
+			<div class="col-sm-9">
+				<input type="password" class="form-control" id="ucsetup_dbpassinput" placeholder="********">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="ucsetup_dbnameinput" class="col-sm-3 control-label text-right">MongoDB Name</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" id="ucsetup_dbnameinput" placeholder="usercom">
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-sm-offset-3 col-sm-9">
+				<button type="submit" id="ucsetup_dbsubmitbtn" class="btn btn-default">Next</button>
+			</div>
+		</div>
+    </div>
+
+  	<div class="UC_SetupContainerCls" id="UC_Setup_SMTP">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>SMTP Details</h1>
+            </div>
+        </div>
+        <br/><br/>
+
+    	<div class="form-group row">
+			<label for="ucsetup_smtphostinput" class="col-sm-3 control-label text-right">SMTP Host</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" id="ucsetup_smtphostinput" placeholder="smtp.google.com">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="ucsetup_smtpportinput" class="col-sm-3 control-label text-right">SMTP Port</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" id="ucsetup_smtpportinput" placeholder="25">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="ucsetup_smtpuserinput" class="col-sm-3 control-label text-right">SMTP Username</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" id="ucsetup_smtpuserinput" placeholder="johndoe@gmail.com">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="ucsetup_smtppassinput" class="col-sm-3 control-label text-right">SMTP Password</label>
+			<div class="col-sm-9">
+				<input type="password" class="form-control" id="ucsetup_smtppassinput" placeholder="********">
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-sm-offset-3 col-sm-9">
+				<button type="submit" id="ucsetup_smtpsubmitbtn" class="btn btn-default">Next</button>
+			</div>
+		</div>
+    </div>
+
+  	<div class="UC_SetupContainerCls" id="UC_Setup_User">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Admin User Details</h1>
+            </div>
+        </div>
+        <br/><br/>
+
+    	<div class="form-group row">
+			<label for="ucsetup_fullnameinput" class="col-sm-3 control-label text-right">Full Name</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" id="ucsetup_fullnameinput" placeholder="John Doe">
+			</div>
+		</div>
+    	<div class="form-group row">
+			<label for="ucsetup_emailinput" class="col-sm-3 control-label text-right">Email</label>
+			<div class="col-sm-9">
+				<input type="email" class="form-control" id="ucsetup_emailinput" placeholder="john.doe@example.com">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="ucsetup_passwordinput" class="col-sm-3 control-label text-right">Password</label>
+			<div class="col-sm-9">
+				<input type="password" class="form-control" id="ucsetup_passwordinput" placeholder="********">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="ucsetup_confirmpasswordinput" class="col-sm-3 control-label text-right">Confirm Password</label>
+			<div class="col-sm-9">
+				<input type="password" class="form-control" id="ucsetup_confirmpasswordinput" placeholder="********">
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-sm-offset-3 col-sm-9">
+				<button type="submit" id="ucsetup_usersubmitbtn" class="btn btn-default">Next</button>
+			</div>
+		</div>
+    </div>
+
+  	<div class="UC_SetupContainerCls" id="UC_Setup_App">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>System Settings</h1>
+            </div>
+        </div>
+        <br/><br/>
+
+    	<div class="form-group row">
+			<label for="ucsetup_fullnameinput" class="col-sm-3 control-label text-right">Base URL (including port)</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" id="ucsetup_baseurlinput" placeholder="http://localhost:3000">
+			</div>
+		</div>
+    	<div class="form-group row">
+			<label for="ucsetup_emailinput" class="col-sm-3 control-label text-right">App Name</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" id="ucsetup_appnameinput" placeholder="MyWebsite">
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-sm-offset-3 col-sm-9">
+				<button type="submit" id="ucsetup_appsubmitbtn" class="btn btn-primary">Finish</button>
+			</div>
+		</div>
+    </div>
+
+    <div style="position: absolute; bottom: 20px; right: 20px; font-size: 26px;">
+        <span id="UC_Setup_Progress_Step">1</span> / <span id="UC_Setup_Total_Step">4</span>
+    </div>
+
+
+    <script>
+	    var uc_userregistration  = new UC_UserRegistrationController();
+	    uc_userregistration.constructor();
+  </script>
+  </body>
+</html>

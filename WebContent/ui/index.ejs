@@ -5,46 +5,38 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Usercom</title>
-      <!-- external scripts -->
+   
+    <!-- external scripts -->
     <% include commoncss.ejs %>
-    
-        <link rel="stylesheet" type="text/css" href="/css/internal/app.css" />
+    <link rel="stylesheet" type="text/css" href="/css/internal/app.css" />
         <link rel="stylesheet" type="text/css" href="/css/internal/header.css" />
         <link rel="stylesheet" type="text/css" href="/css/internal/listing.css" />
     
     <% include commonscripts.ejs %>
-    
-    <script type="text/javascript" src="./js/src/internal/app.js"></script>
-    <script type="text/javascript" src="./js/src/internal/dashboard.js"></script>
-    <script type="text/javascript" src="./js/src/internal/main.js"></script>
- 	 
+
 </head>
 <body>
 
     <% include navigation.ejs %>
 
+    <div class="container">
 
-  <div class="container">
-
-  		
-  		<% include app/app.ejs %>
+        <% include app/app.ejs %>
   
-  		
-  </div>
+    </div>
  
- 	    <% include dialogs.ejs %>
+    <% include dialogs.ejs %>
  	    
-  <script>
+    <script>
   	
- 	
-  	
-  UC_UserSession.user = <%- JSON.stringify(user) %>
+        UC_UserSession.user = <%- JSON.stringify(user) %>;
+        var uc_main = new UC_MainController();
+
+        uc_main.constructor();
+        uc_main.appController.constructor();
+		uc_main.dashboardController.constructor();
  	 
-  var uc_main = new UC_MainController();
-  uc_main.constructor();
- 	 
-  
-  </script>
+    </script>
 
 </body>
 </html>
