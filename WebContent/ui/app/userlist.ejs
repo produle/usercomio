@@ -16,20 +16,8 @@
                         </tr>
                     </thead>
                     <tbody>
-<!--
-                        <tr rv-each-visitor="list">
-                            <td class="text-center uc_table_input_control"><input type="checkbox" class="uc_users_list_selectentry" /></td>
-                            <td>{visitor.visitordata.name}</td>
-                            <td rv-text="visitor.visitordata.email"></td>
-                            <td>
-                                <div rv-each-session="visitor.sessions">
-                                    {session.agentinfo.browser} | {session.agentinfo.os} | {session.geolocationinfo.city}<span rv-show="session.geolocationinfo.city"><span rv-show="session.geolocationinfo.country">,</span></span> {session.geolocationinfo.country}
-                                </div>
-                            </td>
-                        </tr>
--->
                        <tr rv-each-visitor="list">
-                           <td class="uc_td_input_control"><input id="uc-user-select" type="checkbox"><label for="uc-user-select"></label></td>
+                           <td class="uc_td_input_control"><input rv-visitorid="visitor" type="checkbox"><label></label></td>
                            <td>
                                <div class="ucUserBaseDetails">
                                    <div class="ucUserCurrentStatus">
@@ -47,8 +35,8 @@
                                </div>
                            </td>
                            <td class="text-center">20</td>
-                           <td> <div class="ucUserBrowserIcon chrome"> Chrome<span>(v56.0)</span></div></td>
-                           <td> <div class="ucUserOSIcon ios">macOS Sierra<span>(v10.12)</span></div> </td>
+                           <td> <div class="ucUserBrowserIcon" rv-latestbrowser="visitor.sessions"></div></td>
+                           <td> <div class="ucUserOSIcon" rv-latestplatform="visitor.sessions"></div> </td>
                            <td class="text-center"><div class="ucUserDeviceIcon desktop"></div></td>
                            <td>India</td>
                            <td>
