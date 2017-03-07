@@ -168,7 +168,7 @@ function UC_UserRegistrationController()
                 thisClass.config.database.pass = dbpass;
                 thisClass.config.database.name = dbname;
 
-                 thisClass.saveConfig();
+                 thisClass.saveConfig(false);
 
                  $(".UC_SetupContainerCls").hide();
                  $("#UC_Setup_SMTP").show();
@@ -204,7 +204,7 @@ function UC_UserRegistrationController()
         thisClass.config.smtp.user = smtpuser;
         thisClass.config.smtp.pass = smtppass;
 
-        thisClass.saveConfig();
+        thisClass.saveConfig(false);
 
          $(".UC_SetupContainerCls").hide();
          $("#UC_Setup_User").show();
@@ -261,8 +261,6 @@ function UC_UserRegistrationController()
 
     thisClass.config.baseURL= baseurl;
 
-    thisClass.saveConfig(thisClass.config);
-
     var newApp = new UC_App();
     var user = UC_UserSession.user;
 
@@ -283,9 +281,8 @@ function UC_UserRegistrationController()
          }
          else
          {
+             thisClass.saveConfig(true);
 
-             $(".UC_SetupContainerCls").hide();
-             $("#UC_Setup_User").show();
          }
 
     });
@@ -398,7 +395,7 @@ function UC_UserRegistrationController()
   /*
   *  @desc Saves the config data to the server
   */
-  this.saveConfig = function()
+  this.saveConfig = function(isRedirect)
   {
 
 	  UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
@@ -409,6 +406,14 @@ function UC_UserRegistrationController()
 			 {
 				 alert("An Error accured while saving config file!");
 			 }
+             else if(isRedirect)
+             {
+                 //Timeout provided as the server restarts on saving config file, redirecting immediately will lead to Service Not Found error
+                 setTimeout(function(){
+                     location.href = "/";
+                 },2000);
+
+             }
 		 }
 
 	  });
