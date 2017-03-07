@@ -32,9 +32,10 @@
         UC_UserSession.user = <%- JSON.stringify(user) %>;
         var uc_main = new UC_MainController();
 
+ 	    uc_main.appController.renderVisitors = true;
         uc_main.constructor();
 		uc_main.dashboardController.constructor();
- 	 
+
     </script>
 
 </body>

@@ -14,6 +14,8 @@ function UC_AppController()
     this.currentAppId = null;
 
     this.rivetAppNameObj = null;
+
+    this.renderVisitors = false;
 	
 	this.constructor = function()
 	{
@@ -302,7 +304,10 @@ function UC_AppController()
         thisClass.currentAppId = app.id;
         thisClass.rivetAppNameObj.models.currentAppName = app.name;
 
-        uc_main.dashboardController.getAllVisitors();
-        uc_main.dashboardController.getDashboardMetrics();
+        if(thisClass.renderVisitors)
+        {
+            uc_main.dashboardController.getAllVisitors();
+            uc_main.dashboardController.getDashboardMetrics();
+        }
     };
 }
