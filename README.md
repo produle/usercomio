@@ -45,3 +45,7 @@ npm run dev /* Starts the usercom application at port 3000 */
     })
     </script>
     ```
+    
+## Copyright and license
+
+Copyright © 2008-2017 A Produle Systems Pvt Ltd. www.produle.com. All rights reserved. This project is released under the Apache 2.0 license. UserCom.io and usercomio names belong to 'A Produle Systems Pvt Ltd'
