@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Usercom | Edit Database Details</title>
+
+    <!-- external scripts -->
+    <% include commoncss.ejs %>
+    <link rel="stylesheet" type="text/css" href="/css/internal/app.css" />
+
+
+    <% include commonscripts.ejs %>
+
+</head>
+<body>
+
+    <% include navigation.ejs %>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Edit Database Details</h1>
+            </div>
+        </div>
+        <br/><br/>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="form-group row">
+                    <label for="uceditdatabase_host" class="col-sm-3 control-label text-right">MongoDB Host</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="uceditdatabase_host" placeholder="127.0.0.1, localhost, etc">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="uceditdatabase_port" class="col-sm-3 control-label text-right">MongoDB Port</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="uceditdatabase_port" placeholder="27017">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="uceditdatabase_user" class="col-sm-3 control-label text-right">MongoDB Username</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="uceditdatabase_user" placeholder="root">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="uceditdatabase_pass" class="col-sm-3 control-label text-right">MongoDB Password</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control" id="uceditdatabase_pass" placeholder="********">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" id="uceditdatabase_submit" class="btn btn-default">Save</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        UC_UserSession.user = <%- JSON.stringify(user) %>;
+
+        var uc_main = new UC_MainController();
+        uc_main.constructor();
+        uc_main.userController.constructor();
+        uc_main.userController.config = <%- JSON.stringify(config) %>;
+        uc_main.userController.editDatabaseHandler();
+    </script>
+
+</body>
+</html>

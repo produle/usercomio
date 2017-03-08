@@ -16,6 +16,7 @@ function UC_UserController()
 		$(document).on("click","#uceditprofile_submit",thisClass.handleProfileSaveAction);
 		$(document).on("click","#ucchangepassword_submit",thisClass.handlePasswordSaveAction);
 		$(document).on("click","#uceditsmtp_submit",thisClass.handleSMTPSaveAction);
+		$(document).on("click","#uceditdatabase_submit",thisClass.handleDatabaseSaveAction);
 	};
 
     /*
@@ -238,6 +239,109 @@ function UC_UserController()
             msg = "Invalid Host Name !";
         }
         else if($.trim(smtpport) == "")
+        {
+            msg = "Invalid Port !";
+        }
+
+        if(msg != "")
+        {
+            result.status = "failure";
+            result.msg = msg;
+        }
+
+        return result;
+    };
+
+    /*
+     *  @desc Populates the form fields with the Database data
+     */
+    this.editDatabaseHandler = function()
+    {
+        var user = UC_UserSession.user;
+        $('#uceditdatabase_host').val(thisClass.config.database.host);
+        $('#uceditdatabase_port').val(thisClass.config.database.port);
+        $('#uceditdatabase_user').val(thisClass.config.database.user);
+    };
+
+    /*
+     *  @desc Handles the Database data validation and sends it to server
+     */
+    this.handleDatabaseSaveAction = function()
+    {
+        var databasehost = $('#uceditdatabase_host').val(),
+            databaseport = $('#uceditdatabase_port').val(),
+            databaseuser = $('#uceditdatabase_user').val(),
+            databasepass = $('#uceditdatabase_pass').val();
+
+
+        var validationResult = thisClass.validateDatabaseInputs();
+
+        if(validationResult.status == "failure")
+        {
+            alert(validationResult.msg);
+            return;
+        }
+
+        thisClass.config.database.host = databasehost;
+        thisClass.config.database.port = databaseport;
+        thisClass.config.database.user = databaseuser;
+        thisClass.config.database.pass = databasepass;
+
+        UC_AJAX.call('UserManager/verifydbconnection',{dbhost:databasehost,dbport:databaseport,dbuser:databaseuser,dbpass:databasepass,dbname:thisClass.config.database.name},function(data,status,xhr)
+              {
+                 if(data)
+                 {
+                     if(data.status == "connected")
+                     {
+
+                        UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
+                        {
+                            if(data)
+                            {
+                                if(data.status == "failure")
+                                {
+                                    alert("An Error accured while saving config file!");
+                                }
+                                else
+                                {
+                                    alert("Database settings changed successfully");
+                                }
+                            }
+
+                        });
+
+                     }
+                     else if(data.status == "failure")
+                     {
+                         alert("Database connection cannot be established with the provided details");
+                     }
+                     else
+                     {
+                         alert("An Error accured while saving data. Try again!");
+                     }
+                 }
+
+              });
+
+
+    };
+
+    /*
+     * @desc Validate Database data
+     */
+    this.validateDatabaseInputs  = function()
+    {
+        var result = {status:"success",msg:""};
+
+        var databasehost = $('#uceditdatabase_host').val(),
+            databaseport = $('#uceditdatabase_port').val(),
+            msg = "";
+
+        if($.trim(databasehost) == "")
+        {
+            msg = "Invalid Host Name !";
+        }
+        else if($.trim(databaseport) == "")
         {
             msg = "Invalid Port !";
         }
