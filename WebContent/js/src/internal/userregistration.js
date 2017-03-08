@@ -13,11 +13,15 @@ function UC_UserRegistrationController()
   {
      this.bindUIEvents();
 
-      $("#UC_Setup_Database").show();
+      //$("#UC_Setup_Database").show();
+     $("#UC_Setup_Welcome_Page").show();
+     
   }
 
   this.bindUIEvents = function()
   {
+	 
+	$('#ucsetup_getting_startedbtn').on('click',thisClass.handleGettingStartedBtnAction);
     $('#ucuserreg_submitbtn').on('click',thisClass.handleRegisterBtnAction);
     $('#ucsetup_dbsubmitbtn').on('click',thisClass.handleSetupDBAction);
     $('#ucsetup_smtpsubmitbtn').on('click',thisClass.handleSetupSMTPAction);
@@ -25,6 +29,13 @@ function UC_UserRegistrationController()
     $('#ucsetup_appsubmitbtn').on('click',thisClass.handleSetupAppAction);
   }
 
+  this.handleGettingStartedBtnAction = function()
+  {
+	  $(".UC_SetupContainerCls").hide();
+	  $("#UC_Setup_Database").show();
+	  $(".ucSetupProgressSteps li").removeClass("active");
+	  $(".uc_database_details").addClass("active");
+  }
   /*
   *  @desc Handles click event of login button
   */
@@ -124,7 +135,10 @@ function UC_UserRegistrationController()
 
                      $(".UC_SetupContainerCls").hide();
                      $("#UC_Setup_App").show();
+                     $(".ucSetupProgressSteps li").removeClass("active");
+               	  	 $(".uc_user_settings").addClass("active");
                      $("#UC_Setup_Progress_Step").text("4");
+                     
                  }
 			 }
 		 }
@@ -168,11 +182,13 @@ function UC_UserRegistrationController()
                 thisClass.config.database.pass = dbpass;
                 thisClass.config.database.name = dbname;
 
-                 thisClass.saveConfig();
+                 thisClass.saveConfig(false);
 
                  $(".UC_SetupContainerCls").hide();
                  $("#UC_Setup_SMTP").show();
                  $("#UC_Setup_Progress_Step").text("2");
+                 $(".ucSetupProgressSteps li").removeClass("active");
+                 $(".uc_smtp_details").addClass("active");
 
 			 }
 			 else if(data.status == "failure")
@@ -204,11 +220,13 @@ function UC_UserRegistrationController()
         thisClass.config.smtp.user = smtpuser;
         thisClass.config.smtp.pass = smtppass;
 
-        thisClass.saveConfig();
+        thisClass.saveConfig(false);
 
          $(".UC_SetupContainerCls").hide();
          $("#UC_Setup_User").show();
          $("#UC_Setup_Progress_Step").text("3");
+         $(".ucSetupProgressSteps li").removeClass("active");
+         $(".uc_admin_details").addClass("active");
   }
 
   /*
@@ -216,6 +234,8 @@ function UC_UserRegistrationController()
   */
   this.handleSetupUserAction = function()
   {
+	  
+	  
 	var email = $('#ucsetup_emailinput').val(),
 		password = $('#ucsetup_passwordinput').val(),
 		confirmPassword = $('#ucsetup_confirmpasswordinput').val(),
@@ -270,7 +290,7 @@ function UC_UserRegistrationController()
     newApp.creator = user.username;
     newApp.id = UC_Utils.guidGenerator();
     newApp.clientid = user.company;
-
+    
     UC_AJAX.call('AppManager/createNewApp',{newApp:newApp},function(data,status,xhr){
 
         if(data.status == "appexists")
@@ -284,8 +304,8 @@ function UC_UserRegistrationController()
          else
          {
 
-             $(".UC_SetupContainerCls").hide();
-             $("#UC_Setup_User").show();
+        	 thisClass.saveConfig(true);
+             
          }
 
     });
@@ -398,7 +418,7 @@ function UC_UserRegistrationController()
   /*
   *  @desc Saves the config data to the server
   */
-  this.saveConfig = function()
+  this.saveConfig = function(isRedirect)
   {
 
 	  UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
@@ -409,6 +429,14 @@ function UC_UserRegistrationController()
 			 {
 				 alert("An Error accured while saving config file!");
 			 }
+			 else if(isRedirect)
+             {
+                 //Timeout provided as the server restarts on saving config file, redirecting immediately will lead to Service Not Found error
+                 setTimeout(function(){
+                     location.href = "/";
+                 },2000);
+
+            }
 		 }
 
 	  });

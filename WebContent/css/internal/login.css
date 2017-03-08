@@ -41,6 +41,8 @@ form
 	border-bottom: 1px solid #E9EDF0;
     box-shadow: none;
     border-radius: 0;
+    font-weight: 300;
+    font-size: 13px;
 }
 .UC_logo img
 {
