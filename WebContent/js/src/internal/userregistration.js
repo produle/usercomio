@@ -281,8 +281,6 @@ function UC_UserRegistrationController()
 
     thisClass.config.baseURL= baseurl;
 
-    thisClass.saveConfig(thisClass.config);
-
     var newApp = new UC_App();
     var user = UC_UserSession.user;
 
@@ -303,9 +301,7 @@ function UC_UserRegistrationController()
          }
          else
          {
-
-        	 thisClass.saveConfig(true);
-             
+             thisClass.saveConfig(true);
          }
 
     });
@@ -435,8 +431,7 @@ function UC_UserRegistrationController()
                  setTimeout(function(){
                      location.href = "/";
                  },2000);
-
-            }
+             }
 		 }
 
 	  });

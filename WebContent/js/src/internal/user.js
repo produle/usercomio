@@ -9,10 +9,13 @@ function UC_UserController()
 {
 	var thisClass = this;
 
+    this.config = {};
+
 	this.constructor = function()
 	{
 		$(document).on("click","#uceditprofile_submit",thisClass.handleProfileSaveAction);
 		$(document).on("click","#ucchangepassword_submit",thisClass.handlePasswordSaveAction);
+		$(document).on("click","#uceditsmtp_submit",thisClass.handleSMTPSaveAction);
 	};
 
     /*
@@ -156,6 +159,87 @@ function UC_UserController()
         else if($.trim(password) != $.trim(confirmpassword))
         {
             msg = "Confirm Password should match the New Password field";
+        }
+
+        if(msg != "")
+        {
+            result.status = "failure";
+            result.msg = msg;
+        }
+
+        return result;
+    };
+
+    /*
+     *  @desc Populates the form fields with the SMTP data
+     */
+    this.editSMTPHandler = function()
+    {
+        var user = UC_UserSession.user;
+        $('#uceditsmtp_host').val(thisClass.config.smtp.host);
+        $('#uceditsmtp_port').val(thisClass.config.smtp.port);
+        $('#uceditsmtp_user').val(thisClass.config.smtp.user);
+    };
+
+    /*
+     *  @desc Handles the smtp data validation and sends it to server
+     */
+    this.handleSMTPSaveAction = function()
+    {
+        var smtphost = $('#uceditsmtp_host').val(),
+            smtpport = $('#uceditsmtp_port').val(),
+            smtpuser = $('#uceditsmtp_user').val(),
+            smtppass = $('#uceditsmtp_pass').val();
+
+
+        var validationResult = thisClass.validateSMTPInputs();
+
+        if(validationResult.status == "failure")
+        {
+            alert(validationResult.msg);
+            return;
+        }
+
+        thisClass.config.smtp.host = smtphost;
+        thisClass.config.smtp.port = smtpport;
+        thisClass.config.smtp.user = smtpuser;
+        thisClass.config.smtp.pass = smtppass;
+
+        UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
+        {
+            if(data)
+            {
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while saving config file!");
+                }
+                else
+                {
+                    alert("SMTP settings changed successfully");
+                }
+            }
+
+        });
+    };
+
+    /*
+     * @desc Validate smtp data
+     */
+    this.validateSMTPInputs  = function()
+    {
+        var result = {status:"success",msg:""};
+
+        var smtphost = $('#uceditsmtp_host').val(),
+            smtpport = $('#uceditsmtp_port').val(),
+            msg = "";
+
+        if($.trim(smtphost) == "")
+        {
+            msg = "Invalid Host Name !";
+        }
+        else if($.trim(smtpport) == "")
+        {
+            msg = "Invalid Port !";
         }
 
         if(msg != "")

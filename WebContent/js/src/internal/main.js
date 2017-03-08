@@ -18,6 +18,8 @@ function UC_MainController()
 	this.constructor = function()
 	{
 
+        thisClass.appController.constructor();
+
         thisClass.rivetUserNameObj = rivets.bind(
             document.querySelector('#uc_currentuser_name'), {
                 currentUserName: UC_UserSession.user.firstName+" "+UC_UserSession.user.lastName
