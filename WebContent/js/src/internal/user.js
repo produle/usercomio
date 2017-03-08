@@ -17,6 +17,7 @@ function UC_UserController()
 		$(document).on("click","#ucchangepassword_submit",thisClass.handlePasswordSaveAction);
 		$(document).on("click","#uceditsmtp_submit",thisClass.handleSMTPSaveAction);
 		$(document).on("click","#uceditdatabase_submit",thisClass.handleDatabaseSaveAction);
+		$(document).on("click","#uceditsystem_submit",thisClass.handleSystemSaveAction);
 	};
 
     /*
@@ -344,6 +345,74 @@ function UC_UserController()
         else if($.trim(databaseport) == "")
         {
             msg = "Invalid Port !";
+        }
+
+        if(msg != "")
+        {
+            result.status = "failure";
+            result.msg = msg;
+        }
+
+        return result;
+    };
+
+    /*
+     *  @desc Populates the form fields with the System data
+     */
+    this.editSystemHandler = function()
+    {
+        var user = UC_UserSession.user;
+        $('#uceditsystem_baseurl').val(thisClass.config.baseURL);
+    };
+
+    /*
+     *  @desc Handles the System data validation and sends it to server
+     */
+    this.handleSystemSaveAction = function()
+    {
+        var baseurl = $('#uceditsystem_baseurl').val();
+
+
+        var validationResult = thisClass.validateSystemInputs();
+
+        if(validationResult.status == "failure")
+        {
+            alert(validationResult.msg);
+            return;
+        }
+
+        thisClass.config.baseURL = baseurl;
+
+        UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
+        {
+            if(data)
+            {
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while saving config file!");
+                }
+                else
+                {
+                    alert("System settings changed successfully");
+                }
+            }
+
+        });
+    };
+
+    /*
+     * @desc Validate System data
+     */
+    this.validateSystemInputs  = function()
+    {
+        var result = {status:"success",msg:""};
+
+        var baseurl = $('#uceditsystem_baseurl').val(),
+            msg = "";
+
+        if($.trim(baseurl) == "")
+        {
+            msg = "Invalid Host Name !";
         }
 
         if(msg != "")

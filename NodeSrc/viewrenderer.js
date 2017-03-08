@@ -216,6 +216,39 @@ class ViewRenderer
 
 		 });
 
+		/*
+		 * @desc Renders edit system settings page
+		 */
+		app.get('/edit-system', function(req, res)
+		{
+
+            if (req.isAuthenticated())
+            {
+                var uname = req.cookies.uname;
+                if(uname)
+                {
+
+                    var userManagerObj = new userManager();
+
+                    var config = require('config');
+
+                    var user = userManagerObj.getUserByUsername(uname,function(user){
+                        res.render('editsystem',{user:user,config:config})
+                    })
+                }
+                else
+                {
+                    res.redirect('login');
+                }
+            }
+            else
+            {
+                res.redirect('login');
+            }
+
+
+		 });
+
 		
 		/*
 		 * @desc Renders Password Reset Page
