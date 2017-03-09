@@ -19,6 +19,8 @@ function UC_MainController()
 	{
 
         thisClass.appController.constructor();
+        thisClass.dashboardController.constructor();
+        thisClass.userController.constructor();
 
         thisClass.rivetUserNameObj = rivets.bind(
             document.querySelector('#uc_currentuser_name'), {

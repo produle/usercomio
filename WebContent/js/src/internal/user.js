@@ -13,6 +13,12 @@ function UC_UserController()
 
 	this.constructor = function()
 	{
+        $(document).on("click",".ucEditProfile",thisClass.editProfileHandler);
+        $(document).on("click",".ucChangePassword",thisClass.editPasswordHandler);
+        $(document).on("click",".ucEditSMTP",thisClass.editSMTPHandler);
+        $(document).on("click",".ucEditDatabase",thisClass.editDatabaseHandler);
+        $(document).on("click",".ucEditSystem",thisClass.editSystemHandler);
+
 		$(document).on("click","#uceditprofile_submit",thisClass.handleProfileSaveAction);
 		$(document).on("click","#ucchangepassword_submit",thisClass.handlePasswordSaveAction);
 		$(document).on("click","#uceditsmtp_submit",thisClass.handleSMTPSaveAction);
@@ -23,11 +29,15 @@ function UC_UserController()
     /*
      *  @desc Populates the form fields with the user object data
      */
-    this.editProfileHandler = function()
+    this.editProfileHandler = function(e)
     {
         var user = UC_UserSession.user;
         $('#uceditprofile_firstname').val(user.firstName);
         $('#uceditprofile_lastname').val(user.lastName);
+
+        $("#ucEditProfileModal").modal();
+
+        e.preventDefault();
     };
 
     /*
@@ -66,6 +76,8 @@ function UC_UserController()
                 {
                     alert("Profile saved successfully");
                     uc_main.rivetUserNameObj.models.currentUserName = user.firstName+" "+user.lastName;
+
+                    $("#ucEditProfileModal").modal("hide");
                 }
             }
 
@@ -104,6 +116,15 @@ function UC_UserController()
     };
 
     /*
+     *  @desc Populates the form fields with the user object data
+     */
+    this.editPasswordHandler = function(e)
+    {
+        $("#ucEditPasswordModal").modal();
+        e.preventDefault();
+    };
+
+    /*
      *  @desc Handles the user data validation and sends it to server
      */
     this.handlePasswordSaveAction = function()
@@ -137,6 +158,8 @@ function UC_UserController()
                 else
                 {
                     alert("Password changed successfully");
+
+                    $("#ucEditPasswordModal").modal("hide");
                 }
             }
 
@@ -175,12 +198,15 @@ function UC_UserController()
     /*
      *  @desc Populates the form fields with the SMTP data
      */
-    this.editSMTPHandler = function()
+    this.editSMTPHandler = function(e)
     {
-        var user = UC_UserSession.user;
         $('#uceditsmtp_host').val(thisClass.config.smtp.host);
         $('#uceditsmtp_port').val(thisClass.config.smtp.port);
         $('#uceditsmtp_user').val(thisClass.config.smtp.user);
+
+        $("#ucEditSMTPModal").modal();
+
+        e.preventDefault();
     };
 
     /*
@@ -218,6 +244,7 @@ function UC_UserController()
                 else
                 {
                     alert("SMTP settings changed successfully");
+                    $("#ucEditSMTPModal").modal("hide");
                 }
             }
 
@@ -256,12 +283,15 @@ function UC_UserController()
     /*
      *  @desc Populates the form fields with the Database data
      */
-    this.editDatabaseHandler = function()
+    this.editDatabaseHandler = function(e)
     {
-        var user = UC_UserSession.user;
         $('#uceditdatabase_host').val(thisClass.config.database.host);
         $('#uceditdatabase_port').val(thisClass.config.database.port);
         $('#uceditdatabase_user').val(thisClass.config.database.user);
+
+        $("#ucEditDatabaseModal").modal();
+
+        e.preventDefault();
     };
 
     /*
@@ -306,6 +336,8 @@ function UC_UserController()
                                 else
                                 {
                                     alert("Database settings changed successfully");
+
+                                    $("#ucEditDatabaseModal").modal("hide");
                                 }
                             }
 
@@ -359,10 +391,13 @@ function UC_UserController()
     /*
      *  @desc Populates the form fields with the System data
      */
-    this.editSystemHandler = function()
+    this.editSystemHandler = function(e)
     {
-        var user = UC_UserSession.user;
         $('#uceditsystem_baseurl').val(thisClass.config.baseURL);
+
+        $("#ucEditSystemModal").modal();
+
+        e.preventDefault();
     };
 
     /*
@@ -394,6 +429,7 @@ function UC_UserController()
                 else
                 {
                     alert("System settings changed successfully");
+                    $("#ucEditSystemModal").modal("hide");
                 }
             }
 

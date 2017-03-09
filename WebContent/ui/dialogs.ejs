@@ -52,3 +52,209 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<div id="ucEditProfileModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Edit Profile</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="form-group row">
+                            <label for="uceditprofile_firstname" class="col-sm-3 control-label text-right">First Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="uceditprofile_firstname" placeholder="John">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="uceditprofile_lastname" class="col-sm-3 control-label text-right">Last Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="uceditprofile_lastname" placeholder="Doe">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="uceditprofile_submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="ucEditPasswordModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Change Password</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="form-group row">
+                            <label for="ucchangepassword_password" class="col-sm-3 control-label text-right">New Password</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" id="ucchangepassword_password" placeholder="********">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="ucchangepassword_confirmpassword" class="col-sm-3 control-label text-right">Confirm Password</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" id="ucchangepassword_confirmpassword" placeholder="********">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="ucchangepassword_submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="ucEditSMTPModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Edit Email Settings</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="form-group row">
+                            <label for="uceditsmtp_host" class="col-sm-3 control-label text-right">SMTP Host</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="uceditsmtp_host" placeholder="smtp.google.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="uceditsmtp_port" class="col-sm-3 control-label text-right">SMTP Port</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="uceditsmtp_port" placeholder="25">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="uceditsmtp_user" class="col-sm-3 control-label text-right">SMTP Username</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="uceditsmtp_user" placeholder="johndoe@gmail.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="uceditsmtp_pass" class="col-sm-3 control-label text-right">SMTP Password</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" id="uceditsmtp_pass" placeholder="********">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="uceditsmtp_submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="ucEditDatabaseModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Edit Database Settings</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="form-group row">
+                            <label for="uceditdatabase_host" class="col-sm-3 control-label text-right">MongoDB Host</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="uceditdatabase_host" placeholder="127.0.0.1, localhost, etc">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="uceditdatabase_port" class="col-sm-3 control-label text-right">MongoDB Port</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="uceditdatabase_port" placeholder="27017">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="uceditdatabase_user" class="col-sm-3 control-label text-right">MongoDB Username</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="uceditdatabase_user" placeholder="root">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="uceditdatabase_pass" class="col-sm-3 control-label text-right">MongoDB Password</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" id="uceditdatabase_pass" placeholder="********">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="uceditdatabase_submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="ucEditSystemModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Edit System Settings</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="form-group row">
+                            <label for="uceditsystem_baseurl" class="col-sm-3 control-label text-right">Base URL (including port)</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="uceditsystem_baseurl" placeholder="http://localhost:3000">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="uceditsystem_submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
