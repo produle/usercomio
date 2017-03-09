@@ -47,7 +47,7 @@ class ViewRenderer
                         var userManagerObj = new userManager();
 
                         var user = userManagerObj.getUserByUsername(uname,function(user){
-                            res.render('index',{user:user})
+                            res.render('index',{user:user,config:config})
                         })
                     }
                     else
@@ -87,101 +87,6 @@ class ViewRenderer
 		  
 		  
 		});
-		
-		/*
-		 * @desc Renders edit profile page
-		 */
-		app.get('/edit-profile', function(req, res)
-		{
-
-            if (req.isAuthenticated())
-            {
-                var uname = req.cookies.uname;
-                if(uname)
-                {
-
-                    var userManagerObj = new userManager();
-
-                    var user = userManagerObj.getUserByUsername(uname,function(user){
-                        res.render('editprofile',{user:user})
-                    })
-                }
-                else
-                {
-                    res.redirect('login');
-                }
-            }
-            else
-            {
-                res.redirect('login');
-            }
-
-
-		 });
-
-		/*
-		 * @desc Renders change password page
-		 */
-		app.get('/change-password', function(req, res)
-		{
-
-            if (req.isAuthenticated())
-            {
-                var uname = req.cookies.uname;
-                if(uname)
-                {
-
-                    var userManagerObj = new userManager();
-
-                    var user = userManagerObj.getUserByUsername(uname,function(user){
-                        res.render('changepassword',{user:user})
-                    })
-                }
-                else
-                {
-                    res.redirect('login');
-                }
-            }
-            else
-            {
-                res.redirect('login');
-            }
-
-
-		 });
-
-		/*
-		 * @desc Renders edit email settings page
-		 */
-		app.get('/edit-smtp', function(req, res)
-		{
-
-            if (req.isAuthenticated())
-            {
-                var uname = req.cookies.uname;
-                if(uname)
-                {
-
-                    var userManagerObj = new userManager();
-
-                    var config = require('config');
-
-                    var user = userManagerObj.getUserByUsername(uname,function(user){
-                        res.render('editsmtp',{user:user,config:config})
-                    })
-                }
-                else
-                {
-                    res.redirect('login');
-                }
-            }
-            else
-            {
-                res.redirect('login');
-            }
-
-
-		 });
 
 		
 		/*

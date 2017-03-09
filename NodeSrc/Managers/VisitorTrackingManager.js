@@ -49,21 +49,10 @@ class VisitorTrackingManager {
   		
   		if(!req.body.userdata.email || req.body.userdata.email.length == 0)
   		{
-  			if(!req.body.userdata.userid || req.body.userdata.userid.length == 0)
-  			{
-  				return res.send({status:'failure',msg:'Either email or userid should be provided'})
-  			}
-  			else
-  			{
-  				uid = req.body.userdata.userid
-  			}
-  		}
-  		else
-  		{
-  			uid = req.body.userdata.email;
+  		    return res.send({status:'failure',msg:'Email of the user should be provided'});
   		}
   	
-  		
+  		uid = req.body.uid;
   		
   		visitorDetail["_id"] = uid;
         visitorDetail["appid"] = req.body.appid;
@@ -102,7 +91,7 @@ class VisitorTrackingManager {
 
         var status = "success";
         
-        visitorCollection.findOne({ _id: uid },function(err,visitor)
+        visitorCollection.findOne({ "visitordata.email": req.body.userdata.email },function(err,visitor)
         {
       	  if(err)
       	  {
@@ -125,13 +114,15 @@ class VisitorTrackingManager {
       		  		visitorDetail["visitordata"][key] = req.body.userdata[key];
       		  	}
       		  	
-  		  		visitorCollection.update({_id:uid},{$set:{'visitormetainfo.lastseen':lastseen,visitordata:visitorDetail["visitordata"]}},function(err,count,result)
+  		  		visitorCollection.update({_id:visitor._id},{$set:{'visitormetainfo.lastseen':lastseen,visitordata:visitorDetail["visitordata"]}},function(err,count,result)
 	      		{
 	  		  		if (err)
 	  	            {
 	  	            	return res.send({status:'failure'});
 	  	            }
 	      		});
+
+                sessionDetail["visitorid"]  = visitor._id;
       	  }
       	  else
       	  {

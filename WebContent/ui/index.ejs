@@ -34,7 +34,8 @@
 
  	    uc_main.appController.renderVisitors = true;
         uc_main.constructor();
-		uc_main.dashboardController.constructor();
+
+         uc_main.userController.config = <%- JSON.stringify(config) %>;
 
     </script>
 
