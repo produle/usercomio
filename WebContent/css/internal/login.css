@@ -46,12 +46,12 @@ form
 }
 .UC_logo img
 {
-	width: 80px;
-	height: 80px;
+	width: 100px;
+	height: 100px;
 }
 .UC_logo 
 {
-	margin-bottom:20px;
+	margin-bottom:40px;
 }
 #uclogin_usernameinput
 {
@@ -78,6 +78,10 @@ form
     padding: 8px 30px;
     border-radius: 30px;
     border: none;
+}
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus
+{
+	outline: none;
 }
 .UC_LoginContainerCls input[type="email"]::-webkit-input-placeholder, .UC_LoginContainerCls input[type="password"]::-webkit-input-placeholder,
 .UC_LoginContainerCls input[type="email"]::-moz-input-placeholder, .UC_LoginContainerCls input[type="password"]::-moz-input-placeholder,

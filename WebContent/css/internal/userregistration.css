@@ -26,6 +26,7 @@ body
 {
 	background: #2586d4;
 	color:#fff;
+	outline: none;
 }
 
 .UC_UserRegistrationContainerCls
@@ -40,16 +41,6 @@ body
     text-align: center;
 }
 
-.UC_SetupContainerCls
-{
-	width: 1000px;
-    overflow: hidden;
-    transform: translateX(-50%) translateY(-50%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-}
-
 .input-container
 {
   margin-top:10px;
@@ -62,126 +53,7 @@ form
   margin-top: 300px;
 }
 
-.UC_SetupContainerCls
-{
-    display: none;
-}
-.ucSetupProgressSteps
-{
-	margin: 80px 0;
-	padding: 0;
-}
-.ucSetupProgressSteps li
-{
-	display: inline-block;
-    list-style: none;
-    text-align: center;
-    position: relative;
-    color: #9ea1a2;
-    font-weight:300;
-    padding: 0 45px;
-}
-.ucSetupProgressSteps li:first-child
-{
-	padding-left:0;
-}
-.ucSetupProgressSteps li:last-child
-{
-	padding-right:0;
-}
-.ucSetupProgressSteps li span
-{
-	display: block;
-    width: 40px;
-    height: 40px;
-    border: 2px solid #e8eced;
-    background:#fff;
-    margin: 0 auto;
-    line-height: 38px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-}
-.ucSetupProgressSteps li.active span
-{
-	border-color: #2B9AF3;
-	color: #2B9AF3;
-	font-weight: 500;
-}
-.ucSetupProgressSteps li.active
-{
-	color: #2B9AF3;
-}
-.ucSetupProgressSteps li:after
-{
-	content: '';
-    width: 110%;
-    height: 2px;
-    background: #e8eced;
-    position: absolute;
-    left: -50%;
-    top: 20px;
-    z-index: -1;
-}
-.ucSetupProgressSteps li:first-child:after
-{
-	width:0%;
-}
-.ucWelcomeContent
-{
-	padding:50px 30px;
-	text-align:center;
-}
-.ucWelcomeContent img
-{
-	margin:0 auto;
-	display: block;
-}
-.ucWelcomeContent h2
-{
-	font-weight: 300;
-	text-align: center;
-}
-.ucWelcomeContent h5
-{
-	font-weight: 300;
-    color: #a4aeba;
-    font-style: italic;
-    text-align: center;
-}
-.ucWelcomeContent p
-{
-	font-size:13px;
-	line-height:22px;
-	text-align:center;
-	margin: 25px 0; 
-}
-.ucBorderRight
-{
-	border-right: 1px solid #e8eced;
-}
-.ucRequirements p
-{
-	font-size:13px;
-	line-height:20px;
-	text-align:left;
-	margin: 0 0 15px 0; 
-}
-.ucRequirements ul
-{
-	margin:0 0 20px 0;
-	list-style: circle;
-}
-.ucRequirements ul li
-{
-	font-size: 13px;
-	line-height: 26px;
-}
-.ucSetupProgressStepsWrapper
-{
-	width:1000px;
-	margin:0 auto;
-	position: relative;
-}
+
 .ucCopyright
 {
 	text-align: center;
@@ -190,7 +62,7 @@ form
     left: 0;
     right: 0;
 }
-#UC_Setup_Database h2, #UC_Setup_SMTP h2, #UC_Setup_User h2, #UC_Setup_App h2, .UC_UserRegistrationContainerCls h2
+.UC_UserRegistrationContainerCls h2
 {
 	font-size:32px;
 	font-weight:300;
@@ -198,7 +70,7 @@ form
 	text-align: center;
 	margin: 0 auto 30px;
 }
-.UC_SetupContainerCls input[type="text"], .UC_SetupContainerCls input[type="email"], .UC_SetupContainerCls input[type="password"], .UC_UserRegistrationContainerCls input[type="text"],.UC_UserRegistrationContainerCls input[type="email"],.UC_UserRegistrationContainerCls input[type="password"]
+.UC_UserRegistrationContainerCls input[type="text"],.UC_UserRegistrationContainerCls input[type="email"],.UC_UserRegistrationContainerCls input[type="password"]
 {
 	border:none; 
 	border-bottom: 1px solid #e8eced;
@@ -209,11 +81,7 @@ form
     text-align: left;
     margin-bottom: 5px;
 }
-.UC_SetupContainerCls .form-group .btn
-{
-	margin: 10px 0;
-	padding: 8px 30px !important;
-}
+
 .UC_UserRegistrationContainerCls .form-group .btn
 {
 	margin: 30px 0 10px;
