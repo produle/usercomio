@@ -91,3 +91,22 @@ body
     background-color: #d9534f;
     color: #FFF;
 }
+
+#ucPredefinedFilterList
+{
+    list-style: none;
+    padding: 10px;
+    margin: 0px;
+}
+
+#ucPredefinedFilterList li
+{
+    padding: 5px 0px;
+    cursor: pointer;
+    color: #666;
+}
+
+#ucPredefinedFilterList li:hover
+{
+    color: #999;
+}

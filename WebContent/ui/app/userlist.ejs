@@ -2,162 +2,194 @@
 
   		<div class="row uc_mt_medium uc_tab_data_container" id="uc_tab_data_listuser">
             <div class="col-md-12">
-                <table class="table table-striped uc_table" id="uc_visitor_list">
-                    <thead>
-                        <tr>
-                            <th class="uc_table_input_control"><input id="uc-all-user-select" type="checkbox"><label for="uc-all-user-select"></label></th>
-                            <th>Name</th>
-                            <th >Session</th>
-                            <th>Browser</th>
-                            <th>Operating System</th>
-                            <th class="text-center">Device</th>
-                            <th>Country</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                       <tr rv-each-visitor="list">
-                           <td class="uc_td_input_control"><input rv-visitorid="visitor" type="checkbox"><label></label></td>
-                           <td>
-                               <div class="ucUserBaseDetails">
-                                   <div class="ucUserCurrentStatus">
-                                       <span class="ucUserOnline"></span>
-                                       <div class="ucUserPicWrapper">
-                                           <img src="images/app/listing/ucUserPic.png" alt=""/>
-                                       </div>
-                                       
-                                       <div class="ucUserNameAndEmail">
-                                           <span class="ucUserName">{visitor.visitordata.name}</span>
-                                           <span class="ucUserEmail">{visitor.visitordata.email}</span>
-                                       </div>
-                                   </div>
-                                   
-                               </div>
-                           </td>
-                           <td class="text-center">20</td>
-                           <td> <div class="ucUserBrowserIcon" rv-latestbrowser="visitor.sessions"></div></td>
-                           <td> <div class="ucUserOSIcon" rv-latestplatform="visitor.sessions"></div> </td>
-                           <td class="text-center"><div class="ucUserDeviceIcon desktop"></div></td>
-                           <td>India</td>
-                           <td>
-                               <div class="dropdown ucUsersListMoreOptions">
-                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    &#8226;&#8226;&#8226;
-                                  </span>
-                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
-                                    <li><a href="#">Send Email</a></li>
-                                    <li><a href="#">User Profile</a></li>
-                                  </ul>
-                                </div>
-                           </td>
-                       </tr>
 
-                       <tr>
-                           <td class="uc_td_input_control"><input id="uc-user-select" type="checkbox"><label for="uc-user-select"></label></td>
-                           <td>
-                               <div class="ucUserBaseDetails">
-                                   <div class="ucUserCurrentStatus">
-                                       <span class="ucUserOnline"></span>
-                                       <div class="ucUserPicWrapper">
-                                           <img src="images/app/listing/ucUserPic.png" alt=""/>
-                                       </div>
-                                       
-                                       <div class="ucUserNameAndEmail">
-                                           <span class="ucUserName">John</span>
-                                           <span class="ucUserEmail">info@johnabragham.com</span>
-                                       </div>
-                                   </div>
-                                   
-                               </div>
-                           </td>
-                           <td class="text-center">20</td>
-                           <td> <div class="ucUserBrowserIcon chrome">Chrome<span>(v56.0)</span></div></td>
-                           <td> <div class="ucUserOSIcon ios">macOS Sierra<span>(v10.12)</span></div> </td>
-                           <td class="text-center"><div class="ucUserDeviceIcon desktop"></div></td>
-                           <td>India</td>
-                           <td>
-                               <div class="dropdown ucUsersListMoreOptions">
-                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    &#8226;&#8226;&#8226;
-                                  </span>
-                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
-                                    <li><a href="#">Send Email</a></li>
-                                    <li><a href="#">User Profile</a></li>
-                                  </ul>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div>
+                                    <ul id="ucPredefinedFilterList">
+                                        <li rv-each-filter="list" rv-text="filter.name" rv-data-filterid="filter.id"></li>
+                                    </ul>
                                 </div>
-                           </td>
-                       </tr>
-                       <tr>
-                           <td class="uc_td_input_control"><input id="uc-user-select2" type="checkbox"><label for="uc-user-select2"></label></td>
-                           <td>
-                               <div class="ucUserBaseDetails">
-                                   <div class="ucUserCurrentStatus">
-                                       <span class="ucUserOffline"></span>
-                                       <div class="ucUserPicWrapper">
-                                           <span class="ucUserPicWithText">G</span>
-                                       </div>
-                                       
-                                       <div class="ucUserNameAndEmail">
-                                           <span class="ucUserName">George</span>
-                                           <span class="ucUserEmail">george@gmail.com</span>
-                                       </div>
-                                   </div>
-                                   
-                               </div>
-                           </td>
-                           <td class="text-center">20</td>
-                           <td><div class="ucUserBrowserIcon safari">Safari<span>(v10.0)</span></div></td>
-                           <td><div class="ucUserOSIcon windows">Windows 10<span>(v10.0)</span></div></td>
-                           <td class="text-center"><div class="ucUserDeviceIcon mobile"></div></td>
-                           <td>India</td>
-                           <td>
-                               <div class="dropdown ucUsersListMoreOptions">
-                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    &#8226;&#8226;&#8226;
-                                  </span>
-                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
-                                    <li><a href="#">Send Email</a></li>
-                                    <li><a href="#">User Profile</a></li>
-                                  </ul>
+                            </div>
+                        </div>
+
+                        <div class="row uc_mt_large">
+                            <div class="col-md-12">
+                                <div>
+                                    <button class="btn btn-success" id="ucAddFilterBtn"><i class="fa fa-plus"></i> New Filter</button>
                                 </div>
-                           </td>
-                       </tr>
-                       <tr>
-                           <td class="uc_td_input_control"><input id="uc-user-select3" type="checkbox"><label for="uc-user-select3"></label></td>
-                           <td>
-                               <div class="ucUserBaseDetails">
-                                   <div class="ucUserCurrentStatus">
-                                       <span class="ucUserOnline"></span>
-                                       <div class="ucUserPicWrapper">
-                                           <span class="ucUserPicWithText">G</span>
-                                       </div>
-                                       
-                                       <div class="ucUserNameAndEmail">
-                                           <span class="ucUserName">George</span>
-                                           <span class="ucUserEmail">george@gmail.com</span>
-                                       </div>
-                                   </div>
-                                   
-                               </div>
-                           </td>
-                           <td class="text-center">20</td>
-                           <td><div class="ucUserBrowserIcon firefox">Firefox<span>(v10.5)</span></div></td>
-                           <td><div class="ucUserOSIcon linux">Linux<span>(v10.0)</span></div></td>
-                           <td class="text-center"><div class="ucUserDeviceIcon tablet"></div></td>
-                           <td>India</td>
-                           <td>
-                               <div class="dropdown ucUsersListMoreOptions">
-                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    &#8226;&#8226;&#8226;
-                                  </span>
-                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
-                                    <li><a href="#">Send Email</a></li>
-                                    <li><a href="#">User Profile</a></li>
-                                  </ul>
-                                </div>
-                           </td>
-                       </tr>
-                    </tbody>
-                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <table class="table table-striped uc_table" id="uc_visitor_list">
+                                    <thead>
+                                        <tr>
+                                            <th class="uc_table_input_control"><input id="uc-all-user-select" type="checkbox"><label for="uc-all-user-select"></label></th>
+                                            <th>Name</th>
+                                            <th >Session</th>
+                                            <th>Browser</th>
+                                            <th>Operating System</th>
+                                            <th class="text-center">Device</th>
+                                            <th>Country</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       <tr rv-each-visitor="list">
+                                           <td class="uc_td_input_control"><input rv-visitorid="visitor" type="checkbox"><label></label></td>
+                                           <td>
+                                               <div class="ucUserBaseDetails">
+                                                   <div class="ucUserCurrentStatus">
+                                                       <span class="ucUserOnline"></span>
+                                                       <div class="ucUserPicWrapper">
+                                                           <img src="images/app/listing/ucUserPic.png" alt=""/>
+                                                       </div>
+
+                                                       <div class="ucUserNameAndEmail">
+                                                           <span class="ucUserName">{visitor.visitordata.name}</span>
+                                                           <span class="ucUserEmail">{visitor.visitordata.email}</span>
+                                                       </div>
+                                                   </div>
+
+                                               </div>
+                                           </td>
+                                           <td class="text-center">20</td>
+                                           <td> <div class="ucUserBrowserIcon" rv-latestbrowser="visitor.sessions"></div></td>
+                                           <td> <div class="ucUserOSIcon" rv-latestplatform="visitor.sessions"></div> </td>
+                                           <td class="text-center"><div class="ucUserDeviceIcon desktop"></div></td>
+                                           <td>India</td>
+                                           <td>
+                                               <div class="dropdown ucUsersListMoreOptions">
+                                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    &#8226;&#8226;&#8226;
+                                                  </span>
+                                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
+                                                    <li><a href="#">Send Email</a></li>
+                                                    <li><a href="#">User Profile</a></li>
+                                                  </ul>
+                                                </div>
+                                           </td>
+                                       </tr>
+
+                                       <tr>
+                                           <td class="uc_td_input_control"><input id="uc-user-select" type="checkbox"><label for="uc-user-select"></label></td>
+                                           <td>
+                                               <div class="ucUserBaseDetails">
+                                                   <div class="ucUserCurrentStatus">
+                                                       <span class="ucUserOnline"></span>
+                                                       <div class="ucUserPicWrapper">
+                                                           <img src="images/app/listing/ucUserPic.png" alt=""/>
+                                                       </div>
+
+                                                       <div class="ucUserNameAndEmail">
+                                                           <span class="ucUserName">John</span>
+                                                           <span class="ucUserEmail">info@johnabragham.com</span>
+                                                       </div>
+                                                   </div>
+
+                                               </div>
+                                           </td>
+                                           <td class="text-center">20</td>
+                                           <td> <div class="ucUserBrowserIcon chrome">Chrome<span>(v56.0)</span></div></td>
+                                           <td> <div class="ucUserOSIcon ios">macOS Sierra<span>(v10.12)</span></div> </td>
+                                           <td class="text-center"><div class="ucUserDeviceIcon desktop"></div></td>
+                                           <td>India</td>
+                                           <td>
+                                               <div class="dropdown ucUsersListMoreOptions">
+                                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    &#8226;&#8226;&#8226;
+                                                  </span>
+                                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
+                                                    <li><a href="#">Send Email</a></li>
+                                                    <li><a href="#">User Profile</a></li>
+                                                  </ul>
+                                                </div>
+                                           </td>
+                                       </tr>
+                                       <tr>
+                                           <td class="uc_td_input_control"><input id="uc-user-select2" type="checkbox"><label for="uc-user-select2"></label></td>
+                                           <td>
+                                               <div class="ucUserBaseDetails">
+                                                   <div class="ucUserCurrentStatus">
+                                                       <span class="ucUserOffline"></span>
+                                                       <div class="ucUserPicWrapper">
+                                                           <span class="ucUserPicWithText">G</span>
+                                                       </div>
+
+                                                       <div class="ucUserNameAndEmail">
+                                                           <span class="ucUserName">George</span>
+                                                           <span class="ucUserEmail">george@gmail.com</span>
+                                                       </div>
+                                                   </div>
+
+                                               </div>
+                                           </td>
+                                           <td class="text-center">20</td>
+                                           <td><div class="ucUserBrowserIcon safari">Safari<span>(v10.0)</span></div></td>
+                                           <td><div class="ucUserOSIcon windows">Windows 10<span>(v10.0)</span></div></td>
+                                           <td class="text-center"><div class="ucUserDeviceIcon mobile"></div></td>
+                                           <td>India</td>
+                                           <td>
+                                               <div class="dropdown ucUsersListMoreOptions">
+                                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    &#8226;&#8226;&#8226;
+                                                  </span>
+                                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
+                                                    <li><a href="#">Send Email</a></li>
+                                                    <li><a href="#">User Profile</a></li>
+                                                  </ul>
+                                                </div>
+                                           </td>
+                                       </tr>
+                                       <tr>
+                                           <td class="uc_td_input_control"><input id="uc-user-select3" type="checkbox"><label for="uc-user-select3"></label></td>
+                                           <td>
+                                               <div class="ucUserBaseDetails">
+                                                   <div class="ucUserCurrentStatus">
+                                                       <span class="ucUserOnline"></span>
+                                                       <div class="ucUserPicWrapper">
+                                                           <span class="ucUserPicWithText">G</span>
+                                                       </div>
+
+                                                       <div class="ucUserNameAndEmail">
+                                                           <span class="ucUserName">George</span>
+                                                           <span class="ucUserEmail">george@gmail.com</span>
+                                                       </div>
+                                                   </div>
+
+                                               </div>
+                                           </td>
+                                           <td class="text-center">20</td>
+                                           <td><div class="ucUserBrowserIcon firefox">Firefox<span>(v10.5)</span></div></td>
+                                           <td><div class="ucUserOSIcon linux">Linux<span>(v10.0)</span></div></td>
+                                           <td class="text-center"><div class="ucUserDeviceIcon tablet"></div></td>
+                                           <td>India</td>
+                                           <td>
+                                               <div class="dropdown ucUsersListMoreOptions">
+                                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    &#8226;&#8226;&#8226;
+                                                  </span>
+                                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
+                                                    <li><a href="#">Send Email</a></li>
+                                                    <li><a href="#">User Profile</a></li>
+                                                  </ul>
+                                                </div>
+                                           </td>
+                                       </tr>
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
   			</div>
   		</div>
