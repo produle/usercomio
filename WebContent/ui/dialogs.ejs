@@ -54,207 +54,220 @@
 </div><!-- /.modal -->
 
 
-<div id="ucEditProfileModal" class="modal fade" tabindex="-1" role="dialog">
+<div id="ucEditProfileModal" class="modal ucModal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edit Profile</h4>
-            </div>
+
             <div class="modal-body">
+               <img src="images/app/modal/userIcon.png" alt=""/>
+               <h2>Edit Profile</h2>
                 <div class="row">
-                    <div class="col-md-12">
-
-                        <div class="form-group row">
-                            <label for="uceditprofile_firstname" class="col-sm-3 control-label text-right">First Name</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="uceditprofile_firstname" placeholder="John">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="uceditprofile_lastname" class="col-sm-3 control-label text-right">Last Name</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="uceditprofile_lastname" placeholder="Doe">
-                            </div>
-                        </div>
-
+                  <div class="col-sm-10 col-sm-offset-1">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <label>First Name</label>
+                      </span>
+                      <input type="text" class="form-control" id="uceditprofile_firstname">
                     </div>
+                   </div>
+
+                   <div class="col-sm-10 col-sm-offset-1">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <label>Last Name</label>
+                      </span>
+                      <input type="text" class="form-control" id="uceditprofile_lastname">
+                    </div>
+                   </div>
+
+                </div>
+                <div class="ucButtonWrapper">
+                    <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="uceditprofile_submit" class="btn ucSaveBtn">Save</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" id="uceditprofile_submit" class="btn btn-primary">Save</button>
-            </div>
+
         </div>
     </div>
 </div>
 
 
-<div id="ucEditPasswordModal" class="modal fade" tabindex="-1" role="dialog">
+<div id="ucEditPasswordModal" class="modal ucModal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Change Password</h4>
-            </div>
+
             <div class="modal-body">
+               <img src="images/app/modal/passwordIcon.png" alt=""/>
+               <h2>Change Password</h2>
                 <div class="row">
-                    <div class="col-md-12">
 
-                        <div class="form-group row">
-                            <label for="ucchangepassword_password" class="col-sm-3 control-label text-right">New Password</label>
-                            <div class="col-sm-9">
-                                <input type="password" class="form-control" id="ucchangepassword_password" placeholder="********">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>New Password</label>
+                              </span>
+                              <input type="text" class="form-control" id="ucchangepassword_password" placeholder="********">
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="ucchangepassword_confirmpassword" class="col-sm-3 control-label text-right">Confirm Password</label>
-                            <div class="col-sm-9">
-                                <input type="password" class="form-control" id="ucchangepassword_confirmpassword" placeholder="********">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>Confirm Password</label>
+                              </span>
+                              <input type="text" class="form-control" id="ucchangepassword_confirmpassword" placeholder="********">
                             </div>
                         </div>
 
-                    </div>
+                </div>
+                <div class="ucButtonWrapper">
+                    <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="ucchangepassword_submit" class="btn ucSaveBtn">Save</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" id="ucchangepassword_submit" class="btn btn-primary">Save</button>
-            </div>
+
         </div>
     </div>
 </div>
 
 
-<div id="ucEditSMTPModal" class="modal fade" tabindex="-1" role="dialog">
+<div id="ucEditSMTPModal" class="modal ucModal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edit Email Settings</h4>
-            </div>
+
             <div class="modal-body">
+               <img src="images/app/modal/smtpIcon.png" alt=""/>
+               <h2>Edit Email Settings</h2>
+
                 <div class="row">
-                    <div class="col-md-12">
 
-                        <div class="form-group row">
-                            <label for="uceditsmtp_host" class="col-sm-3 control-label text-right">SMTP Host</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="uceditsmtp_host" placeholder="smtp.google.com">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>SMTP Host</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditsmtp_host" placeholder="smtp.google.com">
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="uceditsmtp_port" class="col-sm-3 control-label text-right">SMTP Port</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="uceditsmtp_port" placeholder="25">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>SMTP Port</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditsmtp_port" placeholder="25">
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="uceditsmtp_user" class="col-sm-3 control-label text-right">SMTP Username</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="uceditsmtp_user" placeholder="johndoe@gmail.com">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>SMTP Username</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditsmtp_user" placeholder="johndoe@gmail.com">
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="uceditsmtp_pass" class="col-sm-3 control-label text-right">SMTP Password</label>
-                            <div class="col-sm-9">
-                                <input type="password" class="form-control" id="uceditsmtp_pass" placeholder="********">
+                         <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>SMTP Password</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditsmtp_pass" placeholder="********">
                             </div>
                         </div>
-
-                    </div>
+                </div>
+                <div class="ucButtonWrapper">
+                    <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="uceditsmtp_submit" class="btn ucSaveBtn">Save</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" id="uceditsmtp_submit" class="btn btn-primary">Save</button>
-            </div>
+
         </div>
     </div>
 </div>
 
 
-<div id="ucEditDatabaseModal" class="modal fade" tabindex="-1" role="dialog">
+<div id="ucEditDatabaseModal" class="modal ucModal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edit Database Settings</h4>
-            </div>
+
             <div class="modal-body">
+               <img src="images/app/modal/dbIcon.png" alt=""/>
+               <h2>Edit Database Settings</h2>
+
                 <div class="row">
-                    <div class="col-md-12">
 
-                        <div class="form-group row">
-                            <label for="uceditdatabase_host" class="col-sm-3 control-label text-right">MongoDB Host</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="uceditdatabase_host" placeholder="127.0.0.1, localhost, etc">
+                   <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>MongoDB Host</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditdatabase_host" placeholder="127.0.0.1, localhost, etc">
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="uceditdatabase_port" class="col-sm-3 control-label text-right">MongoDB Port</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="uceditdatabase_port" placeholder="27017">
+                   </div>
+                   <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>MongoDB Port</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditdatabase_port" placeholder="27017">
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="uceditdatabase_user" class="col-sm-3 control-label text-right">MongoDB Username</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="uceditdatabase_user" placeholder="root">
+                   </div>
+                   <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>MongoDB Username</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditdatabase_user" placeholder="root">
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="uceditdatabase_pass" class="col-sm-3 control-label text-right">MongoDB Password</label>
-                            <div class="col-sm-9">
-                                <input type="password" class="form-control" id="uceditdatabase_pass" placeholder="********">
+                   </div>
+                   <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>MongoDB Password</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditdatabase_pass" placeholder="********">
                             </div>
-                        </div>
-
+                   </div>
+                   <div class="ucButtonWrapper">
+                        <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                        <button type="button" id="uceditdatabase_submit" class="btn ucSaveBtn">Save</button>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" id="uceditdatabase_submit" class="btn btn-primary">Save</button>
-            </div>
+
         </div>
     </div>
 </div>
 
 
-<div id="ucEditSystemModal" class="modal fade" tabindex="-1" role="dialog">
+<div id="ucEditSystemModal" class="modal ucModal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edit System Settings</h4>
-            </div>
+
             <div class="modal-body">
+               <img src="images/app/modal/settingsIcon.png" alt=""/>
+               <h2>Edit System Settings</h2>
                 <div class="row">
-                    <div class="col-md-12">
 
-                        <div class="form-group row">
-                            <label for="uceditsystem_baseurl" class="col-sm-3 control-label text-right">Base URL (including port)</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="uceditsystem_baseurl" placeholder="http://localhost:3000">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>Base URL with Port</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditsystem_baseurl" placeholder="http://localhost:3000">
                             </div>
-                        </div>
+                       </div>
+                 </div>
 
-                    </div>
-                </div>
+                 <div class="ucButtonWrapper">
+                        <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                        <button type="button" id="uceditsystem_submit" class="btn ucSaveBtn">Save</button>
+                 </div>
+
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" id="uceditsystem_submit" class="btn btn-primary">Save</button>
-            </div>
+
         </div>
     </div>
 </div>

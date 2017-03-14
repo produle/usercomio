@@ -23,6 +23,7 @@ body
     outline: none !important;
 }
 
+
 .uc_mt_small
 {
     margin-top: 10px;
@@ -90,6 +91,114 @@ body
 {
     background-color: #d9534f;
     color: #FFF;
+}
+
+input[type="text"], input[type="email"], input[type="password"]
+{
+	border:none;
+	border-bottom: 1px solid #e8eced;
+    box-shadow: none;
+    border-radius: 0;
+    font-weight: 300;
+    font-size: 13px;
+    text-align: left;
+    margin-bottom: 5px;
+}
+h2
+{
+	font-size:32px;
+	font-weight:300;
+	color: #788f9d;
+	text-align: center;
+	margin: 0 auto 30px;
+}
+.ucFormWrapper
+{
+	text-align: center;
+	margin-top: 10%;
+}
+.form-group .btn
+{
+	margin: 10px 0;
+	padding: 8px 30px !important;
+	background: #2B9AF3;
+    color: #fff;
+    font-size: 13px;
+    border-radius: 30px;
+    border: none;
+    transition: all 2s ease;
+}
+.form-group .btn:hover, .form-group .btn:focus
+{
+	background: #2586d4;
+	color:#fff;
+	outline: none;
+}
+.form-control:focus {
+    border-color: #e8eced;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+/**** Modal ****/
+.ucModal
+{
+	text-align: center;
+}
+.ucModal .modal-body
+{
+	padding:35px 15px;
+}
+.ucModal .modal-body img
+{
+	margin-bottom: 10px;
+}
+.ucModal h2
+{
+	font-size:28px;
+	color: #333;
+}
+.ucModal .modal-body .input-group-btn label
+{
+	width: 140px;
+	border:none;
+	border-bottom: 1px solid #e8eced;
+    color: #8ea4b1;
+    font-weight: 400;
+    font-size: 13px;
+    text-align: left;
+    margin-bottom: 0px;
+    padding: 7px 0px 8px 11px;
+}
+.ucModal .modal-body .input-group
+{
+	margin-bottom:20px;
+}
+.ucModal .modal-body .ucCancelBtn
+{
+	width: 133px;
+	height:45px;
+	border-radius:5px;
+	border: 1px solid #7b8d98;
+	color: #7b8d98;
+	background: transparent;
+	margin:15px 5px 0px;
+}
+.ucModal .modal-body .ucSaveBtn
+{
+	width: 133px;
+	height:45px;
+	padding: 14px 35px;
+	border-radius:5px;
+	border: none;
+	color: #fff;
+	background: #2b9af3;
+	margin:15px 5px 0px;
+}
+.ucModal .modal-body .ucSaveBtn:focus, .ucModal .modal-body .ucSaveBtn:hover, .ucModal .modal-body .ucCancelBtn:focus, .ucModal .modal-body .ucCancelBtn:hover
+{
+	outline: none;
+	box-shadow: none;
 }
 
 #ucPredefinedFilterList

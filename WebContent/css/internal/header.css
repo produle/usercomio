@@ -68,20 +68,43 @@
 {
 	background: url(../../images/app/header/editIcon.png) no-repeat left top;
 	padding-left: 25px;
-	font-size:13px;
+	font-size: 12px;
+    line-height: 20px;
 }
 .uc_currentuser_submenu .ucChangePassword
 {
 	background: url(../../images/app/header/passwordIcon.png) no-repeat left top;
 	padding-left: 25px;
-	font-size:13px;
+	font-size: 12px;
+    line-height: 20px;
+}
+.uc_currentuser_submenu .ucEditSMTP
+{
+	background: url(../../images/app/header/editEmailIcon.png) no-repeat left top;
+	padding-left: 25px;
+	font-size: 12px;
+    line-height: 20px;
+}
+.uc_currentuser_submenu .ucEditDatabase
+{
+	background: url(../../images/app/header/editDBIcon.png) no-repeat left top;
+	padding-left: 25px;
+	font-size: 12px;
+    line-height: 20px;
+}
+.uc_currentuser_submenu .ucEditSystem
+{
+	background: url(../../images/app/header/editSystemSettingsIcon.png) no-repeat left top;
+	padding-left: 25px;
+	font-size: 12px;
+    line-height: 20px;
 }
 .ucLogoutBtn, .ucAddNewAppBtn
 {
 	padding:0;
 	background-color: #f0f0f0;
 	border-top:1px solid rgba(196,196,196,0.15);
-	font-size: 13px;
+	font-size: 12px;
 	margin-top: 8px;
 }
 .ucLogoutBtn a 

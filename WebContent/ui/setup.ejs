@@ -1,9 +1,12 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 	 <% include commoncss.ejs %>
 
-    <link rel="stylesheet" type="text/css" href="/css/internal/userregistration.css" />
+    <link rel="stylesheet" type="text/css" href="/css/internal/usersetup.css" />
 
     <!-- external scripts -->
     <% include commonscripts.ejs %>
@@ -47,10 +50,11 @@
         
         <div class="row">
             <div class="col-md-12 text-center">
-                <h2>MongoDB Database Details</h2>
+                <div class="UC_SetupLogo mongoDB"><img src="../images/app/setup/mongoDBLogo.png" alt="mongoDBLogo" /></div>
+                <h2>Database Details</h2>
             </div>
         </div>
-        <br/><br/>
+
 
     	<div class="form-group row">
 			<div class="col-sm-6 col-sm-offset-3">
@@ -86,7 +90,7 @@
     </div>
 
   	<div class="UC_SetupContainerCls" id="UC_Setup_SMTP">
-        
+        <div class="UC_SetupLogo"><img src="../images/app/setup/emailIcon.png" alt="emailIcon" /></div>
         <div class="row">
             <div class="col-md-12 text-center">
                 <h2>SMTP Details</h2>
@@ -124,7 +128,9 @@
   	<div class="UC_SetupContainerCls" id="UC_Setup_User">
         
         <div class="row">
-            <div class="col-md-12 text-center">
+
+               <div class="col-md-12 text-center">
+                <div class="UC_SetupLogo"><img src="../images/app/setup/userIcon.png" alt="userIcon" /></div>
                 <h2>Admin User Details</h2>
             </div>
         </div>
@@ -161,6 +167,7 @@
         
         <div class="row">
             <div class="col-md-12 text-center">
+                <div class="UC_SetupLogo"><img src="../images/app/setup/settingsIcon.png" alt="settingsIcon" /></div>
                 <h2>System Settings</h2>
             </div>
         </div>
