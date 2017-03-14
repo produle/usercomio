@@ -11,7 +11,11 @@ function UC_FilterController()
 
     this.predefinedFiltersList = [];
 
+    this.userdefinedFiltersList = [];
+
     this.rivetPredefinedFiltersListObj = null;
+
+    this.rivetUserdefinedFiltersListObj = null;
 
     this.filterOnEdit = null;
 
@@ -24,9 +28,15 @@ function UC_FilterController()
             }
         );
 
+        thisClass.rivetUserdefinedFiltersListObj = rivets.bind(
+            document.querySelector('#ucUserdefinedFilterList'), {
+                list: thisClass.userdefinedFiltersList
+            }
+        );
+
         thisClass.listPredefinedFilters();
 
-        $(document).on("click","#ucPredefinedFilterList li",thisClass.editFilterHandler);
+        $(document).on("click","#ucUserdefinedFilterList li",thisClass.editFilterHandler);
         $(document).on("click","#ucAddFilterBtn",thisClass.addFilterHandler);
         $(document).on("click","#ucEditFilterSubmit",thisClass.saveFilterHandler);
 	};
@@ -51,10 +61,32 @@ function UC_FilterController()
     };
 
     /*
+     * @desc List user defined filters
+     */
+    this.listUserdefinedFilters = function()
+    {
+        UC_AJAX.call('FilterManager/listuserdefined',{user:UC_UserSession.user,appid:uc_main.appController.currentAppId},function(data,status,xhr){
+
+            if(data.status == "failure")
+            {
+                alert("An Error accured while fetching filters list");
+            }
+            else
+            {
+                thisClass.userdefinedFiltersList = data.status;
+                thisClass.rivetUserdefinedFiltersListObj.models.list = thisClass.userdefinedFiltersList;
+            }
+        });
+    };
+
+    /*
      * @desc Creates the instance of query builder for filter
      */
     this.initQueryBuilder = function(filterRule)
     {
+
+        $('#ucFilterQueryBuilderUI').queryBuilder('destroy');
+
         $('#ucFilterQueryBuilderUI').queryBuilder({
           plugins: ['bt-tooltip-errors'],
 
@@ -68,9 +100,9 @@ function UC_FilterController()
             type: 'integer',
             input: 'text',
             operators: ['less_or_equal', 'greater_or_equal', 'equal']
-          }]//,
+          }],
 
-          //rules: filterRule
+          rules: filterRule
         });
     };
 
@@ -83,7 +115,7 @@ function UC_FilterController()
 
         thisClass.filterOnEdit = filterObj;
 
-        thisClass.initQueryBuilder(filterObj.filter);
+        thisClass.initQueryBuilder(JSON.parse(filterObj.filter));
 
         $("#ucFilterName").val(filterObj.name);
 
@@ -96,10 +128,10 @@ function UC_FilterController()
      */
     this.getFilterById = function(filterId)
     {
-        for(var iter = 0 ; iter < thisClass.predefinedFiltersList.length; iter++)
+        for(var iter = 0 ; iter < thisClass.userdefinedFiltersList.length; iter++)
         {
-            var item = thisClass.predefinedFiltersList[iter];
-            if(item.id == filterId)
+            var item = thisClass.userdefinedFiltersList[iter];
+            if(item._id == filterId)
             {
                 return item;
             }
@@ -127,17 +159,60 @@ function UC_FilterController()
      */
     this.saveFilterHandler = function()
     {
-        var result = $('#ucFilterQueryBuilderUI').queryBuilder('getMongo');
+        var filter = $('#ucFilterQueryBuilderUI').queryBuilder('getRules');
 
-        if (!$.isEmptyObject(result)) {
-            thisClass.filterOnEdit.filter = JSON.stringify(result, null, 2);
+        if (!$.isEmptyObject(filter)) {
+            filter = JSON.stringify(filter, null, 2);
         }
-        var mongoResult = $('#ucFilterQueryBuilderUI').queryBuilder('getMongo');
+        var mongoFilter = $('#ucFilterQueryBuilderUI').queryBuilder('getMongo');
 
-        if (!$.isEmptyObject(mongoResult)) {
-            thisClass.filterOnEdit.mongoquery = JSON.stringify(mongoResult, null, 2);
+        if (!$.isEmptyObject(mongoFilter)) {
+            mongoFilter = JSON.stringify(mongoFilter, null, 2);
         }
 
-        //TODO Save the filter object to server
+        var filtername = $('#ucFilterName').val();
+
+        if($.trim(filtername) == "")
+        {
+            alert("Filter Name is Required");
+            return;
+        }
+
+        if(thisClass.filterOnEdit == null)
+        {
+            var filterObj = new UC_Filter();
+
+            filterObj._id = 'F'+UC_Utils.guidGenerator();
+            filterObj.creator = UC_UserSession.user._id;
+            filterObj.appid = uc_main.appController.currentAppId;
+            filterObj.name = filtername;
+            filterObj.filter = filter;
+            filterObj.mongoFilter = mongoFilter;
+        }
+        else
+        {
+            var filterObj = thisClass.filterOnEdit;
+
+            filterObj.name = filtername;
+            filterObj.filter = filter;
+            filterObj.mongoFilter = mongoFilter;
+        }
+
+        UC_AJAX.call('FilterManager/updateFilter',{filter:filterObj},function(data,status,xhr)
+        {
+             if(data)
+             {
+                 if(data.status == "failure")
+                 {
+                     alert("An Error accured while saving data !");
+                 }
+                 else
+                 {
+                     $("#ucEditFilterModal").modal("hide");
+                     thisClass.listUserdefinedFilters();
+                 }
+             }
+
+        });
     };
 }

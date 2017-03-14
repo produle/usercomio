@@ -201,21 +201,37 @@ h2
 	box-shadow: none;
 }
 
-#ucPredefinedFilterList
+#ucPredefinedFilterList,
+#ucUserdefinedFilterList
 {
     list-style: none;
     padding: 10px;
     margin: 0px;
 }
 
-#ucPredefinedFilterList li
+#ucPredefinedFilterList li,
+#ucUserdefinedFilterList li
 {
     padding: 5px 0px;
     cursor: pointer;
     color: #666;
 }
 
-#ucPredefinedFilterList li:hover
+#ucPredefinedFilterList li:hover,
+#ucUserdefinedFilterList li:hover
 {
     color: #999;
+}
+
+#ucPredefinedFilterList li .ucFilterSettingBtn,
+#ucUserdefinedFilterList li .ucFilterSettingBtn
+{
+    display: none;
+    float: right;
+}
+
+#ucPredefinedFilterList li:hover .ucFilterSettingBtn,
+#ucUserdefinedFilterList li:hover .ucFilterSettingBtn
+{
+    display: inline-block;
 }

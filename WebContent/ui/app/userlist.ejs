@@ -9,7 +9,10 @@
                             <div class="col-md-12">
                                 <div>
                                     <ul id="ucPredefinedFilterList">
-                                        <li rv-each-filter="list" rv-text="filter.name" rv-data-filterid="filter.id"></li>
+                                        <li rv-each-filter="list" rv-text="filter.name" rv-data-filterid="filter._id"></li>
+                                    </ul>
+                                    <ul id="ucUserdefinedFilterList">
+                                        <li rv-each-filter="list" rv-data-filterid="filter._id">{filter.name}<div class="ucFilterSettingBtn"><i class="fa fa-cog"></i></div></li>
                                     </ul>
                                 </div>
                             </div>

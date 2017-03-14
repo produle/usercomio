@@ -308,6 +308,7 @@ function UC_AppController()
         {
             uc_main.dashboardController.getAllVisitors();
             uc_main.dashboardController.getDashboardMetrics();
+            uc_main.filterController.listUserdefinedFilters();
         }
     };
 }
