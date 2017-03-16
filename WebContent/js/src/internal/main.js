@@ -12,6 +12,7 @@ function UC_MainController()
 	this.appController = new UC_AppController();
 	this.dashboardController = new UC_DashboardController();
 	this.userController = new UC_UserController();
+	this.filterController = new UC_FilterController();
 
     this.rivetUserNameObj = null;
 	
@@ -21,6 +22,7 @@ function UC_MainController()
         thisClass.appController.constructor();
         thisClass.dashboardController.constructor();
         thisClass.userController.constructor();
+        thisClass.filterController.constructor();
 
         thisClass.rivetUserNameObj = rivets.bind(
             document.querySelector('#uc_currentuser_name'), {

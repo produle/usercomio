@@ -73,3 +73,32 @@
  	}
  	
  };
+
+
+ /**
+  * @desc Query Filter object
+  */
+ function UC_Filter()
+ {
+ 	var thisClass = this;
+
+ 	this._id = null;
+ 	this.name = "";
+ 	this.filter = null;
+ 	this.mongoFilter = null;
+ 	this.createDate = null;
+ 	this.creator = null;
+ 	this.appid = null;
+
+ 	this.cast = function(obj)
+ 	{
+ 		this._id = obj._id;
+ 		this.name = obj.name;
+ 		this.filter = mongofilter;
+ 		this.mongoFilter = obj.mongoFilter;
+ 	 	this.createDate = new Date(obj.createDate);
+ 	 	this.creator = obj.createDate;
+ 	 	this.appid = obj.appid;
+ 	}
+
+ };

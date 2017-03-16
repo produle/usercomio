@@ -19,7 +19,7 @@ body
     font-size: 13px;
     padding: 12px 30px;
     border-radius: 30px;
-    border: none;	
+    border: none;
     transition: all 2s ease;
 }
 .btn:hover, .btn:focus
@@ -142,7 +142,7 @@ form
 	font-size:13px;
 	line-height:22px;
 	text-align:center;
-	margin: 25px 0; 
+	margin: 25px 0;
 }
 .ucSetupProgressStepsWrapper
 {
@@ -168,7 +168,7 @@ form
 }
 .UC_SetupContainerCls input[type="text"], .UC_SetupContainerCls input[type="email"], .UC_SetupContainerCls input[type="password"]
 {
-	border:none; 
+	border:none;
 	border-bottom: 1px solid #e8eced;
     box-shadow: none;
     border-radius: 0;

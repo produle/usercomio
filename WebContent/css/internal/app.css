@@ -92,9 +92,10 @@ body
     background-color: #d9534f;
     color: #FFF;
 }
+
 input[type="text"], input[type="email"], input[type="password"]
 {
-	border:none; 
+	border:none;
 	border-bottom: 1px solid #e8eced;
     box-shadow: none;
     border-radius: 0;
@@ -137,10 +138,10 @@ h2
     border-color: #e8eced;
     outline: 0;
     -webkit-box-shadow: none;
-    box-shadow: none; 
+    box-shadow: none;
 }
 /**** Modal ****/
-.ucModal 
+.ucModal
 {
 	text-align: center;
 }
@@ -160,7 +161,7 @@ h2
 .ucModal .modal-body .input-group-btn label
 {
 	width: 140px;
-	border:none; 
+	border:none;
 	border-bottom: 1px solid #e8eced;
     color: #8ea4b1;
     font-weight: 400;
@@ -198,4 +199,39 @@ h2
 {
 	outline: none;
 	box-shadow: none;
+}
+
+#ucPredefinedFilterList,
+#ucUserdefinedFilterList
+{
+    list-style: none;
+    padding: 10px;
+    margin: 0px;
+}
+
+#ucPredefinedFilterList li,
+#ucUserdefinedFilterList li
+{
+    padding: 5px 0px;
+    cursor: pointer;
+    color: #666;
+}
+
+#ucPredefinedFilterList li:hover,
+#ucUserdefinedFilterList li:hover
+{
+    color: #999;
+}
+
+#ucPredefinedFilterList li .ucFilterSettingBtn,
+#ucUserdefinedFilterList li .ucFilterSettingBtn
+{
+    display: none;
+    float: right;
+}
+
+#ucPredefinedFilterList li:hover .ucFilterSettingBtn,
+#ucUserdefinedFilterList li:hover .ucFilterSettingBtn
+{
+    display: inline-block;
 }
