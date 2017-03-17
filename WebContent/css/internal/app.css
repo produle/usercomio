@@ -235,3 +235,33 @@ h2
 {
     display: inline-block;
 }
+
+.ucFilterSettingBtn .fa:hover
+{
+    color:#666;
+}
+
+.uc_table_header
+{
+    position: relative;
+    text-align: center;
+}
+
+.uc_table_header .fa-caret-up,
+.uc_table_header .fa-caret-down
+{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+}
+
+.uc_table_header .fa-caret-up
+{
+    top: 0px;
+}
+
+.uc_table_header .fa-caret-down
+{
+    top: 7px;
+}

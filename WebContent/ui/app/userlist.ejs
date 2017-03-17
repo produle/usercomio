@@ -9,10 +9,10 @@
                             <div class="col-md-12">
                                 <div>
                                     <ul id="ucPredefinedFilterList">
-                                        <li rv-each-filter="list" rv-text="filter.name" rv-data-filterid="filter._id"></li>
+                                        <li rv-each-filter="list" rv-data-filterid="filter._id"><span>{filter.name}</span></li>
                                     </ul>
                                     <ul id="ucUserdefinedFilterList">
-                                        <li rv-each-filter="list" rv-data-filterid="filter._id">{filter.name}<div class="ucFilterSettingBtn"><i class="fa fa-cog"></i></div></li>
+                                        <li rv-each-filter="list" rv-data-filterid="filter._id"><span>{filter.name}</span><div class="ucFilterSettingBtn"><i class="fa fa-pencil"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-times"></i></div></li>
                                     </ul>
                                 </div>
                             </div>
@@ -34,12 +34,36 @@
                                     <thead>
                                         <tr>
                                             <th class="uc_table_input_control"><input id="uc-all-user-select" type="checkbox"><label for="uc-all-user-select"></label></th>
-                                            <th>Name</th>
-                                            <th >Session</th>
-                                            <th>Browser</th>
-                                            <th>Operating System</th>
-                                            <th class="text-center">Device</th>
-                                            <th>Country</th>
+                                            <th>
+                                                <div class="uc_table_header">
+                                                    Name <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="uc_table_header">
+                                                    Session <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="uc_table_header">
+                                                    Browser <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="uc_table_header">
+                                                    Operating System <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="uc_table_header">
+                                                    Device <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="uc_table_header">
+                                                    Country <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                                </div>
+                                            </th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -62,7 +86,7 @@
 
                                                </div>
                                            </td>
-                                           <td class="text-center">20</td>
+                                           <td class="text-center" rv-sessioncount="visitor.sessions"></td>
                                            <td> <div class="ucUserBrowserIcon" rv-latestbrowser="visitor.sessions"></div></td>
                                            <td> <div class="ucUserOSIcon" rv-latestplatform="visitor.sessions"></div> </td>
                                            <td class="text-center"><div class="ucUserDeviceIcon desktop"></div></td>
@@ -80,7 +104,7 @@
                                            </td>
                                        </tr>
 
-                                       <tr>
+                                       <!--<tr>
                                            <td class="uc_td_input_control"><input id="uc-user-select" type="checkbox"><label for="uc-user-select"></label></td>
                                            <td>
                                                <div class="ucUserBaseDetails">
@@ -184,7 +208,7 @@
                                                   </ul>
                                                 </div>
                                            </td>
-                                       </tr>
+                                       </tr>-->
                                     </tbody>
                                 </table>
 

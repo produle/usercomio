@@ -28,36 +28,55 @@ class DashboardManager {
         var appid = req.body.appid;
         var skipIndex = req.body.skipindex;
         var pageLimit = req.body.pagelimit;
+        var filterId = req.body.filterid;
 
-  		var visitorCollection = global.db.collection('visitors').aggregate([
-            { $match :
-                { appid : appid }
-            },
-            { $sort :
-                { "visitormetainfo.lastseen" : -1 }
-            },
-            { $skip : skipIndex },
-            { $limit : pageLimit },
-            {
-              $lookup:
-                {
-                  from: "sessions",
-                  localField: "_id",
-                  foreignField: "visitorid",
-                  as: "sessions"
-                }
-            }
-        ]).toArray(function(err,visitors)
-            {
-                if(err)
-                {
-                    res.status(500);
-                    return res.send({status:'failure'});
-                }
+        var filter = global.db.collection('filters').findOne(
 
-                return res.send({status:visitors});
+            {_id:filterId},
+
+            function(err,filter)
+            {
+                var filterQuery = JSON.parse(filter.mongoFilter);
+
+                var visitorCollection = global.db.collection('visitors').aggregate([
+                    { $match :
+                        { "$and": [
+                            {
+                              appid:appid
+                            },
+                            filterQuery
+                          ]
+                        }
+                    },
+                    { $sort :
+                        { "visitormetainfo.lastseen" : -1 }
+                    },
+                    { $skip : skipIndex },
+                    { $limit : pageLimit },
+                    {
+                      $lookup:
+                        {
+                          from: "sessions",
+                          localField: "_id",
+                          foreignField: "visitorid",
+                          as: "sessions"
+                        }
+                    }
+                ]).toArray(function(err,visitors)
+                    {
+                        if(err)
+                        {
+                            res.status(500);
+                            return res.send({status:'failure'});
+                        }
+
+                        return res.send({status:visitors});
+                    }
+                );
             }
         );
+
+
   	}
 
   	/*

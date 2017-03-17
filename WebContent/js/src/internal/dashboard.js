@@ -21,6 +21,8 @@ function UC_DashboardController()
 
     this.metrics = {};
 
+    this.currentFilterId = "1"; //TODO Add predefined filters in setup
+
 	this.constructor = function()
 	{
         thisClass.rivetVisitorListObj = rivets.bind(
@@ -64,6 +66,11 @@ function UC_DashboardController()
             $(el).addClass(platformIcon);
         };
 
+        rivets.binders.sessioncount = function (el, value) {
+
+            $(el).html(value.length);
+        };
+
         $(window).scroll(function() {
            if($(window).scrollTop() + $(window).height() == $(document).height()) {
                if(!thisClass.visitorListLoaded)
@@ -72,6 +79,8 @@ function UC_DashboardController()
                }
            }
         });
+
+        $(document).on("click",".uc_table_header .fa-caret-up",thisClass.sortUserList);
 	};
 
 	/*
@@ -82,8 +91,7 @@ function UC_DashboardController()
 
         if(uc_main.appController.currentAppId)
         {
-
-            UC_AJAX.call('DashboardManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit},function(data,status,xhr){
+            UC_AJAX.call('DashboardManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit,filterid:thisClass.currentFilterId},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {
@@ -162,4 +170,25 @@ function UC_DashboardController()
         );
 
 	};
+
+    /*
+     * @desc Sort the user list
+     */
+    this.sortUserList = function()
+    {
+
+    };
+
+    /*
+     * @desc Resets the pagination variables so each filter can have fresh start
+     */
+    this.resetPagination = function()
+    {
+
+        thisClass.visitors = [];
+
+        thisClass.visitorListSkipIndex = 0;
+
+        thisClass.visitorListLoaded = false;
+    }
 }
