@@ -24,6 +24,7 @@ class UserManager {
         this.router.post("/saveconfig",(req, res) => { this.saveConfig(req,res); });
         this.router.post("/saveUserProfile",(req, res) => { this.saveUserProfile(req,res); });
         this.router.post("/saveUserPassword",(req, res) => { this.saveUserPassword(req,res); });
+        this.router.post("/updateFilterOrder",(req, res) => { this.updateFilterOrder(req,res); });
     }
 
   	/*
@@ -262,6 +263,58 @@ class UserManager {
                     { $set :
                         {
                             password: utils.encrypt(updateUser.password)
+                        }
+                    },
+                    { upsert: true },
+                    function(updateErr)
+                    {
+                        if(updateErr)
+                        {
+                            res.status(500);
+                            return res.send({status:'failure'});
+                        }
+                        else
+                        {
+                            res.send({status:"success"});
+                        }
+                    }
+                )
+            }
+            else
+            {
+                res.status(500);
+                return res.send({status:'failure'});
+            }
+
+        });
+
+    };
+
+  	/*
+  	 * @desc Updates the filter order
+  	 */
+    updateFilterOrder(req,res)
+    {
+        // Get the documents collection
+        var userCollection = global.db.collection('users');
+
+        var updateUser = req.body.user;
+
+        userCollection.findOne({ _id: updateUser.username },function(err,user)
+        {
+            if(err)
+            {
+                res.status(500);
+                return res.send({status:'failure'});
+            }
+
+            if(user)
+            {
+                userCollection.update(
+                    { _id:  user.username},
+                    { $set :
+                        {
+                            filterOrder: updateUser.filterOrder
                         }
                     },
                     { upsert: true },

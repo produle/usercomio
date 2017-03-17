@@ -19,6 +19,7 @@ class FilterManager {
         this.router.post("/listpredefined",(req, res) => { this.getAllPredefinedFilters(req,res); });
         this.router.post("/listuserdefined",(req, res) => { this.getAllUserdefinedFilters(req,res); });
         this.router.post("/updateFilter",(req, res) => { this.updateFilter(req,res); });
+        this.router.post("/deleteFilter",(req, res) => { this.deleteFilter(req,res); });
     }
 
   	/*
@@ -83,6 +84,28 @@ class FilterManager {
 
 
         return res.send({status:"saved"});
+
+  	}
+
+  	/*
+  	 * @desc Deletes a filter
+  	 */
+  	deleteFilter(req,res)
+  	{
+
+        var filter = req.body.filter;
+
+        filter.createDate = new Date();
+
+        var filterCollection = global.db.collection('filters');
+
+        filterCollection.remove(
+            { _id: filter._id },
+            1   //Removes only first matching record
+        );
+
+
+        return res.send({status:"deleted"});
 
   	}
 }

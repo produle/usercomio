@@ -36,9 +36,15 @@ function UC_FilterController()
 
         thisClass.listPredefinedFilters();
 
-        $(document).on("click","#ucUserdefinedFilterList li",thisClass.editFilterHandler);
+        $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li span",thisClass.changeFilterHandler);
         $(document).on("click","#ucAddFilterBtn",thisClass.addFilterHandler);
         $(document).on("click","#ucEditFilterSubmit",thisClass.saveFilterHandler);
+        $(document).on("click",".ucFilterSettingBtn .fa-pencil",thisClass.editFilterHandler);
+        $(document).on("click",".ucFilterSettingBtn .fa-times",thisClass.deleteFilterHandler);
+
+        $("#ucUserdefinedFilterList").sortable({
+            update: thisClass.updateFilterOrder
+        });
 	};
 
     /*
@@ -73,7 +79,30 @@ function UC_FilterController()
             }
             else
             {
-                thisClass.userdefinedFiltersList = data.status;
+                var user = UC_UserSession.user;
+                var filterList = data.status;
+
+                //Reorders the filters arrangement based on the user preference
+                if(user.hasOwnProperty('filterOrder'))
+                {
+                    var reOrderedFilterList = [];
+
+                    for(var iter = 0; iter < user.filterOrder.length; iter++)
+                    {
+                        for(var iterFilter = 0; iterFilter < filterList.length; iterFilter++)
+                        {
+                            if(user.filterOrder[iter] == filterList[iterFilter]._id)
+                            {
+                                reOrderedFilterList.push(filterList[iterFilter]);
+                            }
+
+                        }
+                    }
+
+                    filterList = reOrderedFilterList;
+                }
+
+                thisClass.userdefinedFiltersList = filterList;
                 thisClass.rivetUserdefinedFiltersListObj.models.list = thisClass.userdefinedFiltersList;
             }
         });
@@ -91,15 +120,25 @@ function UC_FilterController()
           plugins: ['bt-tooltip-errors'],
 
           filters: [{
-            id: 'name',
+            id: 'visitordata.name',
             label: 'Name',
             type: 'string'
           }, {
-            id: 'lastseen',
+            id: 'visitormetainfo.lastseen',
             label: 'Last Seen',
-            type: 'integer',
+            type: 'date',
+            validation: {
+              format: 'YYYY/MM/DD'
+            },
+            plugin: 'datepicker',
+            plugin_config: {
+              format: 'yyyy/mm/dd',
+              todayBtn: 'linked',
+              todayHighlight: true,
+              autoclose: true
+            },
             input: 'text',
-            operators: ['less_or_equal', 'greater_or_equal', 'equal']
+            operators: ['less_or_equal', 'greater_or_equal', 'between']
           }],
 
           rules: filterRule
@@ -111,7 +150,7 @@ function UC_FilterController()
      */
     this.editFilterHandler = function()
     {
-        var filterObj = thisClass.getFilterById($(this).attr("data-filterid"));
+        var filterObj = thisClass.getFilterById($(this).closest("li").attr("data-filterid"));
 
         thisClass.filterOnEdit = filterObj;
 
@@ -188,6 +227,8 @@ function UC_FilterController()
             filterObj.name = filtername;
             filterObj.filter = filter;
             filterObj.mongoFilter = mongoFilter;
+
+            thisClass.userdefinedFiltersList.push(filterObj);
         }
         else
         {
@@ -212,6 +253,84 @@ function UC_FilterController()
                      thisClass.listUserdefinedFilters();
                  }
              }
+
+        });
+    };
+
+    /*
+     * @desc Changes the current filterin use
+     */
+    this.changeFilterHandler = function()
+    {
+        var filterId = $(this).closest("li").attr("data-filterid");
+
+        uc_main.dashboardController.currentFilterId = filterId;
+
+        uc_main.dashboardController.resetPagination();
+        uc_main.dashboardController.getAllVisitors();
+    };
+
+    /*
+     * @desc Removes the filter obj from local and db
+     */
+    this.deleteFilterHandler = function()
+    {
+        var filterObj = thisClass.getFilterById($(this).closest("li").attr("data-filterid"));
+
+        if(confirm("Are you sure that you want to delete the filter?"))
+        {
+            for(var i = 0; i < thisClass.userdefinedFiltersList.length; i++)
+            {
+                var item = thisClass.userdefinedFiltersList[i];
+
+                if(filterObj._id == item._id)
+                {
+                    thisClass.userdefinedFiltersList.splice(i, 1);
+                    i--;
+                }
+            }
+
+            UC_AJAX.call('FilterManager/deleteFilter',{filter:filterObj},function(data,status,xhr)
+            {
+                 if(data)
+                 {
+                     if(data.status == "failure")
+                     {
+                         alert("An Error accured while deleting");
+                     }
+                     else
+                     {
+                         thisClass.listUserdefinedFilters();
+                     }
+                 }
+
+            });
+        }
+    };
+
+    /*
+     * @desc Updates the filter order based on sorting
+     */
+    this.updateFilterOrder = function(ev,ui)
+    {
+        var filterIdOrder = [];
+
+        $("#ucUserdefinedFilterList li").each(function(){
+            filterIdOrder.push($(this).attr("data-filterid"));
+        });
+
+        UC_UserSession.user.filterOrder = filterIdOrder;
+
+        //Save the ordered data to db
+        UC_AJAX.call('UserManager/updateFilterOrder',{user:UC_UserSession.user},function(data,status,xhr)
+        {
+            if(data)
+            {
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while saving data");
+                }
+            }
 
         });
     };
