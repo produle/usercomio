@@ -173,6 +173,44 @@ class DashboardManager {
             }
         );
   	}
+
+  	/*
+  	 * @desc Return data of visitor by ID
+  	 */
+  	getVisitorById(visitorId,callback)
+  	{
+        if(visitorId)
+    	{
+
+            var visitorCollection = global.db.collection('visitors').aggregate([
+                { $match :
+                    { _id: visitorId }
+                },
+                {
+                  $lookup:
+                    {
+                      from: "sessions",
+                      localField: "_id",
+                      foreignField: "visitorid",
+                      as: "sessions"
+                    }
+                }
+            ]).toArray(function(err,visitor)
+                {
+                    if(err)
+                    {
+                        return callback(null);
+                    }
+                    else
+                    {
+                        return callback(visitor);
+                    }
+                }
+            );
+
+    	}
+
+  	}
 }
 
 

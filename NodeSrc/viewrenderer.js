@@ -6,8 +6,10 @@
  */
 
 var express = require("express");
+var moment = require("moment");
 var app = require("./server").app;
 var userManager = require("./Managers/UserManager").UserManager;
+var dashboardManager = require("./Managers/DashboardManager").DashboardManager;
 
 class ViewRenderer
 {
@@ -52,16 +54,16 @@ class ViewRenderer
                     }
                     else
                     {
-                        res.redirect('login');
+                        res.redirect('/login');
                     }
                 }
                 else
                 {
-                    res.redirect('login');
+                    res.redirect('/login');
                 }
             }
             else {
-                res.redirect('setup');
+                res.redirect('/setup');
             }
 
 
@@ -102,6 +104,59 @@ class ViewRenderer
 		app.get('/setup',function(req,res){
             res.render('setup');
 		});
+
+		/*
+		 * @desc Renders user profile page
+		 */
+		app.get('/visitor/:visitorid', function(req, res)
+		{
+
+            var config = require('config');
+
+            if(config.has("database")) {
+
+                if (req.isAuthenticated())
+                {
+                    var uname = req.cookies.uname;
+                    if(uname)
+                    {
+
+                        var userManagerObj = new userManager();
+
+                        var dashboardManagerObj = new dashboardManager();
+
+                        var user = userManagerObj.getUserByUsername(uname,function(user){
+
+                            dashboardManagerObj.getVisitorById(req.params.visitorid,function(visitors){
+
+                                if(visitors.length > 0)
+                                {
+                                    res.render('visitor',{user:user,config:config,moment:moment,visitor:visitors[0]});
+                                }
+                                else
+                                {
+                                    res.redirect('/');
+                                }
+                            });
+
+                        });
+                    }
+                    else
+                    {
+                        res.redirect('/login');
+                    }
+                }
+                else
+                {
+                    res.redirect('/login');
+                }
+            }
+            else {
+                res.redirect('/setup');
+            }
+
+
+		 });
 
 
 	}

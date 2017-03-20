@@ -265,3 +265,23 @@ h2
 {
     top: 7px;
 }
+
+.ucUserProfileMetaContainer
+{
+    border: 1px solid #DDD;
+}
+
+.ucUserProfileHeading
+{
+    padding : 0px 30px;
+}
+
+.ucUserProfileMetaContainer .table
+{
+    margin-bottom: 0px;
+}
+
+.ucUserBaseDetails
+{
+    cursor: pointer;
+}
