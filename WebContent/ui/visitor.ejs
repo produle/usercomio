@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Usercom</title>
+
+    <!-- external scripts -->
+    <% include commoncss.ejs %>
+    <link rel="stylesheet" type="text/css" href="/css/internal/app.css" />
+        <link rel="stylesheet" type="text/css" href="/css/internal/header.css" />
+        <link rel="stylesheet" type="text/css" href="/css/internal/listing.css" />
+
+    <% include commonscripts.ejs %>
+
+</head>
+<body>
+
+    <% include navigation.ejs %>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-4">
+
+                <div class="ucUserProfileMetaContainer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="ucUserProfileHeading">
+                                <h3 class="display-4"><i class="fa fa-user"></i> User Info</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center">Name</td>
+                                        <td class="text-center"><%- visitor.visitordata.name %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">ID</td>
+                                        <td class="text-center"><%- visitor._id.substring(0,10) + "..." %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Email</td>
+                                        <td class="text-center"><%- visitor.visitordata.email %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Sessions</td>
+                                        <td class="text-center"><%- visitor.sessions.length %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">Last Login</td>
+                                        <td class="text-center"><%- moment(visitor.visitormetainfo.lastseen).format("HH:mm:ss DD/MM/YYYY") %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">First Login</td>
+                                        <td class="text-center"><%- moment(visitor.visitormetainfo.firstseen).format("HH:mm:ss DD/MM/YYYY") %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8">
+
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#ucUserTabContentMessaging" aria-controls="ucUserTabContentMessaging" role="tab" data-toggle="tab">Messaging</a></li>
+                    <li role="presentation"><a href="#ucUserTabContentAnalysis" aria-controls="ucUserTabContentAnalysis" role="tab" data-toggle="tab">Analysis</a></li>
+                    <li role="presentation"><a href="#ucUserTabContentActivities" aria-controls="ucUserTabContentActivities" role="tab" data-toggle="tab">Activities</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="ucUserTabContentMessaging">
+                        Messaging Content
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="ucUserTabContentAnalysis">
+                        Analysis Content
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="ucUserTabContentActivities">
+                        Activities Content
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <% include dialogs.ejs %>
+
+    <script>
+
+        UC_UserSession.user = <%- JSON.stringify(user) %>;
+        var uc_main = new UC_MainController();
+
+ 	    uc_main.appController.renderVisitors = false;
+        uc_main.constructor();
+
+        uc_main.userController.config = <%- JSON.stringify(config) %>;
+
+    </script>
+
+</body>
+</html>

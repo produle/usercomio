@@ -22,29 +22,32 @@ function UC_FilterController()
 	this.constructor = function()
 	{
 
-        thisClass.rivetPredefinedFiltersListObj = rivets.bind(
-            document.querySelector('#ucPredefinedFilterList'), {
-                list: thisClass.predefinedFiltersList
-            }
-        );
+        if(uc_main.appController.renderVisitors)
+        {
+            thisClass.rivetPredefinedFiltersListObj = rivets.bind(
+                document.querySelector('#ucPredefinedFilterList'), {
+                    list: thisClass.predefinedFiltersList
+                }
+            );
 
-        thisClass.rivetUserdefinedFiltersListObj = rivets.bind(
-            document.querySelector('#ucUserdefinedFilterList'), {
-                list: thisClass.userdefinedFiltersList
-            }
-        );
+            thisClass.rivetUserdefinedFiltersListObj = rivets.bind(
+                document.querySelector('#ucUserdefinedFilterList'), {
+                    list: thisClass.userdefinedFiltersList
+                }
+            );
 
-        thisClass.listPredefinedFilters();
+            thisClass.listPredefinedFilters();
 
-        $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li span",thisClass.changeFilterHandler);
-        $(document).on("click","#ucAddFilterBtn",thisClass.addFilterHandler);
-        $(document).on("click","#ucEditFilterSubmit",thisClass.saveFilterHandler);
-        $(document).on("click",".ucFilterSettingBtn .fa-pencil",thisClass.editFilterHandler);
-        $(document).on("click",".ucFilterSettingBtn .fa-times",thisClass.deleteFilterHandler);
+            $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li span",thisClass.changeFilterHandler);
+            $(document).on("click","#ucAddFilterBtn",thisClass.addFilterHandler);
+            $(document).on("click","#ucEditFilterSubmit",thisClass.saveFilterHandler);
+            $(document).on("click",".ucFilterSettingBtn .fa-pencil",thisClass.editFilterHandler);
+            $(document).on("click",".ucFilterSettingBtn .fa-times",thisClass.deleteFilterHandler);
 
-        $("#ucUserdefinedFilterList").sortable({
-            update: thisClass.updateFilterOrder
-        });
+            $("#ucUserdefinedFilterList").sortable({
+                update: thisClass.updateFilterOrder
+            });
+        }
 	};
 
     /*
