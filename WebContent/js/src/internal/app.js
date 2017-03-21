@@ -306,7 +306,7 @@ function UC_AppController()
 
         if(thisClass.renderVisitors)
         {
-            uc_main.dashboardController.getAllVisitors();
+            uc_main.visitorListController.getAllVisitors();
             uc_main.dashboardController.getDashboardMetrics();
             uc_main.filterController.listUserdefinedFilters();
         }

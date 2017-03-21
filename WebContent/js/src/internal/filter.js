@@ -267,10 +267,10 @@ function UC_FilterController()
     {
         var filterId = $(this).closest("li").attr("data-filterid");
 
-        uc_main.dashboardController.currentFilterId = filterId;
+        uc_main.visitorListController.currentFilterId = filterId;
 
-        uc_main.dashboardController.resetPagination();
-        uc_main.dashboardController.getAllVisitors();
+        uc_main.visitorListController.resetPagination();
+        uc_main.visitorListController.getAllVisitors();
     };
 
     /*
