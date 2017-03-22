@@ -28,6 +28,10 @@ class VisitorListManager {
         var skipIndex = req.body.skipindex;
         var pageLimit = req.body.pagelimit;
         var filterId = req.body.filterid;
+        var sortColumn = req.body.sortColumn;
+        var sortOrder = req.body.sortOrder;
+
+        var sortQuery = JSON.parse('{"'+sortColumn+'":'+sortOrder+'}');
 
         var filter = global.db.collection('filters').findOne(
 
@@ -38,18 +42,6 @@ class VisitorListManager {
                 var filterQuery = JSON.parse(filter.mongoFilter);
 
                 var visitorCollection = global.db.collection('visitors').aggregate([
-                    { $match :
-                        { "$and": [
-                            {
-                              appid:appid
-                            },
-                            filterQuery
-                          ]
-                        }
-                    },
-                    { $sort :
-                        { "visitormetainfo.lastseen" : -1 }
-                    },
                     { $skip : skipIndex },
                     { $limit : pageLimit },
                     {
@@ -59,6 +51,18 @@ class VisitorListManager {
                           localField: "_id",
                           foreignField: "visitorid",
                           as: "sessions"
+                        }
+                    },
+                    { $sort :
+                        sortQuery
+                    },
+                    { $match :
+                        { "$and": [
+                            {
+                              appid:appid
+                            },
+                            filterQuery
+                          ]
                         }
                     }
                 ]).toArray(function(err,visitors)

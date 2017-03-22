@@ -21,6 +21,10 @@ function UC_VisitorListController()
 
     this.currentFilterId = "1"; //TODO Add predefined filters in setup
 
+    this.currentSortColumn = "visitormetainfo.lastseen";
+
+    this.currentSortOrder = 1; //1 for ASC and -1 for DESC
+
 	this.constructor = function()
 	{
         if(uc_main.appController.renderVisitors)
@@ -47,6 +51,7 @@ function UC_VisitorListController()
                 }
 
                 $(el).html(browserName+" <span>(v"+browserVersion+")</span>");
+                $(el).removeClass("chrome safari firefox edge ie");
                 $(el).addClass(browserName.toLowerCase());
             };
 
@@ -63,6 +68,7 @@ function UC_VisitorListController()
                 //TODO Check for linux
 
                 $(el).html(platformName);
+                $(el).removeClass("ios android windows linux");
                 $(el).addClass(platformIcon);
             };
 
@@ -80,9 +86,12 @@ function UC_VisitorListController()
                }
             });
 
-            $(document).on("click",".uc_table_header .fa-caret-up",thisClass.sortUserList);
+            $(document).on("click",".ucUserListSortableColumn",thisClass.sortUserList);
 
             $(document).on("click",".ucUserBaseDetails",thisClass.openVisitorProfile);
+
+            $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-up").hide();
+            $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-down").hide();
         }
 	};
 
@@ -94,7 +103,7 @@ function UC_VisitorListController()
 
         if(uc_main.appController.currentAppId)
         {
-            UC_AJAX.call('VisitorListManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit,filterid:thisClass.currentFilterId},function(data,status,xhr){
+            UC_AJAX.call('VisitorListManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit,filterid:thisClass.currentFilterId,sortColumn:thisClass.currentSortColumn,sortOrder:thisClass.currentSortOrder},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {
@@ -131,7 +140,39 @@ function UC_VisitorListController()
      */
     this.sortUserList = function()
     {
+        var newSortColumn = $(this).attr("data-sortColumn");
 
+        if(newSortColumn == thisClass.currentSortColumn)
+        {
+            if(thisClass.currentSortOrder === 1)
+            {
+                thisClass.currentSortOrder = -1;
+            }
+            else
+            {
+                thisClass.currentSortOrder = 1;
+            }
+        }
+        else
+        {
+            thisClass.currentSortColumn = newSortColumn;
+            thisClass.currentSortOrder = -1;
+        }
+
+        $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-up").hide();
+        $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-down").hide();
+
+        if(thisClass.currentSortOrder === 1)
+        {
+            $(this).find(".fa-caret-up").show();
+        }
+        else
+        {
+            $(this).find(".fa-caret-down").show();
+        }
+
+        thisClass.resetPagination();
+        thisClass.getAllVisitors();
     };
 
     /*

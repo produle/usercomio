@@ -142,6 +142,10 @@ function UC_FilterController()
             },
             input: 'text',
             operators: ['less_or_equal', 'greater_or_equal', 'between']
+          },{
+            id: 'sessions.agentinfo.browser',
+            label: 'Browser',
+            type: 'string'
           }],
 
           rules: filterRule
@@ -232,6 +236,10 @@ function UC_FilterController()
             filterObj.mongoFilter = mongoFilter;
 
             thisClass.userdefinedFiltersList.push(filterObj);
+
+            UC_UserSession.user.filterOrder.push(filterObj._id);
+
+            thisClass.saveFilterOrder();
         }
         else
         {
@@ -293,6 +301,26 @@ function UC_FilterController()
                 }
             }
 
+            for(var j = 0; j < UC_UserSession.user.filterOrder.length; j++)
+            {
+                var item = UC_UserSession.user.filterOrder[j];
+
+                if(filterObj._id == item)
+                {
+                    UC_UserSession.user.filterOrder.splice(j, 1);
+                    j--;
+                }
+            }
+
+            if(uc_main.visitorListController.currentFilterId == filterObj._id)
+            {
+                uc_main.visitorListController.currentFilterId = "1";
+
+                uc_main.visitorListController.resetPagination();
+                uc_main.visitorListController.getAllVisitors();
+            }
+
+
             UC_AJAX.call('FilterManager/deleteFilter',{filter:filterObj},function(data,status,xhr)
             {
                  if(data)
@@ -324,7 +352,15 @@ function UC_FilterController()
 
         UC_UserSession.user.filterOrder = filterIdOrder;
 
-        //Save the ordered data to db
+        thisClass.saveFilterOrder();
+    };
+
+    /*
+     * @desc Saves the filter order to server
+     */
+    this.saveFilterOrder = function()
+    {
+
         UC_AJAX.call('UserManager/updateFilterOrder',{user:UC_UserSession.user},function(data,status,xhr)
         {
             if(data)
