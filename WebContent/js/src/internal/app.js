@@ -304,6 +304,11 @@ function UC_AppController()
         thisClass.currentAppId = app.id;
         thisClass.rivetAppNameObj.models.currentAppName = app.name;
 
+        if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(thisClass.currentAppId) && UC_UserSession.user.app[thisClass.currentAppId].hasOwnProperty('currentFilter'))
+        {
+            uc_main.visitorListController.currentFilterId = UC_UserSession.user.app[thisClass.currentAppId].currentFilter;
+        }
+
         if(thisClass.renderVisitors)
         {
             uc_main.visitorListController.getAllVisitors();

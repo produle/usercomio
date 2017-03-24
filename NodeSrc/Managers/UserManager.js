@@ -24,7 +24,7 @@ class UserManager {
         this.router.post("/saveconfig",(req, res) => { this.saveConfig(req,res); });
         this.router.post("/saveUserProfile",(req, res) => { this.saveUserProfile(req,res); });
         this.router.post("/saveUserPassword",(req, res) => { this.saveUserPassword(req,res); });
-        this.router.post("/updateFilterOrder",(req, res) => { this.updateFilterOrder(req,res); });
+        this.router.post("/updateAppPreference",(req, res) => { this.updateAppPreference(req,res); });
     }
 
   	/*
@@ -291,9 +291,9 @@ class UserManager {
     };
 
   	/*
-  	 * @desc Updates the filter order
+  	 * @desc Updates the user preference of the apps
   	 */
-    updateFilterOrder(req,res)
+    updateAppPreference(req,res)
     {
         // Get the documents collection
         var userCollection = global.db.collection('users');
@@ -314,7 +314,7 @@ class UserManager {
                     { _id:  user.username},
                     { $set :
                         {
-                            filterOrder: updateUser.filterOrder
+                            app: updateUser.app
                         }
                     },
                     { upsert: true },

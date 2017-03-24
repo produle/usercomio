@@ -285,3 +285,9 @@ h2
 {
     cursor: pointer;
 }
+
+.ucCurrentFilter
+{
+    color: #000 !important;
+    font-weight: bold;
+}
