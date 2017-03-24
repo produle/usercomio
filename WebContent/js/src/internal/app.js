@@ -304,9 +304,20 @@ function UC_AppController()
         thisClass.currentAppId = app.id;
         thisClass.rivetAppNameObj.models.currentAppName = app.name;
 
+        if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(thisClass.currentAppId) && UC_UserSession.user.app[thisClass.currentAppId].hasOwnProperty('currentFilter'))
+        {
+            uc_main.visitorListController.currentFilterId = UC_UserSession.user.app[thisClass.currentAppId].currentFilter;
+        }
+
+        if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(thisClass.currentAppId) && UC_UserSession.user.app[thisClass.currentAppId].hasOwnProperty('currentSortColumn'))
+        {
+            uc_main.visitorListController.currentSortColumn = UC_UserSession.user.app[thisClass.currentAppId].currentSortColumn;
+            uc_main.visitorListController.currentSortOrder = UC_UserSession.user.app[thisClass.currentAppId].currentSortOrder;
+        }
+
         if(thisClass.renderVisitors)
         {
-            uc_main.dashboardController.getAllVisitors();
+            uc_main.visitorListController.getAllVisitors();
             uc_main.dashboardController.getDashboardMetrics();
             uc_main.filterController.listUserdefinedFilters();
         }

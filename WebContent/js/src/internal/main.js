@@ -11,6 +11,7 @@ function UC_MainController()
 	
 	this.appController = new UC_AppController();
 	this.dashboardController = new UC_DashboardController();
+	this.visitorListController = new UC_VisitorListController();
 	this.userController = new UC_UserController();
 	this.filterController = new UC_FilterController();
 
@@ -21,6 +22,7 @@ function UC_MainController()
 
         thisClass.appController.constructor();
         thisClass.dashboardController.constructor();
+        thisClass.visitorListController.constructor();
         thisClass.userController.constructor();
         thisClass.filterController.constructor();
 

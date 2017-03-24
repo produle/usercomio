@@ -24,7 +24,7 @@ class UserManager {
         this.router.post("/saveconfig",(req, res) => { this.saveConfig(req,res); });
         this.router.post("/saveUserProfile",(req, res) => { this.saveUserProfile(req,res); });
         this.router.post("/saveUserPassword",(req, res) => { this.saveUserPassword(req,res); });
-        this.router.post("/updateFilterOrder",(req, res) => { this.updateFilterOrder(req,res); });
+        this.router.post("/updateAppPreference",(req, res) => { this.updateAppPreference(req,res); });
     }
 
   	/*
@@ -143,6 +143,10 @@ class UserManager {
             } else {
                 status = "connected";
                 global.db = db;
+
+                var userManagerObj = new UserManager();
+
+                userManagerObj.databaseSetupImport();
             }
 
             res.send({status:status});
@@ -291,9 +295,9 @@ class UserManager {
     };
 
   	/*
-  	 * @desc Updates the filter order
+  	 * @desc Updates the user preference of the apps
   	 */
-    updateFilterOrder(req,res)
+    updateAppPreference(req,res)
     {
         // Get the documents collection
         var userCollection = global.db.collection('users');
@@ -314,7 +318,7 @@ class UserManager {
                     { _id:  user.username},
                     { $set :
                         {
-                            filterOrder: updateUser.filterOrder
+                            app: updateUser.app
                         }
                     },
                     { upsert: true },
@@ -340,6 +344,22 @@ class UserManager {
 
         });
 
+    };
+
+    /*
+     * @desc Imports the initial data to the database
+     */
+    databaseSetupImport()
+    {
+        //Predefined filters
+        var predefinedFilterArray = [
+            {"_id":"1","name":"All Users","filter":null,"mongoFilter":"{}","createDate":{"date":"2017-03-16T06:43:41.723Z"},"creator":null,"appid":null},
+            {"_id":"2","name":"New Users","filter":"{\"condition\": \"AND\", \"rules\": [ { \"id\": \"visitormetainfo.lastseen\", \"field\": \"visitormetainfo.lastseen\", \"type\": \"date\", \"input\": \"text\", \"operator\": \"greater_or_equal\", \"value\": \"2017/03/01\" } ], \"valid\": true}","mongoFilter":"{  \"$and\": [    {      \"visitormetainfo.lastseen\": {        \"$gte\": \"2017/03/01\"      }    }  ]}","createDate":{"date":"2017-03-16T06:43:41.723Z"},"creator":null,"appid":null},
+            {"_id":"3","name":"Slipping Away","filter":"{\"condition\": \"AND\", \"rules\": [ { \"id\": \"visitormetainfo.lastseen\", \"field\": \"visitormetainfo.lastseen\", \"type\": \"date\", \"input\": \"text\", \"operator\": \"greater_or_equal\", \"value\": \"2017/03/01\" } ], \"valid\": true}","mongoFilter":"{  \"$and\": [    {      \"visitormetainfo.lastseen\": {        \"$gte\": \"2017/03/01\"      }    }  ]}","createDate":{"date":"2017-03-16T06:43:41.723Z"},"creator":null,"appid":null}
+        ];
+
+        var userCollection = global.db.collection('filters');
+        userCollection.insertMany(predefinedFilterArray);
     };
 
 }
