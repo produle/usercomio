@@ -133,6 +133,8 @@ function UC_VisitorListController()
 
         thisClass.rivetVisitorListObj.models.list = thisClass.visitors;
 
+        thisClass.selectCurrentSort();
+
 	};
 
     /*
@@ -159,17 +161,18 @@ function UC_VisitorListController()
             thisClass.currentSortOrder = -1;
         }
 
-        $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-up").hide();
-        $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-down").hide();
+        if(!UC_UserSession.user.hasOwnProperty('app'))
+        {
+            UC_UserSession.user.app = {};
+        }
+        if(!UC_UserSession.user.app.hasOwnProperty(uc_main.appController.currentAppId))
+        {
+            UC_UserSession.user.app[uc_main.appController.currentAppId] = {};
+        }
+        UC_UserSession.user.app[uc_main.appController.currentAppId].currentSortColumn = thisClass.currentSortColumn;
+        UC_UserSession.user.app[uc_main.appController.currentAppId].currentSortOrder = thisClass.currentSortOrder;
 
-        if(thisClass.currentSortOrder === 1)
-        {
-            $(this).find(".fa-caret-up").show();
-        }
-        else
-        {
-            $(this).find(".fa-caret-down").show();
-        }
+        uc_main.filterController.saveAppPreference();
 
         thisClass.resetPagination();
         thisClass.getAllVisitors();
@@ -194,5 +197,23 @@ function UC_VisitorListController()
     this.openVisitorProfile = function()
     {
         location.href="/visitor/"+$(this).attr("data-visitorid");
+    };
+
+    /*
+     * @desc Selects the current sorting column to differentiate in ui
+     */
+    this.selectCurrentSort = function()
+    {
+        $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-up").hide();
+        $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-down").hide();
+
+        if(thisClass.currentSortOrder === 1)
+        {
+            $("#uc_visitor_list .ucUserListSortableColumn[data-sortColumn='"+thisClass.currentSortColumn+"'] .fa-caret-up").show();
+        }
+        else
+        {
+            $("#uc_visitor_list .ucUserListSortableColumn[data-sortColumn='"+thisClass.currentSortColumn+"'] .fa-caret-down").show();
+        }
     };
 }
