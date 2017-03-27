@@ -273,12 +273,24 @@
 </div>
 
 
-<div id="ucEditFilterModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="width: 70%;">
+<div id="ucEditFilterModal" class="modal ucFilterModal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="../images/app/listing/filter/ucListingFilterCloseIcon.png" alt=""/></button>
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <input type="text" class="form-control" id="ucFilterName" placeholder="Filter Name" />
+                <img src="../images/app/listing/filter/ucListingFilterIcon.png" alt=""/>
+                <h2>Filter Options</h2>
+                <div class="row ucFilterNameTextBox">
+	                <div class="col-sm-10 col-sm-offset-1">
+	                    <div class="input-group">
+	                      <span class="input-group-btn">
+	                        <label>Filter Name</label>
+	                      </span>
+	                      <input type="text" class="form-control" id="ucFilterName" />
+	                    </div>
+	                </div>
+                </div>
+                
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -292,8 +304,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" id="ucEditFilterSubmit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                <button type="button" id="ucEditFilterSubmit" class="btn ucSaveBtn">Save</button>
             </div>
         </div>
     </div>
