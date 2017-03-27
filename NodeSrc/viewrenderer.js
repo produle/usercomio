@@ -49,6 +49,7 @@ class ViewRenderer
                         var userManagerObj = new userManager();
 
                         var user = userManagerObj.getUserByUsername(uname,function(user){
+                            delete user.password; //To avoid the encrypted password transmitted to client
                             res.render('index',{user:user,config:config})
                         })
                     }
@@ -131,6 +132,7 @@ class ViewRenderer
 
                                 if(visitors.length > 0)
                                 {
+                                    delete user.password; //To avoid the encrypted password transmitted to client
                                     res.render('visitor',{user:user,config:config,moment:moment,visitor:visitors[0]});
                                 }
                                 else

@@ -114,6 +114,8 @@ passport.use(new LocalStrategy(
       if (!(user.password == utils.encrypt(password))) {
         return done(null, false, { message: 'Incorrect password.' });
       }
+
+      delete user.password; //To avoid the encrypted password transmitted to client
       return done(null, user);
     });
   }
