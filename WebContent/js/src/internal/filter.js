@@ -162,6 +162,13 @@ function UC_FilterController()
         $("#ucFilterName").val(filterObj.name);
 
         $("#ucEditFilterModal").modal();
+        $('.rule-container .rule-actions .btn-danger').text('');
+		$('.rule-container .rule-actions .btn-danger').addClass('ucListingFilterDeleteIcon');
+		
+        $('#ucFilterQueryBuilderUI').on('afterAddRule.queryBuilder', function(e, rule, error, value) {
+        	$('.rule-container .rule-actions .btn-danger').text('');
+        	$('.rule-container .rule-actions .btn-danger').addClass('ucListingFilterDeleteIcon');
+        });
     };
 
     /*
@@ -194,6 +201,15 @@ function UC_FilterController()
         $("#ucFilterName").val("");
 
         $("#ucEditFilterModal").modal();
+        
+        $('.rule-container .rule-actions .btn-danger').text('');
+		$('.rule-container .rule-actions .btn-danger').addClass('ucListingFilterDeleteIcon');
+		
+        $('#ucFilterQueryBuilderUI').on('afterAddRule.queryBuilder', function(e, rule, error, value) {
+        	$('.rule-container .rule-actions .btn-danger').text('');
+        	$('.rule-container .rule-actions .btn-danger').addClass('ucListingFilterDeleteIcon');
+        });
+        
     };
 
     /*
