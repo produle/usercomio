@@ -108,7 +108,6 @@ function UC_FilterController()
 
                 thisClass.userdefinedFiltersList = filterList;
                 thisClass.rivetUserdefinedFiltersListObj.models.list = thisClass.userdefinedFiltersList;
-                thisClass.selectCurrentFilter();
 
                 thisClass.selectCurrentFilter();
             }
@@ -146,10 +145,6 @@ function UC_FilterController()
             },
             input: 'text',
             operators: ['less_or_equal', 'greater_or_equal', 'between']
-            },{
-            id: 'sessions.agentinfo.browser',
-            label: 'Browser',
-            type: 'string'
           },{
             id: 'sessions.agentinfo.browser',
             label: 'Browser',
@@ -174,6 +169,7 @@ function UC_FilterController()
         $("#ucFilterName").val(filterObj.name);
 
         $("#ucEditFilterModal").modal();
+        
         $('.rule-container .rule-actions .btn-danger').text('');
 		$('.rule-container .rule-actions .btn-danger').addClass('ucListingFilterDeleteIcon');
 		
@@ -221,7 +217,6 @@ function UC_FilterController()
         	$('.rule-container .rule-actions .btn-danger').text('');
         	$('.rule-container .rule-actions .btn-danger').addClass('ucListingFilterDeleteIcon');
         });
-        
     };
 
     /*
