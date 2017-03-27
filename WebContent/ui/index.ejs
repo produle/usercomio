@@ -33,6 +33,8 @@
         uc_main.userController.config = <%- JSON.stringify(config) %>;
 
         uc_main.constructor();
+ 	    uc_main.filterController.initRivetBinds();
+ 	    uc_main.visitorListController.initRivetBinds();
 
     </script>
 
