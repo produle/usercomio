@@ -1,17 +1,14 @@
-<% include header.ejs %>
+<% include partials/header.ejs %>
    
     <!-- external scripts -->
-    <% include commoncss.ejs %>
-    <link rel="stylesheet" type="text/css" href="/css/internal/app.css" />
-        <link rel="stylesheet" type="text/css" href="/css/internal/header.css" />
-        <link rel="stylesheet" type="text/css" href="/css/internal/listing.css" />
+    <% include partials/commoncss.ejs %>
     
-    <% include commonscripts.ejs %>
+    <% include partials/commonscripts.ejs %>
 
 </head>
 <body>
 
-    <% include navigation.ejs %>
+    <% include partials/navigation.ejs %>
 
     <div class="container">
 
@@ -19,7 +16,7 @@
   
     </div>
  
-    <% include dialogs.ejs %>
+    <% include partials/dialogs.ejs %>
  	    
     <script>
   	
@@ -27,9 +24,9 @@
         var uc_main = new UC_MainController();
 
  	    uc_main.appController.renderVisitors = true;
-        uc_main.constructor();
+        uc_main.userController.config = <%- JSON.stringify(config) %>;
 
-         uc_main.userController.config = <%- JSON.stringify(config) %>;
+        uc_main.constructor();
 
     </script>
 

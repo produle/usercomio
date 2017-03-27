@@ -9,7 +9,7 @@ var express = require("express");
 var moment = require("moment");
 var app = require("./server").app;
 var userManager = require("./Managers/UserManager").UserManager;
-var dashboardManager = require("./Managers/DashboardManager").DashboardManager;
+var visitorListManager = require("./Managers/VisitorListManager").VisitorListManager;
 
 class ViewRenderer
 {
@@ -123,11 +123,11 @@ class ViewRenderer
 
                         var userManagerObj = new userManager();
 
-                        var dashboardManagerObj = new dashboardManager();
+                        var visitorListManagerObj = new visitorListManager();
 
                         var user = userManagerObj.getUserByUsername(uname,function(user){
 
-                            dashboardManagerObj.getVisitorById(req.params.visitorid,function(visitors){
+                            visitorListManagerObj.getVisitorById(req.params.visitorid,function(visitors){
 
                                 if(visitors.length > 0)
                                 {
