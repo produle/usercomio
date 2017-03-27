@@ -54,13 +54,7 @@ function UC_LoginController()
 	    		  }
 	    		  else
     			  {
-	    			var uc_user = new UC_User();
-
-	  	            uc_user.cast(data);
-
-	  	            UC_UserSession.user = uc_user;
-
-	  	            location.href  = "/"
+	                  location.href  = "/"
     			  }
 
 	          }
