@@ -151,6 +151,8 @@ function UC_UserController()
         {
             if(data)
             {
+                delete UC_UserSession.user.password; //To avoid the encrypted password transmitted to client
+
                 if(data.status == "failure")
                 {
                     alert("An Error accured while saving data !");

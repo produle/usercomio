@@ -15,12 +15,12 @@ function UC_UserRegistrationController()
 
       //$("#UC_Setup_Database").show();
      $("#UC_Setup_Welcome_Page").show();
-     
+
   }
 
   this.bindUIEvents = function()
   {
-	 
+
 	$('#ucsetup_getting_startedbtn').on('click',thisClass.handleGettingStartedBtnAction);
     $('#ucuserreg_submitbtn').on('click',thisClass.handleRegisterBtnAction);
     $('#ucsetup_dbsubmitbtn').on('click',thisClass.handleSetupDBAction);
@@ -45,10 +45,10 @@ function UC_UserRegistrationController()
 		password = $('#ucuserreg_passwordinput').val(),
 		confirmPassword = $('#ucuserreg_confirmpasswordinput').val(),
 		fullname  = $('#ucuserreg_fullnameinput').val();
-	
-    
+
+
     var validationResult = thisClass.validateUserRegistrationInputs();
-    
+
     if(validationResult.status == "failure")
     {
     	alert(validationResult.msg);
@@ -56,29 +56,29 @@ function UC_UserRegistrationController()
     }
 
     var newUser = new UC_User();
-    
+
     newUser.username = email;
     newUser.firstName = fullname;
     newUser.password = password;
     newUser.company = 'C'+UC_Utils.guidGenerator();
-    
+
 
     thisClass.sendLoginRequest(newUser,true);
   }
-  
+
   /*
    * @desc Validate user inputs
    */
   this.validateUserRegistrationInputs  = function()
   {
 	  var result = {status:"success",msg:""};
-	  
+
 	  var email = $('#ucuserreg_emailinput').val(),
 	      password = $('#ucuserreg_passwordinput').val(),
 	      confirmPassword = $('#ucuserreg_confirmpasswordinput').val(),
 	      fullname  = $('#ucuserreg_fullnameinput').val(),
 	  	  msg = "";
-	  
+
 	  if($.trim(fullname) == "")
 	  {
 		  msg = "Invalid Name !";
@@ -95,13 +95,13 @@ function UC_UserRegistrationController()
       {
 	  	msg = "Password & Confirm Password doesn't match !";
       }
-	  
+
 	  if(msg != "")
 	  {
 		  result.status = "failure";
 		  result.msg = msg;
 	  }
-	  
+
 	  return result;
   }
 
@@ -110,7 +110,7 @@ function UC_UserRegistrationController()
   */
   this.sendLoginRequest = function(newUser,isRedirect)
   {
-	  
+
 	  UC_AJAX.call('UserManager/registerUser',{user:newUser},function(data,status,xhr)
 	  {
 		 if(data)
@@ -123,7 +123,7 @@ function UC_UserRegistrationController()
 			 {
 				 alert("An Error accured while saving data !");
 			 }
-			 else 
+			 else
 			 {
                  if(isRedirect)
                  {
@@ -138,14 +138,14 @@ function UC_UserRegistrationController()
                      $(".ucSetupProgressSteps li").removeClass("active");
                	  	 $(".uc_user_settings").addClass("active");
                      $("#UC_Setup_Progress_Step").text("4");
-                     
+
                  }
 			 }
 		 }
 
 	  });;
-	  
-  
+
+
     }
 
   /*
@@ -234,8 +234,8 @@ function UC_UserRegistrationController()
   */
   this.handleSetupUserAction = function()
   {
-	  
-	  
+
+
 	var email = $('#ucsetup_emailinput').val(),
 		password = $('#ucsetup_passwordinput').val(),
 		confirmPassword = $('#ucsetup_confirmpasswordinput').val(),
@@ -288,7 +288,7 @@ function UC_UserRegistrationController()
     newApp.creator = user.username;
     newApp.id = UC_Utils.guidGenerator();
     newApp.clientid = user.company;
-    
+
     UC_AJAX.call('AppManager/createNewApp',{newApp:newApp},function(data,status,xhr){
 
         if(data.status == "appexists")
@@ -438,6 +438,6 @@ function UC_UserRegistrationController()
 
 
     }
-   
+
 }
 

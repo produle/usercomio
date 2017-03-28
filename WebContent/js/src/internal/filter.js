@@ -24,18 +24,6 @@ function UC_FilterController()
 
         if(uc_main.appController.renderVisitors)
         {
-            thisClass.rivetPredefinedFiltersListObj = rivets.bind(
-                document.querySelector('#ucPredefinedFilterList'), {
-                    list: thisClass.predefinedFiltersList
-                }
-            );
-
-            thisClass.rivetUserdefinedFiltersListObj = rivets.bind(
-                document.querySelector('#ucUserdefinedFilterList'), {
-                    list: thisClass.userdefinedFiltersList
-                }
-            );
-
             thisClass.listPredefinedFilters();
 
             $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li span",thisClass.changeFilterHandler);
@@ -48,6 +36,24 @@ function UC_FilterController()
                 update: thisClass.updateFilterOrder
             });
         }
+	};
+
+    /*
+     * @desc Init all Binding reference objects for rivets
+     */
+	this.initRivetBinds = function()
+	{
+		thisClass.rivetPredefinedFiltersListObj = rivets.bind(
+            document.querySelector('#ucPredefinedFilterList'), {
+                list: thisClass.predefinedFiltersList
+            }
+        );
+
+        thisClass.rivetUserdefinedFiltersListObj = rivets.bind(
+            document.querySelector('#ucUserdefinedFilterList'), {
+                list: thisClass.userdefinedFiltersList
+            }
+        );
 	};
 
     /*

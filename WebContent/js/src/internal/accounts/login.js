@@ -47,36 +47,30 @@ function UC_LoginController()
 	      {
 	    	  if(data)
 	          {
-	    		  
+
 	    		  if(data.error)
 	    		  {
 	    			  alert(data.error)
 	    		  }
 	    		  else
     			  {
-	    			var uc_user = new UC_User();
-	    				
-	  	            uc_user.cast(data);
-	  	
-	  	            UC_UserSession.user = uc_user;
-	  	
-	  	            location.href  = "/"
+	                  location.href  = "/"
     			  }
-	            
+
 	          }
-	
+
 	      });
-	      
-      
+
+
     }
     else
     {
         throw "username or password  was not provided."
     }
-    
-    
+
+
   };
-  
+
   /*
    * @desc Handles forgot password btn click event
    */
@@ -84,14 +78,14 @@ function UC_LoginController()
   {
   	var email = $('#uclogin_usernameinput').val();
   	var token = UC_Utils.guidGenerator();
-  	
-  	
+
+
   	if($.trim(email).length == 0)
   	{
   		alert('Email is required !')
   		return;
   	}
-  	
+
   	 UC_AJAX.call('LoginManager/forgotPassword',{email:email,token:token},function(data,status,xhr)
   		      {
   		    	  if(data)
@@ -101,19 +95,19 @@ function UC_LoginController()
   		    			  alert('Check E-mail for resetting Password.  (If not received check Spam folder) ');
   		    			  return;
   		    		  }
-  		    		  
+
   		    		  if(data.status == "failure")
   		    		  {
   		    			  alert('An error accured !');
 		    			  return;
   		    		  }
-  		    		  
+
   		          }
-  		      
+
   		      });
-  		          
+
   }
 
- 
+
 
 }

@@ -29,54 +29,6 @@ function UC_VisitorListController()
 	{
         if(uc_main.appController.renderVisitors)
         {
-            thisClass.rivetVisitorListObj = rivets.bind(
-                document.querySelector('#uc_visitor_list'), {
-                    list: thisClass.visitors
-                }
-            );
-
-            rivets.binders.visitorid = function (el, value) {
-                $(el).attr("id","uc-user-select-"+value._id);
-                $(el).next("label").attr("for","uc-user-select-"+value._id);
-            };
-
-            rivets.binders.latestbrowser = function (el, value) {
-
-                var browserName = value[0].agentinfo.browser;
-                var browserVersion = value[0].agentinfo.version;
-                var broswerVersionArr = browserVersion.split(".");
-                if(broswerVersionArr.length > 2)
-                {
-                    browserVersion = broswerVersionArr[0]+"."+broswerVersionArr[1];
-                }
-
-                $(el).html(browserName+" <span>(v"+browserVersion+")</span>");
-                $(el).removeClass("chrome safari firefox edge ie");
-                $(el).addClass(browserName.toLowerCase());
-            };
-
-            rivets.binders.latestplatform = function (el, value) {
-
-                var platformName = value[0].agentinfo.os;
-                var platformIcon = "windows";
-
-                if(platformName.toLowerCase().substr(0,5) == "macos")
-                {
-                    platformIcon = "ios";
-                }
-
-                //TODO Check for linux
-
-                $(el).html(platformName);
-                $(el).removeClass("ios android windows linux");
-                $(el).addClass(platformIcon);
-            };
-
-            rivets.binders.sessioncount = function (el, value) {
-
-                $(el).html(value.length);
-            };
-
             $(window).scroll(function() {
                if($(window).scrollTop() + $(window).height() == $(document).height()) {
                    if(!thisClass.visitorListLoaded)
@@ -93,6 +45,60 @@ function UC_VisitorListController()
             $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-up").hide();
             $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-down").hide();
         }
+	};
+
+    /*
+     * @desc Init all Binding reference objects for rivets
+     */
+	this.initRivetBinds = function()
+	{
+		thisClass.rivetVisitorListObj = rivets.bind(
+            document.querySelector('#uc_visitor_list'), {
+                list: thisClass.visitors
+            }
+        );
+
+        rivets.binders.visitorid = function (el, value) {
+            $(el).attr("id","uc-user-select-"+value._id);
+            $(el).next("label").attr("for","uc-user-select-"+value._id);
+        };
+
+        rivets.binders.latestbrowser = function (el, value) {
+
+            var browserName = value[0].agentinfo.browser;
+            var browserVersion = value[0].agentinfo.version;
+            var broswerVersionArr = browserVersion.split(".");
+            if(broswerVersionArr.length > 2)
+            {
+                browserVersion = broswerVersionArr[0]+"."+broswerVersionArr[1];
+            }
+
+            $(el).html(browserName+" <span>(v"+browserVersion+")</span>");
+            $(el).removeClass("chrome safari firefox edge ie");
+            $(el).addClass(browserName.toLowerCase());
+        };
+
+        rivets.binders.latestplatform = function (el, value) {
+
+            var platformName = value[0].agentinfo.os;
+            var platformIcon = "windows";
+
+            if(platformName.toLowerCase().substr(0,5) == "macos")
+            {
+                platformIcon = "ios";
+            }
+
+            //TODO Check for linux
+
+            $(el).html(platformName);
+            $(el).removeClass("ios android windows linux");
+            $(el).addClass(platformIcon);
+        };
+
+        rivets.binders.sessioncount = function (el, value) {
+
+            $(el).html(value.length);
+        };
 	};
 
 	/*

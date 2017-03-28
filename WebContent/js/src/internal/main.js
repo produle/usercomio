@@ -26,14 +26,22 @@ function UC_MainController()
         thisClass.userController.constructor();
         thisClass.filterController.constructor();
 
-        thisClass.rivetUserNameObj = rivets.bind(
+        thisClass.initRivetBinds();
+
+        $(".uc_tab_trigger").on("click",thisClass.toggleTabs);
+
+	};
+
+    /*
+     * @desc Init all Binding reference objects for rivets
+     */
+	this.initRivetBinds = function()
+	{
+		thisClass.rivetUserNameObj = rivets.bind(
             document.querySelector('#uc_currentuser_name'), {
                 currentUserName: UC_UserSession.user.firstName+" "+UC_UserSession.user.lastName
             }
         );
-
-        $(".uc_tab_trigger").on("click",thisClass.toggleTabs);
-
 	};
 
     /**

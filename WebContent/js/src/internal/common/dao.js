@@ -29,22 +29,28 @@
  function UC_User() 
  {
  	var thisClass = this;
- 		
+
+    this._id = "";
  	this.firstName = "";
  	this.lastName = "";
  	this.createDate = null;
  	this.username = "";
  	this.password = "";
  	this.company = "";
+    this.app = null;
+    this.token = null;
  	
  	this.cast = function(obj)
  	{
+ 		this._id = obj._id;
  		this.firstName = obj.firstName;
  		this.lastName = obj.lastName;
  		this.createDate = new Date(obj.createDate);
  		this.username = obj.username;
  		this.password = obj.password;
  		this.company = obj.company;
+ 		this.app = obj.app;
+ 		this.token = obj.token;
  	}
  	
  };
@@ -100,5 +106,53 @@
  	 	this.creator = obj.createDate;
  	 	this.appid = obj.appid;
  	}
+
+ };
+
+
+ /**
+  * @desc Visitor object sample
+  */
+ function UC_Visitor()
+ {
+ 	var thisClass = this;
+
+ 	this._id = null;
+ 	this.appid = null;
+ 	this.visitordata = {
+        name : "",
+        email : "",
+        created_at: null
+        //Custom data will be available here
+    };
+ 	this.visitormetainfo = {
+        firstseen : null,
+        lastseen : null
+    };
+
+ };
+
+
+ /**
+  * @desc Visitor Session object sample (Sessions collection)
+  */
+ function UC_VisitorSession()
+ {
+ 	var thisClass = this;
+
+ 	this._id = null;
+ 	this.sessionid = null;
+ 	this.visitorid = null;
+ 	this.agentinfo = {
+        browser : "",
+        browserlanguagae : "",
+        os: "",
+        platform: "",
+        version: null
+    };
+ 	this.visitormetainfo = {
+        firstseen : null,
+        lastseen : null
+    };
 
  };

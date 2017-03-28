@@ -21,12 +21,20 @@ function UC_AppController()
 	{
 		this.bindUIEvents();
 
-        thisClass.rivetAppNameObj = rivets.bind(
+        thisClass.initRivetBinds();
+	};
+
+    /*
+     * @desc Init all Binding reference objects for rivets
+     */
+	this.initRivetBinds = function()
+	{
+		thisClass.rivetAppNameObj = rivets.bind(
             document.querySelector('#uc_currentapp_name'), {
                 currentAppName: thisClass.currentAppId
             }
         );
-	}
+	};
 	
 	this.bindUIEvents = function()
 	{
