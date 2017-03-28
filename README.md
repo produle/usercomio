@@ -41,6 +41,10 @@ npm run dev /* Starts the usercom application at port 3000 */
         name: "Jane Doe",   /* Fullname of the visitor */
         email: "janedoe@example.com",   /* Email Address of the visitor */
         created_at: 1312182000, /* Current timestamp */
+        paid: true, /* Boolean */
+        birthdate: "1990-01-01", /* Date in format YYYY-MM-DD */
+        gender: "male", /* possible values ("male","female","other") */
+        profilepicture: "", /* a valid profile picture url */
         rating:'5'  /* Sample Custom Data */
     })
     </script>

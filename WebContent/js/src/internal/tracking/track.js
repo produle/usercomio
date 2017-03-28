@@ -178,7 +178,9 @@
 				var requestObj = {
 						appid : appid,
 						userdata : userComSettings,
-						uid:utils.guidGenerator()
+						uid:utils.guidGenerator(),
+                        screenresolution: screen.width+"x"+screen.height,
+                        timezone: -(new Date().getTimezoneOffset() / 60)
 				}
 				
 				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/ping', JSON.stringify(requestObj),function(data){
