@@ -145,7 +145,7 @@
  	this.visitorid = null;
  	this.agentinfo = {
         browser : "",
-        browserlanguagae : "",
+        browserlanguage : "",
         os: "",
         platform: "",
         version: null

@@ -13,6 +13,7 @@ var BrowserInfo = require("../dao/BrowserInfo").BrowserInfo;
 var GeoLocation = require("../dao/GeoLocation").GeoLocation;
 var VisitorMetaInfo = require("../dao/VisitorMetaInfo").VisitorMetaInfo;
 var utils = require("../core/utils.js").utils;
+var geoip = require("geoip-lite");
 
 class VisitorTrackingManager {
 
@@ -77,12 +78,44 @@ class VisitorTrackingManager {
   		browserInfo.version =  agent.version;
   		browserInfo.os =  agent.os;
   		browserInfo.platform= agent.platform;
-  		browserInfo.browserlanguagae = req.headers["accept-language"].split(',')[0];
-  		
+  		browserInfo.browserlanguage = req.headers["accept-language"].split(',')[0];
+        browserInfo.screenresolution = req.body.screenresolution;
+        browserInfo.timezone = req.body.timezone;
+        browserInfo.rawagentdata = agent.source;
+
+        if(agent.isDesktop)
+        {
+  		    browserInfo.device= "Desktop";
+        }
+        else if(agent.isTablet)
+        {
+  		    browserInfo.device= "Tablet";
+        }
+        else if(agent.isMobile)
+        {
+  		    browserInfo.device= "Mobile";
+        }
+        //Laptop not available with the agent library, clubbed with desktop
+
+        var ipAddress = req.header('x-forwarded-for') || req.connection.remoteAddress;
+        var locationInfo = geoip.lookup(ipAddress);
+
+        geolocation.city = "";
+        geolocation.country = "";
+        geolocation.region = "";
+        geolocation.timezone = "";
+
+        if(locationInfo != null)
+        {
+            geolocation.city = locationInfo.city;
+            geolocation.country = locationInfo.country;
+            geolocation.region = locationInfo.region;
+        }
   		
 		sessionDetail["agentinfo"]  = browserInfo;
   		sessionDetail["geolocationinfo"]  = geolocation;
   		sessionDetail["visitorid"]  = uid;
+  		sessionDetail["ipaddress"]  = ipAddress;
   		visitorDetail["visitordata"]  = req.body.userdata;
   		
   		
