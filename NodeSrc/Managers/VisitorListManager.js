@@ -7,6 +7,7 @@
 
 var express = require("express");
 var app = require("../server").app;
+var moment = require("moment");
 
 class VisitorListManager {
 
@@ -40,6 +41,19 @@ class VisitorListManager {
             function(err,filter)
             {
                 var filterQuery = JSON.parse(filter.mongoFilter);
+
+                if(filterId == "2")
+                {
+                    var date30DaysAgo = new Date(moment( moment().subtract(30, 'days') ).format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
+                    filterQuery = {"visitormetainfo.firstseen" : {"$gte":date30DaysAgo }};
+                }
+
+                if(filterId == "3")
+                {
+                    var date30DaysAgo = new Date(moment( moment().subtract(30, 'days') ).format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
+                    filterQuery = {"visitormetainfo.lastseen" : {"$lte":date30DaysAgo }};
+                }
+
 
                 var visitorCollection = global.db.collection('visitors').aggregate([
                     { $skip : skipIndex },

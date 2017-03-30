@@ -138,16 +138,13 @@ function UC_FilterController()
           }, {
             id: 'visitormetainfo.lastseen',
             label: 'Last Seen',
-            type: 'date',
+            type: 'datetime',
             validation: {
-              format: 'YYYY/MM/DD'
+              format: 'YYYY-MM-DD HH:mm:ss'
             },
-            plugin: 'datepicker',
+            plugin: 'datetimepicker',
             plugin_config: {
-              format: 'yyyy/mm/dd',
-              todayBtn: 'linked',
-              todayHighlight: true,
-              autoclose: true
+                format:'Y-m-d H:i:s'
             },
             input: 'text',
             operators: ['less_or_equal', 'greater_or_equal', 'between']
