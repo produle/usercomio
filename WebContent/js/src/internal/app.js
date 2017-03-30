@@ -192,6 +192,11 @@ function UC_AppController()
 				 else 
 				 {
 					 thisClass.updateAppDetailsInAppsListing(app);
+                     if(thisClass.currentAppId == app.id)
+                     {
+                         thisClass.rivetAppNameObj.models.currentAppName = app.name;
+                     }
+
 					 $('#ucapp_update_modal').modal('hide');
 				 }
 			});

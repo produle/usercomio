@@ -17,7 +17,7 @@ function UC_LoginController()
   this.bindUIEvents = function()
   {
     $('#uclogin_submitbtn').on('click',thisClass.handleLoginBtnAction);
-    $('#uclogin_forgotpasswrodbtn').on('click',thisClass.handleForgotPasswordBtnAction)
+    $('#uclogin_forgotpasswordbtn').on('click',thisClass.handleForgotPasswordBtnAction)
   }
 
   /*

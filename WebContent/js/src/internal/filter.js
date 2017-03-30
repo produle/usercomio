@@ -299,6 +299,13 @@ function UC_FilterController()
                  {
                      $("#ucEditFilterModal").modal("hide");
                      thisClass.listUserdefinedFilters();
+
+                     if(uc_main.visitorListController.currentFilterId == filterObj._id)
+                     {
+                         uc_main.visitorListController.resetPagination();
+                         uc_main.visitorListController.getAllVisitors();
+                     }
+
                  }
              }
 
