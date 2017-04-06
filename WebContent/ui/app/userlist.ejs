@@ -4,6 +4,12 @@
             <div class="col-md-12">
 
                 <div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-primary pull-right" id="ucSendMessageGroupBtn">Send Message</button>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-3">
                         <div class="row">
                             <div class="col-md-12">
@@ -69,7 +75,7 @@
                                     </thead>
                                     <tbody>
                                        <tr rv-each-visitor="list">
-                                           <td class="uc_td_input_control"><input rv-visitorid="visitor" type="checkbox"><label></label></td>
+                                           <td class="uc_td_input_control"><input rv-visitorid="visitor" class="uc-user-select" type="checkbox"><label></label></td>
                                            <td>
                                                <div class="ucUserBaseDetails" rv-data-visitorid="visitor._id">
                                                    <div class="ucUserCurrentStatus">

@@ -32,6 +32,17 @@ class VisitorListManager {
         var sortColumn = req.body.sortColumn;
         var sortOrder = req.body.sortOrder;
 
+        this.getAllVisitorsFromDB(appid,filterId,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response){
+            return res.send({status:response});
+        });
+
+  	}
+
+  	/*
+  	 * @desc Returns all visitors of the app
+  	 */
+  	getAllVisitorsFromDB(appid,filterId,sortColumn,sortOrder,skipIndex,pageLimit,exclusionList,callback)
+  	{
         var sortQuery = JSON.parse('{"'+sortColumn+'":'+sortOrder+'}');
 
         var filter = global.db.collection('filters').findOne(
@@ -54,10 +65,8 @@ class VisitorListManager {
                     filterQuery = {"visitormetainfo.lastseen" : {"$lte":date30DaysAgo }};
                 }
 
-
-                var visitorCollection = global.db.collection('visitors').aggregate([
+                var aggregateArray = [
                     { $skip : skipIndex },
-                    { $limit : pageLimit },
                     {
                       $lookup:
                         {
@@ -75,19 +84,26 @@ class VisitorListManager {
                             {
                               appid:appid
                             },
+                            { _id: {"$nin": exclusionList}},
                             filterQuery
                           ]
                         }
                     }
-                ]).toArray(function(err,visitors)
+                ];
+
+                if(pageLimit != null)
+                {
+                    aggregateArray.push({ $limit : pageLimit });
+                }
+
+                var visitorCollection = global.db.collection('visitors').aggregate(aggregateArray).toArray(function(err,visitors)
                     {
                         if(err)
                         {
-                            res.status(500);
-                            return res.send({status:'failure'});
+                            callback('failure');
                         }
 
-                        return res.send({status:visitors});
+                        callback(visitors);
                     }
                 );
             }
