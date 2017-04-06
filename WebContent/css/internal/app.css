@@ -291,3 +291,8 @@ h2
     color: #000 !important;
     font-weight: bold;
 }
+
+.mfTooltip
+{
+    cursor: pointer;
+}

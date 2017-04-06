@@ -7,6 +7,7 @@
 
 var express = require("express");
 var app = require("../server").app;
+var moment = require("moment");
 
 class VisitorListManager {
 
@@ -31,6 +32,17 @@ class VisitorListManager {
         var sortColumn = req.body.sortColumn;
         var sortOrder = req.body.sortOrder;
 
+        this.getAllVisitorsFromDB(appid,filterId,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response){
+            return res.send({status:response});
+        });
+
+  	}
+
+  	/*
+  	 * @desc Returns all visitors of the app
+  	 */
+  	getAllVisitorsFromDB(appid,filterId,sortColumn,sortOrder,skipIndex,pageLimit,exclusionList,callback)
+  	{
         var sortQuery = JSON.parse('{"'+sortColumn+'":'+sortOrder+'}');
 
         var filter = global.db.collection('filters').findOne(
@@ -41,9 +53,20 @@ class VisitorListManager {
             {
                 var filterQuery = JSON.parse(filter.mongoFilter);
 
-                var visitorCollection = global.db.collection('visitors').aggregate([
+                if(filterId == "2")
+                {
+                    var date30DaysAgo = new Date(moment( moment().subtract(30, 'days') ).format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
+                    filterQuery = {"visitormetainfo.firstseen" : {"$gte":date30DaysAgo }};
+                }
+
+                if(filterId == "3")
+                {
+                    var date30DaysAgo = new Date(moment( moment().subtract(30, 'days') ).format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
+                    filterQuery = {"visitormetainfo.lastseen" : {"$lte":date30DaysAgo }};
+                }
+
+                var aggregateArray = [
                     { $skip : skipIndex },
-                    { $limit : pageLimit },
                     {
                       $lookup:
                         {
@@ -61,19 +84,26 @@ class VisitorListManager {
                             {
                               appid:appid
                             },
+                            { _id: {"$nin": exclusionList}},
                             filterQuery
                           ]
                         }
                     }
-                ]).toArray(function(err,visitors)
+                ];
+
+                if(pageLimit != null)
+                {
+                    aggregateArray.push({ $limit : pageLimit });
+                }
+
+                var visitorCollection = global.db.collection('visitors').aggregate(aggregateArray).toArray(function(err,visitors)
                     {
                         if(err)
                         {
-                            res.status(500);
-                            return res.send({status:'failure'});
+                            callback('failure');
                         }
 
-                        return res.send({status:visitors});
+                        callback(visitors);
                     }
                 );
             }

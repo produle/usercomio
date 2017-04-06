@@ -185,7 +185,23 @@
 				
 				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/ping', JSON.stringify(requestObj),function(data){
 					console.log(data);
-				})
+				});
+
+                window.onbeforeunload = function(){
+
+                    var logoutRequestObj = {
+                            appid : appid,
+                            userdata : userComSettings,
+                            uid:requestObj.uid,
+                            sessionstart: sessionstart
+                    };
+
+                    xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/logout', JSON.stringify(logoutRequestObj),function(data){
+
+				    });
+
+                    return undefined;
+                };
 				
 				window.Usercom = UsercomLib;
 				

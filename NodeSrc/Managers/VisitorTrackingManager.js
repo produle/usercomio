@@ -30,6 +30,7 @@ class VisitorTrackingManager {
         this.router.post("/ping",(req, res) => { this.handlePing(req,res); });
         this.router.post("/event",(req, res) => { this.handleEvents(req,res); });
         this.router.post("/error",(req, res) => { this.handleError(req,res); });
+        this.router.post("/logout",(req, res) => { this.handleLogout(req,res); });
         
     }
   	
@@ -82,6 +83,7 @@ class VisitorTrackingManager {
         browserInfo.screenresolution = req.body.screenresolution;
         browserInfo.timezone = req.body.timezone;
         browserInfo.rawagentdata = agent.source;
+        browserInfo.sessionstart = req.body.sessionstart;
 
         if(agent.isDesktop)
         {
@@ -302,6 +304,57 @@ class VisitorTrackingManager {
       	            
       	           
       	        });
+  	}
+
+  	/*
+  	 * @desc Handle the logout call from client
+  	 */
+  	handleLogout(req,res)
+  	{
+
+        var sessionCollection = global.db.collection('sessions');
+
+        sessionCollection.aggregate([
+            {
+              $lookup:
+                {
+                  from: "visitors",
+                  localField: "visitorid",
+                  foreignField: "_id",
+                  as: "visitors"
+                }
+            },
+            { $match :
+                { "$and": [
+                    { "agentinfo.sessionstart" : req.body.sessionstart},
+                    { "visitors.visitordata.email" : req.body.userdata.email }
+                  ]
+                }
+            }
+        ]).toArray(function(err,session)
+        {
+            if(err)
+            {
+      		    res.status(500);
+                return res.send({status:'failure'});
+            }
+
+            if(session)
+            {
+                sessionCollection.update(
+                    { _id: session[0]._id },
+                    { $set :
+                        {
+                            "agentinfo.sessionend": new Date()
+                        }
+                    },
+                    { upsert: true }
+                );
+            }
+
+        });
+
+
   	}
   
   	
