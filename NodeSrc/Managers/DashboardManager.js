@@ -16,6 +16,7 @@ class DashboardManager {
         this.router = express.Router();
 
         this.router.post("/metrics",(req, res) => { this.getDashboardMetrics(req,res); });
+        this.router.post("/newusers",(req, res) => { this.getNewUsersMetrics(req,res); });
     }
 
   	/*
@@ -111,6 +112,50 @@ class DashboardManager {
                     });
             }
         );
+  	}
+
+  	/*
+  	 * @desc Returns the data for new user graph
+  	 */
+  	getNewUsersMetrics(req,res)
+  	{
+
+        var appid = req.body.appid;
+        var days = req.body.days;
+
+        global.db.collection('visitors').aggregate([
+            { $match : {
+                $and : [
+                    { "visitormetainfo.firstseen" : {$gt: new Date((new Date())-(1000*60*60*24*days))} },
+                    { appid : appid }
+                ]
+                }
+            },
+            { $group: {
+                _id: {
+                    $add: [
+                        { $dayOfYear: "$visitormetainfo.firstseen"},
+                        { $multiply:
+                            [400, {$year: "$visitormetainfo.firstseen"}]
+                        }
+                    ]
+                },
+                visitors: { $sum: 1 },
+                first: {$min: "$visitormetainfo.firstseen"}
+            }},
+            { $sort: {_id: -1} },
+            { $limit: 15 },
+            { $project: { date: { $dateToString: { format: "%d-%m", date: "$first" } }, visitors: 1, _id: 0} }
+        ]).toArray(function(err,newUsers)
+        {
+            if(err)
+            {
+                res.status(500);
+                return res.send({status:'failure'});
+            }
+
+            return res.send({status:newUsers});
+        });
   	}
 }
 
