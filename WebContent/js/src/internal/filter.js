@@ -27,10 +27,10 @@ function UC_FilterController()
             thisClass.listPredefinedFilters();
 
             $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li span",thisClass.changeFilterHandler);
-            $(document).on("click","#ucAddFilterBtn",thisClass.addFilterHandler);
+            $(document).on("click",".ucAddFilterBtn",thisClass.addFilterHandler);
             $(document).on("click","#ucEditFilterSubmit",thisClass.saveFilterHandler);
-            $(document).on("click",".ucFilterSettingBtn .fa-pencil",thisClass.editFilterHandler);
-            $(document).on("click",".ucFilterSettingBtn .fa-times",thisClass.deleteFilterHandler);
+            $(document).on("click",".ucFilterSettingBtn .ico-edit",thisClass.editFilterHandler);
+            $(document).on("click",".ucFilterSettingBtn .ico-trash2",thisClass.deleteFilterHandler);
 
             $("#ucUserdefinedFilterList").sortable({
                 update: thisClass.updateFilterOrder
@@ -115,7 +115,7 @@ function UC_FilterController()
                 thisClass.userdefinedFiltersList = filterList;
                 thisClass.rivetUserdefinedFiltersListObj.models.list = thisClass.userdefinedFiltersList;
 
-                thisClass.selectCurrentFilter();
+                //thisClass.selectCurrentFilter();
             }
         });
     };
@@ -317,6 +317,9 @@ function UC_FilterController()
      */
     this.changeFilterHandler = function()
     {
+    	$("#uc_tab_data_dashboard").hide();
+        $("#uc_tab_data_listuser").show();
+        
         var filterId = $(this).closest("li").attr("data-filterid");
 
         thisClass.changeCurrentFilter(filterId);
@@ -451,7 +454,7 @@ function UC_FilterController()
 
         thisClass.saveAppPreference();
 
-        thisClass.selectCurrentFilter();
+        //thisClass.selectCurrentFilter();
     };
 
     /*

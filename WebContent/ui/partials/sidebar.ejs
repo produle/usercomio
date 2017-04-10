@@ -1,0 +1,16 @@
+           <div class="ucSidebarCloseBtn"><i class="ico-close"></i></div>
+           <h5 id="ucMainDashboard" class="ucSwitchContentTrigger" switch-to="uc_tab_data_dashboard"><i class="ico-pie_chart"></i>Dashboard</h5>
+<!--
+           <ul class="ucMainMenu">
+               <mli id="ucMainDashboard" class="ucSwitchContentTrigger" switch-to="uc_tab_data_dashboard">Dashboard</li>     
+           </ul>
+-->
+           <h5 id="ucMainListing">Listing</h5>
+           <ul id="ucPredefinedFilterList" class="ucListingOptions">
+               <li rv-each-filter="list" rv-data-filterid="filter._id" class="ucSwitchContentTrigger" switch-to="uc_tab_data_listuser"><span>{filter.name}</span></li>
+           </ul>
+           
+           <h5 id="ucCustomFilter">Custom Filter <span class="ucAddNewFilter ucAddFilterBtn" class="ucAddFilterBtn"><i class="ico-plus2"></i></span></h5>
+           <ul id="ucUserdefinedFilterList" class="ucUserDefinedFilterOptions">
+               <li rv-each-filter="list" rv-data-filterid="filter._id" class="ucSwitchContentTrigger" switch-to="uc_tab_data_listuser"><i class="ico-settings"></i><span>{filter.name}</span><div class="ucFilterSettingBtn"><i class="ico-edit"></i><i class="ico-trash2"></i></div></li>
+           </ul>

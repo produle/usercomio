@@ -22,7 +22,14 @@ body
 {
     outline: none !important;
 }
-
+btn
+{
+	height: 35px;
+    padding: 4px 25px;
+    border: none;
+    color: #fff;
+    background: #2b9af3;
+}
 
 .uc_mt_small
 {
@@ -104,6 +111,17 @@ input[type="text"], input[type="email"], input[type="password"]
     text-align: left;
     margin-bottom: 5px;
 }
+textarea.form-control
+{
+	border:none;
+	border-bottom: 1px solid #e8eced;
+    box-shadow: none;
+    border-radius: 0;
+    font-weight: 300;
+    font-size: 13px;
+    text-align: left;
+    margin-bottom: 5px;
+}
 h2
 {
 	font-size:32px;
@@ -140,7 +158,236 @@ h2
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-/**** Modal ****/
+/**** Index Page Styles Starts****/
+.ucIndexPageWrapper
+{
+	width: 100%;
+	float:left;
+}
+.ucSidebar
+{
+	width: 270px;
+	height: 100vh;
+	background-color: #f9f9f9;
+	border-right: 1px solid #e9edee;
+	float:left;
+	padding: 15px;
+	transition: 0.2s;
+}
+.ucMainContent
+{
+	width: calc(100% - 270px);
+	float: left;
+	transition: margin-left .2s;
+}
+#ucMainDashboard
+{
+	padding: 3px 0 15px 0px;
+    margin: 10px 0 20px;
+    border-bottom: 1px solid #e9edee;
+    cursor: pointer;
+}
+#uc_tab_data_dashboard
+{
+	padding-top: 20px;
+}
+#ucMainDashboard i
+{
+	margin-right: 10px;
+	font-weight: bold;
+}
+#ucMainListing
+{
+	background: url('../../images/app/listing/ucListingIcon.png') no-repeat left top;
+	padding-left: 30px;
+}
+#ucCustomFilter
+{
+	background: url('../../images/app/listing/ucFilterIcon.png') no-repeat left top;
+	padding-left: 30px;
+}
+.ucSidebar h5
+{
+	font-size: 16px;
+    font-weight: 400;
+    color: #3d4c53;
+    margin: 20px 0 10px;
+}
+.ucAddNewFilter
+{
+	float: right;
+    font-size: 20px;
+    color: #000;
+    cursor: pointer;
+}
+.ucAddNewFilter .ico-plus2
+{
+	color:#777;
+	font-weight: bold;
+}
+.ucSidebar ul
+{
+	padding:0 0 15px;
+	margin:0 0 20px;
+	border-bottom: 1px solid #e9edee;
+}
+.ucSidebar ul li
+{
+	list-style: none;
+	line-height: 40px;
+    font-size: 12px;
+    color: #777;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+.ucSidebar ul li:hover
+{
+	color: #111;
+}
+.ucUserDefinedFilterOptions li .ico-settings
+{
+	cursor: default;
+}
+
+
+.ucUserDefinedFilterOptions li span
+{
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 140px;
+    position: absolute;
+    
+}
+.ucSidebar ul li i
+{
+	color: #777;
+    padding-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    top: 0px;
+    font-size: 17px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.ucFilterSettingBtn i
+{
+	cursor: pointer;
+}
+.ucCurrentPage, .ucCurrentPage .ico-settings
+{
+	color: #2b9af3 !important;
+	font-weight: bold;
+}
+.ucSearchBar 
+{
+	background: #6e6d84;
+    border-bottom: 1px solid #e9edee;
+    width: 100%;
+    min-height: 50px;
+    margin-bottom: 40px;
+    padding: 15px;
+    position: relative;
+}
+.ucSearchWrapper
+{
+	background:#fff;
+	width: 400px;
+	border-radius: 20px;
+	border: 1px solid #e9edee;
+	padding-left:10px;
+	float: left;
+    margin-right: 20px;
+}
+.ucSearchSelect
+{
+	color: #8ea4b1;
+    /* background-color: #f9f9f9;
+    border-color: #dddedf; */
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    font-weight: 300;
+    font-size: 12px;
+    padding: 0px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    box-shadow: none;
+    width:100% !important;
+    background: url(../../images/app/listing/filter/ucListingFilterDropdownIcon.png) no-repeat right center;
+    padding-right: 30px;
+    overflow: hidden;
+    position: absolute;
+}
+.ucSearchBar input[type="text"]
+{
+    box-shadow: none;
+    border-radius: 0;
+    font-weight: 300;
+    font-size: 13px;
+    height: 35px;
+    border: 0;
+    text-align: left;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    margin-bottom:0;
+    border-left: 1px solid #e3e8e9;
+    width: 100% !important;
+}
+.ucSearchBar .ucSearchBtn
+{
+	height: 35px;
+    padding: 4px 25px;
+    border-radius: 30px;
+    border: none;
+    color: #fff;
+    background: #2b9af3;
+}
+.ucSearchBar .ucAddFilterBtn
+{
+	color: #B1B0BF;
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    font-size: 25px;
+    cursor: pointer;
+    transition: 0.5s all ease;
+}
+.ucSearchBar .ucAddFilterBtn:hover
+{
+	color: #ccc;
+}
+.ucSideBarMenuTrigger
+{
+	width: 40px;
+    height: 40px;
+    float: left;
+    margin-right: 20px;
+    display: none;
+    position: relative;
+    z-index: 9;
+    padding: 2px 0 0 2px;
+}
+.ucSideBarMenuTrigger i
+{
+	color: #fff;
+	font-size: 35px;
+}
+.ucSidebarCloseBtn
+{
+	width:25px;
+	height:25px;
+	position: absolute;
+	right:10px;
+	top: 10px;
+	display: none;
+}
+.ucSidebarCloseBtn i
+{
+	font-size: 25px;
+}
+/**** Modal Styles Starts****/
 .ucModal
 {
 	text-align: center;
@@ -200,28 +447,49 @@ h2
 	outline: none;
 	box-shadow: none;
 }
-
-#ucPredefinedFilterList,
-#ucUserdefinedFilterList
+.ucNoteSection
 {
-    list-style: none;
-    padding: 10px;
-    margin: 0px;
+	background-color: #f8f8f8;
+	border-radius: 5px;
+	color: #333;
+	padding: 10px;
+	margin-bottom: 25px;
 }
-
-#ucPredefinedFilterList li,
-#ucUserdefinedFilterList li
+.ucNoteSection h4
 {
-    padding: 5px 0px;
-    cursor: pointer;
-    color: #666;
+	margin-top:0;
 }
-
-#ucPredefinedFilterList li:hover,
-#ucUserdefinedFilterList li:hover
+.ucNoteSection i
 {
-    color: #999;
+	font-weight: bold;
 }
+.ucNoteSection ul
+{
+	margin:0;
+	padding:0;
+	list-style: none;
+}
+.ucNoteSection ul li
+{
+	display:inline;
+	font-weight: 300;
+	color: #777;
+}
+.ucNoteSection ul li:after
+{
+	content:',';
+}
+.ucNoteSection ul li:last-child:after
+{
+	content:'';
+}
+#ucSendMessageModal textarea.form-control
+{
+	margin: 10px 0 20px !important;
+}
+/*Modal Styles End*/
+
+
 
 #ucPredefinedFilterList li .ucFilterSettingBtn,
 #ucUserdefinedFilterList li .ucFilterSettingBtn
@@ -236,15 +504,11 @@ h2
     display: inline-block;
 }
 
-.ucFilterSettingBtn .fa:hover
-{
-    color:#666;
-}
 
 .uc_table_header
 {
     position: relative;
-    text-align: center;
+    text-align: left;
 }
 
 .uc_table_header .fa-caret-up,
@@ -286,6 +550,32 @@ h2
     cursor: pointer;
 }
 
+@media only screen and (max-width:992px) 
+{
+	.ucSidebar{width:0; position: fixed; padding:0;top:0; left:0; height: 100%; display:none; overflow: auto; }
+	.ucMainContent{width: 100%; }
+	.ucSearchWrapper .form-group {margin-bottom: 0;}
+	.navbar-collapse {box-shadow: none; border-color:#3e3c5a; margin-top: 10px;}
+	#ucHeader.navbar-default .navbar-toggle { background: #3e3c5a; border-color: transparent;}
+	#ucHeader.navbar-default .navbar-toggle .icon-bar{background-color: #dfdef5;}
+	.ucSideBarMenuTrigger { display: block; }
+	.ucSidebar.open{width:270px; padding:15px;position: fixed; top:0; left:0; height: 100%;display:block; z-index: 999;}
+	.ucMainContent.open{margin-left: 270px;}
+	.ucIndexPageWrapper.open{overflow:hidden;}
+	#ucHeader.open{margin-left: 270px;}
+	.ucSidebarCloseBtn{display: block;}
+	.ucMainContent.open:after {    content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index:99; }
+	.ucSearchWrapper{width:60%;}
+}
+@media only screen and (max-width:480px) 
+{
+	.ucSearchBar .form-inline { width:100%; display: inline-block; margin-top: 10px;}
+	.ucSearchWrapper {width: 65%; margin-right: 10px;}
+	.ucFilterModal .group-actions , .ucFilterModal .modal-footer .ucCancelBtn, .rules-list select.form-control { margin-bottom:10px !important;}
+	
+}
+
+
 .ucCurrentFilter
 {
     color: #000 !important;
@@ -296,3 +586,4 @@ h2
 {
     cursor: pointer;
 }
+

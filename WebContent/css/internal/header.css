@@ -6,11 +6,18 @@
  */
 #ucHeader
 {
-	padding:10px;
-	background-color: #fff;
-	border-bottom: 1px solid #E9EDEE;
+	width:100%;
+	padding: 10px;
+    background-color: #313048;
+    border: 0;
+    margin-bottom: 0px;
+    border-radius: 0;
+    transition: margin-left 0.2s;
 }
-
+#ucHeader .logo
+{
+	padding: 12px 0 0 5px;
+}
 #ucHeader .logo img
 {
     display: inline-block;
@@ -19,16 +26,17 @@
 }
 #ucHeader .navbar-nav>li>a
 {
-	color: #7c848a;
+	/*color: #7c848a;*/
+	color: #706e86;
 	transition: 0.5s color ease;
 }
 #ucHeader .navbar-nav>li>a:hover
 {
-	color: #2B9AF3;
+	color: #a9a8b7;
 }
 #ucHeader .navbar-nav>.open>a, #ucHeader .navbar-nav>.open>a:focus, #ucHeader .navbar-nav>.open>a:hover
 {
-	color: #2B9AF3;
+	color: #a9a8b7;
 	background-color: transparent;
 }
 .uc_currentuser_submenu li
