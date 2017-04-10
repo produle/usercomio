@@ -40,7 +40,7 @@ function UC_VisitorListController()
 
             $(document).on("click",".ucUserListSortableColumn",thisClass.sortUserList);
 
-            $(document).on("click",".ucUserBaseDetails",thisClass.openVisitorProfile);
+            $(document).on("click",".ucVisitorPageTrigger",thisClass.openVisitorProfile);
 
             $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-up").hide();
             $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-down").hide();
@@ -231,7 +231,7 @@ function UC_VisitorListController()
      */
     this.userListSelectHandler = function()
     {
-        if($(this).is(":checked"))
+        if($("#uc-all-user-select").is(":checked"))
         {
             $(".uc-user-select").prop("checked",true);
             $("#ucSendMessageGroupBtn").text("Send Message to All");

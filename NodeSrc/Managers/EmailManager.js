@@ -10,6 +10,7 @@ var app = require("../server").app;
 var moment = require("moment");
 var visitorListManager = require("./VisitorListManager").VisitorListManager;
 var mailer = require('express-mailer');
+var utils = require("../core/utils.js").utils;
 
 class EmailManager {
 
@@ -53,6 +54,7 @@ class EmailManager {
                     recipientSingle.visitordata = response[iter].visitordata;
 
                     EmailManagerObj.parseEmail(message,recipientSingle,function(parsedMessage,recipientSingle){
+                        EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitordata.email,subject,parsedMessage);
                         EmailManagerObj.sendSMTPMail(recipientSingle.visitordata.email,subject,parsedMessage);
                     });
 
@@ -85,6 +87,7 @@ class EmailManager {
                         recipientSingle.visitordata = response[iter].visitordata;
 
                         EmailManagerObj.parseEmail(message,recipientSingle,function(parsedMessage,recipientSingle){
+                            EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitordata.email,subject,parsedMessage);
                             EmailManagerObj.sendSMTPMail(recipientSingle.visitordata.email,subject,parsedMessage);
                         });
 
@@ -161,6 +164,25 @@ class EmailManager {
                 console.log("ERROR in sending Email via SMTP, check the credentials");
             }
             return;
+        });
+    }
+
+    /*
+     * @desc Stores the email sent in the DB
+     */
+    saveEmailMessage(visitorId,visitorEmail,subject,message)
+    {
+
+
+        var messagesCollection = global.db.collection('messages');
+
+        messagesCollection.insert({
+            _id: utils.guidGenerator(),
+            visitorId: visitorId,
+            visitorEmail: visitorEmail,
+            subject: subject,
+            message: message,
+            sentOn: new Date()
         });
     }
 }

@@ -97,7 +97,7 @@
                                        <tr rv-each-visitor="list">
                                            <td class="uc_td_input_control"><input rv-visitorid="visitor" class="uc-user-select" type="checkbox"><label></label></td>
                                            <td>
-                                               <div class="ucUserBaseDetails" rv-data-visitorid="visitor._id">
+                                               <div class="ucUserBaseDetails ucVisitorPageTrigger" rv-data-visitorid="visitor._id">
                                                    <div class="ucUserCurrentStatus">
                                                        <span class="ucUserOnline"></span>
                                                        <div class="ucUserPicWrapper">
@@ -123,8 +123,8 @@
                                                     &#8226;&#8226;&#8226;
                                                   </span>
                                                   <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
-                                                    <li><a href="#">Send Email</a></li>
-                                                    <li><a href="#">User Profile</a></li>
+                                                    <li><a href="#" class="ucSendMessageSingleTrigger">Send Email</a></li>
+                                                    <li><a href="#" class="ucVisitorPageTrigger" rv-data-visitorid="visitor._id">User Profile</a></li>
                                                   </ul>
                                                 </div>
                                            </td>

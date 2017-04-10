@@ -14,6 +14,8 @@ function UC_EmailMessagingController()
 		$(document).on("click","#ucSendMessageGroupBtn",thisClass.openSendMessageModal);
 
         $(document).on("click","#ucSendMessageSubmit",thisClass.submitMessageHandler);
+
+        $(document).on("click",".ucSendMessageSingleTrigger",thisClass.selectCurrentVisitor);
 	};
 
     this.openSendMessageModal = function()
@@ -64,5 +66,20 @@ function UC_EmailMessagingController()
                     $("#ucSendMessageModal").modal("hide");
                 }
             });
+    };
+
+    /*
+     * @desc Selects the checkbox of corresponding visitor to insert them in inclusionList
+     */
+    this.selectCurrentVisitor = function()
+    {
+        $("#uc-all-user-select").prop("checked",false);
+        $(".uc-user-select").prop("checked",false);
+
+        uc_main.visitorListController.userListSelectHandler();
+
+        $(this).closest("tr").find(".uc-user-select").prop("checked",true);
+
+        thisClass.openSendMessageModal();
     }
 }

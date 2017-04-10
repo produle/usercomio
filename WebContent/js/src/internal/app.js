@@ -332,6 +332,7 @@ function UC_AppController()
         {
             uc_main.visitorListController.getAllVisitors();
             uc_main.dashboardController.getDashboardMetrics();
+            uc_main.dashboardController.drawNewUsersGraph();
             uc_main.filterController.listUserdefinedFilters();
         }
     };
