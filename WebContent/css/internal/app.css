@@ -22,7 +22,14 @@ body
 {
     outline: none !important;
 }
-
+btn
+{
+	height: 35px;
+    padding: 4px 25px;
+    border: none;
+    color: #fff;
+    background: #2b9af3;
+}
 
 .uc_mt_small
 {
@@ -104,6 +111,17 @@ input[type="text"], input[type="email"], input[type="password"]
     text-align: left;
     margin-bottom: 5px;
 }
+textarea.form-control
+{
+	border:none;
+	border-bottom: 1px solid #e8eced;
+    box-shadow: none;
+    border-radius: 0;
+    font-weight: 300;
+    font-size: 13px;
+    text-align: left;
+    margin-bottom: 5px;
+}
 h2
 {
 	font-size:32px;
@@ -169,9 +187,14 @@ h2
     border-bottom: 1px solid #e9edee;
     cursor: pointer;
 }
+#uc_tab_data_dashboard
+{
+	padding-top: 20px;
+}
 #ucMainDashboard i
 {
 	margin-right: 10px;
+	font-weight: bold;
 }
 #ucMainListing
 {
@@ -196,6 +219,11 @@ h2
     font-size: 20px;
     color: #000;
     cursor: pointer;
+}
+.ucAddNewFilter .ico-plus2
+{
+	color:#777;
+	font-weight: bold;
 }
 .ucSidebar ul
 {
@@ -233,7 +261,7 @@ h2
 }
 .ucSidebar ul li i
 {
-	color: #000;
+	color: #777;
     padding-right: 10px;
     display: inline-block;
     vertical-align: middle;
@@ -241,6 +269,7 @@ h2
     top: 0px;
     font-size: 17px;
     cursor: pointer;
+    font-weight: bold;
 }
 .ucFilterSettingBtn i
 {
@@ -249,7 +278,7 @@ h2
 .ucCurrentPage, .ucCurrentPage .ico-settings
 {
 	color: #2b9af3 !important;
-	font-weight: normal;
+	font-weight: bold;
 }
 .ucSearchBar 
 {
@@ -417,6 +446,46 @@ h2
 {
 	outline: none;
 	box-shadow: none;
+}
+.ucNoteSection
+{
+	background-color: #f8f8f8;
+	border-radius: 5px;
+	color: #333;
+	padding: 10px;
+	margin-bottom: 25px;
+}
+.ucNoteSection h4
+{
+	margin-top:0;
+}
+.ucNoteSection i
+{
+	font-weight: bold;
+}
+.ucNoteSection ul
+{
+	margin:0;
+	padding:0;
+	list-style: none;
+}
+.ucNoteSection ul li
+{
+	display:inline;
+	font-weight: 300;
+	color: #777;
+}
+.ucNoteSection ul li:after
+{
+	content:',';
+}
+.ucNoteSection ul li:last-child:after
+{
+	content:'';
+}
+#ucSendMessageModal textarea.form-control
+{
+	margin: 10px 0 20px !important;
 }
 /*Modal Styles End*/
 
