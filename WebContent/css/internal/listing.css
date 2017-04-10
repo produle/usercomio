@@ -174,7 +174,6 @@ box-shadow: 0px 4px 17px -2px rgba(0,0,0,0.59);
 {
 	width:30px;
 	height:30px;
-	margin:0 auto;
 }
 .ucUserBrowserIcon span, .ucUserOSIcon span
 {
@@ -375,6 +374,11 @@ box-shadow: 0px 4px 17px -2px rgba(0,0,0,0.59);
     padding: 4px 12px;
     font-weight: 300;
     transition: 0.1s all ease;
+}
+.group-actions .btn-success:first-child
+{
+	background-color: #4a9d55;
+    border-color: #3b7e44;
 }
 .group-actions .btn-danger
 {

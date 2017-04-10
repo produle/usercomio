@@ -29,7 +29,15 @@ function UC_MainController()
         thisClass.initRivetBinds();
 
         $(".uc_tab_trigger").on("click",thisClass.toggleTabs);
-
+        
+        $(document).on("click",".ucSwitchContentTrigger",thisClass.switchContent);
+        
+        $(".ucSwitchContentContainer").hide();
+        $("#uc_tab_data_dashboard").show();
+        $("#ucMainDashboard").addClass("ucCurrentPage");
+        
+        $(".ucSideBarMenuTrigger").on("click",thisClass.menuContainer);
+        $(".ucSidebarCloseBtn").on("click",thisClass.closeMenuContainer);
 	};
 
     /*
@@ -54,5 +62,53 @@ function UC_MainController()
 
         $(this).closest(".btn-group").find(".btn").removeClass("active");
         $(this).addClass("active");
+    };
+
+    /**
+     * @desc 
+     */
+    this.switchContent = function(e)
+    {
+    	var divID = $(this).attr("switch-to");
+        $(".ucSwitchContentContainer").hide();
+        $("#"+divID).show();
+        
+        $(".ucSwitchContentTrigger").removeClass("ucCurrentPage");
+        $(this).addClass("ucCurrentPage");
+        
+        thisClass.closeMenuContainer(e);
+    };
+    /**
+     * @desc Responsive for Sidebar
+     */
+
+    this.menuContainer = function(e)
+    {
+    		e.stopPropagation();
+    	
+    	    if($('.ucSidebar,.ucMainContent,.ucIndexPageWrapper, body,  #ucHeader').hasClass('open'))
+    	    {
+    	    	$( ".ucSidebar,.ucMainContent,.ucIndexPageWrapper, body , #ucHeader" ).removeClass( "open" );
+    	    	$("html, body").css({"overflow": "auto"}); 
+    	    	
+    	    	
+    	    } else {
+    	    	$( ".ucSidebar,.ucMainContent, .ucIndexPageWrapper, body , #ucHeader" ).addClass( "open" );
+    	    	$("html, body").css({"overflow": "hidden"}); 
+    	    	
+    	    }
+    
+    };
+    /**
+     * @desc Closing the sidebar
+     */
+
+    this.closeMenuContainer = function(e)
+    {
+    		e.stopPropagation();
+    		$( ".ucSidebar,.ucMainContent,.ucIndexPageWrapper, body , #ucHeader" ).removeClass( "open" );
+    		$("html, body").css({"overflow": "auto"}); 
+    		
+    		
     };
 }
