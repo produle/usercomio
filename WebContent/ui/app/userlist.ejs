@@ -1,40 +1,60 @@
 
 
-  		<div class="row uc_mt_medium uc_tab_data_container" id="uc_tab_data_listuser">
-            <div class="col-md-12">
+  		<div class="row uc_data_container ucSwitchContentContainer" id="uc_tab_data_listuser" >
+           <div class="ucSearchBar">
+                <div class="ucSideBarMenuTrigger"><i class="ico-keypad"></i></div>
+                 <div class="container-fluid">
+                         
+                         <div class="row">
+                          <div class="col-lg-8 col-md-10">
+                           <form class="form-inline">
+                                <div class="ucSearchWrapper row">
+                                  <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                    <select class="form-control ucSearchSelect" id="">
+                                        <option>Name</option>
+                                        <option>Session</option>
+                                        <option>Browser</option>
+                                        <option>Operating System</option>
+                                        <option>Device</option>
+                                        <option>Country</option>
+                                    </select>
+                                    
+                                  </div>
+                                  <div class="form-group col-md-8 col-sm-8 col-xs-8 ">
+                                    <input type="text" class="form-control" >
+                                  </div>
+                                </div>
+                                <button type="submit" class="btn ucSearchBtn">Search</button>
+                                  
+                              
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <button class="btn btn-primary pull-right" id="ucSendMessageGroupBtn">Send Message</button>
-                    </div>
-                </div>
+                            </form>
+                            <div class="">
+                              
+                               
+                            </div><!-- /input-group -->
+                          </div><!-- /.col-lg-6 -->
+                          
+                        </div><!-- /.row -->
+                        <span class="ucAddFilterBtn"><i class="ico-filter2"></i></span>
+                 </div>
+            </div>
+              
+               
+                
+                  <div class="col-md-12">
 
-                <div class="row">
-                    <div class="col-md-3">
+              
                         <div class="row">
                             <div class="col-md-12">
-                                <div>
-                                    <ul id="ucPredefinedFilterList">
-                                        <li rv-each-filter="list" rv-data-filterid="filter._id"><span>{filter.name}</span></li>
-                                    </ul>
-                                    <ul id="ucUserdefinedFilterList">
-                                        <li rv-each-filter="list" rv-data-filterid="filter._id"><span>{filter.name}</span><div class="ucFilterSettingBtn"><i class="fa fa-pencil"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-times"></i></div></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row uc_mt_large">
-                            <div class="col-md-12">
-                                <div>
-                                    <button class="btn btn-success" id="ucAddFilterBtn"><i class="fa fa-plus"></i> New Filter</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
+                            <button class="btn btn-primary pull-right" id="ucSendMessageGroupBtn">Send Message</button>
+                            </div></div>
+                            
                         <div class="row">
                             <div class="col-md-12">
+                                
+                                
+                                
 
                                 <table class="table table-striped uc_table" id="uc_visitor_list">
                                     <thead>
@@ -224,5 +244,3 @@
                     </div>
 
                 </div>
-  			</div>
-  		</div>

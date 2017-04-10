@@ -9,12 +9,26 @@
 <body>
 
     <% include partials/navigation.ejs %>
+    
+    <div class="ucIndexPageWrapper">
+        <div class="ucSidebar">
+          <% include partials/sidebar.ejs %>
+        </div>
+        
+        <div class="ucMainContent">
+           
+            
+           
+           <div class="container-fluid">
 
-    <div class="container">
+                <% include app/app.ejs %>
 
-        <% include app/app.ejs %>
-  
+           </div>
+        </div>
+        
     </div>
+    
+    
  
     <% include partials/dialogs.ejs %>
  	    

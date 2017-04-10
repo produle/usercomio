@@ -313,29 +313,24 @@
 
 
 <div id="ucSendMessageModal" class="modal ucModal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="width: 80%;">
+    <div class="modal-dialog" role="document">
        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="../images/app/listing/filter/ucListingFilterCloseIcon.png" alt=""/></button>
         <div class="modal-content">
-            <div class="modal-header">
-                <img src="/images/app/modal/smtpIcon.png" alt=""/>
-                <h2>Messaging</h2>
-
-            </div>
+            
             <div class="modal-body">
+               <img src="/images/app/modal/smtpIcon.png" alt=""/>
+                <h2>Messaging</h2>
                 <div class="row">
-	                <div class="col-sm-3 text-left">
-                        <div class="row">
-                            <div class="col-sm-12">
-
-                                <h4>Variables <i class="fa fa-info-circle mfTooltip" data-placement="top" title="Copy the below variables and paste it in the message body, which will substitute the corresponding user data"></i></h4>
-                                <ul style="list-style:none;padding-left: 20px;">
+	                <div class="col-sm-12 text-left">
+                        <div class="ucNoteSection">
+                            <h4>Variables <i class="ico-info mfTooltip" data-placement="top" title="Copy the below variables and paste it in the message body, which will substitute the corresponding user data"></i></h4>
+                                <ul style="">
                                     <li>{name}</li>
                                     <li>{email}</li>
                                 </ul>
-                            </div>
                         </div>
                     </div>
-	                <div class="col-sm-9">
+	                <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="ucSendMessageSubject" placeholder="Subject" />
@@ -343,16 +338,15 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <textarea class="form-control" id="ucSendMessageBody" rows="10" placeholder="Body of the message"></textarea>
+                                <textarea class="form-control" id="ucSendMessageBody" rows="5" placeholder="Body of the message"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
                 <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
                 <button type="button" id="ucSendMessageSubmit" class="btn ucSaveBtn">Send</button>
             </div>
+            
         </div>
     </div>
 </div>
