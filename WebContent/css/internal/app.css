@@ -480,6 +480,7 @@ h2
 {
     cursor: pointer;
 }
+
 @media only screen and (max-width:992px) 
 {
 	.ucSidebar{width:0; position: fixed; padding:0;top:0; left:0; height: 100%; display:none; overflow: auto; }
@@ -504,3 +505,16 @@ h2
 	.ucFilterModal .group-actions , .ucFilterModal .modal-footer .ucCancelBtn, .rules-list select.form-control { margin-bottom:10px !important;}
 	
 }
+
+
+.ucCurrentFilter
+{
+    color: #000 !important;
+    font-weight: bold;
+}
+
+.mfTooltip
+{
+    cursor: pointer;
+}
+

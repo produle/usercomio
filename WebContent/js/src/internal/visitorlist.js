@@ -44,6 +44,8 @@ function UC_VisitorListController()
 
             $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-up").hide();
             $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-down").hide();
+
+            $(document).on("click","#uc-all-user-select",thisClass.userListSelectHandler);
         }
 	};
 
@@ -60,6 +62,7 @@ function UC_VisitorListController()
 
         rivets.binders.visitorid = function (el, value) {
             $(el).attr("id","uc-user-select-"+value._id);
+            $(el).attr("data-visitorid",value._id);
             $(el).next("label").attr("for","uc-user-select-"+value._id);
         };
 
@@ -220,6 +223,25 @@ function UC_VisitorListController()
         else
         {
             $("#uc_visitor_list .ucUserListSortableColumn[data-sortColumn='"+thisClass.currentSortColumn+"'] .fa-caret-down").show();
+        }
+    };
+
+    /*
+     * @desc Selects / Unselects the user list based on the select all checkbox
+     */
+    this.userListSelectHandler = function()
+    {
+        if($(this).is(":checked"))
+        {
+            $(".uc-user-select").prop("checked",true);
+            $("#ucSendMessageGroupBtn").text("Send Message to All");
+            $("#ucSendMessageSubmit").text("Send to All");
+        }
+        else
+        {
+            $(".uc-user-select").prop("checked",false);
+            $("#ucSendMessageGroupBtn").text("Send Message");
+            $("#ucSendMessageSubmit").text("Send");
         }
     };
 }

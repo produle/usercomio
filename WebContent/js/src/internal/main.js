@@ -14,6 +14,7 @@ function UC_MainController()
 	this.visitorListController = new UC_VisitorListController();
 	this.userController = new UC_UserController();
 	this.filterController = new UC_FilterController();
+	this.messagingController = new UC_MessagingController();
 
     this.rivetUserNameObj = null;
 	
@@ -25,11 +26,12 @@ function UC_MainController()
         thisClass.visitorListController.constructor();
         thisClass.userController.constructor();
         thisClass.filterController.constructor();
+        thisClass.messagingController.constructor();
 
         thisClass.initRivetBinds();
 
         $(".uc_tab_trigger").on("click",thisClass.toggleTabs);
-        
+
         $(document).on("click",".ucSwitchContentTrigger",thisClass.switchContent);
         
         $(".ucSwitchContentContainer").hide();
@@ -38,6 +40,11 @@ function UC_MainController()
         
         $(".ucSideBarMenuTrigger").on("click",thisClass.menuContainer);
         $(".ucSidebarCloseBtn").on("click",thisClass.closeMenuContainer);
+
+
+        $(".mfTooltip").tooltip();
+
+
 	};
 
     /*

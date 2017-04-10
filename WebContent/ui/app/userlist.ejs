@@ -3,11 +3,17 @@
   		<div class="row uc_data_container ucSwitchContentContainer" id="uc_tab_data_listuser" >
             <div class="col-md-12">
 
-                <div class="row">
-                    
-                    <div class="col-md-12">
+              
                         <div class="row">
                             <div class="col-md-12">
+                            <button class="btn btn-primary pull-right" id="ucSendMessageGroupBtn">Send Message</button>
+                            </div></div>
+                            
+                        <div class="row">
+                            <div class="col-md-12">
+                                
+                                
+                                
 
                                 <table class="table table-striped uc_table" id="uc_visitor_list">
                                     <thead>
@@ -48,7 +54,7 @@
                                     </thead>
                                     <tbody>
                                        <tr rv-each-visitor="list">
-                                           <td class="uc_td_input_control"><input rv-visitorid="visitor" type="checkbox"><label></label></td>
+                                           <td class="uc_td_input_control"><input rv-visitorid="visitor" class="uc-user-select" type="checkbox"><label></label></td>
                                            <td>
                                                <div class="ucUserBaseDetails" rv-data-visitorid="visitor._id">
                                                    <div class="ucUserCurrentStatus">
@@ -197,5 +203,3 @@
                     </div>
 
                 </div>
-  			</div>
-  		</div>
