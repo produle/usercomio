@@ -45,7 +45,7 @@ class EmailManager {
         if(filterId != null)
         {
             var visitorListManagerObj = new visitorListManager();
-            visitorListManagerObj.getAllVisitorsFromDB(appid,filterId,"visitormetainfo.lastseen",1,0,null,exclusionList,function(response){
+            visitorListManagerObj.getAllVisitorsFromDB(appid,filterId,"visitormetainfo.lastseen",1,0,null,exclusionList,function(response,totalcount){
 
                 for(var iter = 0; iter < response.length; iter++)
                 {

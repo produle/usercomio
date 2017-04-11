@@ -32,8 +32,8 @@ class VisitorListManager {
         var sortColumn = req.body.sortColumn;
         var sortOrder = req.body.sortOrder;
 
-        this.getAllVisitorsFromDB(appid,filterId,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response){
-            return res.send({status:response});
+        this.getAllVisitorsFromDB(appid,filterId,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response,totalcount){
+            return res.send({status:response,totalcount:totalcount});
         });
 
   	}
@@ -91,19 +91,33 @@ class VisitorListManager {
                     }
                 ];
 
+                var aggregateWithLimit = aggregateArray;
+                var aggregateWithCount = aggregateArray;
+
                 if(pageLimit != null)
                 {
-                    aggregateArray.push({ $limit : pageLimit });
+                    aggregateWithLimit.push({ $limit : pageLimit });
                 }
 
-                var visitorCollection = global.db.collection('visitors').aggregate(aggregateArray).toArray(function(err,visitors)
+                var visitorCollection = global.db.collection('visitors').aggregate(aggregateWithLimit).toArray(function(err,visitors)
                     {
                         if(err)
                         {
                             callback('failure');
                         }
 
-                        callback(visitors);
+                        aggregateWithCount.push({$count: "count"});
+
+                        var visitorRecordCollection = global.db.collection('visitors').aggregate(aggregateWithCount).toArray(function(err,totalcount)
+                            {
+                                if(err)
+                                {
+                                    callback('failure');
+                                }
+
+                                callback(visitors,totalcount);
+                            }
+                        );
                     }
                 );
             }

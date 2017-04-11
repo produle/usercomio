@@ -25,6 +25,8 @@ function UC_VisitorListController()
 
     this.currentSortOrder = 1; //1 for ASC and -1 for DESC
 
+    this.currentFilterTotalVisitors = 0;
+
 	this.constructor = function()
 	{
         if(uc_main.appController.renderVisitors)
@@ -46,6 +48,8 @@ function UC_VisitorListController()
             $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-down").hide();
 
             $(document).on("click","#uc-all-user-select",thisClass.userListSelectHandler);
+
+            $(document).on("change","#uc-all-user-select,.uc-user-select",thisClass.updateRecipientCount);
         }
 	};
 
@@ -120,6 +124,14 @@ function UC_VisitorListController()
                 }
                 else
                 {
+                    if(data.totalcount.length == 1)
+                    {
+                        thisClass.currentFilterTotalVisitors = data.totalcount[0].count;
+                    }
+                    else
+                    {
+                        thisClass.currentFilterTotalVisitors = 0;
+                    }
                     thisClass.visitors = thisClass.visitors.concat(data.status);
                     thisClass.visitorListSkipIndex = thisClass.visitorListSkipIndex + data.status.length;
 
@@ -198,6 +210,8 @@ function UC_VisitorListController()
         thisClass.visitorListSkipIndex = 0;
 
         thisClass.visitorListLoaded = false;
+
+        $("#uc-all-user-select").prop("checked",false);
     };
 
     /*
@@ -243,5 +257,35 @@ function UC_VisitorListController()
             $("#ucSendMessageGroupBtn").text("Send Message");
             $("#ucSendMessageSubmit").text("Send");
         }
+    };
+
+    /*
+     * @desc Updates the recipient count
+     */
+    this.updateRecipientCount = function()
+    {
+        var recipientCount = 0;
+        if($("#uc-all-user-select").is(":checked"))
+        {
+            recipientCount = thisClass.currentFilterTotalVisitors;
+
+            $(".uc-user-select").each(function(){
+                if(!$(this).is(":checked"))
+                {
+                    recipientCount--;
+                }
+            });
+        }
+        else
+        {
+            $(".uc-user-select").each(function(){
+                if($(this).is(":checked"))
+                {
+                    recipientCount++;
+                }
+            });
+        }
+
+        $("#ucSendMessageGroupBtn,#ucSendMessageSubmit").text("Send Message to "+recipientCount+" users");
     };
 }
