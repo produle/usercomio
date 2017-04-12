@@ -128,18 +128,8 @@ class ViewRenderer
 
                         var user = userManagerObj.getUserByUsername(uname,function(user){
 
-                            visitorListManagerObj.getVisitorById(req.params.visitorid,function(visitors){
-
-                                if(visitors.length > 0)
-                                {
-                                    delete user.password; //To avoid the encrypted password transmitted to client
-                                    res.render('visitor',{user:user,config:config,moment:moment,visitor:visitors[0]});
-                                }
-                                else
-                                {
-                                    res.redirect('/');
-                                }
-                            });
+                            delete user.password; //To avoid the encrypted password transmitted to client
+                            res.render('visitor',{user:user,config:config,moment:moment,visitorid:req.params.visitorid});
 
                         });
                     }

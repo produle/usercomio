@@ -19,6 +19,10 @@ function UC_VisitorListController()
 
     this.rivetVisitorListObj = null;
 
+    this.rivetVisitorDetailsObj = null;
+
+    this.rivetVisitorMessagesObj = null;
+
     this.currentFilterId = "1"; //TODO Add predefined filters in setup
 
     this.currentSortColumn = "visitormetainfo.lastseen";
@@ -287,5 +291,68 @@ function UC_VisitorListController()
         }
 
         $("#ucSendMessageGroupBtn,#ucSendMessageSubmit").text("Send Message to "+recipientCount+" users");
+    };
+
+    /*
+     * @desc Obtains the visitors details
+     */
+    this.getVisitorDetails = function(visitorId)
+    {
+        if(visitorId != null)
+        {
+            UC_AJAX.call('VisitorListManager/getvisitordetails',{appid:uc_main.appController.currentAppId,visitorid:visitorId},function(data,status,xhr){
+
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while fetching user details !");
+                }
+                else
+                {
+                    if(data.visitor != null)
+                    {
+
+                        var visitorObj = data.visitor;
+
+                        visitorObj.displayId = (visitorObj._id.substring(0,10))+"...";
+                        visitorObj.displaySessionCount = visitorObj.sessions.length;
+                        visitorObj.displayLastSeen = moment(visitorObj.visitormetainfo.lastseen).format("DD MMM YYYY HH:mm:ss");
+                        visitorObj.displayFirstSeen = moment(visitorObj.visitormetainfo.firstseen).format("DD MMM YYYY HH:mm:ss");
+
+                        thisClass.rivetVisitorDetailsObj = rivets.bind(
+                            document.querySelector('#ucVisitorDetail'), {
+                                visitor: visitorObj
+                            }
+                        );
+                    }
+                }
+            });
+
+            UC_AJAX.call('VisitorListManager/getvisitormessages',{appid:uc_main.appController.currentAppId,visitorid:visitorId},function(data,status,xhr){
+
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while fetching user details !");
+                }
+                else
+                {
+                    if(data.messages != null)
+                    {
+
+                        var messageList = data.messages;
+
+                        for(var i = 0; i < messageList.length; i++)
+                        {
+                            messageList[i].displayDate = moment(messageList[i].sentOn).format("DD MMM YYYY HH:mm:ss");
+                        }
+
+                        thisClass.rivetVisitorMessagesObj = rivets.bind(
+                            document.querySelector('#ucVisitorMessages'), {
+                                messageList: messageList
+                            }
+                        );
+                    }
+                }
+            });
+        }
     };
 }

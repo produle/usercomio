@@ -18,6 +18,8 @@ class VisitorListManager {
 
 
         this.router.post("/visitorlist",(req, res) => { this.getAllVisitors(req,res); });
+        this.router.post("/getvisitordetails",(req, res) => { this.getVisitorById(req,res); });
+        this.router.post("/getvisitormessages",(req, res) => { this.getVisitorMessages(req,res); });
     }
 
   	/*
@@ -129,8 +131,9 @@ class VisitorListManager {
   	/*
   	 * @desc Return data of visitor by ID
   	 */
-  	getVisitorById(visitorId,callback)
+  	getVisitorById(req,res)
   	{
+        var visitorId = req.body.visitorid;
         if(visitorId)
     	{
 
@@ -151,11 +154,41 @@ class VisitorListManager {
                 {
                     if(err)
                     {
-                        return callback(null);
+                        return res.send({status:'failure'});
                     }
                     else
                     {
-                        return callback(visitor);
+                        return res.send({status:'success',visitor:visitor[0]});
+                    }
+                }
+            );
+
+    	}
+
+  	}
+
+  	/*
+  	 * @desc Return collection of messages sento a visitor
+  	 */
+  	getVisitorMessages(req,res)
+  	{
+        var visitorId = req.body.visitorid;
+        if(visitorId)
+    	{
+
+            var messagesCollection = global.db.collection('messages').aggregate([
+                { $match :
+                    { visitorId: visitorId }
+                }
+            ]).toArray(function(err,messages)
+                {
+                    if(err)
+                    {
+                        return res.send({status:'failure'});
+                    }
+                    else
+                    {
+                        return res.send({status:'success',messages:messages});
                     }
                 }
             );
