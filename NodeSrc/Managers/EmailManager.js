@@ -28,6 +28,11 @@ class EmailManager {
   	 */
   	sendMessage(req,res)
   	{
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
         var appid = req.body.appid;
         var user = req.body.user;
         var filterId = req.body.filterId;

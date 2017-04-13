@@ -280,6 +280,7 @@ function UC_UserRegistrationController()
 
 
     thisClass.config.baseURL= baseurl;
+    thisClass.config.setupCompleted = 1;
 
     var newApp = new UC_App();
     var user = UC_UserSession.user;

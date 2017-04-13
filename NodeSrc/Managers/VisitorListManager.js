@@ -27,6 +27,11 @@ class VisitorListManager {
   	 */
   	getAllVisitors(req,res)
   	{
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
         var appid = req.body.appid;
         var skipIndex = req.body.skipindex;
         var pageLimit = req.body.pagelimit;
@@ -133,6 +138,12 @@ class VisitorListManager {
   	 */
   	getVisitorById(req,res)
   	{
+
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
         var visitorId = req.body.visitorid;
         if(visitorId)
     	{
@@ -172,6 +183,11 @@ class VisitorListManager {
   	 */
   	getVisitorMessages(req,res)
   	{
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
         var visitorId = req.body.visitorid;
         if(visitorId)
     	{

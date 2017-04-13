@@ -15,6 +15,15 @@ class ViewRenderer
 {
 	constructor()
 	{
+
+        function isLoggedIn(req, res, next) {
+            if (req.user) {
+                next();
+            } else {
+                res.redirect('/login');
+            }
+        }
+
 		/*
 		 * @desc Renders Login Page
 		 */
@@ -103,13 +112,18 @@ class ViewRenderer
 		 * @desc Renders Setup Page
 		 */
 		app.get('/setup',function(req,res){
+            var config = require('config');
+
+            if(config.has("setupCompleted") && (config.get("setupCompleted") == 1)) {
+                res.redirect('/login');
+            }
             res.render('setup');
 		});
 
 		/*
 		 * @desc Renders user profile page
 		 */
-		app.get('/visitor/:visitorid', function(req, res)
+		app.get('/visitor/:visitorid', isLoggedIn, function(req, res)
 		{
 
             var config = require('config');

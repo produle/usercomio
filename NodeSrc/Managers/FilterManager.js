@@ -27,6 +27,11 @@ class FilterManager {
   	 */
   	getAllPredefinedFilters(req,res)
   	{
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
         var predefinedFiltersList = [
             {_id: 1, name: "All Users", filter: null},
             {_id: 2, name: "New Users", filter: null},
@@ -41,6 +46,11 @@ class FilterManager {
   	 */
   	getAllUserdefinedFilters(req,res)
   	{
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
         var appid = req.body.appid;
 
         var filterCollection = global.db.collection('filters').aggregate([
@@ -70,6 +80,11 @@ class FilterManager {
   	updateFilter(req,res)
   	{
 
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
         var filter = req.body.filter;
 
         filter.createDate = new Date();
@@ -92,6 +107,11 @@ class FilterManager {
   	 */
   	deleteFilter(req,res)
   	{
+
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
 
         var filter = req.body.filter;
 
