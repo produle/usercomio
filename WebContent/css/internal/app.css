@@ -344,15 +344,29 @@ h2
     color: #fff;
     background: #2b9af3;
 }
+#ucSendMessageGroupBtn
+{
+	float:left;
+	margin-right: 10px;
+	background-color: #2b9af3;
+    border-color: #177ed1;
+    border-radius: 30px;
+    padding: 8px 20px;
+}
+.ucSendMessageWrapper
+{
+	position:absolute;
+	top: 15px;
+	right: 10px;
+}
 .ucSearchBar .ucAddFilterBtn
 {
 	color: #B1B0BF;
-    position: absolute;
-    right: 20px;
-    top: 18px;
     font-size: 25px;
     cursor: pointer;
     transition: 0.5s all ease;
+    position: relative;
+    top: 2px;
 }
 .ucSearchBar .ucAddFilterBtn:hover
 {
