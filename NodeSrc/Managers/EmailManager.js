@@ -21,6 +21,7 @@ class EmailManager {
 
 
         this.router.post("/sendmessage",(req, res) => { this.sendMessage(req,res); });
+        this.router.post("/getemailtemplates",(req, res) => { this.getAllEmailTemplates(req,res); });
     }
 
   	/*
@@ -40,6 +41,8 @@ class EmailManager {
         var inclusionList = req.body.inclusionList;
         var subject = req.body.subject;
         var message = req.body.message;
+        var template = req.body.template;
+        var blockDuplicate = req.body.blockDuplicate;
 
         var recipientList = [];
 
@@ -47,23 +50,41 @@ class EmailManager {
 
         EmailManagerObj.initSMTPConfig();
 
+        if(template == "new")
+        {
+            EmailManagerObj.saveNewTemplate(appid,user,subject,message,function(templateObj){
+                EmailManagerObj.processMessage(appid,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate);
+            });
+        }
+        else
+        {
+            EmailManagerObj.getTemplateById(appid,template,function(templateObj){
+                EmailManagerObj.processMessage(appid,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate);
+            });
+        }
+
+        return res.send({status:"Success"});
+
+    }
+
+    /*
+     * @desc Checks whether spam protection is enabled and collects the list of visitors mailed already
+     */
+
+    /*
+     * @desc Process the message with templateid
+     */
+    processMessage(appid,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate)
+    {
+
+        var EmailManagerObj = new EmailManager();
+
         if(filterId != null)
         {
             var visitorListManagerObj = new visitorListManager();
             visitorListManagerObj.getAllVisitorsFromDB(appid,filterId,"visitormetainfo.lastseen",1,0,null,exclusionList,function(response,totalcount){
 
-                for(var iter = 0; iter < response.length; iter++)
-                {
-                    var recipientSingle = {};
-                    recipientSingle.id = response[iter]._id;
-                    recipientSingle.visitordata = response[iter].visitordata;
-
-                    EmailManagerObj.parseEmail(message,recipientSingle,function(parsedMessage,recipientSingle){
-                        EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitordata.email,subject,parsedMessage);
-                        EmailManagerObj.sendSMTPMail(recipientSingle.visitordata.email,subject,parsedMessage);
-                    });
-
-                }
+                    EmailManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate);
             });
         }
         else
@@ -85,28 +106,38 @@ class EmailManager {
                         console.log("ERROR: "+err);
                     }
 
-                    for(var iter = 0; iter < response.length; iter++)
-                    {
-                        var recipientSingle = {};
-                        recipientSingle.id = response[iter]._id;
-                        recipientSingle.visitordata = response[iter].visitordata;
-
-                        EmailManagerObj.parseEmail(message,recipientSingle,function(parsedMessage,recipientSingle){
-                            EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitordata.email,subject,parsedMessage);
-                            EmailManagerObj.sendSMTPMail(recipientSingle.visitordata.email,subject,parsedMessage);
-                        });
-
-                    }
+                    EmailManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate);
                 }
             );
         }
+    }
 
-        return res.send({status:"Success"});
+    /*
+     * @desc Loops throught the recipient list and mails with a spam check
+     */
+    selectRecipients(response,subject,message,templateObj,blockDuplicate)
+    {
+        var EmailManagerObj = new EmailManager();
 
+        for(var iter = 0; iter < response.length; iter++)
+        {
+            if(blockDuplicate && templateObj.recipientList.includes(response[iter]._id))
+            {
+                //Will not send email to prevent spam
+            }
+            else
+            {
+                var recipientSingle = {};
+                recipientSingle.id = response[iter]._id;
+                recipientSingle.visitordata = response[iter].visitordata;
 
+                EmailManagerObj.parseEmail(message,recipientSingle,function(parsedMessage,recipientSingle){
+                    EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitordata.email,subject,parsedMessage,templateObj);
+                    EmailManagerObj.sendSMTPMail(recipientSingle.visitordata.email,subject,parsedMessage);
+                });
+            }
 
-
-
+        }
     }
 
     /*
@@ -175,11 +206,12 @@ class EmailManager {
     /*
      * @desc Stores the email sent in the DB
      */
-    saveEmailMessage(visitorId,visitorEmail,subject,message)
+    saveEmailMessage(visitorId,visitorEmail,subject,message,templateObj)
     {
 
 
         var messagesCollection = global.db.collection('messages');
+        var emailTemplatesCollection = global.db.collection('emailtemplates');
 
         messagesCollection.insert({
             _id: utils.guidGenerator(),
@@ -187,8 +219,102 @@ class EmailManager {
             visitorEmail: visitorEmail,
             subject: subject,
             message: message,
+            templateId: templateObj._id,
             sentOn: new Date()
         });
+
+        templateObj.recipientList.push(visitorId);
+
+        emailTemplatesCollection.update(
+            { _id:  templateObj._id},
+            { $set :
+                {
+                    recipientList: templateObj.recipientList
+                }
+            },
+            { upsert: true }
+        )
+    }
+
+  	/*
+  	 * @desc Collects the list of email templates available for the app
+  	 */
+  	getAllEmailTemplates(req,res)
+  	{
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
+        var appid = req.body.appid;
+        var user = req.body.user;
+
+        var emailTemplateCollection = global.db.collection('emailtemplates').aggregate([
+                { $match :
+                    { "$and": [
+                        {
+                          appid:appid
+                        }
+                      ]
+                    }
+                }
+            ]).toArray(function(err,templates)
+            {
+                if(err)
+                {
+                    console.log("ERROR: "+err);
+                    return res.send({status:"failure"});
+                }
+                return res.send({status:"Success",emailTemplateList:templates});
+
+            }
+        );
+
+    }
+
+    /*
+     * @desc Stores the new email template in the DB
+     */
+    saveNewTemplate(appid,user,subject,message,callback)
+    {
+        var emailTemplatesCollection = global.db.collection('emailtemplates');
+
+        var templateObj = {
+            _id: utils.guidGenerator(),
+            appid: appid,
+            creator: user._id,
+            subject: subject,
+            message: message,
+            createdOn: new Date(),
+            recipientList: []
+        };
+
+        emailTemplatesCollection.insert(templateObj);
+
+        callback(templateObj);
+    }
+
+    /*
+     * @desc Returns the template object by given id
+     */
+    getTemplateById(appid,templateid,callback)
+    {
+        var emailTemplatesCollection = global.db.collection('emailtemplates').aggregate([
+                { $match :
+                    { _id: templateid }
+                }
+            ]).toArray(function(err,template)
+                {
+                    if(err)
+                    {
+                        callback(null);
+                    }
+                    else
+                    {
+                        callback(template[0]);
+                    }
+                }
+            );
     }
 }
 
