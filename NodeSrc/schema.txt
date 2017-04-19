@@ -1,0 +1,102 @@
+/**
+ * Copyright - A Produle Systems Private Limited. All Rights Reserved.
+ * Schema for Usercom
+ */
+ 
+// Collection name: apps
+    _id : String //Auto generated id
+    id : String //Auto generated id
+    name : String //name of the app
+    clientid : String //id from users collection
+    createDate : Date //Datetime of when the record is created
+    creator : String //Email ID of the created user
+
+// Collection name: emailtemplates
+    _id : String //Auto generated id
+    appid : String //id from apps collection
+    creator : String //Email ID of the created user
+    subject : String
+    message : String
+    createdOn : Date //Datetime of when the record is created
+    recipientList : Array of Strings //contains list of visitor id from the visitors collection
+
+// Collection name: filters
+    _id : String //Auto generated id
+    name : String //name of the filter
+    filter : String //Filter rule in format compliance to query builder plugin
+    mongoFilter : String //Filter rule in mongoDB query format
+    createDate : Date //Datetime of when the record is created
+    creator : String //Email ID of the created user
+    appid : String //id from apps collection
+    
+    //Filter IDs 1,2,3 are predefined filters with appid and creator null
+
+// Collection name: messages
+    _id : String //Auto generated id
+    visitorId : String //id from visitors collection
+    visitorEmail : String //Email ID of the visitor
+    subject : String
+    message : String
+    templateId : String //id from emailtemplates collection
+    sentOn : Date //Datetime of when the record is created
+
+// Collection name: sessions
+    _id : Object //Auto generated
+    sessionid : String //Auto generated id
+    agentinfo : {
+        browser : String //Obtained from agent
+        browserlanguage : String //Obtained from request headers
+        device : String //Obtained from agent
+        os : String //Obtained from agent
+        platform : String //Obtained from agent
+        rawagentdata : String //Obtained from agent, covers entire header info
+        screenresolution : String //Obtained from track.js
+        sessionstart : Date //Obtained from track.js
+        sessionend : Date //Obtained from track.js
+        timezone : Double //Obtained from track.js
+        version : String //Obtained from agent
+    }
+    geolocationinfo : {
+        city : String //Obtained from geoip
+        country : String //Obtained from geoip
+        region : String //Obtained from geoip
+        timezone : String //Empty for now
+    }
+    visitorid : String //id from visitors collection
+    ipaddress : String //Obtained from request headers
+
+// Collection name: users
+    _id : Object //Auto generated id
+    firstName : String
+    lastName : String
+    createDate : Date //Datetime of when the record is created
+    username : String //Email ID of the user
+    password : String //Hashed password
+    company : String //Auto generated id
+    app : [ //Array of Object, each object denotes a specific app that contains the users preferences
+        {
+            filterOrder : [] //Array of String, list of filter id from the filters collection. The order of the array is the displayed sorted order.
+            currentFilter : String //id from filters collection. The last visited filter by the user.
+            currentSortColumn : String //field name the user last visited
+            currentSortOrder : Int //1 or -1 for ASC/DESC for the user preference to currentSortColumn
+        }
+    ]
+    token : String
+
+// Collection name: visitors
+    _id : Object //Auto generated id
+    appid : String //id from apps collection
+    visitordata : {
+        birthdate : String //From user app
+        created_at : Double //JS timestamp from user app
+        email : String //From user app
+        gender : String //From user app
+        name : String //From user app
+        paid : Boolean //From user app
+        profilepicture : String //From user app
+        ... //All custom fields send by the user
+    }
+    visitormetainfo : {
+        firstseen : Date
+        lastseen : Date
+    }
