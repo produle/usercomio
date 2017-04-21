@@ -22,8 +22,10 @@
     "express-session": "^1.14.2",
     "express-useragent": "^1.0.6",
     "geoip-lite": "^1.2.0",
+    "mailgun-js": "^0.10.1",
     "moment": "^2.18.0",
     "mongodb": "^2.2.20",
+    "node-ses": "^2.0.5",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0"
   },

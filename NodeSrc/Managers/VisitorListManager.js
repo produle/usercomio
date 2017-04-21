@@ -18,6 +18,8 @@ class VisitorListManager {
 
 
         this.router.post("/visitorlist",(req, res) => { this.getAllVisitors(req,res); });
+        this.router.post("/getvisitordetails",(req, res) => { this.getVisitorById(req,res); });
+        this.router.post("/getvisitormessages",(req, res) => { this.getVisitorMessages(req,res); });
     }
 
   	/*
@@ -25,6 +27,11 @@ class VisitorListManager {
   	 */
   	getAllVisitors(req,res)
   	{
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
         var appid = req.body.appid;
         var skipIndex = req.body.skipindex;
         var pageLimit = req.body.pagelimit;
@@ -32,8 +39,8 @@ class VisitorListManager {
         var sortColumn = req.body.sortColumn;
         var sortOrder = req.body.sortOrder;
 
-        this.getAllVisitorsFromDB(appid,filterId,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response){
-            return res.send({status:response});
+        this.getAllVisitorsFromDB(appid,filterId,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response,totalcount){
+            return res.send({status:response,totalcount:totalcount});
         });
 
   	}
@@ -91,19 +98,33 @@ class VisitorListManager {
                     }
                 ];
 
+                var aggregateWithLimit = aggregateArray;
+                var aggregateWithCount = aggregateArray;
+
                 if(pageLimit != null)
                 {
-                    aggregateArray.push({ $limit : pageLimit });
+                    aggregateWithLimit.push({ $limit : pageLimit });
                 }
 
-                var visitorCollection = global.db.collection('visitors').aggregate(aggregateArray).toArray(function(err,visitors)
+                var visitorCollection = global.db.collection('visitors').aggregate(aggregateWithLimit).toArray(function(err,visitors)
                     {
                         if(err)
                         {
                             callback('failure');
                         }
 
-                        callback(visitors);
+                        aggregateWithCount.push({$count: "count"});
+
+                        var visitorRecordCollection = global.db.collection('visitors').aggregate(aggregateWithCount).toArray(function(err,totalcount)
+                            {
+                                if(err)
+                                {
+                                    callback('failure');
+                                }
+
+                                callback(visitors,totalcount);
+                            }
+                        );
                     }
                 );
             }
@@ -115,8 +136,15 @@ class VisitorListManager {
   	/*
   	 * @desc Return data of visitor by ID
   	 */
-  	getVisitorById(visitorId,callback)
+  	getVisitorById(req,res)
   	{
+
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
+        var visitorId = req.body.visitorid;
         if(visitorId)
     	{
 
@@ -137,11 +165,46 @@ class VisitorListManager {
                 {
                     if(err)
                     {
-                        return callback(null);
+                        return res.send({status:'failure'});
                     }
                     else
                     {
-                        return callback(visitor);
+                        return res.send({status:'success',visitor:visitor[0]});
+                    }
+                }
+            );
+
+    	}
+
+  	}
+
+  	/*
+  	 * @desc Return collection of messages sento a visitor
+  	 */
+  	getVisitorMessages(req,res)
+  	{
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
+        var visitorId = req.body.visitorid;
+        if(visitorId)
+    	{
+
+            var messagesCollection = global.db.collection('messages').aggregate([
+                { $match :
+                    { visitorId: visitorId }
+                }
+            ]).toArray(function(err,messages)
+                {
+                    if(err)
+                    {
+                        return res.send({status:'failure'});
+                    }
+                    else
+                    {
+                        return res.send({status:'success',messages:messages});
                     }
                 }
             );

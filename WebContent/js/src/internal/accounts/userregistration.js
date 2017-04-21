@@ -214,6 +214,7 @@ function UC_UserRegistrationController()
 	      smtpuser  = $('#ucsetup_smtpuserinput').val(),
 	      smtppass  = $('#ucsetup_smtppassinput').val();
 
+        thisClass.config.emailType = "SMTP";
         thisClass.config.smtp= {};
         thisClass.config.smtp.host = smtphost;
         thisClass.config.smtp.port = smtpport;
@@ -280,6 +281,7 @@ function UC_UserRegistrationController()
 
 
     thisClass.config.baseURL= baseurl;
+    thisClass.config.setupCompleted = 1;
 
     var newApp = new UC_App();
     var user = UC_UserSession.user;

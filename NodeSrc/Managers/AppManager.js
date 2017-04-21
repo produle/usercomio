@@ -28,7 +28,12 @@ class AppManager {
   	 */
   	getAllUserApps(req,res)
   	{
-  		var appCollection = global.db.collection('apps');
+  		if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
+        var appCollection = global.db.collection('apps');
   		var user = req.body.user;
         
         appCollection.find({creator:user.username,clientid:user.company},{_id:0}).toArray(function(err,apps)
@@ -52,9 +57,12 @@ class AppManager {
   	 */
   	createNewApp(req,res)
   	{
-  		
-  		
-  		// Get the documents collection
+  		if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
+        // Get the documents collection
         var appCollection = global.db.collection('apps');
 
         var newApp = req.body.newApp;
@@ -102,7 +110,12 @@ class AppManager {
   	 */
   	updateAnAppDetails(req,res)
   	{
-  		var appCollection = global.db.collection('apps');
+  		if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
+        var appCollection = global.db.collection('apps');
   		
   		var appinfo = req.body.app;
   		
@@ -145,7 +158,12 @@ class AppManager {
   	 */
   	deleteAnApp(req,res)
   	{
-  		var appCollection = global.db.collection('apps');
+  		if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
+        var appCollection = global.db.collection('apps');
   		
   		var appinfo = req.body.app;
   		

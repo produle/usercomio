@@ -25,6 +25,11 @@ class DashboardManager {
   	getDashboardMetrics(req,res)
   	{
 
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
         var appid = req.body.appid;
 
   		global.db.collection('visitors').aggregate([
@@ -119,6 +124,11 @@ class DashboardManager {
   	 */
   	getNewUsersMetrics(req,res)
   	{
+
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
 
         var appid = req.body.appid;
         var days = req.body.days;

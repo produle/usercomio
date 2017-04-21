@@ -19,11 +19,17 @@ function UC_VisitorListController()
 
     this.rivetVisitorListObj = null;
 
+    this.rivetVisitorDetailsObj = null;
+
+    this.rivetVisitorMessagesObj = null;
+
     this.currentFilterId = "1"; //TODO Add predefined filters in setup
 
     this.currentSortColumn = "visitormetainfo.lastseen";
 
     this.currentSortOrder = 1; //1 for ASC and -1 for DESC
+
+    this.currentFilterTotalVisitors = 0;
 
 	this.constructor = function()
 	{
@@ -46,6 +52,8 @@ function UC_VisitorListController()
             $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-down").hide();
 
             $(document).on("click","#uc-all-user-select",thisClass.userListSelectHandler);
+
+            $(document).on("change","#uc-all-user-select,.uc-user-select",thisClass.updateRecipientCount);
         }
 	};
 
@@ -120,6 +128,14 @@ function UC_VisitorListController()
                 }
                 else
                 {
+                    if(data.totalcount.length == 1)
+                    {
+                        thisClass.currentFilterTotalVisitors = data.totalcount[0].count;
+                    }
+                    else
+                    {
+                        thisClass.currentFilterTotalVisitors = 0;
+                    }
                     thisClass.visitors = thisClass.visitors.concat(data.status);
                     thisClass.visitorListSkipIndex = thisClass.visitorListSkipIndex + data.status.length;
 
@@ -198,6 +214,8 @@ function UC_VisitorListController()
         thisClass.visitorListSkipIndex = 0;
 
         thisClass.visitorListLoaded = false;
+
+        $("#uc-all-user-select").prop("checked",false);
     };
 
     /*
@@ -242,6 +260,99 @@ function UC_VisitorListController()
             $(".uc-user-select").prop("checked",false);
             $("#ucSendMessageGroupBtn").text("Send Message");
             $("#ucSendMessageSubmit").text("Send");
+        }
+    };
+
+    /*
+     * @desc Updates the recipient count
+     */
+    this.updateRecipientCount = function()
+    {
+        var recipientCount = 0;
+        if($("#uc-all-user-select").is(":checked"))
+        {
+            recipientCount = thisClass.currentFilterTotalVisitors;
+
+            $(".uc-user-select").each(function(){
+                if(!$(this).is(":checked"))
+                {
+                    recipientCount--;
+                }
+            });
+        }
+        else
+        {
+            $(".uc-user-select").each(function(){
+                if($(this).is(":checked"))
+                {
+                    recipientCount++;
+                }
+            });
+        }
+
+        $("#ucSendMessageGroupBtn,#ucSendMessageSubmit").text("Send Message to "+recipientCount+" users");
+    };
+
+    /*
+     * @desc Obtains the visitors details
+     */
+    this.getVisitorDetails = function(visitorId)
+    {
+        if(visitorId != null)
+        {
+            UC_AJAX.call('VisitorListManager/getvisitordetails',{appid:uc_main.appController.currentAppId,visitorid:visitorId},function(data,status,xhr){
+
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while fetching user details !");
+                }
+                else
+                {
+                    if(data.visitor != null)
+                    {
+
+                        var visitorObj = data.visitor;
+
+                        visitorObj.displayId = (visitorObj._id.substring(0,10))+"...";
+                        visitorObj.displaySessionCount = visitorObj.sessions.length;
+                        visitorObj.displayLastSeen = moment(visitorObj.visitormetainfo.lastseen).format("DD MMM YYYY HH:mm:ss");
+                        visitorObj.displayFirstSeen = moment(visitorObj.visitormetainfo.firstseen).format("DD MMM YYYY HH:mm:ss");
+
+                        thisClass.rivetVisitorDetailsObj = rivets.bind(
+                            document.querySelector('#ucVisitorDetail'), {
+                                visitor: visitorObj
+                            }
+                        );
+                    }
+                }
+            });
+
+            UC_AJAX.call('VisitorListManager/getvisitormessages',{appid:uc_main.appController.currentAppId,visitorid:visitorId},function(data,status,xhr){
+
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while fetching user details !");
+                }
+                else
+                {
+                    if(data.messages != null)
+                    {
+
+                        var messageList = data.messages;
+
+                        for(var i = 0; i < messageList.length; i++)
+                        {
+                            messageList[i].displayDate = moment(messageList[i].sentOn).format("DD MMM YYYY HH:mm:ss");
+                        }
+
+                        thisClass.rivetVisitorMessagesObj = rivets.bind(
+                            document.querySelector('#ucVisitorMessages'), {
+                                messageList: messageList
+                            }
+                        );
+                    }
+                }
+            });
         }
     };
 }

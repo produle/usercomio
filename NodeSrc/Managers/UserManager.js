@@ -299,6 +299,11 @@ class UserManager {
   	 */
     updateAppPreference(req,res)
     {
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
         // Get the documents collection
         var userCollection = global.db.collection('users');
 

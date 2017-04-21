@@ -9,12 +9,18 @@
 
     <% include partials/navigation.ejs %>
 
-    <div class="container">
+    <div class="container uc_mt_large">
 
         <div class="row">
+            <div class="col-md-12">
+                <a class="btn btn-primary" href="/"><i class="fa fa-chevron-left"></i> Back</a>
+            </div>
+        </div>
+
+        <div class="row uc_mt_medium">
             <div class="col-md-4">
 
-                <div class="ucUserProfileMetaContainer">
+                <div class="ucUserProfileMetaContainer" id="ucVisitorDetail">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="ucUserProfileHeading">
@@ -30,27 +36,27 @@
                                 <tbody>
                                     <tr>
                                         <td class="text-center">Name</td>
-                                        <td class="text-center"><%- visitor.visitordata.name %></td>
+                                        <td class="text-center" rv-text="visitor.visitordata.name"></td>
                                     </tr>
                                     <tr>
                                         <td class="text-center">ID</td>
-                                        <td class="text-center"><%- visitor._id.substring(0,10) + "..." %></td>
+                                        <td class="text-center" rv-text="visitor.displayId"></td>
                                     </tr>
                                     <tr>
                                         <td class="text-center">Email</td>
-                                        <td class="text-center"><%- visitor.visitordata.email %></td>
+                                        <td class="text-center" rv-text="visitor.visitordata.email"></td>
                                     </tr>
                                     <tr>
                                         <td class="text-center">Sessions</td>
-                                        <td class="text-center"><%- visitor.sessions.length %></td>
+                                        <td class="text-center" rv-text="visitor.displaySessionCount"></td>
                                     </tr>
                                     <tr>
                                         <td class="text-center">Last Login</td>
-                                        <td class="text-center"><%- moment(visitor.visitormetainfo.lastseen).format("HH:mm:ss DD/MM/YYYY") %></td>
+                                        <td class="text-center" rv-text="visitor.displayLastSeen"></td>
                                     </tr>
                                     <tr>
                                         <td class="text-center">First Login</td>
-                                        <td class="text-center"><%- moment(visitor.visitormetainfo.firstseen).format("HH:mm:ss DD/MM/YYYY") %></td>
+                                        <td class="text-center" rv-text="visitor.displayFirstSeen"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -70,7 +76,22 @@
 
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="ucUserTabContentMessaging">
-                        Messaging Content
+                        <table class="table table=stripped" id="ucVisitorMessages">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Date &amp; Time</th>
+                                    <th class="text-center">Subject</th>
+                                    <th class="text-center">Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr rv-each-message="messageList">
+                                    <td rv-text="message.displayDate"></td>
+                                    <td rv-text="message.subject"></td>
+                                    <td rv-text="message.message"></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ucUserTabContentAnalysis">
                         Analysis Content
@@ -96,6 +117,8 @@
         uc_main.userController.config = <%- JSON.stringify(config) %>;
 
         uc_main.constructor();
+
+        uc_main.visitorListController.getVisitorDetails("<%- visitorid %>");
 
 
     </script>

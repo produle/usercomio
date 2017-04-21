@@ -131,7 +131,7 @@
 </div>
 
 
-<div id="ucEditSMTPModal" class="modal ucModal fade" tabindex="-1" role="dialog">
+<div id="ucEditMailModal" class="modal ucModal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
 
@@ -139,7 +139,13 @@
                <img src="/images/app/modal/smtpIcon.png" alt=""/>
                <h2>Edit Email Settings</h2>
 
-                <div class="row">
+                <div class="btn-group ucTabBtnGroup" id="ucEditEmailTypeTabGroup" role="group">
+                    <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditEmailContainer" data-tabgroup-tabid="ucEditEmailSMTPContainer" data-emailType="SMTP">SMTP</button>
+                    <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditEmailContainer" data-tabgroup-tabid="ucEditEmailMailgunContainer" data-emailType="Mailgun">Mailgun</button>
+                    <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditEmailContainer" data-tabgroup-tabid="ucEditEmailAmazonContainer" data-emailType="Amazon">Amazon SES</button>
+                </div>
+
+                <div class="row ucEditEmailContainer" id="ucEditEmailSMTPContainer">
 
                         <div class="col-sm-10 col-sm-offset-1">
                             <div class="input-group">
@@ -173,13 +179,56 @@
                               <span class="input-group-btn">
                                 <label>SMTP Password</label>
                               </span>
-                              <input type="text" class="form-control" id="uceditsmtp_pass" placeholder="********">
+                              <input type="password" class="form-control" id="uceditsmtp_pass" placeholder="********">
                             </div>
                         </div>
                 </div>
+
+                <div class="row ucEditEmailContainer" id="ucEditEmailMailgunContainer">
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>Mailgun Key</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditmailgun_key" placeholder="key-XXXXXXXXXXXXXXXXXXXXXXX">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>Mailgun Domain</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditmailgun_domain" placeholder="www.usercom.io">
+                            </div>
+                        </div>
+                </div>
+
+                <div class="row ucEditEmailContainer" id="ucEditEmailAmazonContainer">
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>Amazon SES Key</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditamazon_key" placeholder="Enter Amazon SES Key">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>Amazon Secret</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditamazon_secret" placeholder="Enter Amazon SES Secret">
+                            </div>
+                        </div>
+                </div>
+
                 <div class="ucButtonWrapper">
                     <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
-                    <button type="button" id="uceditsmtp_submit" class="btn ucSaveBtn">Save</button>
+                    <button type="button" id="uceditmail_submit" class="btn ucSaveBtn">Save</button>
                 </div>
             </div>
 
@@ -333,12 +382,29 @@
 	                <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-12">
+                                <select class="form-control" id="ucSendMessageTemplate">
+                                    <option value="new">New Template</option>
+                                    <option rv-each-emailtemplate="emailTemplateList" rv-text="emailtemplate.subject" rv-data-templatebody="emailtemplate.message" rv-value="emailtemplate._id"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row uc_mt_small">
+                            <div class="col-sm-12">
                                 <input type="text" class="form-control" id="ucSendMessageSubject" placeholder="Subject" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
                                 <textarea class="form-control" id="ucSendMessageBody" rows="5" placeholder="Body of the message"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="ucSendMessageBlockDuplicate" checked> Exclude users who have already received this mail
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>

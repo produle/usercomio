@@ -86,7 +86,7 @@
 	font-size: 12px;
     line-height: 20px;
 }
-.uc_currentuser_submenu .ucEditSMTP
+.uc_currentuser_submenu .ucEditMail
 {
 	background: url(../../images/app/header/editEmailIcon.png) no-repeat left top;
 	padding-left: 25px;

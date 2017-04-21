@@ -15,15 +15,17 @@ function UC_UserController()
 	{
         $(document).on("click",".ucEditProfile",thisClass.editProfileHandler);
         $(document).on("click",".ucChangePassword",thisClass.editPasswordHandler);
-        $(document).on("click",".ucEditSMTP",thisClass.editSMTPHandler);
+        $(document).on("click",".ucEditMail",thisClass.editMailHandler);
         $(document).on("click",".ucEditDatabase",thisClass.editDatabaseHandler);
         $(document).on("click",".ucEditSystem",thisClass.editSystemHandler);
 
 		$(document).on("click","#uceditprofile_submit",thisClass.handleProfileSaveAction);
 		$(document).on("click","#ucchangepassword_submit",thisClass.handlePasswordSaveAction);
-		$(document).on("click","#uceditsmtp_submit",thisClass.handleSMTPSaveAction);
+		$(document).on("click","#uceditmail_submit",thisClass.handleMailSaveAction);
 		$(document).on("click","#uceditdatabase_submit",thisClass.handleDatabaseSaveAction);
 		$(document).on("click","#uceditsystem_submit",thisClass.handleSystemSaveAction);
+
+		$(document).on("click","#ucEditEmailTypeTabGroup button",thisClass.handleTypeSelectionAction);
 	};
 
     /*
@@ -200,40 +202,111 @@ function UC_UserController()
     /*
      *  @desc Populates the form fields with the SMTP data
      */
-    this.editSMTPHandler = function(e)
+    this.editMailHandler = function(e)
     {
-        $('#uceditsmtp_host').val(thisClass.config.smtp.host);
-        $('#uceditsmtp_port').val(thisClass.config.smtp.port);
-        $('#uceditsmtp_user').val(thisClass.config.smtp.user);
+        if(thisClass.config.emailType)
+        {
+            thisClass.currentEmailType = thisClass.config.emailType;
+        }
+        else
+        {
+            thisClass.currentEmailType = "SMTP";
+        }
 
-        $("#ucEditSMTPModal").modal();
+        $(".ucEditEmailContainer").hide();
+        $("#ucEditEmail"+thisClass.currentEmailType+"Container").show();
+
+        $("#ucEditEmailTypeTabGroup button").removeClass("active");
+        $("#ucEditEmailTypeTabGroup button[data-tabgroup-tabid=ucEditEmail"+thisClass.currentEmailType+"Container]").addClass("active");
+
+        if(thisClass.config.smtp)
+        {
+            $('#uceditsmtp_host').val(thisClass.config.smtp.host);
+            $('#uceditsmtp_port').val(thisClass.config.smtp.port);
+            $('#uceditsmtp_user').val(thisClass.config.smtp.user);
+            $('#uceditsmtp_pass').val(thisClass.config.smtp.pass);
+        }
+        if(thisClass.config.mailgun)
+        {
+            $('#uceditmailgun_key').val(thisClass.config.mailgun.key);
+            $('#uceditmailgun_domain').val(thisClass.config.mailgun.domain);
+        }
+        if(thisClass.config.amazon)
+        {
+            $('#uceditamazon_key').val(thisClass.config.amazon.key);
+            $('#uceditamazon_secret').val(thisClass.config.amazon.secret);
+        }
+
+        $("#ucEditMailModal").modal();
 
         e.preventDefault();
     };
 
     /*
-     *  @desc Handles the smtp data validation and sends it to server
+     *  @desc Handles the email data validation and sends it to server
      */
-    this.handleSMTPSaveAction = function()
+    this.handleMailSaveAction = function()
     {
-        var smtphost = $('#uceditsmtp_host').val(),
-            smtpport = $('#uceditsmtp_port').val(),
-            smtpuser = $('#uceditsmtp_user').val(),
-            smtppass = $('#uceditsmtp_pass').val();
-
-
-        var validationResult = thisClass.validateSMTPInputs();
-
-        if(validationResult.status == "failure")
+        if(thisClass.currentEmailType == "SMTP")
         {
-            alert(validationResult.msg);
-            return;
-        }
+            var smtphost = $('#uceditsmtp_host').val(),
+                smtpport = $('#uceditsmtp_port').val(),
+                smtpuser = $('#uceditsmtp_user').val(),
+                smtppass = $('#uceditsmtp_pass').val();
 
-        thisClass.config.smtp.host = smtphost;
-        thisClass.config.smtp.port = smtpport;
-        thisClass.config.smtp.user = smtpuser;
-        thisClass.config.smtp.pass = smtppass;
+
+            var validationResult = thisClass.validateSMTPInputs();
+
+            if(validationResult.status == "failure")
+            {
+                alert(validationResult.msg);
+                return;
+            }
+
+            thisClass.config.emailType = "SMTP";
+            thisClass.config.smtp.host = smtphost;
+            thisClass.config.smtp.port = smtpport;
+            thisClass.config.smtp.user = smtpuser;
+            thisClass.config.smtp.pass = smtppass;
+        }
+        else if(thisClass.currentEmailType == "Mailgun")
+        {
+            var mailgunkey = $('#uceditmailgun_key').val(),
+                mailgundomain = $('#uceditmailgun_domain').val();
+
+
+            var validationResult = thisClass.validateMailgunInputs();
+
+            if(validationResult.status == "failure")
+            {
+                alert(validationResult.msg);
+                return;
+            }
+
+            thisClass.config.emailType = "Mailgun";
+            thisClass.config.mailgun = {};
+            thisClass.config.mailgun.key = mailgunkey;
+            thisClass.config.mailgun.domain = mailgundomain;
+        }
+        else if(thisClass.currentEmailType == "Amazon")
+        {
+            var amazonkey = $('#uceditamazon_key').val(),
+                amazonsecret = $('#uceditamazon_secret').val();
+
+
+            var validationResult = thisClass.validateAmazonInputs();
+
+            if(validationResult.status == "failure")
+            {
+                alert(validationResult.msg);
+                return;
+            }
+
+            thisClass.config.emailType = "Amazon";
+            thisClass.config.amazon = {};
+            thisClass.config.amazon.key = amazonkey;
+            thisClass.config.amazon.secret = amazonsecret;
+        }
 
         UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
         {
@@ -245,8 +318,8 @@ function UC_UserController()
                 }
                 else
                 {
-                    alert("SMTP settings changed successfully");
-                    $("#ucEditSMTPModal").modal("hide");
+                    alert("Email settings changed successfully");
+                    $("#ucEditMailModal").modal("hide");
                 }
             }
 
@@ -271,6 +344,64 @@ function UC_UserController()
         else if($.trim(smtpport) == "")
         {
             msg = "Invalid Port !";
+        }
+
+        if(msg != "")
+        {
+            result.status = "failure";
+            result.msg = msg;
+        }
+
+        return result;
+    };
+
+    /*
+     * @desc Validate Mailgun data
+     */
+    this.validateMailgunInputs  = function()
+    {
+        var result = {status:"success",msg:""};
+
+        var mailgunkey = $('#uceditmailgun_key').val(),
+            mailgundomain = $('#uceditmailgun_domain').val(),
+            msg = "";
+
+        if($.trim(mailgunkey) == "")
+        {
+            msg = "Invalid Key";
+        }
+        else if($.trim(mailgundomain) == "")
+        {
+            msg = "Invalid Domain";
+        }
+
+        if(msg != "")
+        {
+            result.status = "failure";
+            result.msg = msg;
+        }
+
+        return result;
+    };
+
+    /*
+     * @desc Validate Amazon SES data
+     */
+    this.validateAmazonInputs  = function()
+    {
+        var result = {status:"success",msg:""};
+
+        var amazonkey = $('#uceditamazon_key').val(),
+            amazonsecret = $('#uceditamazon_secret').val(),
+            msg = "";
+
+        if($.trim(amazonkey) == "")
+        {
+            msg = "Invalid Key !";
+        }
+        else if($.trim(amazonsecret) == "")
+        {
+            msg = "Invalid Secret !";
         }
 
         if(msg != "")
@@ -460,5 +591,13 @@ function UC_UserController()
         }
 
         return result;
+    };
+
+    /*
+     * @desc handles the change in type of email
+     */
+    this.handleTypeSelectionAction  = function()
+    {
+        thisClass.currentEmailType = $(this).attr("data-emailType");
     };
 }
