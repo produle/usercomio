@@ -233,10 +233,8 @@ function UC_UserController()
         }
         if(thisClass.config.amazon)
         {
-            $('#uceditamazon_host').val(thisClass.config.amazon.host);
-            $('#uceditamazon_port').val(thisClass.config.amazon.port);
-            $('#uceditamazon_user').val(thisClass.config.amazon.user);
-            $('#uceditamazon_pass').val(thisClass.config.amazon.pass);
+            $('#uceditamazon_key').val(thisClass.config.amazon.key);
+            $('#uceditamazon_secret').val(thisClass.config.amazon.secret);
         }
 
         $("#ucEditMailModal").modal();
@@ -292,10 +290,8 @@ function UC_UserController()
         }
         else if(thisClass.currentEmailType == "Amazon")
         {
-            var amazonhost = $('#uceditamazon_host').val(),
-                amazonport = $('#uceditamazon_port').val(),
-                amazonuser = $('#uceditamazon_user').val(),
-                amazonpass = $('#uceditamazon_pass').val();
+            var amazonkey = $('#uceditamazon_key').val(),
+                amazonsecret = $('#uceditamazon_secret').val();
 
 
             var validationResult = thisClass.validateAmazonInputs();
@@ -308,10 +304,8 @@ function UC_UserController()
 
             thisClass.config.emailType = "Amazon";
             thisClass.config.amazon = {};
-            thisClass.config.amazon.host = amazonhost;
-            thisClass.config.amazon.port = amazonport;
-            thisClass.config.amazon.user = amazonuser;
-            thisClass.config.amazon.pass = amazonpass;
+            thisClass.config.amazon.key = amazonkey;
+            thisClass.config.amazon.secret = amazonsecret;
         }
 
         UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
@@ -397,27 +391,17 @@ function UC_UserController()
     {
         var result = {status:"success",msg:""};
 
-        var amazonhost = $('#uceditamazon_host').val(),
-            amazonport = $('#uceditamazon_port').val(),
-            amazonuser = $('#uceditamazon_user').val(),
-            amazonpass = $('#uceditamazon_pass').val(),
+        var amazonkey = $('#uceditamazon_key').val(),
+            amazonsecret = $('#uceditamazon_secret').val(),
             msg = "";
 
-        if($.trim(amazonhost) == "")
+        if($.trim(amazonkey) == "")
         {
-            msg = "Invalid Host Name !";
+            msg = "Invalid Key !";
         }
-        else if($.trim(amazonport) == "")
+        else if($.trim(amazonsecret) == "")
         {
-            msg = "Invalid Port !";
-        }
-        else if($.trim(amazonuser) == "")
-        {
-            msg = "Invalid Username !";
-        }
-        else if($.trim(amazonpass) == "")
-        {
-            msg = "Invalid Password !";
+            msg = "Invalid Secret !";
         }
 
         if(msg != "")

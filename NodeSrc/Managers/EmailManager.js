@@ -11,6 +11,9 @@ var moment = require("moment");
 var visitorListManager = require("./VisitorListManager").VisitorListManager;
 var mailer = require('express-mailer');
 var utils = require("../core/utils.js").utils;
+var mailgun = null;
+var ses = require('node-ses');
+var client = null;
 
 class EmailManager {
 
@@ -48,7 +51,7 @@ class EmailManager {
 
         var EmailManagerObj = new EmailManager();
 
-        EmailManagerObj.initSMTPConfig();
+        EmailManagerObj.initMailConfig();
 
         if(template == "new")
         {
@@ -133,7 +136,7 @@ class EmailManager {
 
                 EmailManagerObj.parseEmail(message,recipientSingle,function(parsedMessage,recipientSingle){
                     EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitordata.email,subject,parsedMessage,templateObj);
-                    EmailManagerObj.sendSMTPMail(recipientSingle.visitordata.email,subject,parsedMessage);
+                    EmailManagerObj.sendMail(recipientSingle.visitordata.email,subject,parsedMessage);
                 });
             }
 
@@ -162,11 +165,11 @@ class EmailManager {
     /*
      * @desc Initializes email configuration
      */
-    initSMTPConfig()
+    initMailConfig()
     {
         var config = require('config');
 
-        if(config.has("smtp"))
+        if(config.has("emailType") && config.get("emailType") == "SMTP")
         {
             if(typeof app.mailer == "undefined")
             {
@@ -183,24 +186,82 @@ class EmailManager {
                 });
             }
         }
+        
+        if(config.has("emailType") && config.get("emailType") == "Mailgun")
+        {
+            if(mailgun == null)
+            {
+                mailgun = require('mailgun-js')({apiKey: config.mailgun.key, domain: config.mailgun.domain});
+            }
+        }
+        
+        if(config.has("emailType") && config.get("emailType") == "Amazon")
+        {
+            if(client == null)
+            {
+                client = ses.createClient({ key: config.amazon.key, secret: config.mailgun.domain });
+            }
+        }
     }
 
     /*
      * @desc Parses the local variables in the email body to the user data
      */
-    sendSMTPMail(toEmail,subject,message)
+    sendMail(toEmail,subject,message)
     {
-        app.mailer.send('email/plain', {
-            to: toEmail, // REQUIRED. This can be a comma delimited string just like a normal email to field.
-            subject: subject, // REQUIRED.
-            messageBody: message
-        }, function (err) {
-            if (err) {
-                // handle error
-                console.log("ERROR in sending Email via SMTP, check the credentials");
-            }
-            return;
-        });
+        var config = require('config');
+
+        if(config.has("emailType") && config.get("emailType") == "SMTP")
+        {
+            app.mailer.send('email/plain', {
+                to: toEmail,
+                subject: subject,
+                messageBody: message
+            }, function (err) {
+                if (err) {
+                    // handle error
+                    console.log("ERROR in sending Email via SMTP, check the credentials");
+                }
+                return;
+            });
+        }
+        
+        if(config.has("emailType") && config.get("emailType") == "Mailgun")
+        {
+            var data = {
+                from: 'Usercom <test@usercom.io>',
+                to: toEmail,
+                subject: subject,
+                text: message
+            };
+
+            mailgun.messages().send(data, function (err, body) {
+                if (err) {
+                    // handle error
+                    console.log("ERROR in sending Email via Mailgun, check the credentials");
+                }
+                console.log(body);
+            });
+        }
+        
+        if(config.has("emailType") && config.get("emailType") == "Amazon")
+        {
+            client.sendEmail({
+                to: toEmail,
+                from: 'Usercom <test@usercom.io>',
+                subject: subject,
+                message: message,
+                altText: message
+            }, function (err, data, res) {
+                if (err) {
+                    // handle error
+                    console.log("ERROR in sending Email via Amazon SES, check the credentials");
+                }
+                console.log(data);
+            });
+        }
+        
+        
     }
 
     /*
