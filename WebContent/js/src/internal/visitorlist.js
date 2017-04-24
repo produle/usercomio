@@ -23,7 +23,7 @@ function UC_VisitorListController()
 
     this.rivetVisitorMessagesObj = null;
 
-    this.currentFilterId = "1"; //TODO Add predefined filters in setup
+    this.currentFilterId = "dashboard";
 
     this.currentSortColumn = "visitormetainfo.lastseen";
 
@@ -120,7 +120,13 @@ function UC_VisitorListController()
 
         if(uc_main.appController.currentAppId)
         {
-            UC_AJAX.call('VisitorListManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit,filterid:thisClass.currentFilterId,sortColumn:thisClass.currentSortColumn,sortOrder:thisClass.currentSortOrder},function(data,status,xhr){
+            var filterId = thisClass.currentFilterId;
+            if(filterId == 'dashboard')
+            {
+                filterId = '1';
+            }
+
+            UC_AJAX.call('VisitorListManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit,filterid:filterId,sortColumn:thisClass.currentSortColumn,sortOrder:thisClass.currentSortOrder},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {

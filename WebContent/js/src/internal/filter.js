@@ -35,6 +35,10 @@ function UC_FilterController()
             $("#ucUserdefinedFilterList").sortable({
                 update: thisClass.updateFilterOrder
             });
+
+            $(document).on("click","#ucMainDashboard",function(){
+                thisClass.changeCurrentFilter("dashboard");
+            });
         }
 	};
 
@@ -115,7 +119,20 @@ function UC_FilterController()
                 thisClass.userdefinedFiltersList = filterList;
                 thisClass.rivetUserdefinedFiltersListObj.models.list = thisClass.userdefinedFiltersList;
 
-                //thisClass.selectCurrentFilter();
+                if(uc_main.visitorListController.currentFilterId == "dashboard")
+                {
+                    $(".ucSwitchContentContainer").hide();
+                    $("#uc_tab_data_dashboard").show();
+                    $(".ucSwitchContentTrigger").removeClass("ucCurrentPage");
+                    $("#ucMainDashboard").addClass("ucCurrentPage");
+                }
+                else
+                {
+                    $(".ucSwitchContentContainer").hide();
+                    $("#uc_tab_data_listuser").show();
+                    $(".ucSwitchContentTrigger").removeClass("ucCurrentPage");
+                    $("#ucPredefinedFilterList li[data-filterid="+uc_main.visitorListController.currentFilterId+"],#ucUserdefinedFilterList li[data-filterid="+uc_main.visitorListController.currentFilterId+"]").addClass("ucCurrentPage");
+                }
             }
         });
     };
