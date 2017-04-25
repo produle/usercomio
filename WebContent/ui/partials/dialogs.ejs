@@ -373,9 +373,8 @@
 	                <div class="col-sm-12 text-left">
                         <div class="ucNoteSection">
                             <h4>Variables <i class="ico-info mfTooltip" data-placement="top" title="Copy the below variables and paste it in the message body, which will substitute the corresponding user data"></i></h4>
-                                <ul style="">
-                                    <li>{name}</li>
-                                    <li>{email}</li>
+                                <ul id="ucEmailFieldList">
+                                    <li rv-each-field="fieldList">{field}</li>
                                 </ul>
                         </div>
                     </div>

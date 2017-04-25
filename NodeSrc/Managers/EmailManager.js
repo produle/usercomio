@@ -150,7 +150,11 @@ class EmailManager {
     {
         var parsedMessage = message;
 
-        var variableArray = ["name","email"];
+        var variableArray = [];
+        for (var fieldSingle in recipientSingle.visitordata)
+        {
+            variableArray.push(fieldSingle);
+        }
 
         for(var iter = 0; iter < variableArray.length; iter++)
         {
