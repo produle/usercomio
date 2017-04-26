@@ -22,6 +22,19 @@ function UC_AppController()
 		this.bindUIEvents();
 
         thisClass.initRivetBinds();
+
+        $(document).on("click","#uc_app_list li",function(){
+            var appid = $(this).attr("data-appid");
+            for(var iter = 0; iter < thisClass.apps.length; iter++)
+            {
+                if(appid == thisClass.apps[iter].id)
+                {
+                    thisClass.switchApp(thisClass.apps[iter]);
+                    break;
+                }
+            }
+
+        });
 	};
 
     /*
@@ -327,6 +340,7 @@ function UC_AppController()
 
         if(thisClass.renderVisitors)
         {
+            uc_main.visitorListController.resetPagination();
             uc_main.visitorListController.getAllVisitors();
             uc_main.dashboardController.getDashboardMetrics();
             uc_main.dashboardController.drawNewUsersGraph();
