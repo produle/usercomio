@@ -11,6 +11,8 @@ function UC_EmailMessagingController()
 
     this.rivetEmailTemplateListObj = null;
 
+    this.rivetFieldListObj = null;
+
     this.emailTemplateList = [];
 
 	this.constructor = function()
@@ -26,6 +28,12 @@ function UC_EmailMessagingController()
 		thisClass.rivetEmailTemplateListObj = rivets.bind(
             document.querySelector('#ucSendMessageTemplate'), {
                 emailTemplateList: thisClass.emailTemplateList
+            }
+        );
+
+		thisClass.rivetFieldListObj = rivets.bind(
+            document.querySelector('#ucEmailFieldList'), {
+                fieldList: []
             }
         );
 	};
@@ -47,6 +55,22 @@ function UC_EmailMessagingController()
 
                 $('#ucSendMessageTemplate option:eq(0)').prop('selected', true);
                 $("#ucSendMessageSubject,#ucSendMessageBody").val("");
+            }
+        });
+
+        UC_AJAX.call('VisitorListManager/getfieldslist',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user},function(data,status,xhr){
+
+            if(data.status == "failure")
+            {
+                alert("Could not send emails, kindly check the SMTP settings");
+            }
+            else
+            {
+                for(var iter = 0; iter < data.fields.length; iter++)
+                {
+                    data.fields[iter] = "{"+data.fields[iter]+"}";
+                }
+                thisClass.rivetFieldListObj.models.fieldList = data.fields;
             }
         });
     };

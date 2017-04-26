@@ -230,11 +230,14 @@ function UC_UserController()
         {
             $('#uceditmailgun_key').val(thisClass.config.mailgun.key);
             $('#uceditmailgun_domain').val(thisClass.config.mailgun.domain);
+            $('#uceditmailgun_from').val(thisClass.config.mailgun.from);
         }
         if(thisClass.config.amazon)
         {
             $('#uceditamazon_key').val(thisClass.config.amazon.key);
             $('#uceditamazon_secret').val(thisClass.config.amazon.secret);
+            $('#uceditamazon_region').val(thisClass.config.amazon.region);
+            $('#uceditamazon_from').val(thisClass.config.amazon.from);
         }
 
         $("#ucEditMailModal").modal();
@@ -272,7 +275,8 @@ function UC_UserController()
         else if(thisClass.currentEmailType == "Mailgun")
         {
             var mailgunkey = $('#uceditmailgun_key').val(),
-                mailgundomain = $('#uceditmailgun_domain').val();
+                mailgundomain = $('#uceditmailgun_domain').val(),
+                mailgunfrom = $('#uceditmailgun_from').val();
 
 
             var validationResult = thisClass.validateMailgunInputs();
@@ -287,11 +291,14 @@ function UC_UserController()
             thisClass.config.mailgun = {};
             thisClass.config.mailgun.key = mailgunkey;
             thisClass.config.mailgun.domain = mailgundomain;
+            thisClass.config.mailgun.from = mailgunfrom;
         }
         else if(thisClass.currentEmailType == "Amazon")
         {
             var amazonkey = $('#uceditamazon_key').val(),
-                amazonsecret = $('#uceditamazon_secret').val();
+                amazonsecret = $('#uceditamazon_secret').val(),
+                amazonregion = $('#uceditamazon_region').val(),
+                amazonfrom = $('#uceditamazon_from').val();
 
 
             var validationResult = thisClass.validateAmazonInputs();
@@ -306,6 +313,8 @@ function UC_UserController()
             thisClass.config.amazon = {};
             thisClass.config.amazon.key = amazonkey;
             thisClass.config.amazon.secret = amazonsecret;
+            thisClass.config.amazon.region = amazonregion;
+            thisClass.config.amazon.from = amazonfrom;
         }
 
         UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
@@ -364,6 +373,7 @@ function UC_UserController()
 
         var mailgunkey = $('#uceditmailgun_key').val(),
             mailgundomain = $('#uceditmailgun_domain').val(),
+            mailgunfrom = $('#uceditmailgun_from').val(),
             msg = "";
 
         if($.trim(mailgunkey) == "")
@@ -373,6 +383,10 @@ function UC_UserController()
         else if($.trim(mailgundomain) == "")
         {
             msg = "Invalid Domain";
+        }
+        else if($.trim(mailgunfrom) == "")
+        {
+            msg = "Invalid From email";
         }
 
         if(msg != "")
@@ -393,6 +407,8 @@ function UC_UserController()
 
         var amazonkey = $('#uceditamazon_key').val(),
             amazonsecret = $('#uceditamazon_secret').val(),
+            amazonregion = $('#uceditamazon_region').val(),
+            amazonfrom = $('#uceditamazon_from').val(),
             msg = "";
 
         if($.trim(amazonkey) == "")
@@ -402,6 +418,14 @@ function UC_UserController()
         else if($.trim(amazonsecret) == "")
         {
             msg = "Invalid Secret !";
+        }
+        else if($.trim(amazonregion) == "")
+        {
+            msg = "Invalid Region !";
+        }
+        else if($.trim(amazonfrom) == "")
+        {
+            msg = "Invalid From Email !";
         }
 
         if(msg != "")

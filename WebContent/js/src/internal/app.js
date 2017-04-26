@@ -52,9 +52,6 @@ function UC_AppController()
 		})
 		
 		thisClass.getAllUserApps();
-
-        $(".uc_tab_data_container").hide();
-        $("#uc_tab_data_dashboard").show();
 	}
 	
 	/*

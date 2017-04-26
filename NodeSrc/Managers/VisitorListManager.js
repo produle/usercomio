@@ -20,6 +20,7 @@ class VisitorListManager {
         this.router.post("/visitorlist",(req, res) => { this.getAllVisitors(req,res); });
         this.router.post("/getvisitordetails",(req, res) => { this.getVisitorById(req,res); });
         this.router.post("/getvisitormessages",(req, res) => { this.getVisitorMessages(req,res); });
+        this.router.post("/getfieldslist",(req, res) => { this.getFieldsList(req,res); });
     }
 
   	/*
@@ -209,6 +210,46 @@ class VisitorListManager {
                 }
             );
 
+    	}
+
+  	}
+
+  	/*
+  	 * @desc Return list of fields available for the app
+  	 */
+  	getFieldsList(req,res)
+  	{
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
+        var appid = req.body.appid;
+        if(appid)
+    	{
+
+            var visitorsCollection = global.db.collection('visitors').aggregate([
+                { $match :
+                    { appid: appid }
+                },
+                { $limit : 1 }
+            ]).toArray(function(err,visitors)
+                {
+                    if(err)
+                    {
+                        return res.send({status:'failure'});
+                    }
+                    else if(visitors.length > 0)
+                    {
+                        var fieldList = [];
+                        for (var fieldSingle in visitors[0].visitordata)
+                        {
+                            fieldList.push(fieldSingle);
+                        }
+                        return res.send({status:'success',fields:fieldList});
+                    }
+                }
+            );
     	}
 
   	}
