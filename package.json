@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "accept-language": "^3.0.15",
+    "aws-sdk": "^2.45.0",
     "body-parser": "^1.15.2",
     "config": "^1.25.1",
     "connect-flash": "^0.1.1",
@@ -25,7 +26,6 @@
     "mailgun-js": "^0.10.1",
     "moment": "^2.18.0",
     "mongodb": "^2.2.20",
-    "node-ses": "^2.0.5",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0"
   },

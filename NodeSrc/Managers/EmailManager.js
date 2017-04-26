@@ -12,8 +12,9 @@ var visitorListManager = require("./VisitorListManager").VisitorListManager;
 var mailer = require('express-mailer');
 var utils = require("../core/utils.js").utils;
 var mailgun = null;
-var ses = require('node-ses');
-var client = null;
+var aws = require('aws-sdk/global');
+var sesObj = require('aws-sdk/clients/ses');
+var ses = null;
 
 class EmailManager {
 
@@ -201,9 +202,13 @@ class EmailManager {
         
         if(config.has("emailType") && config.get("emailType") == "Amazon")
         {
-            if(client == null)
+            if(ses == null)
             {
-                client = ses.createClient({ key: config.amazon.key, secret: config.mailgun.domain });
+                ses = new aws.SES({
+                    "accessKeyId": config.amazon.key,
+                    "secretAccessKey": config.amazon.secret,
+                    "region": config.amazon.region
+                });
             }
         }
     }
@@ -233,7 +238,7 @@ class EmailManager {
         if(config.has("emailType") && config.get("emailType") == "Mailgun")
         {
             var data = {
-                from: 'Usercom <test@usercom.io>',
+                from: config.mailgun.from,
                 to: toEmail,
                 subject: subject,
                 text: message
@@ -250,18 +255,28 @@ class EmailManager {
         
         if(config.has("emailType") && config.get("emailType") == "Amazon")
         {
-            client.sendEmail({
-                to: toEmail,
-                from: 'Usercom <test@usercom.io>',
-                subject: subject,
-                message: message,
-                altText: message
-            }, function (err, data, res) {
-                if (err) {
+
+            ses.sendEmail( {
+                Source: config.amazon.from,
+                Destination: {
+                    ToAddresses : [toEmail]
+                },
+                Message: {
+                    Subject: {
+                        Data: subject
+                    },
+                    Body: {
+                        Text: {
+                            Data: message,
+                        }
+                    }
+                }
+            },function(err, data) {
+                if(err)
+                {
                     // handle error
                     console.log("ERROR in sending Email via Amazon SES, check the credentials");
                 }
-                console.log(data);
             });
         }
         

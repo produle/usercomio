@@ -1,4 +1,5 @@
 var AWS = require('../core');
+
 var inherit = AWS.util.inherit;
 
 /**
@@ -7,6 +8,14 @@ var inherit = AWS.util.inherit;
 AWS.Signers.RequestSigner = inherit({
   constructor: function RequestSigner(request) {
     this.request = request;
+  },
+
+  setServiceClientId: function setServiceClientId(id) {
+    this.serviceClientId = id;
+  },
+
+  getServiceClientId: function getServiceClientId() {
+    return this.serviceClientId;
   }
 });
 
