@@ -57,7 +57,9 @@ class AppManager {
   	 */
   	createNewApp(req,res)
   	{
-  		if(!req.isAuthenticated())
+        var config = require('config');
+
+  		if(config.has("setupCompleted") && config.get("setupCompleted") == 1 && !req.isAuthenticated())
         {
             return res.send({status:'failure'});
         }
