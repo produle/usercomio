@@ -16,7 +16,7 @@ npm install
 To run the application, execute the following commands
 ```
 cd path/to/application/root /* Change to application root directory */
-mongod  /* This will start mongodb server with default port 27017 */
+sudo mongod  /* This will start mongodb server with default port 27017 */
 npm run dev /* Starts the usercom application at port 3000 */
 ```
 
