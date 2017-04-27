@@ -126,7 +126,7 @@ class VisitorTrackingManager {
 
         var status = "success";
         
-        visitorCollection.findOne({ "visitordata.email": req.body.userdata.email },function(err,visitor)
+        visitorCollection.findOne({ "visitordata.email": req.body.userdata.email, appid: req.body.appid },function(err,visitor)
         {
       	  if(err)
       	  {
