@@ -37,7 +37,7 @@
  	this.username = "";
  	this.password = "";
  	this.company = "";
-    this.app = null;
+    this.app = {};
     this.token = null;
  	
  	this.cast = function(obj)
