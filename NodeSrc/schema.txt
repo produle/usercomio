@@ -79,10 +79,13 @@
     company : String //Auto generated id
     app : [ //Array of Object, each object denotes a specific app that contains the users preferences
         {
-            filterOrder : [] //Array of String, list of filter id from the filters collection. The order of the array is the displayed sorted order.
+            filterOrder : [ //Array of Object, each object will have preferences related to the filter. And the list is in sorted order. The key is filter id from the filters collection.
+                {
+                    currentSortColumn : String //field name the user last visited in the filter
+                    currentSortOrder : Int //1 or -1 for ASC/DESC for the user preference to currentSortColumn in the filter
+                }
+            ]
             currentFilter : String //id from filters collection. The last visited filter by the user.
-            currentSortColumn : String //field name the user last visited
-            currentSortOrder : Int //1 or -1 for ASC/DESC for the user preference to currentSortColumn
         }
     ]
     token : String

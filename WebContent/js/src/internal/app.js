@@ -332,10 +332,10 @@ function UC_AppController()
             uc_main.visitorListController.currentFilterId = UC_UserSession.user.app[thisClass.currentAppId].currentFilter;
         }
 
-        if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(thisClass.currentAppId) && UC_UserSession.user.app[thisClass.currentAppId].hasOwnProperty('currentSortColumn'))
+        if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(thisClass.currentAppId) && UC_UserSession.user.app[thisClass.currentAppId].hasOwnProperty('filterOrder') && UC_UserSession.user.app[thisClass.currentAppId].filterOrder.hasOwnProperty(uc_main.visitorListController.currentFilterId) && UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].hasOwnProperty('currentSortColumn'))
         {
-            uc_main.visitorListController.currentSortColumn = UC_UserSession.user.app[thisClass.currentAppId].currentSortColumn;
-            uc_main.visitorListController.currentSortOrder = UC_UserSession.user.app[thisClass.currentAppId].currentSortOrder;
+            uc_main.visitorListController.currentSortColumn = UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].currentSortColumn;
+            uc_main.visitorListController.currentSortOrder = UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].currentSortOrder;
         }
 
         if(thisClass.renderVisitors)

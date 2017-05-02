@@ -200,8 +200,16 @@ function UC_VisitorListController()
         {
             UC_UserSession.user.app[uc_main.appController.currentAppId] = {};
         }
-        UC_UserSession.user.app[uc_main.appController.currentAppId].currentSortColumn = thisClass.currentSortColumn;
-        UC_UserSession.user.app[uc_main.appController.currentAppId].currentSortOrder = thisClass.currentSortOrder;
+        if(!UC_UserSession.user.app[uc_main.appController.currentAppId].hasOwnProperty('filterOrder'))
+        {
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder = {};
+        }
+        if(!UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.hasOwnProperty(thisClass.currentFilterId))
+        {
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+        }
+        UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].currentSortColumn = thisClass.currentSortColumn;
+        UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].currentSortOrder = thisClass.currentSortOrder;
 
         uc_main.filterController.saveAppPreference();
 
