@@ -15,7 +15,7 @@ class Filter
 	    this.mongoFilter= null,
 	    this.createDate = null
 	    this.creator = null
-	    this.appid = null
+	    this.appId = null
 
 	}
 }

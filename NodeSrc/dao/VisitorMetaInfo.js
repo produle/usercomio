@@ -11,8 +11,8 @@ class VisitorMetaInfo
 {
 	constructor()
 	{
-		this.firstseen = '';
-	    this.lastseen = '';
+		this.firstSeen = '';
+	    this.lastSeen = '';
 	 }
 }
 

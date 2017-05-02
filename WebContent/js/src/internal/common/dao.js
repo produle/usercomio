@@ -62,18 +62,18 @@
  {
  	var thisClass = this;
  		
- 	this.id = "";
+ 	this._id = "";
  	this.name = "";
- 	this.clientid = "";
+ 	this.clientId = "";
  	this.createDate = null;
  	this.creator = "";
  	
  	
  	this.cast = function(obj)
  	{
- 		this.id = obj.id;
+ 		this._id = obj._id;
  	 	this.name = obj.name;
- 	 	this.clientid = obj.clientid;
+ 	 	this.clientId = obj.clientId;
  	 	this.createDate = new Date(obj.createDate);
  	 	this.creator = obj.creator;
  	}
@@ -94,7 +94,8 @@
  	this.mongoFilter = null;
  	this.createDate = null;
  	this.creator = null;
- 	this.appid = null;
+ 	this.clientId = null;
+ 	this.appId = null;
 
  	this.cast = function(obj)
  	{
@@ -104,7 +105,8 @@
  		this.mongoFilter = obj.mongoFilter;
  	 	this.createDate = new Date(obj.createDate);
  	 	this.creator = obj.createDate;
- 	 	this.appid = obj.appid;
+ 	 	this.clientId = obj.clientId;
+ 	 	this.appId = obj.appId;
  	}
 
  };
@@ -119,15 +121,15 @@
 
  	this._id = null;
  	this.appid = null;
- 	this.visitordata = {
+ 	this.visitorData = {
         name : "",
         email : "",
         created_at: null
         //Custom data will be available here
     };
- 	this.visitormetainfo = {
-        firstseen : null,
-        lastseen : null
+ 	this.visitorMetaInfo = {
+        firstSeen : null,
+        lastSeen : null
     };
 
  };
@@ -141,18 +143,17 @@
  	var thisClass = this;
 
  	this._id = null;
- 	this.sessionid = null;
- 	this.visitorid = null;
- 	this.agentinfo = {
+ 	this.visitorId = null;
+ 	this.agentInfo = {
         browser : "",
-        browserlanguage : "",
+        browserLanguage : "",
         os: "",
         platform: "",
         version: null
     };
- 	this.visitormetainfo = {
-        firstseen : null,
-        lastseen : null
+ 	this.visitorMetaInfo = {
+        firstSeen : null,
+        lastSeen : null
     };
 
  };

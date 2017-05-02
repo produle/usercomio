@@ -138,8 +138,6 @@ class ViewRenderer
 
                         var userManagerObj = new userManager();
 
-                        var visitorListManagerObj = new visitorListManager();
-
                         var user = userManagerObj.getUserByUsername(uname,function(user){
 
                             delete user.password; //To avoid the encrypted password transmitted to client

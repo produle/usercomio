@@ -51,11 +51,11 @@ class FilterManager {
             return res.send({status:'failure'});
         }
 
-        var appid = req.body.appid;
+        var appId = req.body.appid;
 
         var filterCollection = global.db.collection('filters').aggregate([
             { $match :
-                { appid : appid }
+                { appId : appId }
             },
             { $sort :
                 { "createDate" : 1 }

@@ -179,7 +179,7 @@
 						appid : appid,
 						userdata : userComSettings,
 						uid:utils.guidGenerator(),
-                        screenresolution: screen.width+"x"+screen.height,
+                        screenResolution: screen.width+"x"+screen.height,
                         timezone: -(new Date().getTimezoneOffset() / 60)
 				}
 				
@@ -193,7 +193,7 @@
                             appid : appid,
                             userdata : userComSettings,
                             uid:requestObj.uid,
-                            sessionstart: sessionstart
+                            sessionStart: sessionstart
                     };
 
                     xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/logout', JSON.stringify(logoutRequestObj),function(data){

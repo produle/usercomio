@@ -13,7 +13,7 @@ class BrowserInfo
 	    this.version =  '',
 	    this.os =  '',
 	    this.platform= '',
-	    this.browserlanguage = ''
+	    this.browserLanguage = ''
 	    
 	}
 }

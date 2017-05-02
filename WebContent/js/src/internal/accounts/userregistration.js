@@ -57,6 +57,7 @@ function UC_UserRegistrationController()
 
     var newUser = new UC_User();
 
+    newUser._id = email;
     newUser.username = email;
     newUser.firstName = fullname;
     newUser.password = password;
@@ -253,6 +254,7 @@ function UC_UserRegistrationController()
 
     var newUser = new UC_User();
 
+    newUser._id = email;
     newUser.username = email;
     newUser.firstName = fullname;
     newUser.password = password;
@@ -288,10 +290,10 @@ function UC_UserRegistrationController()
 
     newApp.name = appName;
     newApp.creator = user.username;
-    newApp.id = UC_Utils.guidGenerator();
-    newApp.clientid = user.company;
+    newApp._id = UC_Utils.guidGenerator();
+    newApp.clientId = user.company;
 
-    UC_AJAX.call('AppManager/createNewApp',{newApp:newApp},function(data,status,xhr){
+    UC_AJAX.call('AppManager/createNewApp',{newApp:newApp,user:user},function(data,status,xhr){
 
         if(data.status == "appexists")
          {

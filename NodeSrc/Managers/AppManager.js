@@ -36,7 +36,7 @@ class AppManager {
         var appCollection = global.db.collection('apps');
   		var user = req.body.user;
         
-        appCollection.find({creator:user.username,clientid:user.company},{_id:0}).toArray(function(err,apps)
+        appCollection.find({creator:user.username,clientId:user.company}).toArray(function(err,apps)
         {
       	  if(err)
       	  {
@@ -65,11 +65,13 @@ class AppManager {
         }
 
         // Get the documents collection
+        var userCollection = global.db.collection('users');
         var appCollection = global.db.collection('apps');
 
+        var user = req.body.user;
         var newApp = req.body.newApp;
         
-        newApp._id = newApp.id;
+        newApp._id = newApp._id;
         newApp.createDate = new Date();
         
         var status = "success";
@@ -88,20 +90,31 @@ class AppManager {
       	  }
       	  else
       	  {
-      		  appCollection.insert([newApp], function (err, result) 
-                {
-      	            if (err)
-      	            {
-      	            	res.status(500);
-      	      		  	return res.send({status:'failure'});
-      	            }
-      	            else
-      	            {
-      	            	return res.send({status:newApp});
-      	            }
-      	            
-      	           
-      	        });
+              userCollection.findOne({ _id: user._id },function(err,userObj)
+              {
+                  if (err)
+                  {
+                        res.status(500);
+                        return res.send({status:'failure'});
+                  }
+
+                  newApp.clientId = userObj.company;
+
+                  appCollection.insert([newApp], function (err, result)
+                    {
+                        if (err)
+                        {
+                            res.status(500);
+                            return res.send({status:'failure'});
+                        }
+                        else
+                        {
+                            return res.send({status:newApp});
+                        }
+
+
+                    });
+              });
       	  }
       	  
       });
@@ -136,7 +149,7 @@ class AppManager {
   		      	  }
   		      	  else
   		      	  {
-  		      		appCollection.update({_id:appinfo.id},{$set:{name:appinfo.name}},function(err,count,result)
+  		      		appCollection.update({_id:appinfo._id},{$set:{name:appinfo.name}},function(err,count,result)
   		      		{
   		    			    if(err)
 		  		  	    	{
@@ -169,7 +182,7 @@ class AppManager {
   		
   		var appinfo = req.body.app;
   		
-  		appCollection.remove({_id:appinfo.id},function(err,numberOfRemovedDocs)
+  		appCollection.remove({_id:appinfo._id},function(err,numberOfRemovedDocs)
   		{
 			 if(err)
   	    	{

@@ -101,11 +101,11 @@ function UC_FilterController()
                     var filterOrder = user.app[uc_main.appController.currentAppId].filterOrder;
                     var reOrderedFilterList = [];
 
-                    for(var iter = 0; iter < filterOrder.length; iter++)
+                    for(var iter in filterOrder)
                     {
                         for(var iterFilter = 0; iterFilter < filterList.length; iterFilter++)
                         {
-                            if(filterOrder[iter] == filterList[iterFilter]._id)
+                            if(iter == filterList[iterFilter]._id)
                             {
                                 reOrderedFilterList.push(filterList[iterFilter]);
                             }
@@ -149,11 +149,11 @@ function UC_FilterController()
           plugins: ['bt-tooltip-errors'],
 
           filters: [{
-            id: 'visitordata.name',
+            id: 'visitorData.name',
             label: 'Name',
             type: 'string'
           }, {
-            id: 'visitormetainfo.lastseen',
+            id: 'visitorMetaInfo.lastSeen',
             label: 'Last Seen',
             type: 'datetime',
             validation: {
@@ -166,7 +166,7 @@ function UC_FilterController()
             input: 'text',
             operators: ['less_or_equal', 'greater_or_equal', 'between']
           },{
-            id: 'sessions.agentinfo.browser',
+            id: 'sessions.agentInfo.browser',
             label: 'Browser',
             type: 'string'
           }],
@@ -269,7 +269,8 @@ function UC_FilterController()
 
             filterObj._id = 'F'+UC_Utils.guidGenerator();
             filterObj.creator = UC_UserSession.user._id;
-            filterObj.appid = uc_main.appController.currentAppId;
+            filterObj.clientId = UC_UserSession.user.company;
+            filterObj.appId = uc_main.appController.currentAppId;
             filterObj.name = filtername;
             filterObj.filter = filter;
             filterObj.mongoFilter = mongoFilter;
@@ -290,7 +291,7 @@ function UC_FilterController()
             }
             else
             {
-                UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.push(filterObj._id);
+                UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterObj._id] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
             }
 
             thisClass.saveAppPreference();
@@ -367,16 +368,7 @@ function UC_FilterController()
 
             if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(uc_main.appController.currentAppId) && UC_UserSession.user.app[uc_main.appController.currentAppId].hasOwnProperty('filterOrder'))
             {
-                for(var j = 0; j < UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.length; j++)
-                {
-                    var item = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[j];
-
-                    if(filterObj._id == item)
-                    {
-                        UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.splice(j, 1);
-                        j--;
-                    }
-                }
+                delete UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterObj._id];
             }
 
 
@@ -412,10 +404,25 @@ function UC_FilterController()
      */
     this.updateFilterOrder = function(ev,ui)
     {
-        var filterIdOrder = [];
+        var oldFilterOrder = {};
+
+        if(UC_UserSession.user.app[uc_main.appController.currentAppId].hasOwnProperty('filterOrder'))
+        {
+            oldFilterOrder = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder;
+        }
+
+        var filterIdOrder = {};
 
         $("#ucUserdefinedFilterList li").each(function(){
-            filterIdOrder.push($(this).attr("data-filterid"));
+
+            if(!oldFilterOrder.hasOwnProperty($(this).attr("data-filterid")))
+            {
+                filterIdOrder[$(this).attr("data-filterid")] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+            }
+            else
+            {
+                filterIdOrder[$(this).attr("data-filterid")] = oldFilterOrder[$(this).attr("data-filterid")];
+            }
         });
 
         if(!UC_UserSession.user.hasOwnProperty('app'))
@@ -467,7 +474,18 @@ function UC_FilterController()
         {
             UC_UserSession.user.app[uc_main.appController.currentAppId] = {};
         }
+        if(!UC_UserSession.user.app[uc_main.appController.currentAppId].hasOwnProperty('filterOrder'))
+        {
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder = {};
+        }
+        if(!UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.hasOwnProperty(filterId))
+        {
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+        }
         UC_UserSession.user.app[uc_main.appController.currentAppId].currentFilter = filterId;
+
+        uc_main.visitorListController.currentSortColumn = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId].currentSortColumn;
+        uc_main.visitorListController.currentSortOrder = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId].currentSortOrder;
 
         thisClass.saveAppPreference();
 

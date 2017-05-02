@@ -25,7 +25,7 @@ function UC_VisitorListController()
 
     this.currentFilterId = "dashboard";
 
-    this.currentSortColumn = "visitormetainfo.lastseen";
+    this.currentSortColumn = "visitorMetaInfo.lastSeen";
 
     this.currentSortOrder = 1; //1 for ASC and -1 for DESC
 
@@ -76,8 +76,8 @@ function UC_VisitorListController()
 
         rivets.binders.latestbrowser = function (el, value) {
 
-            var browserName = value[0].agentinfo.browser;
-            var browserVersion = value[0].agentinfo.version;
+            var browserName = value[0].agentInfo.browser;
+            var browserVersion = value[0].agentInfo.version;
             var broswerVersionArr = browserVersion.split(".");
             if(broswerVersionArr.length > 2)
             {
@@ -91,7 +91,7 @@ function UC_VisitorListController()
 
         rivets.binders.latestplatform = function (el, value) {
 
-            var platformName = value[0].agentinfo.os;
+            var platformName = value[0].agentInfo.os;
             var platformIcon = "windows";
 
             if(platformName.toLowerCase().substr(0,5) == "macos")
@@ -200,8 +200,16 @@ function UC_VisitorListController()
         {
             UC_UserSession.user.app[uc_main.appController.currentAppId] = {};
         }
-        UC_UserSession.user.app[uc_main.appController.currentAppId].currentSortColumn = thisClass.currentSortColumn;
-        UC_UserSession.user.app[uc_main.appController.currentAppId].currentSortOrder = thisClass.currentSortOrder;
+        if(!UC_UserSession.user.app[uc_main.appController.currentAppId].hasOwnProperty('filterOrder'))
+        {
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder = {};
+        }
+        if(!UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.hasOwnProperty(thisClass.currentFilterId))
+        {
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+        }
+        UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].currentSortColumn = thisClass.currentSortColumn;
+        UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].currentSortOrder = thisClass.currentSortOrder;
 
         uc_main.filterController.saveAppPreference();
 
@@ -306,7 +314,7 @@ function UC_VisitorListController()
     {
         if(visitorId != null)
         {
-            UC_AJAX.call('VisitorListManager/getvisitordetails',{appid:uc_main.appController.currentAppId,visitorid:visitorId},function(data,status,xhr){
+            UC_AJAX.call('VisitorListManager/getvisitordetails',{appid:uc_main.appController.currentAppId,visitorId:visitorId},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {
@@ -321,8 +329,8 @@ function UC_VisitorListController()
 
                         visitorObj.displayId = (visitorObj._id.substring(0,10))+"...";
                         visitorObj.displaySessionCount = visitorObj.sessions.length;
-                        visitorObj.displayLastSeen = moment(visitorObj.visitormetainfo.lastseen).format("DD MMM YYYY HH:mm:ss");
-                        visitorObj.displayFirstSeen = moment(visitorObj.visitormetainfo.firstseen).format("DD MMM YYYY HH:mm:ss");
+                        visitorObj.displayLastSeen = moment(visitorObj.visitorMetaInfo.lastSeen).format("DD MMM YYYY HH:mm:ss");
+                        visitorObj.displayFirstSeen = moment(visitorObj.visitorMetaInfo.firstSeen).format("DD MMM YYYY HH:mm:ss");
 
                         thisClass.rivetVisitorDetailsObj = rivets.bind(
                             document.querySelector('#ucVisitorDetail'), {
@@ -333,7 +341,7 @@ function UC_VisitorListController()
                 }
             });
 
-            UC_AJAX.call('VisitorListManager/getvisitormessages',{appid:uc_main.appController.currentAppId,visitorid:visitorId},function(data,status,xhr){
+            UC_AJAX.call('VisitorListManager/getvisitormessages',{appid:uc_main.appController.currentAppId,visitorId:visitorId},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {
