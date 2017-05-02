@@ -27,7 +27,7 @@ function UC_AppController()
             var appid = $(this).attr("data-appid");
             for(var iter = 0; iter < thisClass.apps.length; iter++)
             {
-                if(appid == thisClass.apps[iter].id)
+                if(appid == thisClass.apps[iter]._id)
                 {
                     thisClass.switchApp(thisClass.apps[iter]);
                     break;
@@ -107,8 +107,8 @@ function UC_AppController()
 			
 			newApp.name = appName;
 			newApp.creator = user.username;
-			newApp.id = UC_Utils.guidGenerator();
-			newApp.clientid = user.company;
+			newApp._id = UC_Utils.guidGenerator();
+			newApp.clientId = user.company;
 			
 			UC_AJAX.call('AppManager/createNewApp',{newApp:newApp},function(data,status,xhr){
 				
@@ -202,7 +202,7 @@ function UC_AppController()
 				 else 
 				 {
 					 thisClass.updateAppDetailsInAppsListing(app);
-                     if(thisClass.currentAppId == app.id)
+                     if(thisClass.currentAppId == app._id)
                      {
                          thisClass.rivetAppNameObj.models.currentAppName = app.name;
                      }
@@ -242,7 +242,7 @@ function UC_AppController()
 						 else 
 						 {
 							 thisClass.apps.splice(appIndex, 1);
-							 thisClass.deleteAnAppEntryFromListing(app.id);
+							 thisClass.deleteAnAppEntryFromListing(app._id);
 						 }
 					});
 				}
@@ -272,7 +272,7 @@ function UC_AppController()
 	{
 		if(app)
 		{
-			$('#app_'+app.id).find('.ucapp_namecls').html(app.name);
+			$('#app_'+app._id).find('.ucapp_namecls').html(app.name);
 		}
 	}
 	
@@ -284,15 +284,15 @@ function UC_AppController()
 	{
 		if(appid)
 		{
-			var appIndex = UC_Utils.searchObjArray(thisClass.apps,'id',appid);
+			var appIndex = UC_Utils.searchObjArray(thisClass.apps,'_id',appid);
 			
 			if(appIndex != -1)
 			{
 				var app = thisClass.apps[appIndex];
 				
 				$('#ucapp_update_nameinput').val(app.name);
-				$('#ucapp_update_appid').val(app.id);
-				$('#ucapp_update_appid_display').text(app.id);
+				$('#ucapp_update_appid').val(app._id);
+				$('#ucapp_update_appid_display').text(app._id);
 			}
 		}
 	}
@@ -324,7 +324,7 @@ function UC_AppController()
      */
     this.switchApp = function(app)
     {
-        thisClass.currentAppId = app.id;
+        thisClass.currentAppId = app._id;
         thisClass.rivetAppNameObj.models.currentAppName = app.name;
 
         if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(thisClass.currentAppId) && UC_UserSession.user.app[thisClass.currentAppId].hasOwnProperty('currentFilter'))

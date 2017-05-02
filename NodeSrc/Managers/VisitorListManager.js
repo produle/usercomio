@@ -33,14 +33,14 @@ class VisitorListManager {
             return res.send({status:'failure'});
         }
 
-        var appid = req.body.appid;
+        var appId = req.body.appid;
         var skipIndex = req.body.skipindex;
         var pageLimit = req.body.pagelimit;
         var filterId = req.body.filterid;
         var sortColumn = req.body.sortColumn;
         var sortOrder = req.body.sortOrder;
 
-        this.getAllVisitorsFromDB(appid,filterId,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response,totalcount){
+        this.getAllVisitorsFromDB(appId,filterId,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response,totalcount){
             return res.send({status:response,totalcount:totalcount});
         });
 
@@ -49,7 +49,7 @@ class VisitorListManager {
   	/*
   	 * @desc Returns all visitors of the app
   	 */
-  	getAllVisitorsFromDB(appid,filterId,sortColumn,sortOrder,skipIndex,pageLimit,exclusionList,callback)
+  	getAllVisitorsFromDB(appId,filterId,sortColumn,sortOrder,skipIndex,pageLimit,exclusionList,callback)
   	{
         var sortQuery = JSON.parse('{"'+sortColumn+'":'+sortOrder+'}');
 
@@ -64,13 +64,13 @@ class VisitorListManager {
                 if(filterId == "2")
                 {
                     var date30DaysAgo = new Date(moment( moment().subtract(30, 'days') ).format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
-                    filterQuery = {"visitormetainfo.firstseen" : {"$gte":date30DaysAgo }};
+                    filterQuery = {"visitorMetaInfo.firstSeen" : {"$gte":date30DaysAgo }};
                 }
 
                 if(filterId == "3")
                 {
                     var date30DaysAgo = new Date(moment( moment().subtract(30, 'days') ).format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
-                    filterQuery = {"visitormetainfo.lastseen" : {"$lte":date30DaysAgo }};
+                    filterQuery = {"visitorMetaInfo.lastSeen" : {"$lte":date30DaysAgo }};
                 }
 
                 var aggregateArray = [
@@ -80,7 +80,7 @@ class VisitorListManager {
                         {
                           from: "sessions",
                           localField: "_id",
-                          foreignField: "visitorid",
+                          foreignField: "visitorId",
                           as: "sessions"
                         }
                     },
@@ -90,7 +90,7 @@ class VisitorListManager {
                     { $match :
                         { "$and": [
                             {
-                              appid:appid
+                              appId:appId
                             },
                             { _id: {"$nin": exclusionList}},
                             filterQuery
@@ -145,7 +145,7 @@ class VisitorListManager {
             return res.send({status:'failure'});
         }
 
-        var visitorId = req.body.visitorid;
+        var visitorId = req.body.visitorId;
         if(visitorId)
     	{
 
@@ -158,7 +158,7 @@ class VisitorListManager {
                     {
                       from: "sessions",
                       localField: "_id",
-                      foreignField: "visitorid",
+                      foreignField: "visitorId",
                       as: "sessions"
                     }
                 }
@@ -189,7 +189,7 @@ class VisitorListManager {
             return res.send({status:'failure'});
         }
 
-        var visitorId = req.body.visitorid;
+        var visitorId = req.body.visitorId;
         if(visitorId)
     	{
 
@@ -224,13 +224,13 @@ class VisitorListManager {
             return res.send({status:'failure'});
         }
 
-        var appid = req.body.appid;
-        if(appid)
+        var appId = req.body.appid;
+        if(appId)
     	{
 
             var visitorsCollection = global.db.collection('visitors').aggregate([
                 { $match :
-                    { appid: appid }
+                    { appId: appId }
                 },
                 { $limit : 1 }
             ]).toArray(function(err,visitors)
@@ -242,11 +242,15 @@ class VisitorListManager {
                     else if(visitors.length > 0)
                     {
                         var fieldList = [];
-                        for (var fieldSingle in visitors[0].visitordata)
+                        for (var fieldSingle in visitors[0].visitorData)
                         {
                             fieldList.push(fieldSingle);
                         }
                         return res.send({status:'success',fields:fieldList});
+                    }
+                    else
+                    {
+                        return res.send({status:'success',fields:[]});
                     }
                 }
             );

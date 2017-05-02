@@ -38,7 +38,7 @@ class EmailManager {
             return res.send({status:'failure'});
         }
 
-        var appid = req.body.appid;
+        var appId = req.body.appid;
         var user = req.body.user;
         var filterId = req.body.filterId;
         var exclusionList = req.body.exclusionList;
@@ -56,14 +56,14 @@ class EmailManager {
 
         if(template == "new")
         {
-            EmailManagerObj.saveNewTemplate(appid,user,subject,message,function(templateObj){
-                EmailManagerObj.processMessage(appid,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate);
+            EmailManagerObj.saveNewTemplate(appId,user,subject,message,function(templateObj){
+                EmailManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate);
             });
         }
         else
         {
-            EmailManagerObj.getTemplateById(appid,template,function(templateObj){
-                EmailManagerObj.processMessage(appid,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate);
+            EmailManagerObj.getTemplateById(appId,template,function(templateObj){
+                EmailManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate);
             });
         }
 
@@ -78,7 +78,7 @@ class EmailManager {
     /*
      * @desc Process the message with templateid
      */
-    processMessage(appid,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate)
+    processMessage(appId,clientId,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate)
     {
 
         var EmailManagerObj = new EmailManager();
@@ -86,9 +86,9 @@ class EmailManager {
         if(filterId != null)
         {
             var visitorListManagerObj = new visitorListManager();
-            visitorListManagerObj.getAllVisitorsFromDB(appid,filterId,"visitormetainfo.lastseen",1,0,null,exclusionList,function(response,totalcount){
+            visitorListManagerObj.getAllVisitorsFromDB(appId,filterId,"visitorMetaInfo.lastSeen",1,0,null,exclusionList,function(response,totalcount){
 
-                    EmailManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate);
+                    EmailManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId);
             });
         }
         else
@@ -97,7 +97,7 @@ class EmailManager {
                     { $match :
                         { "$and": [
                             {
-                              appid:appid
+                              appId:appId
                             },
                             { _id: {"$in": inclusionList}}
                           ]
@@ -110,7 +110,7 @@ class EmailManager {
                         console.log("ERROR: "+err);
                     }
 
-                    EmailManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate);
+                    EmailManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId);
                 }
             );
         }
@@ -119,7 +119,7 @@ class EmailManager {
     /*
      * @desc Loops throught the recipient list and mails with a spam check
      */
-    selectRecipients(response,subject,message,templateObj,blockDuplicate)
+    selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId)
     {
         var EmailManagerObj = new EmailManager();
 
@@ -133,11 +133,11 @@ class EmailManager {
             {
                 var recipientSingle = {};
                 recipientSingle.id = response[iter]._id;
-                recipientSingle.visitordata = response[iter].visitordata;
+                recipientSingle.visitorData = response[iter].visitorData;
 
                 EmailManagerObj.parseEmail(message,recipientSingle,function(parsedMessage,recipientSingle){
-                    EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitordata.email,subject,parsedMessage,templateObj);
-                    EmailManagerObj.sendMail(recipientSingle.visitordata.email,subject,parsedMessage);
+                    EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitorData.email,subject,parsedMessage,templateObj,appId,clientId);
+                    EmailManagerObj.sendMail(recipientSingle.visitorData.email,subject,parsedMessage);
                 });
             }
 
@@ -152,7 +152,7 @@ class EmailManager {
         var parsedMessage = message;
 
         var variableArray = [];
-        for (var fieldSingle in recipientSingle.visitordata)
+        for (var fieldSingle in recipientSingle.visitorData)
         {
             variableArray.push(fieldSingle);
         }
@@ -161,7 +161,7 @@ class EmailManager {
         {
             var regExpObj = new RegExp('{'+variableArray[iter]+'}', 'g');
 
-            parsedMessage = parsedMessage.replace(regExpObj,recipientSingle.visitordata[variableArray[iter]]);
+            parsedMessage = parsedMessage.replace(regExpObj,recipientSingle.visitorData[variableArray[iter]]);
         }
 
         callback(parsedMessage,recipientSingle);
@@ -286,7 +286,7 @@ class EmailManager {
     /*
      * @desc Stores the email sent in the DB
      */
-    saveEmailMessage(visitorId,visitorEmail,subject,message,templateObj)
+    saveEmailMessage(visitorId,visitorEmail,subject,message,templateObj,appId,clientId)
     {
 
 
@@ -300,6 +300,8 @@ class EmailManager {
             subject: subject,
             message: message,
             templateId: templateObj._id,
+            appId: appId,
+            clientId: clientId,
             sentOn: new Date()
         });
 
@@ -326,14 +328,14 @@ class EmailManager {
             return res.send({status:'failure'});
         }
 
-        var appid = req.body.appid;
+        var appId = req.body.appid;
         var user = req.body.user;
 
         var emailTemplateCollection = global.db.collection('emailtemplates').aggregate([
                 { $match :
                     { "$and": [
                         {
-                          appid:appid
+                          appId:appId
                         }
                       ]
                     }
@@ -355,13 +357,14 @@ class EmailManager {
     /*
      * @desc Stores the new email template in the DB
      */
-    saveNewTemplate(appid,user,subject,message,callback)
+    saveNewTemplate(appId,user,subject,message,callback)
     {
         var emailTemplatesCollection = global.db.collection('emailtemplates');
 
         var templateObj = {
             _id: utils.guidGenerator(),
-            appid: appid,
+            appId: appId,
+            clientId: user.company,
             creator: user._id,
             subject: subject,
             message: message,
@@ -377,7 +380,7 @@ class EmailManager {
     /*
      * @desc Returns the template object by given id
      */
-    getTemplateById(appid,templateid,callback)
+    getTemplateById(appId,templateid,callback)
     {
         var emailTemplatesCollection = global.db.collection('emailtemplates').aggregate([
                 { $match :

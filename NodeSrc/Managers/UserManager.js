@@ -358,9 +358,9 @@ class UserManager {
     {
         //Predefined filters
         var predefinedFilterArray = [
-            {"_id":"1","name":"All Users","filter":null,"mongoFilter":"{}","createDate":{"date":"2017-03-16T06:43:41.723Z"},"creator":null,"appid":null},
-            {"_id":"2","name":"New Users","filter":"{\"condition\": \"AND\", \"rules\": [ { \"id\": \"visitormetainfo.lastseen\", \"field\": \"visitormetainfo.lastseen\", \"type\": \"date\", \"input\": \"text\", \"operator\": \"greater_or_equal\", \"value\": \"2017/03/01\" } ], \"valid\": true}","mongoFilter":"{  \"$and\": [    {      \"visitormetainfo.lastseen\": {        \"$gte\": \"2017/03/01\"      }    }  ]}","createDate":{"date":"2017-03-16T06:43:41.723Z"},"creator":null,"appid":null},
-            {"_id":"3","name":"Slipping Away","filter":"{\"condition\": \"AND\", \"rules\": [ { \"id\": \"visitormetainfo.lastseen\", \"field\": \"visitormetainfo.lastseen\", \"type\": \"date\", \"input\": \"text\", \"operator\": \"greater_or_equal\", \"value\": \"2017/03/01\" } ], \"valid\": true}","mongoFilter":"{  \"$and\": [    {      \"visitormetainfo.lastseen\": {        \"$gte\": \"2017/03/01\"      }    }  ]}","createDate":{"date":"2017-03-16T06:43:41.723Z"},"creator":null,"appid":null}
+            {"_id":"1","name":"All Users","filter":null,"mongoFilter":"{}","createDate":{"date":"2017-03-16T06:43:41.723Z"},"creator":null,"appId":null},
+            {"_id":"2","name":"New Users","filter":"{\"condition\": \"AND\", \"rules\": [ { \"id\": \"visitorMetaInfo.lastSeen\", \"field\": \"visitorMetaInfo.lastSeen\", \"type\": \"date\", \"input\": \"text\", \"operator\": \"greater_or_equal\", \"value\": \"2017/03/01\" } ], \"valid\": true}","mongoFilter":"{  \"$and\": [    {      \"visitorMetaInfo.lastSeen\": {        \"$gte\": \"2017/03/01\"      }    }  ]}","createDate":{"date":"2017-03-16T06:43:41.723Z"},"creator":null,"appId":null},
+            {"_id":"3","name":"Slipping Away","filter":"{\"condition\": \"AND\", \"rules\": [ { \"id\": \"visitorMetaInfo.lastSeen\", \"field\": \"visitorMetaInfo.lastSeen\", \"type\": \"date\", \"input\": \"text\", \"operator\": \"greater_or_equal\", \"value\": \"2017/03/01\" } ], \"valid\": true}","mongoFilter":"{  \"$and\": [    {      \"visitorMetaInfo.lastSeen\": {        \"$gte\": \"2017/03/01\"      }    }  ]}","createDate":{"date":"2017-03-16T06:43:41.723Z"},"creator":null,"appId":null}
         ];
 
         var userCollection = global.db.collection('filters');

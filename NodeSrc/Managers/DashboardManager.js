@@ -30,11 +30,11 @@ class DashboardManager {
             return res.send({status:'failure'});
         }
 
-        var appid = req.body.appid;
+        var appId = req.body.appid;
 
   		global.db.collection('visitors').aggregate([
             { $match :
-                { appid : appid }
+                { appId : appId }
             },
             { $group:
                 { _id: null, count: { $sum: 1 } }
@@ -55,14 +55,14 @@ class DashboardManager {
 
                     global.db.collection('visitors').aggregate([
                         { $project: {
-                            visitormetainfo : [{ lastseen : 1 } , { firstseen : 1 }],
-                            appid: 1,
-                            isUpdated: { $cmp:["$visitormetainfo.lastseen","$visitormetainfo.firstseen"] }
+                            visitorMetaInfo : [{ lastSeen : 1 } , { firstSeen : 1 }],
+                            appId: 1,
+                            isUpdated: { $cmp:["$visitorMetaInfo.lastSeen","$visitorMetaInfo.firstSeen"] }
                         }},
                         { $match : {
                             $and : [
                                 { isUpdated : 0 },
-                                { appid : appid }
+                                { appId : appId }
                             ]
                             }
                         },
@@ -86,8 +86,8 @@ class DashboardManager {
                         global.db.collection('visitors').aggregate([
                             { $match : {
                                 $and : [
-                                    { "visitormetainfo.lastseen" : {$lt: new Date((new Date())-(1000*60*60*24*30))} },
-                                    { appid : appid }
+                                    { "visitorMetaInfo.lastSeen" : {$lt: new Date((new Date())-(1000*60*60*24*30))} },
+                                    { appId : appId }
                                 ]
                                 }
                             },
@@ -130,28 +130,28 @@ class DashboardManager {
             return res.send({status:'failure'});
         }
 
-        var appid = req.body.appid;
+        var appId = req.body.appid;
         var days = req.body.days;
 
         global.db.collection('visitors').aggregate([
             { $match : {
                 $and : [
-                    { "visitormetainfo.firstseen" : {$gt: new Date((new Date())-(1000*60*60*24*days))} },
-                    { appid : appid }
+                    { "visitorMetaInfo.firstSeen" : {$gt: new Date((new Date())-(1000*60*60*24*days))} },
+                    { appId : appId }
                 ]
                 }
             },
             { $group: {
                 _id: {
                     $add: [
-                        { $dayOfYear: "$visitormetainfo.firstseen"},
+                        { $dayOfYear: "$visitorMetaInfo.firstSeen"},
                         { $multiply:
-                            [400, {$year: "$visitormetainfo.firstseen"}]
+                            [400, {$year: "$visitorMetaInfo.firstSeen"}]
                         }
                     ]
                 },
                 visitors: { $sum: 1 },
-                first: {$min: "$visitormetainfo.firstseen"}
+                first: {$min: "$visitorMetaInfo.firstSeen"}
             }},
             { $sort: {_id: -1} },
             { $limit: 15 },

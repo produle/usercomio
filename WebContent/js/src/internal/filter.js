@@ -149,11 +149,11 @@ function UC_FilterController()
           plugins: ['bt-tooltip-errors'],
 
           filters: [{
-            id: 'visitordata.name',
+            id: 'visitorData.name',
             label: 'Name',
             type: 'string'
           }, {
-            id: 'visitormetainfo.lastseen',
+            id: 'visitorMetaInfo.lastSeen',
             label: 'Last Seen',
             type: 'datetime',
             validation: {
@@ -166,7 +166,7 @@ function UC_FilterController()
             input: 'text',
             operators: ['less_or_equal', 'greater_or_equal', 'between']
           },{
-            id: 'sessions.agentinfo.browser',
+            id: 'sessions.agentInfo.browser',
             label: 'Browser',
             type: 'string'
           }],
@@ -269,7 +269,8 @@ function UC_FilterController()
 
             filterObj._id = 'F'+UC_Utils.guidGenerator();
             filterObj.creator = UC_UserSession.user._id;
-            filterObj.appid = uc_main.appController.currentAppId;
+            filterObj.clientId = UC_UserSession.user.company;
+            filterObj.appId = uc_main.appController.currentAppId;
             filterObj.name = filtername;
             filterObj.filter = filter;
             filterObj.mongoFilter = mongoFilter;

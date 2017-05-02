@@ -55,20 +55,18 @@ class VisitorTrackingManager {
   		}
   	
   		uid = req.body.uid;
-  		
-  		visitorDetail["_id"] = uid;
-        visitorDetail["appid"] = req.body.appid;
-  		
+
   		if(!sessioncookie)
   		{
-  			sessionDetail["sessionid"] = utils.guidGenerator();
+  			sessionDetail["_id"] = utils.guidGenerator();
   		}
   		else
   		{
-  			sessionDetail["sessionid"] = sessioncookie;
+  			sessionDetail["_id"] = sessioncookie;
   		}
-  		
-  		
+
+        visitorDetail["_id"] = uid;
+        visitorDetail["appId"] = req.body.appid;
   		
   		
   		var browserInfo = new BrowserInfo();
@@ -79,11 +77,11 @@ class VisitorTrackingManager {
   		browserInfo.version =  agent.version;
   		browserInfo.os =  agent.os;
   		browserInfo.platform= agent.platform;
-  		browserInfo.browserlanguage = req.headers["accept-language"].split(',')[0];
-        browserInfo.screenresolution = req.body.screenresolution;
+  		browserInfo.browserLanguage = req.headers["accept-language"].split(',')[0];
+        browserInfo.screenResolution = req.body.screenResolution;
         browserInfo.timezone = req.body.timezone;
-        browserInfo.rawagentdata = agent.source;
-        browserInfo.sessionstart = req.body.sessionstart;
+        browserInfo.rawAgentData = agent.source;
+        browserInfo.sessionStart = req.body.sessionStart;
 
         if(agent.isDesktop)
         {
@@ -114,89 +112,108 @@ class VisitorTrackingManager {
             geolocation.region = locationInfo.region;
         }
   		
-		sessionDetail["agentinfo"]  = browserInfo;
-  		sessionDetail["geolocationinfo"]  = geolocation;
-  		sessionDetail["visitorid"]  = uid;
-  		sessionDetail["ipaddress"]  = ipAddress;
-  		visitorDetail["visitordata"]  = req.body.userdata;
+		sessionDetail["agentInfo"]  = browserInfo;
+  		sessionDetail["geoLocationInfo"]  = geolocation;
+  		sessionDetail["visitorId"]  = uid;
+  		sessionDetail["ipAddress"]  = ipAddress;
+  		visitorDetail["visitorData"]  = req.body.userdata;
   		
   		
   		// Get the documents collection
+        var appCollection = global.db.collection('apps');
         var visitorCollection = global.db.collection('visitors');
 
         var status = "success";
         
-        visitorCollection.findOne({ "visitordata.email": req.body.userdata.email, appid: req.body.appid },function(err,visitor)
+        appCollection.findOne({ _id: req.body.appid },function(err,app)
         {
-      	  if(err)
-      	  {
-      		  res.status(500);
-      		  return res.send({status:'failure'});
-      	  }
-      	  
-      	  if(visitor)
-      	  {
-      	  		if(!sessioncookie)
-	      		{
-      	  			res.cookie('usercomio_session',sessionDetail["sessionid"], { httpOnly: true });
-	      		}
-      	  		
-      		  	var lastseen = new Date();
-      		  	
-      		  	
-      		  	for(var key in req.body.userdata)
-      		  	{
-      		  		visitorDetail["visitordata"][key] = req.body.userdata[key];
-      		  	}
-      		  	
-  		  		visitorCollection.update({_id:visitor._id},{$set:{'visitormetainfo.lastseen':lastseen,visitordata:visitorDetail["visitordata"]}},function(err,count,result)
-	      		{
-	  		  		if (err)
-	  	            {
-	  	            	return res.send({status:'failure'});
-	  	            }
-	      		});
+            if(err)
+            {
+                res.status(500);
+                return res.send({status:'failure'});
+            }
 
-                sessionDetail["visitorid"]  = visitor._id;
-      	  }
-      	  else
-      	  {
-      		visitorMetaInfo.firstseen = new Date();
-      		visitorMetaInfo.lastseen = new Date();
-      		
-      		visitorDetail["visitormetainfo"]  = visitorMetaInfo;  
-      		
-      		res.cookie('usercomio_session',sessionDetail["sessionid"], { httpOnly: true });
-      		
-      		visitorCollection.insert([visitorDetail], function (err, result) 
+            if(app)
+            {
+                sessionDetail["appId"]  = app._id;
+                sessionDetail["clientId"]  = app.clientId;
+                visitorDetail["clientId"]  = app.clientId;
+
+                visitorCollection.findOne({ "visitorData.email": req.body.userdata.email, appId: req.body.appid },function(err,visitor)
                 {
-      	            if (err)
-      	            {
-      	            	res.status(500);
-      	      		  	return res.send({status:'failure'});
-      	            }
-      	            
-      	           
-      	        });
-      	  }
+                  if(err)
+                  {
+                      res.status(500);
+                      return res.send({status:'failure'});
+                  }
 
-            var sessionCollection = global.db.collection('sessions');
+                  if(visitor)
+                  {
+                        if(!sessioncookie)
+                        {
+                            res.cookie('usercomio_session',sessionDetail["_id"], { httpOnly: true });
+                        }
 
-      		sessionCollection.insert([sessionDetail], function (err, result) {
-
-      	        if (err)
-                {
-                    res.status(500);
-                    return res.send({status:'failure'});
-                }
-                else
-                {
-                    return res.send({status:visitorDetail});
-                }
+                        var lastSeen = new Date();
 
 
-            });
-      	  
+                        for(var key in req.body.userdata)
+                        {
+                            visitorDetail["visitorData"][key] = req.body.userdata[key];
+                        }
+
+                        visitorCollection.update({_id:visitor._id},{$set:{'visitorMetaInfo.lastSeen':lastSeen,visitorData:visitorDetail["visitorData"]}},function(err,count,result)
+                        {
+                            if (err)
+                            {
+                                return res.send({status:'failure'});
+                            }
+                        });
+
+                        sessionDetail["visitorId"]  = visitor._id;
+                  }
+                  else
+                  {
+                    visitorMetaInfo.firstSeen = new Date();
+                    visitorMetaInfo.lastSeen = new Date();
+
+                    visitorDetail["visitorMetaInfo"]  = visitorMetaInfo;
+
+                    res.cookie('usercomio_session',sessionDetail["_id"], { httpOnly: true });
+
+                    visitorCollection.insert([visitorDetail], function (err, result)
+                        {
+                            if (err)
+                            {
+                                res.status(500);
+                                return res.send({status:'failure'});
+                            }
+
+
+                        });
+                  }
+
+                    var sessionCollection = global.db.collection('sessions');
+
+                    sessionCollection.insert([sessionDetail], function (err, result) {
+
+                        if (err)
+                        {
+                            res.status(500);
+                            return res.send({status:'failure'});
+                        }
+                        else
+                        {
+                            return res.send({status:visitorDetail});
+                        }
+
+
+                    });
+
+                });
+
+
+            }
         });
   		
        
@@ -227,9 +244,8 @@ class VisitorTrackingManager {
   		
   		var visitorEventDetail = {};
   		
-  		visitorEventDetail["_id"] =  req.body.uid;
-  		visitorEventDetail["sessionid"] = req.cookies["usercomio_session"];
-  		visitorEventDetail["appid"] =  req.body.appid;
+  		visitorEventDetail["_id"] =  req.cookies["usercomio_session"];
+  		visitorEventDetail["appId"] =  req.body.appid;
   		visitorEventDetail["createdate"] = new Date();
   		visitorEventDetail["userid"]  = uid;
   		visitorEventDetail["eventname"] = req.body.eventname;
@@ -280,9 +296,8 @@ class VisitorTrackingManager {
   		
   		var visitorPageErrorDetail = {};
   		
-  		visitorPageErrorDetail["_id"] =  req.body.uid;
-  		visitorPageErrorDetail["sessionid"] = req.cookies["usercomio_session"];
-  		visitorPageErrorDetail["appid"] =  req.body.appid;
+  		visitorPageErrorDetail["_id"] =  req.cookies["usercomio_session"];
+  		visitorPageErrorDetail["appId"] =  req.body.appid;
   		visitorPageErrorDetail["occuredon"] = new Date();
   		visitorPageErrorDetail["userid"]  = uid;
   		visitorPageErrorDetail["error"] = req.body.errormsg;
@@ -319,15 +334,15 @@ class VisitorTrackingManager {
               $lookup:
                 {
                   from: "visitors",
-                  localField: "visitorid",
+                  localField: "visitorId",
                   foreignField: "_id",
                   as: "visitors"
                 }
             },
             { $match :
                 { "$and": [
-                    { "agentinfo.sessionstart" : req.body.sessionstart},
-                    { "visitors.visitordata.email" : req.body.userdata.email }
+                    { "agentInfo.sessionStart" : req.body.sessionStart},
+                    { "visitors.visitorData.email" : req.body.userdata.email }
                   ]
                 }
             }
@@ -345,7 +360,7 @@ class VisitorTrackingManager {
                     { _id: session[0]._id },
                     { $set :
                         {
-                            "agentinfo.sessionend": new Date()
+                            "agentInfo.sessionEnd": new Date()
                         }
                     },
                     { upsert: true }
