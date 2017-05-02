@@ -57,15 +57,40 @@ class UserManager {
         	  }
         	  else
         	  {
-        		  userCollection.insert([newUser], function (err, result) 
-                  {
-        	            if (err)
-        	            {
-        	            	 status = "error";
-        	            	 res.status(500);
-        	            }
-        	            
-        	        });
+                  var UserManagerObj = new UserManager();
+
+                  UserManagerObj.getDefaultCompany(function(company){
+                      newUser.company = company._id;
+                      userCollection.insert([newUser], function (err, result)
+                      {
+                            if (err)
+                            {
+                                 status = "error";
+                                 res.status(500);
+                            }
+
+                      });
+
+                      //Inserting a row to usercompany table also
+                      var userCompany = {
+                          _id: utils.guidGenerator(),
+                          company: newUser.company,
+                          userId: newUser._id,
+                          role: "Admin"
+                      };
+
+                      var userCompanyCollection = global.db.collection('usercompany');
+                      userCompanyCollection.insert([userCompany], function (err, result)
+                      {
+                            if (err)
+                            {
+                                 status = "error";
+                                 res.status(500);
+                            }
+
+                      });
+                  });
+
         	  }
         	  
         	  
@@ -366,6 +391,50 @@ class UserManager {
         var userCollection = global.db.collection('filters');
         userCollection.insertMany(predefinedFilterArray);
     };
+
+    /*
+     * @desc Return the default company, creates if not exist
+     */
+    getDefaultCompany(callback)
+    {
+        var companyCollection = global.db.collection('companies');
+
+        companyCollection.findOne({},function(err,company)
+        {
+              if(err)
+              {
+                  status = "error";
+                  res.status(500);
+              }
+
+              if(company)
+              {
+                  return callback(company);
+              }
+              else
+              {
+                  var newCompany = {
+                      _id : 'C'+utils.guidGenerator(),
+                      name: "Usercom",
+                      createDate: new Date()
+                  };
+
+                  companyCollection.insert([newCompany], function (err, result)
+                  {
+                      if(err)
+                      {
+                             return callback(null);
+                      }
+                      else
+                      {
+                          return callback(newCompany);
+                      }
+
+                  });
+              }
+
+        });
+    }
 
 }
 

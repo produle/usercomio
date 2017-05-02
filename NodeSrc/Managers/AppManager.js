@@ -65,8 +65,10 @@ class AppManager {
         }
 
         // Get the documents collection
+        var userCollection = global.db.collection('users');
         var appCollection = global.db.collection('apps');
 
+        var user = req.body.user;
         var newApp = req.body.newApp;
         
         newApp._id = newApp._id;
@@ -88,20 +90,31 @@ class AppManager {
       	  }
       	  else
       	  {
-      		  appCollection.insert([newApp], function (err, result) 
-                {
-      	            if (err)
-      	            {
-      	            	res.status(500);
-      	      		  	return res.send({status:'failure'});
-      	            }
-      	            else
-      	            {
-      	            	return res.send({status:newApp});
-      	            }
-      	            
-      	           
-      	        });
+              userCollection.findOne({ _id: user._id },function(err,userObj)
+              {
+                  if (err)
+                  {
+                        res.status(500);
+                        return res.send({status:'failure'});
+                  }
+
+                  newApp.clientId = userObj.company;
+
+                  appCollection.insert([newApp], function (err, result)
+                    {
+                        if (err)
+                        {
+                            res.status(500);
+                            return res.send({status:'failure'});
+                        }
+                        else
+                        {
+                            return res.send({status:newApp});
+                        }
+
+
+                    });
+              });
       	  }
       	  
       });

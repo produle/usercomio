@@ -302,6 +302,7 @@ class EmailManager {
             templateId: templateObj._id,
             appId: appId,
             clientId: clientId,
+            isHTML: false,
             sentOn: new Date()
         });
 
@@ -369,6 +370,7 @@ class EmailManager {
             subject: subject,
             message: message,
             createdOn: new Date(),
+            isHTML: false,
             recipientList: []
         };
 

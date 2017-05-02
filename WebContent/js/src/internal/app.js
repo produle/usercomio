@@ -110,7 +110,7 @@ function UC_AppController()
 			newApp._id = UC_Utils.guidGenerator();
 			newApp.clientId = user.company;
 			
-			UC_AJAX.call('AppManager/createNewApp',{newApp:newApp},function(data,status,xhr){
+			UC_AJAX.call('AppManager/createNewApp',{newApp:newApp,user:user},function(data,status,xhr){
 				
 				if(data.status == "appexists")
 				 {
