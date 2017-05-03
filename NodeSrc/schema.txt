@@ -17,6 +17,7 @@
     creator : String //Email ID of the created user
     subject : String
     message : String
+    isHTML : Boolean
     createdOn : Date //Datetime of when the record is created
     recipientList : Array of Strings //contains list of visitor id from the visitors collection
 
@@ -39,6 +40,7 @@
     subject : String
     message : String
     templateId : String //id from emailtemplates collection
+    isHTML : Boolean
     appId : String //id from apps collection
     clientId : String //company from users collection
     sentOn : Date //Datetime of when the record is created
@@ -70,13 +72,13 @@
     appId : String //id from apps collection
 
 // Collection name: users
-    _id : Object //Auto generated id
+    _id : String //Email of the user
     firstName : String
     lastName : String
     createDate : Date //Datetime of when the record is created
     username : String //Email ID of the user
     password : String //Hashed password
-    company : String //Auto generated id
+    company : String //id from companies collection
     app : [ //Array of Object, each object denotes a specific app that contains the users preferences
         {
             filterOrder : [ //Array of Object, each object will have preferences related to the filter. And the list is in sorted order. The key is filter id from the filters collection.
@@ -91,7 +93,7 @@
     token : String
 
 // Collection name: visitors
-    _id : Object //Auto generated id
+    _id : String //Auto generated id
     appId : String //id from apps collection
     clientId : String //company from users collection
     visitorData : {
@@ -108,3 +110,14 @@
         firstSeen : Date
         lastSeen : Date
     }
+
+// Collection name: companies
+    _id : String //Auto generated id
+    name : String //name of the company
+    createDate : Date //Datetime of when the record is created
+
+// Collection name: usercompany
+    _id : String //Auto generated id
+    company : String //id from companies collection
+    userId : String //id from users collection
+    role : String //Role of the user in that company
