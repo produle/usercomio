@@ -188,7 +188,7 @@ class UserManager {
     {
         var config = req.body.config;
 
-        var configString = JSON.stringify(config);
+        var configString = JSON.stringify(config, null, '\t');
 
         var fs = require('fs');
         var path = require("path");

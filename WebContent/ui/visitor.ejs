@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col-md-12">
 
-                            <table class="table table-striped">
+                            <table class="table table-striped" id="ucVisitorDetailTable" style="display:none;">
                                 <tbody>
                                     <tr>
                                         <td class="text-center">Name</td>
@@ -60,6 +60,8 @@
                                     </tr>
                                 </tbody>
                             </table>
+
+                            <div id="ucVisitorDetailAjaxLoader" class='ucAjaxLoader'><div></div></div>
 
                         </div>
                     </div>
@@ -92,6 +94,9 @@
                                 </tr>
                             </tbody>
                         </table>
+
+                        <div id="ucVisitorMessageAjaxLoader" class='ucAjaxLoader'><div></div></div>
+
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ucUserTabContentAnalysis">
                         Analysis Content

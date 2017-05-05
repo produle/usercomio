@@ -126,6 +126,9 @@ function UC_VisitorListController()
                 filterId = '1';
             }
 
+            thisClass.rivetVisitorListObj.models.list = [];
+            $("#ucVisitorListAjaxLoader").show();
+
             UC_AJAX.call('VisitorListManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit,filterid:filterId,sortColumn:thisClass.currentSortColumn,sortOrder:thisClass.currentSortOrder},function(data,status,xhr){
 
                 if(data.status == "failure")
@@ -152,6 +155,8 @@ function UC_VisitorListController()
 
                     thisClass.listVisitors();
                 }
+
+                $("#ucVisitorListAjaxLoader").hide();
             });
         }
 	};
@@ -314,6 +319,8 @@ function UC_VisitorListController()
     {
         if(visitorId != null)
         {
+            $("#ucVisitorDetailAjaxLoader").show();
+
             UC_AJAX.call('VisitorListManager/getvisitordetails',{appid:uc_main.appController.currentAppId,visitorId:visitorId},function(data,status,xhr){
 
                 if(data.status == "failure")
@@ -338,8 +345,14 @@ function UC_VisitorListController()
                             }
                         );
                     }
+
+                    $("#ucVisitorDetailAjaxLoader").hide();
+                    $("#ucVisitorDetailTable").show();
                 }
             });
+
+
+            $("#ucVisitorMessageAjaxLoader").show();
 
             UC_AJAX.call('VisitorListManager/getvisitormessages',{appid:uc_main.appController.currentAppId,visitorId:visitorId},function(data,status,xhr){
 
@@ -365,6 +378,9 @@ function UC_VisitorListController()
                             }
                         );
                     }
+
+                    $("#ucVisitorMessageAjaxLoader").hide();
+                    $("#ucVisitorMessages").show();
                 }
             });
         }
