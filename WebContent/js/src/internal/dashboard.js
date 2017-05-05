@@ -24,6 +24,8 @@ function UC_DashboardController()
 
         if(uc_main.appController.currentAppId)
         {
+            $('#ucDashboardMetricsContainer').hide();
+            $('#ucDashboardMetricsAjaxLoader').show();
 
             UC_AJAX.call('DashboardManager/metrics',{appid:uc_main.appController.currentAppId},function(data,status,xhr){
 
@@ -36,6 +38,9 @@ function UC_DashboardController()
                     thisClass.metrics = data.metrics;
                     thisClass.listMetrics();
                 }
+
+                $('#ucDashboardMetricsContainer').show();
+                $('#ucDashboardMetricsAjaxLoader').hide();
             });
         }
 	};
@@ -72,6 +77,9 @@ function UC_DashboardController()
         {
 
             var noOfDays = 30;
+
+            $('#ucNewUsersGraph').hide();
+            $('#ucDashboardNewUsersAjaxLoader').show();
 
             UC_AJAX.call('DashboardManager/newusers',{appid:uc_main.appController.currentAppId,days:noOfDays},function(data,status,xhr){
 
@@ -147,6 +155,9 @@ function UC_DashboardController()
                         data: data
                     });
                 }
+
+                $('#ucNewUsersGraph').show();
+                $('#ucDashboardNewUsersAjaxLoader').hide();
             });
         }
 

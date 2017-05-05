@@ -4,117 +4,129 @@
             <div class="col-md-12">
 
                 <div class="row">
-
-                    <div class="col-md-4">
-                        <div class="uc_tile uc_tile_primary">
+                    <div class="col-md-12">
+                        <div id="ucDashboardMetricsContainer" style="display: none;">
                             <div class="row">
-                                <div class="col-md-8">
-                                    <div class="uc_tile_heading">
-                                        Current Users
-                                    </div>
-                                </div>
+
                                 <div class="col-md-4">
-                                    <div class="uc_tile_value" rv-text="currentUsers">
-                                        0
+                                    <div class="uc_tile uc_tile_primary">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="uc_tile_heading">
+                                                    Current Users
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="uc_tile_value" rv-text="currentUsers">
+                                                    0
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <div class="uc_tile uc_tile_info">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="uc_tile_heading">
+                                                    Total Users
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="uc_tile_value" rv-text="totalUsers">
+                                                    0
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="uc_tile uc_tile_warning">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="uc_tile_heading">
+                                                    Slipping Away
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="uc_tile_value" rv-text="slippingAway">
+                                                    0
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row uc_mt_small">
+
+                                <div class="col-md-4">
+                                    <div class="uc_tile uc_tile_success">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="uc_tile_heading">
+                                                    Top Browser
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="uc_tile_value">
+                                                    <i rv-faiconclass="topBrowser"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="uc_tile">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="uc_tile_heading">
+                                                    New Users
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="uc_tile_value" rv-text="newUsers">
+                                                    0
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="uc_tile uc_tile_danger">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="uc_tile_heading">
+                                                    Open Issues
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="uc_tile_value" rv-text="openIssues">
+                                                    0
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-4">
-                        <div class="uc_tile uc_tile_info">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="uc_tile_heading">
-                                        Total Users
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="uc_tile_value" rv-text="totalUsers">
-                                        0
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <div id="ucDashboardMetricsAjaxLoader" class='ucAjaxLoader'><div></div></div>
 
-                    <div class="col-md-4">
-                        <div class="uc_tile uc_tile_warning">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="uc_tile_heading">
-                                        Slipping Away
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="uc_tile_value" rv-text="slippingAway">
-                                        0
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
-                <div class="row uc_mt_small">
 
-                    <div class="col-md-4">
-                        <div class="uc_tile uc_tile_success">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="uc_tile_heading">
-                                        Top Browser
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="uc_tile_value">
-                                        <i rv-faiconclass="topBrowser"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4">
-                        <div class="uc_tile">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="uc_tile_heading">
-                                        New Users
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="uc_tile_value" rv-text="newUsers">
-                                        0
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="uc_tile uc_tile_danger">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="uc_tile_heading">
-                                        Open Issues
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="uc_tile_value" rv-text="openIssues">
-                                        0
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
 
                 <br/><br/>
 
-                <canvas id="ucNewUsersGraph" width="400" height="200"></canvas>
-
+                <canvas id="ucNewUsersGraph" width="400" height="200" style="display: none;"></canvas>
+                <div id="ucDashboardNewUsersAjaxLoader" class='ucAjaxLoader'><div></div></div>
   			</div>
   		</div>

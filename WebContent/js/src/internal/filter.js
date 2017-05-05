@@ -65,6 +65,7 @@ function UC_FilterController()
      */
     this.listPredefinedFilters = function()
     {
+        $('#ucPredefinedFilterAjaxLoader').show();
         UC_AJAX.call('FilterManager/listpredefined',{user:UC_UserSession.user},function(data,status,xhr){
 
             if(data.status == "failure")
@@ -76,6 +77,7 @@ function UC_FilterController()
                 thisClass.predefinedFiltersList = data.status;
                 thisClass.rivetPredefinedFiltersListObj.models.list = thisClass.predefinedFiltersList;
             }
+            $('#ucPredefinedFilterAjaxLoader').hide();
         });
     };
 
@@ -84,6 +86,9 @@ function UC_FilterController()
      */
     this.listUserdefinedFilters = function()
     {
+        thisClass.rivetUserdefinedFiltersListObj.models.list = [];
+        $('#ucUserdefinedFilterAjaxLoader').show();
+
         UC_AJAX.call('FilterManager/listuserdefined',{user:UC_UserSession.user,appid:uc_main.appController.currentAppId},function(data,status,xhr){
 
             if(data.status == "failure")
@@ -134,6 +139,7 @@ function UC_FilterController()
                     $("#ucPredefinedFilterList li[data-filterid="+uc_main.visitorListController.currentFilterId+"],#ucUserdefinedFilterList li[data-filterid="+uc_main.visitorListController.currentFilterId+"]").addClass("ucCurrentPage");
                 }
             }
+            $('#ucUserdefinedFilterAjaxLoader').hide();
         });
     };
 
@@ -190,6 +196,8 @@ function UC_FilterController()
 
         $("#ucEditFilterModal").modal();
         
+        $('#ucUpdateFilterAjaxLoader').hide();
+
         $('.rule-container .rule-actions .btn-danger').text('');
 		$('.rule-container .rule-actions .btn-danger').addClass('ucListingFilterDeleteIcon');
 		
@@ -305,6 +313,7 @@ function UC_FilterController()
             filterObj.mongoFilter = mongoFilter;
         }
 
+        $('#ucUpdateFilterAjaxLoader').show();
         UC_AJAX.call('FilterManager/updateFilter',{filter:filterObj},function(data,status,xhr)
         {
              if(data)
@@ -327,6 +336,7 @@ function UC_FilterController()
                  }
              }
 
+            $('#ucUpdateFilterAjaxLoader').hide();
         });
     };
 

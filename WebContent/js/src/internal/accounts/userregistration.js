@@ -35,6 +35,8 @@ function UC_UserRegistrationController()
 	  $("#UC_Setup_Database").show();
 	  $(".ucSetupProgressSteps li").removeClass("active");
 	  $(".uc_database_details").addClass("active");
+
+      $('#ucSetupDatabaseAjaxLoader').hide();
   }
   /*
   *  @desc Handles click event of login button
@@ -112,6 +114,11 @@ function UC_UserRegistrationController()
   this.sendLoginRequest = function(newUser,isRedirect)
   {
 
+      if(!isRedirect)
+      {
+          $('#ucSetupUserAjaxLoader').show();
+      }
+
 	  UC_AJAX.call('UserManager/registerUser',{user:newUser},function(data,status,xhr)
 	  {
 		 if(data)
@@ -139,6 +146,9 @@ function UC_UserRegistrationController()
                      $(".ucSetupProgressSteps li").removeClass("active");
                	  	 $(".uc_user_settings").addClass("active");
                      $("#UC_Setup_Progress_Step").text("4");
+
+                     $('#ucSetupUserAjaxLoader').hide();
+                     $('#ucSetupAppAjaxLoader').hide();
 
                  }
 			 }
@@ -169,6 +179,8 @@ function UC_UserRegistrationController()
     	return;
     }
 
+    $('#ucSetupDatabaseAjaxLoader').show();
+
     UC_AJAX.call('UserManager/verifydbconnection',{dbhost:dbhost,dbport:dbport,dbuser:dbuser,dbpass:dbpass,dbname:dbname},function(data,status,xhr)
 	  {
 		 if(data)
@@ -191,6 +203,8 @@ function UC_UserRegistrationController()
                  $(".ucSetupProgressSteps li").removeClass("active");
                  $(".uc_smtp_details").addClass("active");
 
+                 $('#ucSetupEmailAjaxLoader').hide();
+
 			 }
 			 else if(data.status == "failure")
 			 {
@@ -200,6 +214,8 @@ function UC_UserRegistrationController()
 			 {
 				 alert("An Error accured while saving data. Try again!");
 			 }
+
+             $('#ucSetupDatabaseAjaxLoader').hide();
 		 }
 
 	  });
@@ -222,6 +238,7 @@ function UC_UserRegistrationController()
         thisClass.config.smtp.user = smtpuser;
         thisClass.config.smtp.pass = smtppass;
 
+        $('#ucSetupEmailAjaxLoader').show();
         thisClass.saveConfig(false);
 
          $(".UC_SetupContainerCls").hide();
@@ -292,6 +309,8 @@ function UC_UserRegistrationController()
     newApp.creator = user.username;
     newApp._id = UC_Utils.guidGenerator();
     newApp.clientId = user.company;
+
+    $('#ucSetupAppAjaxLoader').show();
 
     UC_AJAX.call('AppManager/createNewApp',{newApp:newApp,user:user},function(data,status,xhr){
 
@@ -437,6 +456,9 @@ function UC_UserRegistrationController()
                  },2000);
              }
 		 }
+
+          $('#ucSetupEmailAjaxLoader').hide();
+          $('#ucSetupUserAjaxLoader').hide();
 
 	  });
 

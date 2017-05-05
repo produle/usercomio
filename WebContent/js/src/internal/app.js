@@ -15,6 +15,8 @@ function UC_AppController()
 
     this.rivetAppNameObj = null;
 
+    this.rivetAppListObj = null;
+
     this.renderVisitors = false;
 	
 	this.constructor = function()
@@ -52,7 +54,8 @@ function UC_AppController()
 	this.bindUIEvents = function()
 	{
 		$(document).on('click','#uc_create_newapp_modalopen_btn',function(){
-			$('#uc_newapp_creation_modal').modal('show')
+			$('#uc_newapp_creation_modal').modal('show');
+			$('#ucNewAppAjaxLoader').hide();
 		});
 		
 		$('#uc_create_newapp_submitbtn').on('click',function(){
@@ -110,6 +113,8 @@ function UC_AppController()
 			newApp._id = UC_Utils.guidGenerator();
 			newApp.clientId = user.company;
 			
+            $('#ucNewAppAjaxLoader').show();
+
 			UC_AJAX.call('AppManager/createNewApp',{newApp:newApp,user:user},function(data,status,xhr){
 				
 				if(data.status == "appexists")
@@ -123,11 +128,13 @@ function UC_AppController()
 				 else 
 				 {
 					 thisClass.apps.push(data.status);
-					 thisClass.listApps([data.status]);
+					 thisClass.listApps(thisClass.apps);
 					 $('#uc_newapp_creation_modal').modal('hide');
 
                      thisClass.switchApp(thisClass.apps[0]);
 				 }
+
+                $('#ucNewAppAjaxLoader').hide();
 				
 			});
 			
@@ -145,11 +152,18 @@ function UC_AppController()
 	{
         var list = {appList:apps};
 
-        rivets.bind(
-            document.querySelector('#uc_app_list'), {
-                list: list
-            }
-        );
+        if(thisClass.rivetAppListObj == null)
+        {
+            thisClass.rivetAppListObj = rivets.bind(
+                document.querySelector('#uc_app_list'), {
+                    list: list
+                }
+            );
+        }
+        else
+        {
+            thisClass.rivetAppListObj.models.list = list;
+        }
 
         thisClass.bindAppDetailModificationOperationEvents();
 		
@@ -165,6 +179,7 @@ function UC_AppController()
 			$('#ucapp_update_modal').modal('show');
 			var appid = $(this).attr('data-appid');
 			thisClass.fillAppInformationInUpdateModal(appid);
+            $('#ucUpdateAppAjaxLoader').hide();
 		});
 		
 		$('.ucapp_deletebtncls').on('click',function(e){
@@ -182,13 +197,15 @@ function UC_AppController()
 		var appid = $('#ucapp_update_appid').val();
 		var editedAppName = $('#ucapp_update_nameinput').val();
 		
-		var appIndex = UC_Utils.searchObjArray(thisClass.apps,'id',appid);
+		var appIndex = UC_Utils.searchObjArray(thisClass.apps,'_id',appid);
 		
 		if(appIndex != -1)
 		{
 			var app = thisClass.apps[appIndex];
 			app.name = editedAppName;
 			
+            $('#ucUpdateAppAjaxLoader').show();
+
 			UC_AJAX.call('AppManager/updateAnAppDetails',{app:app},function(data,status,xhr){
 				
 				if(data.status == "appexists")
@@ -209,6 +226,8 @@ function UC_AppController()
 
 					 $('#ucapp_update_modal').modal('hide');
 				 }
+
+                $('#ucUpdateAppAjaxLoader').hide();
 			});
 		}
 		

@@ -42,6 +42,8 @@ function UC_EmailMessagingController()
     {
         $("#ucSendMessageModal").modal();
 
+        $('#ucSendMessageAjaxLoader').hide();
+
         UC_AJAX.call('EmailManager/getemailtemplates',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user},function(data,status,xhr){
 
             if(data.status == "failure")
@@ -114,6 +116,8 @@ function UC_EmailMessagingController()
 
         //call the email trigger server function
 
+        $('#ucSendMessageAjaxLoader').show();
+
         UC_AJAX.call('EmailManager/sendmessage',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,filterId:filterId,exclusionList:exclusionList,inclusionList:inclusionList,subject:subject,message:message,template:template,blockDuplicate:blockDuplicate},function(data,status,xhr){
 
                 if(data.status == "failure")
@@ -124,6 +128,8 @@ function UC_EmailMessagingController()
                 {
                     $("#ucSendMessageModal").modal("hide");
                 }
+
+                $('#ucSendMessageAjaxLoader').hide();
             });
     };
 

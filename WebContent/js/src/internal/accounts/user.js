@@ -39,6 +39,8 @@ function UC_UserController()
 
         $("#ucEditProfileModal").modal();
 
+        $("#ucEditProfileAjaxLoader").hide();
+
         e.preventDefault();
     };
 
@@ -66,6 +68,7 @@ function UC_UserController()
 
         UC_UserSession.user = user;
 
+        $("#ucEditProfileAjaxLoader").show();
         UC_AJAX.call('UserManager/saveUserProfile',{user:user},function(data,status,xhr)
         {
             if(data)
@@ -82,6 +85,8 @@ function UC_UserController()
                     $("#ucEditProfileModal").modal("hide");
                 }
             }
+
+            $("#ucEditProfileAjaxLoader").hide();
 
         });
 
@@ -123,6 +128,9 @@ function UC_UserController()
     this.editPasswordHandler = function(e)
     {
         $("#ucEditPasswordModal").modal();
+
+        $("#ucEditPasswordAjaxLoader").hide();
+
         e.preventDefault();
     };
 
@@ -149,6 +157,8 @@ function UC_UserController()
 
         UC_UserSession.user = user;
 
+        $("#ucEditPasswordAjaxLoader").show();
+
         UC_AJAX.call('UserManager/saveUserPassword',{user:user},function(data,status,xhr)
         {
             if(data)
@@ -165,6 +175,8 @@ function UC_UserController()
 
                     $("#ucEditPasswordModal").modal("hide");
                 }
+
+                $("#ucEditPasswordAjaxLoader").hide();
             }
 
         });
@@ -242,6 +254,8 @@ function UC_UserController()
 
         $("#ucEditMailModal").modal();
 
+        $("#ucEditEmailAjaxLoader").hide();
+
         e.preventDefault();
     };
 
@@ -317,6 +331,8 @@ function UC_UserController()
             thisClass.config.amazon.from = amazonfrom;
         }
 
+        $("#ucEditEmailAjaxLoader").show();
+
         UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
         {
             if(data)
@@ -330,6 +346,8 @@ function UC_UserController()
                     alert("Email settings changed successfully");
                     $("#ucEditMailModal").modal("hide");
                 }
+
+                $("#ucEditEmailAjaxLoader").hide();
             }
 
         });
@@ -448,6 +466,8 @@ function UC_UserController()
 
         $("#ucEditDatabaseModal").modal();
 
+        $("#ucEditDatabaseAjaxLoader").hide();
+
         e.preventDefault();
     };
 
@@ -475,6 +495,8 @@ function UC_UserController()
         thisClass.config.database.user = databaseuser;
         thisClass.config.database.pass = databasepass;
 
+        $("#ucEditDatabaseAjaxLoader").show();
+
         UC_AJAX.call('UserManager/verifydbconnection',{dbhost:databasehost,dbport:databaseport,dbuser:databaseuser,dbpass:databasepass,dbname:thisClass.config.database.name},function(data,status,xhr)
               {
                  if(data)
@@ -496,6 +518,8 @@ function UC_UserController()
 
                                     $("#ucEditDatabaseModal").modal("hide");
                                 }
+
+                                $("#ucEditDatabaseAjaxLoader").hide();
                             }
 
                         });
@@ -504,10 +528,12 @@ function UC_UserController()
                      else if(data.status == "failure")
                      {
                          alert("Database connection cannot be established with the provided details");
+                         $("#ucEditDatabaseAjaxLoader").hide();
                      }
                      else
                      {
                          alert("An Error accured while saving data. Try again!");
+                         $("#ucEditDatabaseAjaxLoader").hide();
                      }
                  }
 
@@ -554,6 +580,8 @@ function UC_UserController()
 
         $("#ucEditSystemModal").modal();
 
+        $("#ucEditSystemAjaxLoader").hide();
+
         e.preventDefault();
     };
 
@@ -575,6 +603,8 @@ function UC_UserController()
 
         thisClass.config.baseURL = baseurl;
 
+        $("#ucEditSystemAjaxLoader").show();
+
         UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
         {
             if(data)
@@ -588,6 +618,8 @@ function UC_UserController()
                     alert("System settings changed successfully");
                     $("#ucEditSystemModal").modal("hide");
                 }
+
+                $("#ucEditSystemAjaxLoader").hide();
             }
 
         });
