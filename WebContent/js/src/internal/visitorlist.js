@@ -31,7 +31,7 @@ function UC_VisitorListController()
 
     this.currentFilterTotalVisitors = 0;
 
-	this.constructor = function()
+    this.constructor = function()
 	{
         if(uc_main.appController.renderVisitors)
         {
@@ -109,6 +109,21 @@ function UC_VisitorListController()
         rivets.binders.sessioncount = function (el, value) {
 
             $(el).html(value.length);
+        };
+
+        rivets.binders.profilepicture = function (el, value) {
+            if(value.profilepicture != null && value.profilepicture != "")
+            {
+                $(el).find(".ucUserProfileImage").attr("src",value.profilepicture).show();
+                $(el).find(".ucUserProfileIntial").hide();
+            }
+            else
+            {
+                var sColor = UC_Utils.getProfileColor(value.name);
+
+                $(el).find(".ucUserProfileIntial").css({"background-color": sColor}).text(value.name[0]).show();
+                $(el).find(".ucUserProfileImage").hide();
+            }
         };
 	};
 
