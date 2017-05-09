@@ -182,7 +182,7 @@ function UC_AppController()
             $('#ucUpdateAppAjaxLoader').hide();
 		});
 		
-		$('.ucapp_deletebtncls').on('click',function(e){
+		$('#ucDeleteAppBtn').on('click',function(e){
 			e.stopImmediatePropagation();
 			var appid = $(this).attr('data-appid');
 			thisClass.deleteAnApp(appid);
@@ -240,11 +240,13 @@ function UC_AppController()
 	this.deleteAnApp = function(appid)
 	{
 		
-			var appIndex = UC_Utils.searchObjArray(thisClass.apps,'id',appid);
+        if(thisClass.apps.length > 1)
+        {
+			var appIndex = UC_Utils.searchObjArray(thisClass.apps,'_id',appid);
 			
 			var app = thisClass.apps[appIndex];
 			
-			var ans = confirm("Do you want to delete "+app.name+" ?")
+			var ans = confirm("Do you want to delete "+app.name+" and all its contents?")
 			
 			if(ans)
 			{
@@ -258,16 +260,28 @@ function UC_AppController()
 						 {
 							 alert("An Error accured while deleting the app entry !");
 						 }
+						 else if(data.status == "defaultapp")
+						 {
+							 alert("There should be a minimum of one app.");
+						 }
 						 else 
 						 {
+                             $('#ucapp_update_modal').modal('hide');
+
 							 thisClass.apps.splice(appIndex, 1);
-							 thisClass.deleteAnAppEntryFromListing(app._id);
+
+                             thisClass.listApps(thisClass.apps);
+                             thisClass.switchApp(thisClass.apps[0]);
 						 }
 					});
 				}
 			}
 		
-		
+        }
+        else
+        {
+            alert("There should be a minimum of one app.");
+        }
 		
 	}
 	
@@ -312,6 +326,7 @@ function UC_AppController()
 				$('#ucapp_update_nameinput').val(app.name);
 				$('#ucapp_update_appid').val(app._id);
 				$('#ucapp_update_appid_display').text(app._id);
+				$('#ucDeleteAppBtn').attr("data-appid",app._id);
 			}
 		}
 	}

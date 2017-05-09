@@ -26,6 +26,7 @@ class EmailManager {
 
         this.router.post("/sendmessage",(req, res) => { this.sendMessage(req,res); });
         this.router.post("/getemailtemplates",(req, res) => { this.getAllEmailTemplates(req,res); });
+        this.router.post("/deletetemplate",(req, res) => { this.deleteTemplate(req,res); });
     }
 
   	/*
@@ -63,6 +64,7 @@ class EmailManager {
         else
         {
             EmailManagerObj.getTemplateById(appId,template,function(templateObj){
+                EmailManagerObj.updateTemplate(appId,user,subject,message,templateObj);
                 EmailManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate);
             });
         }
@@ -400,6 +402,51 @@ class EmailManager {
                     }
                 }
             );
+    }
+
+    /*
+     * @desc Updates the email template in the DB
+     */
+    updateTemplate(appId,user,subject,message,templateObj)
+    {
+        var emailTemplatesCollection = global.db.collection('emailtemplates');
+
+        emailTemplatesCollection.update(
+            { _id:  templateObj._id},
+            { $set :
+                {
+                    subject: subject,
+                    message: message
+                }
+            },
+            { upsert: true }
+        )
+
+        return true;
+    }
+
+    /*
+     * @desc Deletes the email template in the DB
+     */
+    deleteTemplate(req,res)
+    {
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
+        var appId = req.body.appid;
+        var user = req.body.user;
+        var templateId = req.body.templateId;
+
+        global.db.collection('emailtemplates').remove({_id:templateId,appId:appId},function(err,numberOfRemovedDocs)
+        {
+            if(err)
+            {
+                return res.send({status:'failure'});
+            }
+            return res.send({status:'success'});
+        });
     }
 }
 
