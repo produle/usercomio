@@ -372,13 +372,12 @@ function UC_AppController()
             uc_main.visitorListController.currentSortOrder = UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].currentSortOrder;
         }
 
-        if(thisClass.renderVisitors)
-        {
-            uc_main.visitorListController.resetPagination();
-            uc_main.visitorListController.getAllVisitors();
-            uc_main.dashboardController.getDashboardMetrics();
-            uc_main.dashboardController.drawNewUsersGraph();
-            uc_main.filterController.listUserdefinedFilters();
-        }
+
+        uc_main.visitorListController.resetPagination();
+        uc_main.visitorListController.getAllVisitors();
+        uc_main.dashboardController.getDashboardMetrics();
+        uc_main.dashboardController.drawNewUsersGraph();
+        uc_main.filterController.listUserdefinedFilters();
+
     };
 }
