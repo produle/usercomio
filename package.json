@@ -30,6 +30,16 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "grunt-contrib-cssmin": "^2.1.0",
+    "grunt-contrib-uglify": "^2.3.0",
     "nodemon": "^1.11.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckavinkumar/usercomio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ckavinkumar/usercomio/issues"
+  },
+  "homepage": "https://github.com/ckavinkumar/usercomio#readme"
 }

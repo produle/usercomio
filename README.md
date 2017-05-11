@@ -50,6 +50,22 @@ npm run dev /* Starts the usercom application at port 3000 */
     </script>
     ```
     
+## Process for Grunt build   
+Navigate to the project root folder and execute the following steps
+
+ npm init	/* command will create a basic package.json file.*/
+ npm install grunt  /* command  will put the grunt in your system path */
+ npm install grunt --save  /* install the latest version of Grunt in your project folder*/
+ npm install grunt-contrib-uglify --save-dev
+ npm install grunt-contrib-cssmin --save-dev
+ grunt /*grunt to execute the default function inside gruntfile.js*/
+ 
+## Auto Build Process using Travis CI
+1.Go to the travis-ci.org website and signup.
+2.Authorize the repository you want to get access.
+3.create travis.yml file and include the necessary code.
+4.
+    
 ## Copyright and license
 
 Copyright © 2008-2017 A Produle Systems Pvt Ltd. www.produle.com. All rights reserved. This project is released under the Apache 2.0 license. UserCom.io and usercomio names belong to 'A Produle Systems Pvt Ltd'
