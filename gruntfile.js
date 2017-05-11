@@ -32,8 +32,7 @@ module.exports = function(grunt) {
       
       build:{
     	  process.exit(0); 
-      } 
-      
+      }  
   });
 
   // calling uglify and cssmin function by default

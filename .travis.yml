@@ -4,6 +4,6 @@ node_js:
   - "stable"
 
 services:
-   - mongodb
+  - mongodb
 
- script:grunt 
+ script:grunt  
