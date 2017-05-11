@@ -456,6 +456,16 @@ h2
 	background: #2b9af3;
 	margin:15px 5px 0px;
 }
+.ucModal .modal-body .ucSendBtn
+{
+	height:45px;
+	padding: 14px 35px;
+	border-radius:5px;
+	border: none;
+	color: #fff;
+	background: #2b9af3;
+	margin:15px 5px 0px;
+}
 .ucModal .modal-body .ucSaveBtn:focus, .ucModal .modal-body .ucSaveBtn:hover, .ucModal .modal-body .ucCancelBtn:focus, .ucModal .modal-body .ucCancelBtn:hover
 {
 	outline: none;
@@ -466,8 +476,13 @@ h2
 	background-color: #f8f8f8;
 	border-radius: 5px;
 	color: #333;
-	padding: 10px;
-	margin-bottom: 25px;
+	padding: 20px;
+	width: 200px;
+    height: 538px;
+    position: relative;
+    float: left;
+    text-align: left;
+    overflow-y: auto;
 }
 .ucNoteSection h4
 {
@@ -485,21 +500,34 @@ h2
 }
 .ucNoteSection ul li
 {
-	display:inline;
+	
 	font-weight: 300;
 	color: #777;
+	padding: 3px 0;
 }
-.ucNoteSection ul li:after
-{
-	content:',';
-}
-.ucNoteSection ul li:last-child:after
-{
-	content:'';
-}
+
 #ucSendMessageModal textarea.form-control
 {
 	margin: 10px 0 20px !important;
+}
+#ucSendMessageModal .modal-body
+{
+	padding:0;
+	overflow: auto;
+}
+.ucSendMessageSection
+{
+	float: right;
+    width: calc(100% - 200px);
+    padding: 20px;
+}
+.ucCheckboxLabel
+{
+	font-size: 12px;
+}
+#ucSendMessageModal .modal-dialog
+{
+	width:800px;
 }
 /*Modal Styles End*/
 
@@ -589,6 +617,15 @@ h2
 	.ucSidebarCloseBtn{display: block;}
 	.ucMainContent.open:after {    content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index:99; }
 	.ucSearchWrapper{width:60%;}
+	#ucSendMessageModal .modal-dialog { width:auto; }
+}
+@media only screen and (max-width:580px) 
+{
+	.ucNoteSection{ width: 100%; height: auto; }
+	.ucNoteSection ul li {display:inline; }
+	.ucNoteSection ul li:after { content:','; padding: 0 3px;}
+	.ucNoteSection ul li:last-child:after { content:''; }
+	.ucSendMessageSection{ width:100%;}
 }
 @media only screen and (max-width:480px) 
 {
@@ -610,6 +647,10 @@ h2
     cursor: pointer;
 }
 
+.ucTabBtnGroup
+{
+	margin-bottom: 20px;
+}
 
 /**
  * CSS Loader animation - Start
