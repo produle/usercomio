@@ -327,6 +327,20 @@ function UC_AppController()
 				$('#ucapp_update_appid').val(app._id);
 				$('#ucapp_update_appid_display').text(app._id);
 				$('#ucDeleteAppBtn').attr("data-appid",app._id);
+
+                var trackingSnippet = '<script type="text/javascript" src="'+uc_main.userController.config.baseURL+'/js/src/internal/tracking/track.js"></script>\n'+
+                    '<script>\n'+
+                    '\tUsercom.init("'+app._id+'",{ /* appID generated from the usercom application */\n'+
+                        '\t\tname: "John Smith",   /* Fullname of the visitor */\n'+
+                        '\t\temail: "jsmith@usercom.io",   /* Email Address of the visitor */\n'+
+                        '\t\tcreated_at: new Date().getTime(), /* Current timestamp */\n'+
+                        '\t\tpaid: true, /* Boolean */\n'+
+                        '\t\tbirthdate: "1990-01-01", /* Date in format YYYY-MM-DD */\n'+
+                        '\t\tgender: "male", /* possible values ("male","female","other") */\n'+
+                        '\t\tprofilepicture: "", /* a valid profile picture url */\n'+
+                    '\t});\n'+
+                    '</script>\n';
+				$('#ucapp_update_trackingcode').text(trackingSnippet);
 			}
 		}
 	}
