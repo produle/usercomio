@@ -6,4 +6,4 @@ node_js:
 script: grunt 
 
 after_success:
-  - push.sh
+  - sh push.sh
