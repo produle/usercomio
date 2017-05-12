@@ -11,6 +11,8 @@ function UC_UserController()
 
     this.config = {};
 
+    this.emailSetting = {};
+
 	this.constructor = function()
 	{
         $(document).on("click",".ucEditProfile",thisClass.editProfileHandler);
@@ -216,45 +218,65 @@ function UC_UserController()
      */
     this.editMailHandler = function(e)
     {
-        if(thisClass.config.emailType)
-        {
-            thisClass.currentEmailType = thisClass.config.emailType;
-        }
-        else
-        {
-            thisClass.currentEmailType = "SMTP";
-        }
+        var user = UC_UserSession.user;
 
-        $(".ucEditEmailContainer").hide();
-        $("#ucEditEmail"+thisClass.currentEmailType+"Container").show();
-
-        $("#ucEditEmailTypeTabGroup button").removeClass("active");
-        $("#ucEditEmailTypeTabGroup button[data-tabgroup-tabid=ucEditEmail"+thisClass.currentEmailType+"Container]").addClass("active");
-
-        if(thisClass.config.smtp)
+        UC_AJAX.call('EmailManager/getemailsetting',{company:user.company},function(data,status,xhr)
         {
-            $('#uceditsmtp_host').val(thisClass.config.smtp.host);
-            $('#uceditsmtp_port').val(thisClass.config.smtp.port);
-            $('#uceditsmtp_user').val(thisClass.config.smtp.user);
-            $('#uceditsmtp_pass').val(thisClass.config.smtp.pass);
-        }
-        if(thisClass.config.mailgun)
-        {
-            $('#uceditmailgun_key').val(thisClass.config.mailgun.key);
-            $('#uceditmailgun_domain').val(thisClass.config.mailgun.domain);
-            $('#uceditmailgun_from').val(thisClass.config.mailgun.from);
-        }
-        if(thisClass.config.amazon)
-        {
-            $('#uceditamazon_key').val(thisClass.config.amazon.key);
-            $('#uceditamazon_secret').val(thisClass.config.amazon.secret);
-            $('#uceditamazon_region').val(thisClass.config.amazon.region);
-            $('#uceditamazon_from').val(thisClass.config.amazon.from);
-        }
+            if(data)
+            {
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while retrieving email settings!");
+                }
+                else
+                {
+                    thisClass.emailSetting = data.emailsetting;
 
-        $("#ucEditMailModal").modal();
+                    if(thisClass.emailSetting.emailType)
+                    {
+                        thisClass.currentEmailType = thisClass.emailSetting.emailType;
+                    }
+                    else
+                    {
+                        thisClass.currentEmailType = "SMTP";
+                    }
 
-        $("#ucEditEmailAjaxLoader").hide();
+                    $(".ucEditEmailContainer").hide();
+                    $("#ucEditEmail"+thisClass.currentEmailType+"Container").show();
+
+                    $("#ucEditEmailTypeTabGroup button").removeClass("active");
+                    $("#ucEditEmailTypeTabGroup button[data-tabgroup-tabid=ucEditEmail"+thisClass.currentEmailType+"Container]").addClass("active");
+
+                    if(thisClass.emailSetting.smtp)
+                    {
+                        $('#uceditsmtp_host').val(thisClass.emailSetting.smtp.host);
+                        $('#uceditsmtp_port').val(thisClass.emailSetting.smtp.port);
+                        $('#uceditsmtp_user').val(thisClass.emailSetting.smtp.user);
+                        $('#uceditsmtp_pass').val(thisClass.emailSetting.smtp.pass);
+                    }
+                    if(thisClass.emailSetting.mailgun)
+                    {
+                        $('#uceditmailgun_key').val(thisClass.emailSetting.mailgun.key);
+                        $('#uceditmailgun_domain').val(thisClass.emailSetting.mailgun.domain);
+                        $('#uceditmailgun_from').val(thisClass.emailSetting.mailgun.from);
+                    }
+                    if(thisClass.emailSetting.amazon)
+                    {
+                        $('#uceditamazon_key').val(thisClass.emailSetting.amazon.key);
+                        $('#uceditamazon_secret').val(thisClass.emailSetting.amazon.secret);
+                        $('#uceditamazon_region').val(thisClass.emailSetting.amazon.region);
+                        $('#uceditamazon_from').val(thisClass.emailSetting.amazon.from);
+                    }
+
+                    $("#ucEditMailModal").modal();
+
+                    $("#ucEditEmailAjaxLoader").hide();
+                }
+            }
+
+        });
+
+
 
         e.preventDefault();
     };
@@ -280,11 +302,11 @@ function UC_UserController()
                 return;
             }
 
-            thisClass.config.emailType = "SMTP";
-            thisClass.config.smtp.host = smtphost;
-            thisClass.config.smtp.port = smtpport;
-            thisClass.config.smtp.user = smtpuser;
-            thisClass.config.smtp.pass = smtppass;
+            thisClass.emailSetting.emailType = "SMTP";
+            thisClass.emailSetting.smtp.host = smtphost;
+            thisClass.emailSetting.smtp.port = smtpport;
+            thisClass.emailSetting.smtp.user = smtpuser;
+            thisClass.emailSetting.smtp.pass = smtppass;
         }
         else if(thisClass.currentEmailType == "Mailgun")
         {
@@ -301,11 +323,11 @@ function UC_UserController()
                 return;
             }
 
-            thisClass.config.emailType = "Mailgun";
-            thisClass.config.mailgun = {};
-            thisClass.config.mailgun.key = mailgunkey;
-            thisClass.config.mailgun.domain = mailgundomain;
-            thisClass.config.mailgun.from = mailgunfrom;
+            thisClass.emailSetting.emailType = "Mailgun";
+            thisClass.emailSetting.mailgun = {};
+            thisClass.emailSetting.mailgun.key = mailgunkey;
+            thisClass.emailSetting.mailgun.domain = mailgundomain;
+            thisClass.emailSetting.mailgun.from = mailgunfrom;
         }
         else if(thisClass.currentEmailType == "Amazon")
         {
@@ -323,23 +345,25 @@ function UC_UserController()
                 return;
             }
 
-            thisClass.config.emailType = "Amazon";
-            thisClass.config.amazon = {};
-            thisClass.config.amazon.key = amazonkey;
-            thisClass.config.amazon.secret = amazonsecret;
-            thisClass.config.amazon.region = amazonregion;
-            thisClass.config.amazon.from = amazonfrom;
+            thisClass.emailSetting.emailType = "Amazon";
+            thisClass.emailSetting.amazon = {};
+            thisClass.emailSetting.amazon.key = amazonkey;
+            thisClass.emailSetting.amazon.secret = amazonsecret;
+            thisClass.emailSetting.amazon.region = amazonregion;
+            thisClass.emailSetting.amazon.from = amazonfrom;
         }
 
         $("#ucEditEmailAjaxLoader").show();
 
-        UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
+        var user = UC_UserSession.user;
+
+        UC_AJAX.call('EmailManager/saveemailsetting',{use:user,emailSetting:thisClass.emailSetting},function(data,status,xhr)
         {
             if(data)
             {
                 if(data.status == "failure")
                 {
-                    alert("An Error accured while saving config file!");
+                    alert("An Error accured while saving email settings!");
                 }
                 else
                 {

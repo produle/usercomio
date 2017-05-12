@@ -592,6 +592,15 @@ h2
     cursor: pointer;
 }
 
+.ucUserProfileIntial
+{
+    border-radius: 50%;
+    height: 100%;
+    padding: 6px 13px;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+
 @media only screen and (max-width:992px) 
 {
 	.ucSidebar{width:0; position: fixed; padding:0;top:0; left:0; height: 100%; display:none; overflow: auto; }

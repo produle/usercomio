@@ -238,6 +238,8 @@ function UC_FilterController()
 
         $("#ucEditFilterModal").modal();
         
+        $('#ucUpdateFilterAjaxLoader').hide();
+
         $('.rule-container .rule-actions .btn-danger').text('');
 		$('.rule-container .rule-actions .btn-danger').addClass('ucListingFilterDeleteIcon');
 		
