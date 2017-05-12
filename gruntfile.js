@@ -16,7 +16,7 @@ module.exports = function(grunt) {
        jsfiles: {  
           files: {
         	   //convert all js files to single min file with excluding certain files to avoid other pages ready function certain events 
-               'Webcontent/dist/js/internal/internal.min.js': ['WebContent/js/src/internal/**/*.js','!**/passwordreset.js' ]
+               'WebContent/dist/js/internal/internal.min.js': ['WebContent/js/src/internal/**/*.js','!**/passwordreset.js' ]
           } 
        }, 
       }, 
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
      cssmin: { 
           cssfiles: { 
              files: {
-            	 'Webcontent/dist/styles/internal.min.css': ['WebContent/css/internal/**/*..css']
+            	 'WebContent/dist/styles/internal.min.css': ['WebContent/css/internal/**/*..css']
              }  
          },
       }, 
