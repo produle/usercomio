@@ -51,13 +51,7 @@ npm run dev /* Starts the usercom application at port 3000 */
     ```
     
 ## Process for Grunt build   
-Navigate to the project root folder and execute the following steps
-
- npm init	/* command will create a basic package.json file.*/
- npm install grunt  /* command  will put the grunt in your system path */
- npm install grunt --save  /* install the latest version of Grunt in your project folder*/
- npm install grunt-contrib-uglify --save-dev
- npm install grunt-contrib-cssmin --save-dev
+Navigate to the project root folder and execute   
  grunt /*grunt to execute the default function inside gruntfile.js*/
  
 ## Auto Build Process using Travis CI
