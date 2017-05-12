@@ -4,3 +4,6 @@ node_js:
   - "stable"
  
 script: grunt 
+
+after_success:
+  - .push.sh
