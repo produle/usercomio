@@ -16,6 +16,8 @@ var aws = require('aws-sdk/global');
 var sesObj = require('aws-sdk/clients/ses');
 var ses = null;
 
+var emailSetting = null;
+
 class EmailManager {
 
   constructor()
@@ -27,6 +29,18 @@ class EmailManager {
         this.router.post("/sendmessage",(req, res) => { this.sendMessage(req,res); });
         this.router.post("/getemailtemplates",(req, res) => { this.getAllEmailTemplates(req,res); });
         this.router.post("/deletetemplate",(req, res) => { this.deleteTemplate(req,res); });
+        this.router.post("/addemailsetting",(req, res) => { this.addEmailSettings(req,res); });
+        this.router.post("/getemailsetting",(req, res) => {
+            this.getEmailSettingByCompany(req.body.company,function(emailsetting){
+                if(!req.isAuthenticated())
+                {
+                    return res.send({status:'failure'});
+                }
+
+                return res.send({status:"Success",emailsetting:emailsetting});
+            });
+        });
+        this.router.post("/saveemailsetting",(req, res) => { this.updateEmailSetting(req,res); });
     }
 
   	/*
@@ -53,7 +67,7 @@ class EmailManager {
 
         var EmailManagerObj = new EmailManager();
 
-        EmailManagerObj.initMailConfig();
+        EmailManagerObj.initMailConfig(user);
 
         if(template == "new")
         {
@@ -172,47 +186,50 @@ class EmailManager {
     /*
      * @desc Initializes email configuration
      */
-    initMailConfig()
+    initMailConfig(user)
     {
-        var config = require('config');
+        this.getEmailSettingByCompany(user.company,function(emailSettingObj){
 
-        if(config.has("emailType") && config.get("emailType") == "SMTP")
-        {
-            if(typeof app.mailer == "undefined")
+            emailSetting = emailSettingObj;
+            if(emailSetting.emailType && emailSetting.emailType == "SMTP")
             {
-                mailer.extend(app, {
-                    from: config.smtp.user,
-                    host: config.smtp.host,
-                    secureConnection: false, // use SSL
-                    port: config.smtp.port, // port for secure SMTP
-                    transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
-                    auth: {
-                        user: config.smtp.user,
-                        pass: config.smtp.pass
-                    }
-                });
+                if(typeof app.mailer == "undefined")
+                {
+                    mailer.extend(app, {
+                        from: emailSetting.smtp.user,
+                        host: emailSetting.smtp.host,
+                        secureConnection: false, // use SSL
+                        port: emailSetting.smtp.port, // port for secure SMTP
+                        transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
+                        auth: {
+                            user: emailSetting.smtp.user,
+                            pass: emailSetting.smtp.pass
+                        }
+                    });
+                }
             }
-        }
-        
-        if(config.has("emailType") && config.get("emailType") == "Mailgun")
-        {
-            if(mailgun == null)
+
+            if(emailSetting.emailType && emailSetting.emailType == "Mailgun")
             {
-                mailgun = require('mailgun-js')({apiKey: config.mailgun.key, domain: config.mailgun.domain});
+                if(mailgun == null)
+                {
+                    mailgun = require('mailgun-js')({apiKey: emailSetting.mailgun.key, domain: emailSetting.mailgun.domain});
+                }
             }
-        }
-        
-        if(config.has("emailType") && config.get("emailType") == "Amazon")
-        {
-            if(ses == null)
+
+            if(emailSetting.emailType && emailSetting.emailType == "Amazon")
             {
-                ses = new aws.SES({
-                    "accessKeyId": config.amazon.key,
-                    "secretAccessKey": config.amazon.secret,
-                    "region": config.amazon.region
-                });
+                if(ses == null)
+                {
+                    ses = new aws.SES({
+                        "accessKeyId": emailSetting.amazon.key,
+                        "secretAccessKey": emailSetting.amazon.secret,
+                        "region": emailSetting.amazon.region
+                    });
+                }
             }
-        }
+
+        });
     }
 
     /*
@@ -220,9 +237,9 @@ class EmailManager {
      */
     sendMail(toEmail,subject,message)
     {
-        var config = require('config');
+        var emailsetting = emailSetting;
 
-        if(config.has("emailType") && config.get("emailType") == "SMTP")
+        if(emailSetting.emailType && emailSetting.emailType == "SMTP")
         {
             app.mailer.send('email/plain', {
                 to: toEmail,
@@ -237,10 +254,10 @@ class EmailManager {
             });
         }
         
-        if(config.has("emailType") && config.get("emailType") == "Mailgun")
+        if(emailSetting.emailType && emailSetting.emailType == "Mailgun")
         {
             var data = {
-                from: config.mailgun.from,
+                from: emailSetting.mailgun.from,
                 to: toEmail,
                 subject: subject,
                 text: message
@@ -255,11 +272,11 @@ class EmailManager {
             });
         }
         
-        if(config.has("emailType") && config.get("emailType") == "Amazon")
+        if(emailSetting.emailType && emailSetting.emailType == "Amazon")
         {
 
             ses.sendEmail( {
-                Source: config.amazon.from,
+                Source: emailSetting.amazon.from,
                 Destination: {
                     ToAddresses : [toEmail]
                 },
@@ -447,6 +464,85 @@ class EmailManager {
             }
             return res.send({status:'success'});
         });
+    }
+
+    /*
+     * @desc Stores the new emailsettings in the DB
+     */
+    addEmailSettings(req,res)
+    {
+        var user = req.body.user;
+        var emailSettings = req.body.emailSettings;
+
+        var emailSettingsCollection = global.db.collection('emailsettings');
+        var userCollection = global.db.collection('users');
+
+        emailSettings._id = utils.guidGenerator();
+        emailSettings.clientId = user.company;
+
+        userCollection.findOne({ _id: user._id },function(err,userObj)
+          {
+              if (err)
+              {
+                    res.status(500);
+                    return res.send({status:'failure'});
+              }
+
+              emailSettings.clientId = userObj.company;
+
+              emailSettingsCollection.insert(emailSettings);
+
+              return res.send({status:'success'});
+          });
+
+    }
+
+    /*
+     * @desc Returns the emailsetting object by given clientid
+     */
+    getEmailSettingByCompany(clientId,callback)
+    {
+        var emailSettingsCollection = global.db.collection('emailsettings').aggregate([
+                { $match :
+                    { clientId: clientId }
+                }
+            ]).toArray(function(err,emailsetting)
+                {
+                    if(err)
+                    {
+                        callback(null);
+                    }
+                    else
+                    {
+                        callback(emailsetting[0]);
+                    }
+                }
+            );
+    }
+
+    /*
+     * @desc Updates the email settings in the DB
+     */
+    updateEmailSetting(req,res)
+    {
+
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'failure'});
+        }
+
+        var user = req.body.user;
+        var emailSetting = req.body.emailSetting;
+
+        var emailSettingsCollection = global.db.collection('emailsettings');
+
+        emailSettingsCollection.update(
+            { _id:  emailSetting._id},
+            emailSetting,
+            { upsert: false }
+        )
+
+        return res.send({status:'success'});
     }
 }
 
