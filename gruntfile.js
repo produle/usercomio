@@ -28,15 +28,11 @@ module.exports = function(grunt) {
             	 'Webcontent/dist/styles/internal.min.css': ['WebContent/css/internal/**/*..css']
              }  
          },
-      },
-      
-      build:{
-    	  process.exit(0); 
-      }  
+      }, 
   });
 
   // calling uglify and cssmin function by default
-  grunt.registerTask('default', ['uglify','cssmin','build']);
+  grunt.registerTask('default', ['uglify','cssmin']);
   
 };
  
