@@ -410,8 +410,9 @@
         <div class="modal-content">
             
             <div class="modal-body">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="../images/app/listing/filter/ucListingFilterCloseIcon.png" alt=""/></button>
               <div class="ucNoteSection">
-                            <h4>Variables <i class="ico-info mfTooltip" data-placement="top" title="Copy the below variables and paste it in the message body, which will substitute the corresponding user data"></i></h4>
+                            <h4>Variables <i class="ico-info mfTooltip" data-placement="bottom" title="Copy the below variables and paste it in the message body, which will substitute the corresponding user data"></i></h4>
                                 <ul id="ucEmailFieldList">
                                     <li rv-each-field="fieldList">{field}</li>
                                 </ul>
@@ -428,6 +429,7 @@
                                     <option value="new">New Template</option>
                                     <option rv-each-emailtemplate="emailTemplateList" rv-text="emailtemplate.subject" rv-data-templatebody="emailtemplate.message" rv-value="emailtemplate._id"></option>
                                 </select>
+                                <button type="button" class="ucListingFilterDeleteIcon" id="ucDeleteTemplateBtn"></button>
                             </div>
                         </div>
                         <div class="row uc_mt_small">
@@ -441,7 +443,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12 text-left">
                                 <div class="checkbox">
                                     <label class="ucCheckboxLabel">
                                         <input type="checkbox" id="ucSendMessageBlockDuplicate" checked> Exclude users who have already received this mail
@@ -451,8 +453,8 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" id="ucDeleteTemplateBtn" class="btn btn-danger btn-lg" style="margin: 15px 5px 0px;">Delete</button>
-                <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                
+                
                 <button type="button" id="ucSendMessageSubmit" class="btn ucSendBtn">Send</button>
                 <div id="ucSendMessageAjaxLoader" class='ucAjaxLoader'><div></div></div>
             </div>
