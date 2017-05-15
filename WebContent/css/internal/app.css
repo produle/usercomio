@@ -421,9 +421,9 @@ h2
 }
 .ucModal .modal-body .input-group-btn label
 {
-	width: 140px;
+	width: 150px;
 	border:none;
-	border-bottom: 1px solid #e8eced;
+	/*border-bottom: 1px solid #e8eced;*/
     color: #8ea4b1;
     font-weight: 400;
     font-size: 13px;
@@ -434,6 +434,10 @@ h2
 .ucModal .modal-body .input-group
 {
 	margin-bottom:20px;
+}
+.ucModal .modal-body .input-group .form-control
+{
+	padding:0px;
 }
 .ucModal .modal-body .ucCancelBtn
 {
@@ -591,16 +595,33 @@ h2
 {
     cursor: pointer;
 }
-
-.ucUserProfileIntial
+#ucSendMessageModal .close
 {
-    border-radius: 50%;
-    height: 100%;
-    padding: 6px 13px;
-    font-size: 20px;
-    color: #FFFFFF;
+	position: absolute;
+	top:10px; 
+	right:10px;
+}
+.close:hover, .close:focus
+{
+	outline: none;
+}
+#ucSendMessageModal .ucSendBtn
+{
+	float:right;
+}
+.ucExistTemplate
+{
+	width: calc(100% - 25px) !important;
+    display: inline-block !important;
+    float: left !important;
 }
 
+#ucDeleteTemplateBtn
+{	
+	width:16px !important;
+	margin-right:0 !important;
+	float: right;
+}
 @media only screen and (max-width:992px) 
 {
 	.ucSidebar{width:0; position: fixed; padding:0;top:0; left:0; height: 100%; display:none; overflow: auto; }

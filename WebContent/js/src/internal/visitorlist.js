@@ -324,7 +324,7 @@ function UC_VisitorListController()
             });
         }
 
-        $("#ucSendMessageGroupBtn,#ucSendMessageSubmit").text("Send Message to "+recipientCount+" users");
+        $("#ucSendMessageGroupBtn,#ucSendMessageSubmit").text("Send to "+recipientCount+" users");
     };
 
     /*

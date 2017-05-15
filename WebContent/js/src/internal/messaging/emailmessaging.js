@@ -47,6 +47,8 @@ function UC_EmailMessagingController()
         $('#ucSendMessageAjaxLoader').hide();
 
         $("#ucDeleteTemplateBtn").hide();
+        
+        $("#ucSendMessageTemplate").removeClass("ucExistTemplate");
 
         UC_AJAX.call('EmailManager/getemailtemplates',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user},function(data,status,xhr){
 
@@ -161,12 +163,14 @@ function UC_EmailMessagingController()
         {
             $("#ucSendMessageSubject,#ucSendMessageBody").val("");
             $("#ucDeleteTemplateBtn").hide();
+            $("#ucSendMessageTemplate").removeClass("ucExistTemplate");
         }
         else
         {
             $("#ucSendMessageSubject").val($(this).find("option:selected").text());
             $("#ucSendMessageBody").val($(this).find("option:selected").attr("data-templatebody"));
             $("#ucDeleteTemplateBtn").show();
+            $("#ucSendMessageTemplate").addClass("ucExistTemplate");
         }
     }
 
@@ -193,6 +197,7 @@ function UC_EmailMessagingController()
                     else
                     {
                         $("#ucSendMessageModal").modal("hide");
+                        
                     }
 
                     $('#ucSendMessageAjaxLoader').hide();
