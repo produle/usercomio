@@ -673,6 +673,19 @@ h2
 	margin-bottom: 20px;
 }
 
+.ucVisitorFieldList
+{
+    width: 200px;
+    list-style: none;
+    padding: 0px;
+}
+
+.ucVisitorFieldList li span
+{
+    font-weight: normal;
+    cursor: pointer;
+}
+
 /**
  * CSS Loader animation - Start
  */

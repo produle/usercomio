@@ -301,7 +301,7 @@ function UC_FilterController()
             }
             else
             {
-                UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterObj._id] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+                UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterObj._id] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
             }
 
             thisClass.saveAppPreference();
@@ -429,7 +429,7 @@ function UC_FilterController()
 
             if(!oldFilterOrder.hasOwnProperty($(this).attr("data-filterid")))
             {
-                filterIdOrder[$(this).attr("data-filterid")] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+                filterIdOrder[$(this).attr("data-filterid")] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
             }
             else
             {
@@ -492,12 +492,13 @@ function UC_FilterController()
         }
         if(!UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.hasOwnProperty(filterId))
         {
-            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
         }
         UC_UserSession.user.app[uc_main.appController.currentAppId].currentFilter = filterId;
 
         uc_main.visitorListController.currentSortColumn = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId].currentSortColumn;
         uc_main.visitorListController.currentSortOrder = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId].currentSortOrder;
+        uc_main.visitorListController.displayFields = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId].displayFields;
 
         thisClass.saveAppPreference();
 

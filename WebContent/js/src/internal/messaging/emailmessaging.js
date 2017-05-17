@@ -70,7 +70,7 @@ function UC_EmailMessagingController()
 
             if(data.status == "failure")
             {
-                alert("Could not send emails, kindly check the SMTP settings");
+                alert("Error while getting field list");
             }
             else
             {
