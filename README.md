@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/produle/usercomio.svg?branch=master)](https://travis-ci.org/produle/usercomio)
+
 # UserCom
 A Open-Source platform to track, engage and convert users of your application, record events performed by them to improve usability with the help of reported metrics.
 

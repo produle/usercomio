@@ -10,11 +10,8 @@ commit_website_files() {
 }
 
 upload_files() {
-  git remote add origin-pages https://${GH_TOKEN}@github.com/ckavinkumar/usercomio.git > /dev/null 2>&1
-  echo "before push"
-  git branch
-  git push origin-pages master 
-  echo "after push"
+  git remote add origin-pages https://${GH_TOKEN}@github.com/ckavinkumar/usercomio.git > /dev/null 2>&1 
+  git push origin-pages master  
 }
 
 setup_git
