@@ -3,7 +3,8 @@ setup_git() {
   git config --global user.name "ckavinkumar"
 }
 
-commit_website_files() { 
+commit_website_files() {
+  git checkout master 
   git add WebContent/dist/*
   git commit --message "Travis build: $TRAVIS_BUILD_NUMBER"
 }
