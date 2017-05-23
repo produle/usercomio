@@ -242,7 +242,15 @@ box-shadow: 0px 4px 17px -2px rgba(0,0,0,0.59);
 {
 	cursor: pointer;
 }
-
+.ucUserProfileIntial
+{
+    border-radius: 50%;
+    height: 100%;
+    padding: 6px 13px;
+    font-size: 20px;
+    color: #FFFFFF;
+    text-align:center;
+}
 /* Filter Styles Start */
 .ucFilterModal .modal-dialog
 {
@@ -430,6 +438,7 @@ box-shadow: 0px 4px 17px -2px rgba(0,0,0,0.59);
 	background-color: transparent !important;
 	border:transparent;
 	opacity: 0.3;
+	outline: none;
 }
 /* Filter Styles End */
 

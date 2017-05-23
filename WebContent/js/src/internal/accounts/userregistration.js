@@ -142,10 +142,10 @@ function UC_UserRegistrationController()
                      UC_UserSession.user = newUser;
 
                      $(".UC_SetupContainerCls").hide();
-                     $("#UC_Setup_App").show();
+                     $("#UC_Setup_SMTP").show();
                      $(".ucSetupProgressSteps li").removeClass("active");
-               	  	 $(".uc_user_settings").addClass("active");
-                     $("#UC_Setup_Progress_Step").text("4");
+               	  	 $(".uc_smtp_details").addClass("active");
+                     $("#UC_Setup_Progress_Step").text("3");
 
                      $('#ucSetupUserAjaxLoader').hide();
                      $('#ucSetupAppAjaxLoader').hide();
@@ -198,10 +198,10 @@ function UC_UserRegistrationController()
                  thisClass.saveConfig(false);
 
                  $(".UC_SetupContainerCls").hide();
-                 $("#UC_Setup_SMTP").show();
+                 $("#UC_Setup_User").show();
                  $("#UC_Setup_Progress_Step").text("2");
                  $(".ucSetupProgressSteps li").removeClass("active");
-                 $(".uc_smtp_details").addClass("active");
+                 $(".uc_admin_details").addClass("active");
 
                  $('#ucSetupEmailAjaxLoader').hide();
 
@@ -231,21 +231,42 @@ function UC_UserRegistrationController()
 	      smtpuser  = $('#ucsetup_smtpuserinput').val(),
 	      smtppass  = $('#ucsetup_smtppassinput').val();
 
-        thisClass.config.emailType = "SMTP";
-        thisClass.config.smtp= {};
-        thisClass.config.smtp.host = smtphost;
-        thisClass.config.smtp.port = smtpport;
-        thisClass.config.smtp.user = smtpuser;
-        thisClass.config.smtp.pass = smtppass;
+      var emailSettings = {
+          emailType : "SMTP",
+          smtp: {
+            host : smtphost,
+            port : smtpport,
+            user : smtpuser,
+            pass : smtppass
+          }
+      };
 
-        $('#ucSetupEmailAjaxLoader').show();
-        thisClass.saveConfig(false);
+      var user = UC_UserSession.user;
 
-         $(".UC_SetupContainerCls").hide();
-         $("#UC_Setup_User").show();
-         $("#UC_Setup_Progress_Step").text("3");
-         $(".ucSetupProgressSteps li").removeClass("active");
-         $(".uc_admin_details").addClass("active");
+      UC_AJAX.call('EmailManager/addemailsetting',{user:user,emailSettings:emailSettings},function(data,status,xhr)
+	  {
+		 if(data)
+		 {
+			 if(data.status == "failure")
+			 {
+                 alert("Error in adding Email settings");
+
+			 }
+			 else
+			 {
+
+                 $(".UC_SetupContainerCls").hide();
+                 $("#UC_Setup_App").show();
+                 $("#UC_Setup_Progress_Step").text("4");
+                 $(".ucSetupProgressSteps li").removeClass("active");
+                 $(".uc_user_settings").addClass("active");
+
+			 }
+
+             $('#ucSetupEmailAjaxLoader').hide();
+		 }
+
+	  });
   }
 
   /*

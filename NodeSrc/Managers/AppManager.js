@@ -178,22 +178,74 @@ class AppManager {
             return res.send({status:'failure'});
         }
 
-        var appCollection = global.db.collection('apps');
-  		
-  		var appinfo = req.body.app;
-  		
-  		appCollection.remove({_id:appinfo._id},function(err,numberOfRemovedDocs)
-  		{
-			 if(err)
-  	    	{
-  	    		  res.status(500);
-  	    		  return res.send({status:'failure'});
-  	    	}
-    		else
-  			{
-    				return res.send({status:'success'});
-  			}
-  		});
+        var appinfo = req.body.app;
+
+        global.db.collection('apps').count({},function(error, numOfApps) {
+            if(numOfApps > 1)
+            {
+                //Delete messages of the app
+                global.db.collection('messages').remove({appId:appinfo._id},function(err,numberOfRemovedDocs)
+                {
+                     if(err)
+                    {
+                          console.log(err);
+                    }
+                });
+
+                //Delete emailtemplates of the app
+                global.db.collection('emailtemplates').remove({appId:appinfo._id},function(err,numberOfRemovedDocs)
+                {
+                     if(err)
+                    {
+                          console.log(err);
+                    }
+                });
+
+                //Delete filters of the app
+                global.db.collection('filters').remove({appId:appinfo._id},function(err,numberOfRemovedDocs)
+                {
+                     if(err)
+                    {
+                          console.log(err);
+                    }
+                });
+
+                //Delete sessions of the app
+                global.db.collection('sessions').remove({appId:appinfo._id},function(err,numberOfRemovedDocs)
+                {
+                     if(err)
+                    {
+                          console.log(err);
+                    }
+                });
+
+                //Delete visitors of the app
+                global.db.collection('visitors').remove({appId:appinfo._id},function(err,numberOfRemovedDocs)
+                {
+                     if(err)
+                    {
+                          console.log(err);
+                    }
+                });
+
+                //Delete from app of the app
+                global.db.collection('apps').remove({_id:appinfo._id},function(err,numberOfRemovedDocs)
+                {
+                     if(err)
+                    {
+                          console.log(err);
+                    }
+                });
+
+                return res.send({status:'success'});
+            }
+            else
+            {
+                return res.send({status:'defaultapp'});
+            }
+        });
+
+
 
   	}
 }

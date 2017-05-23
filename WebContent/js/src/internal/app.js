@@ -182,7 +182,7 @@ function UC_AppController()
             $('#ucUpdateAppAjaxLoader').hide();
 		});
 		
-		$('.ucapp_deletebtncls').on('click',function(e){
+		$('#ucDeleteAppBtn').on('click',function(e){
 			e.stopImmediatePropagation();
 			var appid = $(this).attr('data-appid');
 			thisClass.deleteAnApp(appid);
@@ -240,11 +240,13 @@ function UC_AppController()
 	this.deleteAnApp = function(appid)
 	{
 		
-			var appIndex = UC_Utils.searchObjArray(thisClass.apps,'id',appid);
+        if(thisClass.apps.length > 1)
+        {
+			var appIndex = UC_Utils.searchObjArray(thisClass.apps,'_id',appid);
 			
 			var app = thisClass.apps[appIndex];
 			
-			var ans = confirm("Do you want to delete "+app.name+" ?")
+			var ans = confirm("Do you want to delete "+app.name+" and all its contents?")
 			
 			if(ans)
 			{
@@ -258,16 +260,28 @@ function UC_AppController()
 						 {
 							 alert("An Error accured while deleting the app entry !");
 						 }
+						 else if(data.status == "defaultapp")
+						 {
+							 alert("There should be a minimum of one app.");
+						 }
 						 else 
 						 {
+                             $('#ucapp_update_modal').modal('hide');
+
 							 thisClass.apps.splice(appIndex, 1);
-							 thisClass.deleteAnAppEntryFromListing(app._id);
+
+                             thisClass.listApps(thisClass.apps);
+                             thisClass.switchApp(thisClass.apps[0]);
 						 }
 					});
 				}
 			}
 		
-		
+        }
+        else
+        {
+            alert("There should be a minimum of one app.");
+        }
 		
 	}
 	
@@ -312,6 +326,21 @@ function UC_AppController()
 				$('#ucapp_update_nameinput').val(app.name);
 				$('#ucapp_update_appid').val(app._id);
 				$('#ucapp_update_appid_display').text(app._id);
+				$('#ucDeleteAppBtn').attr("data-appid",app._id);
+
+                var trackingSnippet = '<script type="text/javascript" src="'+uc_main.userController.config.baseURL+'/js/src/internal/tracking/track.js"></script>\n'+
+                    '<script>\n'+
+                    '\tUsercom.init("'+app._id+'",{ /* appID generated from the usercom application */\n'+
+                        '\t\tname: "John Smith",   /* Fullname of the visitor */\n'+
+                        '\t\temail: "jsmith@usercom.io",   /* Email Address of the visitor */\n'+
+                        '\t\tcreated_at: new Date().getTime(), /* Current timestamp */\n'+
+                        '\t\tpaid: true, /* Boolean */\n'+
+                        '\t\tbirthdate: "1990-01-01", /* Date in format YYYY-MM-DD */\n'+
+                        '\t\tgender: "male", /* possible values ("male","female","other") */\n'+
+                        '\t\tprofilepicture: "", /* a valid profile picture url */\n'+
+                    '\t});\n'+
+                    '</script>\n';
+				$('#ucapp_update_trackingcode').text(trackingSnippet);
 			}
 		}
 	}
@@ -357,13 +386,12 @@ function UC_AppController()
             uc_main.visitorListController.currentSortOrder = UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].currentSortOrder;
         }
 
-        if(thisClass.renderVisitors)
-        {
-            uc_main.visitorListController.resetPagination();
-            uc_main.visitorListController.getAllVisitors();
-            uc_main.dashboardController.getDashboardMetrics();
-            uc_main.dashboardController.drawNewUsersGraph();
-            uc_main.filterController.listUserdefinedFilters();
-        }
+
+        uc_main.visitorListController.resetPagination();
+        uc_main.visitorListController.getAllVisitors();
+        uc_main.dashboardController.getDashboardMetrics();
+        uc_main.dashboardController.drawNewUsersGraph();
+        uc_main.filterController.listUserdefinedFilters();
+
     };
 }

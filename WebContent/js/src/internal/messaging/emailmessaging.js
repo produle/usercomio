@@ -25,6 +25,8 @@ function UC_EmailMessagingController()
 
         $(document).on("change","#ucSendMessageTemplate",thisClass.templateChangeHandler);
 
+        $(document).on("click","#ucDeleteTemplateBtn",thisClass.deleteTemplateHandler);
+
 		thisClass.rivetEmailTemplateListObj = rivets.bind(
             document.querySelector('#ucSendMessageTemplate'), {
                 emailTemplateList: thisClass.emailTemplateList
@@ -43,6 +45,10 @@ function UC_EmailMessagingController()
         $("#ucSendMessageModal").modal();
 
         $('#ucSendMessageAjaxLoader').hide();
+
+        $("#ucDeleteTemplateBtn").hide();
+        
+        $("#ucSendMessageTemplate").removeClass("ucExistTemplate");
 
         UC_AJAX.call('EmailManager/getemailtemplates',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user},function(data,status,xhr){
 
@@ -156,11 +162,48 @@ function UC_EmailMessagingController()
         if($(this).val()=="new")
         {
             $("#ucSendMessageSubject,#ucSendMessageBody").val("");
+            $("#ucDeleteTemplateBtn").hide();
+            $("#ucSendMessageTemplate").removeClass("ucExistTemplate");
         }
         else
         {
             $("#ucSendMessageSubject").val($(this).find("option:selected").text());
             $("#ucSendMessageBody").val($(this).find("option:selected").attr("data-templatebody"));
+            $("#ucDeleteTemplateBtn").show();
+            $("#ucSendMessageTemplate").addClass("ucExistTemplate");
         }
+    }
+
+    /*
+     * @desc Removes the selected template
+     */
+    this.deleteTemplateHandler = function()
+    {
+
+        var templateId = $("#ucSendMessageTemplate").val();
+
+        if(templateId != "new")
+        {
+            if(confirm("Are you sure you want to delete the template?"))
+            {
+                $('#ucSendMessageAjaxLoader').show();
+
+                UC_AJAX.call('EmailManager/deletetemplate',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,templateId:templateId},function(data,status,xhr){
+
+                    if(data.status == "failure")
+                    {
+                        alert("Could not delete template");
+                    }
+                    else
+                    {
+                        $("#ucSendMessageModal").modal("hide");
+                        
+                    }
+
+                    $('#ucSendMessageAjaxLoader').hide();
+                });
+            }
+        }
+
     }
 }

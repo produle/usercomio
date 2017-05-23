@@ -70,7 +70,27 @@ var UC_Utils = (function() {
 	        if (!results) return null;
 	        if (!results[2]) return '';
 	        return decodeURIComponent(results[2].replace(/\+/g, " "));
-	    }
+	    },
+
+        /**
+         * @desc return the color value based on user name
+         * @param uname: user name
+         * @return return hex color string
+         */
+        getProfileColor: function(uname)
+        {
+            var colors= ["#446CB3", "#8E44AD", "#26A65B", "#F89406", "#6C7A89", "#34495E"];
+            var avg = 0;
+
+            for(var i=0; i<uname.length; i++)
+            {
+                avg += uname.charCodeAt(i) * i;
+            }
+            avg = Math.round(avg / uname.length);
+
+            return colors[avg % colors.length];
+
+        }
 	   
 	  };
 	})();
