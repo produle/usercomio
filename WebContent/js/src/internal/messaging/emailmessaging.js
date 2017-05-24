@@ -120,6 +120,14 @@ function UC_EmailMessagingController()
             });
         }
 
+        var validationResult = thisClass.validateSendMessageInputs();
+
+        if(validationResult.status == "failure")
+        {
+            alert(validationResult.msg);
+            return;
+        }
+
         //call the email trigger server function
 
         $('#ucSendMessageAjaxLoader').show();
@@ -206,4 +214,33 @@ function UC_EmailMessagingController()
         }
 
     }
+
+  /*
+   * @desc Validate user inputs
+   */
+  this.validateSendMessageInputs  = function()
+  {
+	  var result = {status:"success",msg:""};
+
+	  var subject = $("#ucSendMessageSubject").val(),
+          message = $("#ucSendMessageBody").val(),
+	  	  msg = "";
+
+	  if($.trim(subject) == "")
+	  {
+		  msg = "Subject is required";
+	  }
+	  else if($.trim(message) == "")
+	  {
+		  msg = "Message is required";
+	  }
+
+	  if(msg != "")
+	  {
+		  result.status = "failure";
+		  result.msg = msg;
+	  }
+
+	  return result;
+  }
 }
