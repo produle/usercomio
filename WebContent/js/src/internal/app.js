@@ -81,6 +81,10 @@ function UC_AppController()
 			 {
 				 alert("An Error accured while fetching user's app !");
 			 }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
+            }
 			else
 			{
 				if(data.status.length > 0)
@@ -125,6 +129,10 @@ function UC_AppController()
 				 {
 					 alert("An Error accured while saving data !");
 				 }
+                 else if(data.status == "authenticationfailed")
+                 {
+                     location.href="/";
+                 }
 				 else 
 				 {
 					 thisClass.apps.push(data.status);
@@ -216,6 +224,10 @@ function UC_AppController()
 				 {
 					 alert("An Error accured while saving data !");
 				 }
+                 else if(data.status == "authenticationfailed")
+                 {
+                     location.href="/";
+                 }
 				 else 
 				 {
 					 thisClass.updateAppDetailsInAppsListing(app);
@@ -260,6 +272,10 @@ function UC_AppController()
 						 {
 							 alert("An Error accured while deleting the app entry !");
 						 }
+                         else if(data.status == "authenticationfailed")
+                         {
+                             location.href="/";
+                         }
 						 else if(data.status == "defaultapp")
 						 {
 							 alert("There should be a minimum of one app.");
@@ -386,12 +402,15 @@ function UC_AppController()
             uc_main.visitorListController.currentSortOrder = UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].currentSortOrder;
         }
 
+        if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(thisClass.currentAppId) && UC_UserSession.user.app[thisClass.currentAppId].hasOwnProperty('filterOrder') && UC_UserSession.user.app[thisClass.currentAppId].filterOrder.hasOwnProperty(uc_main.visitorListController.currentFilterId) && UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].hasOwnProperty('displayFields'))
+        {
+            uc_main.visitorListController.displayFields = UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].displayFields;
+        }
 
-        uc_main.visitorListController.resetPagination();
-        uc_main.visitorListController.getAllVisitors();
         uc_main.dashboardController.getDashboardMetrics();
         uc_main.dashboardController.drawNewUsersGraph();
         uc_main.filterController.listUserdefinedFilters();
+        uc_main.visitorListController.getFieldsList();
 
     };
 }

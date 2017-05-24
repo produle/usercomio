@@ -34,7 +34,7 @@ class EmailManager {
             this.getEmailSettingByCompany(req.body.company,function(emailsetting){
                 if(!req.isAuthenticated())
                 {
-                    return res.send({status:'failure'});
+                    return res.send({status:'authenticationfailed'});
                 }
 
                 return res.send({status:"Success",emailsetting:emailsetting});
@@ -50,7 +50,7 @@ class EmailManager {
   	{
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appId = req.body.appid;
@@ -345,7 +345,7 @@ class EmailManager {
   	{
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appId = req.body.appid;
@@ -449,7 +449,7 @@ class EmailManager {
     {
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appId = req.body.appid;
@@ -528,7 +528,7 @@ class EmailManager {
 
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var user = req.body.user;

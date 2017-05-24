@@ -23,6 +23,8 @@ function UC_VisitorListController()
 
     this.rivetVisitorMessagesObj = null;
 
+    this.rivetVisitorColumnListObj = null;
+
     this.currentFilterId = "dashboard";
 
     this.currentSortColumn = "visitorMetaInfo.lastSeen";
@@ -30,6 +32,8 @@ function UC_VisitorListController()
     this.currentSortOrder = 1; //1 for ASC and -1 for DESC
 
     this.currentFilterTotalVisitors = 0;
+
+    this.displayFields = [];
 
     this.constructor = function()
 	{
@@ -54,6 +58,25 @@ function UC_VisitorListController()
             $(document).on("click","#uc-all-user-select",thisClass.userListSelectHandler);
 
             $(document).on("change","#uc-all-user-select,.uc-user-select",thisClass.updateRecipientCount);
+
+            $("#ucVisitorFieldsPopover").popover({
+                html: true,
+                content: function() {
+                    var popoverHTML = $('#ucVisitorFieldsPopoverContent').clone();
+                    $(popoverHTML).find("#ucVisitorFieldList").removeAttr("id").addClass("ucVisitorFieldList");
+                    return $(popoverHTML).html();
+                }
+            });
+
+            $("#ucVisitorFieldsPopover").on('shown.bs.popover', function () {
+                for(var i = 0; i < thisClass.displayFields.length; i++)
+                {
+                    $(".ucVisitorFieldList").find('[data-fieldid="'+thisClass.displayFields[i]+'"]').prop("checked",true);
+                };
+
+            })
+
+            $(document).on("click","#ucVisitorFieldsPopoverSubmit",thisClass.saveFieldsListHandler);
         }
 	};
 
@@ -64,7 +87,8 @@ function UC_VisitorListController()
 	{
 		thisClass.rivetVisitorListObj = rivets.bind(
             document.querySelector('#uc_visitor_list'), {
-                list: thisClass.visitors
+                list: thisClass.visitors,
+                fieldList: []
             }
         );
 
@@ -84,22 +108,62 @@ function UC_VisitorListController()
                 browserVersion = broswerVersionArr[0]+"."+broswerVersionArr[1];
             }
 
+            var browserIcon = "chrome"; //TODO Change default icon
+
+            if(value[0].agentInfo.rawAgentData.isChrome)
+            {
+                browserIcon = "chrome";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isSafari)
+            {
+                browserIcon = "safari";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isFirefox)
+            {
+                browserIcon = "firefox";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isEdge)
+            {
+                browserIcon = "edge";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isIE)
+            {
+                browserIcon = "ie";
+            }
+
             $(el).html(browserName+" <span>(v"+browserVersion+")</span>");
             $(el).removeClass("chrome safari firefox edge ie");
-            $(el).addClass(browserName.toLowerCase());
+            $(el).addClass(browserIcon);
         };
 
         rivets.binders.latestplatform = function (el, value) {
 
             var platformName = value[0].agentInfo.os;
-            var platformIcon = "windows";
+            var platformIcon = "windows"; //TODO Change default icon
 
-            if(platformName.toLowerCase().substr(0,5) == "macos")
+            if(value[0].agentInfo.rawAgentData.isWindows)
+            {
+                platformIcon = "windows";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isMac || value[0].agentInfo.rawAgentData.isiPad || value[0].agentInfo.rawAgentData.isiPod || value[0].agentInfo.rawAgentData.isiPhone)
             {
                 platformIcon = "ios";
             }
 
-            //TODO Check for linux
+            if(value[0].agentInfo.rawAgentData.isLinux || value[0].agentInfo.rawAgentData.isLinux64)
+            {
+                platformIcon = "linux";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isAndroid)
+            {
+                platformIcon = "android";
+            }
 
             $(el).html(platformName);
             $(el).removeClass("ios android windows linux");
@@ -125,6 +189,29 @@ function UC_VisitorListController()
                 $(el).find(".ucUserProfileImage").hide();
             }
         };
+
+        thisClass.rivetVisitorColumnListObj = rivets.bind(
+            document.querySelector('#ucVisitorFieldList'), {
+                fieldList: []
+            }
+        );
+
+        rivets.binders.customfieldheader = function (el, value) {
+            $(el).addClass("ucVisitorListToggleField_"+value.value);
+            $(el).attr("data-sortColumn","visitorData."+value.value);
+            $(el).find(".ucVisitorListHeaderLabel").html(value.label);
+        };
+
+        rivets.binders.customfielddata = function (el, value) {
+            $(el).addClass("ucVisitorListToggleField_"+value.value);
+            $(el).attr("data-customField",value.value);
+            $(el).html("{visitor.visitorData.name}");
+            $(el).find(".ucVisitorListHeaderLabel").html(value.label);
+        };
+
+        rivets.binders.customfieldtest = function (el, value) {
+            $(el).text(value[$(el).attr("data-customField")]);
+        };
 	};
 
 	/*
@@ -149,6 +236,10 @@ function UC_VisitorListController()
                 if(data.status == "failure")
                 {
                     alert("An Error accured while fetching visitors list !");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
                 }
                 else
                 {
@@ -185,6 +276,8 @@ function UC_VisitorListController()
         thisClass.rivetVisitorListObj.models.list = thisClass.visitors;
 
         thisClass.selectCurrentSort();
+
+        thisClass.toggleVisitorListFields();
 
 	};
 
@@ -226,7 +319,7 @@ function UC_VisitorListController()
         }
         if(!UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.hasOwnProperty(thisClass.currentFilterId))
         {
-            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
         }
         UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].currentSortColumn = thisClass.currentSortColumn;
         UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].currentSortOrder = thisClass.currentSortOrder;
@@ -342,6 +435,10 @@ function UC_VisitorListController()
                 {
                     alert("An Error accured while fetching user details !");
                 }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
                 else
                 {
                     if(data.visitor != null)
@@ -375,6 +472,10 @@ function UC_VisitorListController()
                 {
                     alert("An Error accured while fetching user details !");
                 }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
                 else
                 {
                     if(data.messages != null)
@@ -399,5 +500,104 @@ function UC_VisitorListController()
                 }
             });
         }
+    };
+
+    /*
+     * @desc Obtains the list of fields for the app
+     */
+    this.getFieldsList = function()
+    {
+        UC_AJAX.call('VisitorListManager/getfieldslist',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user},function(data,status,xhr){
+
+            if(data.status == "failure")
+            {
+                alert("Error while getting field list");
+            }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
+            }
+            else
+            {
+                var fieldList = [];
+
+                for(var iter = 0; iter < data.fields.length; iter++)
+                {
+                    if(data.fields[iter] != "name")
+                    {
+                        var fieldItem = {};
+                        fieldItem.value = data.fields[iter];
+                        fieldItem.label = data.fields[iter];
+                        fieldItem.label = fieldItem.label.replace("_"," ");
+                        fieldItem.label = fieldItem.label.charAt(0).toUpperCase() + fieldItem.label.slice(1);
+                        fieldList.push(fieldItem);
+                    }
+                }
+
+                var fieldListDropdown = [
+                    {value:"browser",label:"Browser"},
+                    {value:"os",label:"Operating System"},
+                    {value:"device",label:"Device"},
+                    {value:"country",label:"Country"}
+                ];
+
+                thisClass.rivetVisitorColumnListObj.models.fieldList = fieldListDropdown.concat(fieldList);
+                thisClass.rivetVisitorListObj.models.fieldList = fieldList;
+                thisClass.resetPagination();
+                thisClass.getAllVisitors();
+            }
+        });
+    };
+
+    /*
+     * @desc Saves the fields preference for each filter
+     */
+    this.saveFieldsListHandler = function()
+    {
+        thisClass.displayFields = [];
+
+        $(".ucVisitorFieldListItem").each(function(){
+            if($(this).is(":checked"))
+            {
+                thisClass.displayFields.push($(this).attr("data-fieldid"));
+            }
+        });
+
+        $("#ucVisitorFieldsPopover").popover('hide');
+
+        if(!UC_UserSession.user.hasOwnProperty('app'))
+        {
+            UC_UserSession.user.app = {};
+        }
+        if(!UC_UserSession.user.app.hasOwnProperty(uc_main.appController.currentAppId))
+        {
+            UC_UserSession.user.app[uc_main.appController.currentAppId] = {};
+        }
+        if(!UC_UserSession.user.app[uc_main.appController.currentAppId].hasOwnProperty('filterOrder'))
+        {
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder = {};
+        }
+        if(!UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.hasOwnProperty(thisClass.currentFilterId))
+        {
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
+        }
+        UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].displayFields = thisClass.displayFields;
+
+        uc_main.filterController.saveAppPreference();
+
+        thisClass.toggleVisitorListFields();
+    };
+
+    /*
+     * @desc List the corresponding fields in visitorlist as per selection
+     */
+    this.toggleVisitorListFields = function()
+    {
+        $(".ucVisitorListToggleField").hide();
+
+        for(var i = 0; i < thisClass.displayFields.length; i++)
+        {
+            $(".ucVisitorListToggleField_"+thisClass.displayFields[i]).show();
+        };
     };
 }

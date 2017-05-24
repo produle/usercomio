@@ -219,6 +219,11 @@ class UserManager {
   	 */
     saveUserProfile(req,res)
     {
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
         // Get the documents collection
         var userCollection = global.db.collection('users');
 
@@ -272,6 +277,11 @@ class UserManager {
   	 */
     saveUserPassword(req,res)
     {
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
         // Get the documents collection
         var userCollection = global.db.collection('users');
 
@@ -326,7 +336,7 @@ class UserManager {
     {
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         // Get the documents collection

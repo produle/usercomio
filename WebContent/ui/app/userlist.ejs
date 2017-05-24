@@ -36,6 +36,18 @@
                         <div class="ucSendMessageWrapper">
                             <button class="btn btn-primary" id="ucSendMessageGroupBtn">Send Message</button>
                             <span class="ucAddFilterBtn"><i class="ico-filter2"></i></span>
+                            <button type="button" class="btn btn-sm btn-default" id="ucVisitorFieldsPopover" data-toggle="popover" title="Select Fields" data-placement="bottom" data-container="body" data-html="true"><i class="fa fa-th"></i></button>
+                            <div id="ucVisitorFieldsPopoverContent" style="display:none;">
+                                <ul id="ucVisitorFieldList">
+                                    <li rv-each-field="fieldList">
+                                        <label>
+                                            <input type="checkbox" class="ucVisitorFieldListItem" rv-data-fieldid="field.value" /> <span  rv-text="field.label"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+
+                                <button class="btn btn-primary" id="ucVisitorFieldsPopoverSubmit">Save</button>
+                            </div>
                         </div>
                         
                  </div>
@@ -71,24 +83,29 @@
                                                     Session
                                                 </div>
                                             </th>
-                                            <th class="ucUserListSortableColumn" data-sortColumn="sessions.agentInfo.browser">
+                                            <th class="ucUserListSortableColumn ucVisitorListToggleField ucVisitorListToggleField_browser" data-sortColumn="sessions.agentInfo.browser">
                                                 <div class="uc_table_header">
                                                     Browser <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
                                                 </div>
                                             </th>
-                                            <th class="ucUserListSortableColumn" data-sortColumn="sessions.agentInfo.os">
+                                            <th class="ucUserListSortableColumn ucVisitorListToggleField ucVisitorListToggleField_os" data-sortColumn="sessions.agentInfo.os">
                                                 <div class="uc_table_header">
                                                     Operating System <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
                                                 </div>
                                             </th>
-                                            <th>
+                                            <th class="ucVisitorListToggleField ucVisitorListToggleField_device">
                                                 <div class="uc_table_header">
                                                     Device
                                                 </div>
                                             </th>
-                                            <th class="ucUserListSortableColumn" data-sortColumn="sessions.geolocationinfo.country">
+                                            <th class="ucUserListSortableColumn ucVisitorListToggleField ucVisitorListToggleField_country" data-sortColumn="sessions.geolocationinfo.country">
                                                 <div class="uc_table_header">
                                                     Country <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                                </div>
+                                            </th>
+                                            <th class="ucUserListSortableColumn ucVisitorListToggleField" rv-each-customfield="fieldList" rv-customfieldheader="customfield">
+                                                <div class="uc_table_header">
+                                                    <span class="ucVisitorListHeaderLabel"></span> <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
                                                 </div>
                                             </th>
                                             <th></th>
@@ -115,10 +132,11 @@
                                                </div>
                                            </td>
                                            <td class="text-center" rv-sessioncount="visitor.sessions"></td>
-                                           <td> <div class="ucUserBrowserIcon" rv-latestbrowser="visitor.sessions"></div></td>
-                                           <td> <div class="ucUserOSIcon" rv-latestplatform="visitor.sessions"></div> </td>
-                                           <td class="text-center"><div class="ucUserDeviceIcon desktop"></div></td>
-                                           <td>India</td>
+                                           <td class="ucVisitorListToggleField ucVisitorListToggleField_browser"> <div class="ucUserBrowserIcon" rv-latestbrowser="visitor.sessions"></div></td>
+                                           <td class="ucVisitorListToggleField ucVisitorListToggleField_os"> <div class="ucUserOSIcon" rv-latestplatform="visitor.sessions"></div> </td>
+                                           <td class="ucVisitorListToggleField ucVisitorListToggleField_device text-center"><div class="ucUserDeviceIcon desktop"></div></td>
+                                           <td class="ucVisitorListToggleField ucVisitorListToggleField_country">India</td>
+                                           <td class="ucVisitorListToggleField" rv-each-customfield="fieldList" rv-customfielddata="customfield" rv-customfieldtest="visitor.visitorData"></td>
                                            <td>
                                                <div class="dropdown ucUsersListMoreOptions">
                                                   <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
