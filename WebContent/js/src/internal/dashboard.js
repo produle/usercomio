@@ -33,6 +33,10 @@ function UC_DashboardController()
                 {
                     alert("An Error accured while fetching visitors list !");
                 }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
                 else
                 {
                     thisClass.metrics = data.metrics;
@@ -86,6 +90,10 @@ function UC_DashboardController()
                 if(data.status == "failure")
                 {
                     alert("An Error accured while fetching visitors list !");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
                 }
                 else
                 {

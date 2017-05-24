@@ -27,7 +27,7 @@ class DashboardManager {
 
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appId = req.body.appid;
@@ -127,7 +127,7 @@ class DashboardManager {
 
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appId = req.body.appid;

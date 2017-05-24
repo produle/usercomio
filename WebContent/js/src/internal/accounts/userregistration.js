@@ -252,6 +252,10 @@ function UC_UserRegistrationController()
                  alert("Error in adding Email settings");
 
 			 }
+             else if(data.status == "authenticationfailed")
+             {
+                 location.href="/";
+             }
 			 else
 			 {
 
@@ -338,6 +342,10 @@ function UC_UserRegistrationController()
         if(data.status == "appexists")
          {
              alert("App with this name already exists !");
+         }
+         else if(data.status == "authenticationfailed")
+         {
+             location.href="/";
          }
          else if(data.status == "failure")
          {

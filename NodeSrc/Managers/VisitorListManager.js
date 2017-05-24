@@ -30,7 +30,7 @@ class VisitorListManager {
   	{
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appId = req.body.appid;
@@ -142,7 +142,7 @@ class VisitorListManager {
 
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var visitorId = req.body.visitorId;
@@ -186,7 +186,7 @@ class VisitorListManager {
   	{
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var visitorId = req.body.visitorId;
@@ -221,7 +221,7 @@ class VisitorListManager {
   	{
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appId = req.body.appid;
