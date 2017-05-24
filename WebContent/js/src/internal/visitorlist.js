@@ -108,22 +108,62 @@ function UC_VisitorListController()
                 browserVersion = broswerVersionArr[0]+"."+broswerVersionArr[1];
             }
 
+            var browserIcon = "chrome"; //TODO Change default icon
+
+            if(value[0].agentInfo.rawAgentData.isChrome)
+            {
+                browserIcon = "chrome";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isSafari)
+            {
+                browserIcon = "safari";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isFirefox)
+            {
+                browserIcon = "firefox";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isEdge)
+            {
+                browserIcon = "edge";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isIE)
+            {
+                browserIcon = "ie";
+            }
+
             $(el).html(browserName+" <span>(v"+browserVersion+")</span>");
             $(el).removeClass("chrome safari firefox edge ie");
-            $(el).addClass(browserName.toLowerCase());
+            $(el).addClass(browserIcon);
         };
 
         rivets.binders.latestplatform = function (el, value) {
 
             var platformName = value[0].agentInfo.os;
-            var platformIcon = "windows";
+            var platformIcon = "windows"; //TODO Change default icon
 
-            if(platformName.toLowerCase().substr(0,5) == "macos")
+            if(value[0].agentInfo.rawAgentData.isWindows)
+            {
+                platformIcon = "windows";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isMac || value[0].agentInfo.rawAgentData.isiPad || value[0].agentInfo.rawAgentData.isiPod || value[0].agentInfo.rawAgentData.isiPhone)
             {
                 platformIcon = "ios";
             }
 
-            //TODO Check for linux
+            if(value[0].agentInfo.rawAgentData.isLinux || value[0].agentInfo.rawAgentData.isLinux64)
+            {
+                platformIcon = "linux";
+            }
+
+            if(value[0].agentInfo.rawAgentData.isAndroid)
+            {
+                platformIcon = "android";
+            }
 
             $(el).html(platformName);
             $(el).removeClass("ios android windows linux");
@@ -509,7 +549,6 @@ function UC_VisitorListController()
 
         $("#ucVisitorFieldsPopover").popover('hide');
 
-        //TODO Save the list
         if(!UC_UserSession.user.hasOwnProperty('app'))
         {
             UC_UserSession.user.app = {};

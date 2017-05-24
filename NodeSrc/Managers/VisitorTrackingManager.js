@@ -80,7 +80,8 @@ class VisitorTrackingManager {
   		browserInfo.browserLanguage = req.headers["accept-language"].split(',')[0];
         browserInfo.screenResolution = req.body.screenResolution;
         browserInfo.timezone = req.body.timezone;
-        browserInfo.rawAgentData = agent.source;
+        browserInfo.rawAgentData = agent;
+        browserInfo.rawAgentSource = agent.source;
         browserInfo.sessionStart = req.body.sessionStart;
 
         if(agent.isDesktop)
