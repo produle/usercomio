@@ -30,7 +30,7 @@ class AppManager {
   	{
   		if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appCollection = global.db.collection('apps');
@@ -61,7 +61,7 @@ class AppManager {
 
   		if(config.has("setupCompleted") && config.get("setupCompleted") == 1 && !req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         // Get the documents collection
@@ -127,7 +127,7 @@ class AppManager {
   	{
   		if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appCollection = global.db.collection('apps');
@@ -175,7 +175,7 @@ class AppManager {
   	{
   		if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appinfo = req.body.app;

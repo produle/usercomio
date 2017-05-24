@@ -72,6 +72,10 @@ function UC_FilterController()
             {
                 alert("An Error accured while fetching filters list");
             }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
+            }
             else
             {
                 thisClass.predefinedFiltersList = data.status;
@@ -94,6 +98,10 @@ function UC_FilterController()
             if(data.status == "failure")
             {
                 alert("An Error accured while fetching filters list");
+            }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
             }
             else
             {
@@ -324,6 +332,10 @@ function UC_FilterController()
                  {
                      alert("An Error accured while saving data !");
                  }
+                 else if(data.status == "authenticationfailed")
+                 {
+                     location.href="/";
+                 }
                  else
                  {
                      $("#ucEditFilterModal").modal("hide");
@@ -401,6 +413,10 @@ function UC_FilterController()
                      {
                          alert("An Error accured while deleting");
                      }
+                     else if(data.status == "authenticationfailed")
+                     {
+                         location.href="/";
+                     }
                      else
                      {
                          thisClass.listUserdefinedFilters();
@@ -463,6 +479,10 @@ function UC_FilterController()
                 if(data.status == "failure")
                 {
                     alert("An Error accured while saving data");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
                 }
             }
 

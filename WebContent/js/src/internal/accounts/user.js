@@ -79,6 +79,10 @@ function UC_UserController()
                 {
                     alert("An Error accured while saving data !");
                 }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
                 else
                 {
                     alert("Profile saved successfully");
@@ -171,6 +175,10 @@ function UC_UserController()
                 {
                     alert("An Error accured while saving data !");
                 }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
                 else
                 {
                     alert("Password changed successfully");
@@ -227,6 +235,10 @@ function UC_UserController()
                 if(data.status == "failure")
                 {
                     alert("An Error accured while retrieving email settings!");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
                 }
                 else
                 {
@@ -364,6 +376,10 @@ function UC_UserController()
                 if(data.status == "failure")
                 {
                     alert("An Error accured while saving email settings!");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
                 }
                 else
                 {

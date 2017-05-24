@@ -237,6 +237,10 @@ function UC_VisitorListController()
                 {
                     alert("An Error accured while fetching visitors list !");
                 }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
                 else
                 {
                     if(data.totalcount.length == 1)
@@ -431,6 +435,10 @@ function UC_VisitorListController()
                 {
                     alert("An Error accured while fetching user details !");
                 }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
                 else
                 {
                     if(data.visitor != null)
@@ -463,6 +471,10 @@ function UC_VisitorListController()
                 if(data.status == "failure")
                 {
                     alert("An Error accured while fetching user details !");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
                 }
                 else
                 {
@@ -500,6 +512,10 @@ function UC_VisitorListController()
             if(data.status == "failure")
             {
                 alert("Error while getting field list");
+            }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
             }
             else
             {

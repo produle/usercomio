@@ -81,6 +81,10 @@ function UC_AppController()
 			 {
 				 alert("An Error accured while fetching user's app !");
 			 }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
+            }
 			else
 			{
 				if(data.status.length > 0)
@@ -125,6 +129,10 @@ function UC_AppController()
 				 {
 					 alert("An Error accured while saving data !");
 				 }
+                 else if(data.status == "authenticationfailed")
+                 {
+                     location.href="/";
+                 }
 				 else 
 				 {
 					 thisClass.apps.push(data.status);
@@ -216,6 +224,10 @@ function UC_AppController()
 				 {
 					 alert("An Error accured while saving data !");
 				 }
+                 else if(data.status == "authenticationfailed")
+                 {
+                     location.href="/";
+                 }
 				 else 
 				 {
 					 thisClass.updateAppDetailsInAppsListing(app);
@@ -260,6 +272,10 @@ function UC_AppController()
 						 {
 							 alert("An Error accured while deleting the app entry !");
 						 }
+                         else if(data.status == "authenticationfailed")
+                         {
+                             location.href="/";
+                         }
 						 else if(data.status == "defaultapp")
 						 {
 							 alert("There should be a minimum of one app.");

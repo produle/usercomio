@@ -56,6 +56,10 @@ function UC_EmailMessagingController()
             {
                 alert("Could not send emails, kindly check the SMTP settings");
             }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
+            }
             else
             {
                 thisClass.emailTemplateList = data.emailTemplateList;
@@ -71,6 +75,10 @@ function UC_EmailMessagingController()
             if(data.status == "failure")
             {
                 alert("Error while getting field list");
+            }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
             }
             else
             {
@@ -138,6 +146,10 @@ function UC_EmailMessagingController()
                 {
                     alert("Could not send emails, kindly check the SMTP settings");
                 }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
                 else
                 {
                     $("#ucSendMessageModal").modal("hide");
@@ -201,6 +213,10 @@ function UC_EmailMessagingController()
                     if(data.status == "failure")
                     {
                         alert("Could not delete template");
+                    }
+                    else if(data.status == "authenticationfailed")
+                    {
+                        location.href="/";
                     }
                     else
                     {
