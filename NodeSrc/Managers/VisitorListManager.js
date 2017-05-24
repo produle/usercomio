@@ -39,20 +39,28 @@ class VisitorListManager {
         var filterId = req.body.filterid;
         var sortColumn = req.body.sortColumn;
         var sortOrder = req.body.sortOrder;
+        var mongoFilterQuery = JSON.parse(req.body.mongoFilterQuery);
 
-        this.getAllVisitorsFromDB(appId,filterId,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response,totalcount){
-            return res.send({status:response,totalcount:totalcount});
-        });
+        if(mongoFilterQuery == null)
+        {
+            this.getFilterData(appId,filterId,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response,totalcount){
+                return res.send({status:response,totalcount:totalcount});
+            });
+        }
+        else
+        {
+            this.getAllVisitorsFromDB(appId,mongoFilterQuery,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response,totalcount){
+                return res.send({status:response,totalcount:totalcount});
+            });
+        }
 
   	}
 
   	/*
   	 * @desc Returns all visitors of the app
   	 */
-  	getAllVisitorsFromDB(appId,filterId,sortColumn,sortOrder,skipIndex,pageLimit,exclusionList,callback)
+  	getFilterData(appId,filterId,sortColumn,sortOrder,skipIndex,pageLimit,exclusionList,callback)
   	{
-        var sortQuery = JSON.parse('{"'+sortColumn+'":'+sortOrder+'}');
-
         var filter = global.db.collection('filters').findOne(
 
             {_id:filterId},
@@ -73,61 +81,78 @@ class VisitorListManager {
                     filterQuery = {"visitorMetaInfo.lastSeen" : {"$lte":date30DaysAgo }};
                 }
 
-                var aggregateArray = [
-                    { $skip : skipIndex },
-                    {
-                      $lookup:
-                        {
-                          from: "sessions",
-                          localField: "_id",
-                          foreignField: "visitorId",
-                          as: "sessions"
-                        }
-                    },
-                    { $sort :
-                        sortQuery
-                    },
-                    { $match :
-                        { "$and": [
-                            {
-                              appId:appId
-                            },
-                            { _id: {"$nin": exclusionList}},
-                            filterQuery
-                          ]
-                        }
-                    }
-                ];
+                var VisitorListManagerObj = new VisitorListManager();
+                VisitorListManagerObj.getAllVisitorsFromDB(appId,filterQuery,sortColumn,sortOrder,skipIndex,pageLimit,exclusionList,callback);
+            }
+        );
 
-                var aggregateWithLimit = aggregateArray;
-                var aggregateWithCount = aggregateArray;
 
-                if(pageLimit != null)
+  	}
+
+  	/*
+  	 * @desc Returns all visitors of the app
+  	 */
+  	getAllVisitorsFromDB(appId,filterQuery,sortColumn,sortOrder,skipIndex,pageLimit,exclusionList,callback)
+  	{
+        var sortQuery = JSON.parse('{"'+sortColumn+'":'+sortOrder+'}');
+
+        var aggregateArray = [
+            { $skip : skipIndex },
+            {
+              $lookup:
                 {
-                    aggregateWithLimit.push({ $limit : pageLimit });
+                  from: "sessions",
+                  localField: "_id",
+                  foreignField: "visitorId",
+                  as: "sessions"
                 }
-
-                var visitorCollection = global.db.collection('visitors').aggregate(aggregateWithLimit).toArray(function(err,visitors)
+            },
+            { $sort :
+                sortQuery
+            },
+            { $match :
+                { "$and": [
                     {
-                        if(err)
+                      appId:appId
+                    },
+                    { _id: {"$nin": exclusionList}},
+                    filterQuery
+                  ]
+                }
+            }
+        ];
+
+        var aggregateWithLimit = aggregateArray;
+        var aggregateWithCount = aggregateArray;
+
+        if(pageLimit != null)
+        {
+            aggregateWithLimit.push({ $limit : pageLimit });
+        }
+
+        var visitorCollection = global.db.collection('visitors').aggregate(aggregateWithLimit).toArray(function(err,visitors)
+            {
+                if(err)
+                {
+                    callback('failure');
+                }
+                else
+                {
+                    aggregateWithCount.push({$count: "count"});
+
+                    var visitorRecordCollection = global.db.collection('visitors').aggregate(aggregateWithCount).toArray(function(err,totalcount)
                         {
-                            callback('failure');
-                        }
-
-                        aggregateWithCount.push({$count: "count"});
-
-                        var visitorRecordCollection = global.db.collection('visitors').aggregate(aggregateWithCount).toArray(function(err,totalcount)
+                            if(err)
                             {
-                                if(err)
-                                {
-                                    callback('failure');
-                                }
-
+                                callback('failure');
+                            }
+                            else
+                            {
                                 callback(visitors,totalcount);
                             }
-                        );
-                    }
-                );
+                        }
+                    );
+                }
             }
         );
 
