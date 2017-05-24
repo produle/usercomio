@@ -217,8 +217,13 @@ function UC_VisitorListController()
 	/*
 	 * @desc Gets all visitor information from server
 	 */
-	this.getAllVisitors = function()
+	this.getAllVisitors = function(mongoFilterQuery)
 	{
+
+        if(typeof mongoFilterQuery == "undefined")
+        {
+            mongoFilterQuery = null;
+        }
 
         if(uc_main.appController.currentAppId)
         {
@@ -231,7 +236,7 @@ function UC_VisitorListController()
             thisClass.rivetVisitorListObj.models.list = [];
             $("#ucVisitorListAjaxLoader").show();
 
-            UC_AJAX.call('VisitorListManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit,filterid:filterId,sortColumn:thisClass.currentSortColumn,sortOrder:thisClass.currentSortOrder},function(data,status,xhr){
+            UC_AJAX.call('VisitorListManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit,filterid:filterId,sortColumn:thisClass.currentSortColumn,sortOrder:thisClass.currentSortOrder,mongoFilterQuery:mongoFilterQuery},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {

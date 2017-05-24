@@ -102,7 +102,7 @@ class EmailManager {
         if(filterId != null)
         {
             var visitorListManagerObj = new visitorListManager();
-            visitorListManagerObj.getAllVisitorsFromDB(appId,filterId,"visitorMetaInfo.lastSeen",1,0,null,exclusionList,function(response,totalcount){
+            visitorListManagerObj.getFilterData(appId,filterId,"visitorMetaInfo.lastSeen",1,0,null,exclusionList,function(response,totalcount){
 
                     EmailManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId);
             });
