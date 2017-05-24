@@ -53,15 +53,16 @@ npm run dev /* Starts the usercom application at port 3000 */
     ```
     
 ## Process for Grunt build   
-Navigate to the project root folder and execute   
+ Navigate to the project root folder and execute   
  grunt /*grunt to execute the default function inside gruntfile.js*/
  
-## Auto Build Process using Travis CI
-1.Go to the travis-ci.org website and signup.
-2.Authorize the repository you want to get access.
-3.Create travis.yml file and include the necessary code.
-4.Add push.sh shell file to commit the grunt generated build code from travis ci to the git
-5.Create a github_token for the project repository and add it in the travis ci Environment Variables
+## Auto Build Process using Grunt and Travis CI
+1. Go to the travis-ci.org website and signup.
+2. Authorize the repository you want to get access. 
+3. Create a github token for the project repository and add it in the travis ci Environment Variables *More Options > Settings* with keyname as *GH_TOKEN*.
+4. Add Travis CI service in the git repository *Interactions and Services*. 
+5. Copy the markdown url from the travis-ci project and place it inside the README.md file to update the build status in the git repository.
+6. Travis builds the code and pushes the minified code to the git source while pushing the changes.
 
     
 ## Copyright and license
