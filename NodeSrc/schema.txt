@@ -53,7 +53,8 @@
         device : String //Obtained from agent
         os : String //Obtained from agent
         platform : String //Obtained from agent
-        rawAgentData : String //Obtained from agent, covers entire header info
+        rawAgentData : String //Obtained from agent, covers entire info provided by the agent object
+        rawAgentSource : String //Obtained from agent, covers header info of the request
         screenResolution : String //Obtained from track.js
         sessionStart : Date //Obtained from track.js
         sessionEnd : Date //Obtained from track.js
@@ -121,3 +122,26 @@
     company : String //id from companies collection
     userId : String //id from users collection
     role : String //Role of the user in that company
+    
+// Collection name: emailsettings
+    _id : String //Auto generated id
+    clientId : String //company from users collection
+    emailType : String //Either "SMTP","Mailgun","Amazon"
+    smtp : {
+        host : String //Hostname of the mail server
+        port : String //Port of the mail server
+        user : String //Username for mail account
+        pass : String //Password for mail account
+    }
+    mailgun : {
+        key : String //Key provided by Mailgun
+        domain : String //Domain name configured in Mailgun
+        from : String //From account, to process reply
+    }
+    amazon : {
+        key : String //Key provided by Amazon
+        secret : String //Secret Key provided by Amazon
+        region : String //Amazon mail server region
+        from : String //From account, to process reply
+    }
+    
