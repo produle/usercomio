@@ -843,3 +843,48 @@ h2
  * CSS Loader animation - End
 **/
 
+/**
+ * Div Table Global styles - Start
+**/
+.ucTable
+{
+    display: table;
+    width: 100%;
+    border-top: 1px solid #ddd;
+}
+.ucTableRow
+{
+    display: table-row;
+}
+.ucTableHeading
+{
+    display: table-header-group;
+}
+.ucTableBody
+{
+    display: table-row-group;
+}
+.ucTableFoot
+{
+    display: table-footer-group;
+}
+.ucTableCell,
+.ucTableHead
+{
+    display: table-cell;
+    border-bottom: 1px solid #ddd;
+    padding: 8px 5px;
+}
+
+.ucTableHead
+{
+    font-weight: bold;
+}
+
+.ucTableStripped .ucTableRow:nth-child(odd)
+{
+    background-color: #f9f9f9;
+}
+/**
+ * Div Table Global styles - End
+**/
