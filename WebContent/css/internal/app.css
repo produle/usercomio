@@ -554,7 +554,7 @@ h2
 .uc_table_header
 {
     position: relative;
-    text-align: left;
+    text-align: center;
 }
 
 .uc_table_header .fa-caret-up,
@@ -874,11 +874,22 @@ h2
     display: table-cell;
     border-bottom: 1px solid #ddd;
     padding: 8px 5px;
+    vertical-align: middle;
+}
+.ucTableRow:hover .ucTableCell
+{
+    box-shadow: inset 0px -10px 18px -18px rgba(0,0,0,0.6);
+    -webkit-box-shadow: inset 0px -12px 18px -18px rgba(0,0,0,0.6);
+    -moz-box-shadow: inset 0px -10px 18px -18px rgba(0,0,0,0.6);
 }
 
 .ucTableHead
 {
-    font-weight: bold;
+    background: #fff;
+    color: #8ea4b1;
+	text-transform: uppercase;
+    font-size:13px;
+	font-weight: normal;
 }
 
 .ucTableStripped .ucTableRow:nth-child(odd)
