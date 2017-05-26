@@ -212,6 +212,10 @@ function UC_VisitorListController()
         rivets.binders.customfieldtest = function (el, value) {
             $(el).text(value[$(el).attr("data-customField")]);
         };
+
+        rivets.binders.country = function (el, value) {
+            $(el).html(value[0].geoLocationInfo.country);
+        };
 	};
 
 	/*

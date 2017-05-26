@@ -10,6 +10,7 @@ var moment = require("moment");
 var app = require("./server").app;
 var userManager = require("./Managers/UserManager").UserManager;
 var visitorListManager = require("./Managers/VisitorListManager").VisitorListManager;
+var emailManager = require("./Managers/EmailManager").EmailManager;
 
 class ViewRenderer
 {
@@ -160,6 +161,63 @@ class ViewRenderer
             }
 
 
+		 });
+
+		/*
+		 * @desc Renders unsubscribe page
+		 */
+		app.get('/unsubscribe/:appid/:visitorid', function(req, res)
+		{
+
+            if(req.params.appid != null && req.params.appid != "" && req.params.visitorid != null && req.params.visitorid != "")
+            {
+                var emailManagerObj = new emailManager();
+
+                emailManagerObj.validateAppDetails(req.params.appid,req.params.visitorid,function(appDetails, visitorDetails){
+
+                    if(appDetails)
+                    {
+                        res.render('unsubscribe',{confirmation:true,app:appDetails,visitor:visitorDetails});
+                    }
+                    else
+                    {
+                        res.redirect('/');
+                    }
+                });
+            }
+            else
+            {
+                res.redirect('/');
+            }
+		 });
+
+		/*
+		 * @desc Unsubscribes the email upon confirmation page
+		 */
+		app.post('/unsubscribe/:appid/:visitorid', function(req, res)
+		{
+
+            if(req.params.appid != null && req.params.appid != "" && req.params.visitorid != null && req.params.visitorid != "")
+            {
+                var emailManagerObj = new emailManager();
+
+                emailManagerObj.validateAppDetails(req.params.appid,req.params.visitorid,function(appDetails, visitorDetails){
+
+                    if(appDetails)
+                    {
+                        emailManagerObj.unsubscribeVisitorFromApp(appDetails,visitorDetails);
+                        res.render('unsubscribe',{confirmation:false});
+                    }
+                    else
+                    {
+                        res.redirect('/');
+                    }
+                });
+            }
+            else
+            {
+                res.redirect('/');
+            }
 		 });
 
 
