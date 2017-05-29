@@ -19,7 +19,8 @@ To run the application, execute the following commands
 ```
 cd path/to/application/root /* Change to application root directory */
 sudo mongod  /* This will start mongodb server with default port 27017 */
-npm run dev /* Starts the usercom application at port 3000 */
+npm run dev /* Starts the usercom application in development mode at port 3000 */
+npm run prod /* Starts the usercom application in production mode at port 3000 */
 ```
 
 ## Setup
