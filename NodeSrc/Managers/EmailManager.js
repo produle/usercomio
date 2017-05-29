@@ -102,7 +102,7 @@ class EmailManager {
         if(filterId != null)
         {
             var visitorListManagerObj = new visitorListManager();
-            visitorListManagerObj.getAllVisitorsFromDB(appId,filterId,"visitorMetaInfo.lastSeen",1,0,null,exclusionList,function(response,totalcount){
+            visitorListManagerObj.getFilterData(appId,filterId,"visitorMetaInfo.lastSeen",1,0,null,exclusionList,function(response,totalcount){
 
                     EmailManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId);
             });
@@ -139,25 +139,42 @@ class EmailManager {
     {
         var EmailManagerObj = new EmailManager();
 
-        for(var iter = 0; iter < response.length; iter++)
-        {
-            if(blockDuplicate && templateObj.recipientList.includes(response[iter]._id))
-            {
-                //Will not send email to prevent spam
-            }
-            else
-            {
-                var recipientSingle = {};
-                recipientSingle.id = response[iter]._id;
-                recipientSingle.visitorData = response[iter].visitorData;
+        EmailManagerObj.getEmailSettingByCompany(clientId,function(emailSettingObj){
 
-                EmailManagerObj.parseEmail(message,recipientSingle,function(parsedMessage,recipientSingle){
-                    EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitorData.email,subject,parsedMessage,templateObj,appId,clientId);
-                    EmailManagerObj.sendMail(recipientSingle.visitorData.email,subject,parsedMessage);
-                });
+            var config = require('config');
+            var baseURL = "";
+
+            if(config.has("baseURL")) {
+                baseURL = config.get("baseURL");
             }
 
-        }
+            for(var iter = 0; iter < response.length; iter++)
+            {
+                if(blockDuplicate && templateObj.recipientList.includes(response[iter]._id))
+                {
+                    //Will not send email to prevent spam
+                }
+                else if(emailSettingObj.hasOwnProperty("unsubscribeList") && emailSettingObj.unsubscribeList.includes(response[iter]._id))
+                {
+                    //Will not send email to unsubscribed emails
+                }
+                else
+                {
+                    var recipientSingle = {};
+                    recipientSingle.id = response[iter]._id;
+                    recipientSingle.visitorData = response[iter].visitorData;
+
+                    EmailManagerObj.parseEmail(message,recipientSingle,function(parsedMessage,recipientSingle){
+
+                        //Set the unsubscribe link in the email
+                        parsedMessage = parsedMessage + "\r\n\r\n\r\nClick the link below to unsubscribe emails\r\n"+baseURL+"/unsubscribe/"+appId+"/"+recipientSingle.id;
+                        EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitorData.email,subject,parsedMessage,templateObj,appId,clientId);
+                        EmailManagerObj.sendMail(recipientSingle.visitorData.email,subject,parsedMessage);
+                    });
+                }
+
+            }
+        });
     }
 
     /*
@@ -544,6 +561,96 @@ class EmailManager {
 
         return res.send({status:'success'});
     }
+
+  	/*
+  	 * @desc Validates the visitor and app data, returns the app details
+  	 */
+  	validateAppDetails(appId, visitorId, callback)
+  	{
+        if(appId)
+    	{
+
+            var visitorsCollection = global.db.collection('visitors').aggregate([
+                { $match :
+                    {
+                        appId: appId,
+                        _id: visitorId
+                    }
+                },
+                { $limit : 1 }
+            ]).toArray(function(err,visitors)
+                {
+                    if(err)
+                    {
+                        callback(false,false);
+                    }
+                    else if(visitors.length > 0)
+                    {
+                        global.db.collection('apps').aggregate([
+                            { $match :
+                                { _id: appId }
+                            },
+                            { $limit : 1 }
+                        ]).toArray(function(err,apps)
+                            {
+                                if(err)
+                                {
+                                    callback(false,false);
+                                }
+                                else if(apps.length > 0)
+                                {
+                                    callback(apps[0],visitors[0]);
+                                }
+                                else
+                                {
+                                    callback(false,false);
+                                }
+                            }
+                        );
+
+
+                    }
+                    else
+                    {
+                        callback(false,false);
+                    }
+                }
+            );
+    	}
+
+  	}
+
+  	/*
+  	 * @desc Unsubscribes an user email from an app
+  	 */
+  	unsubscribeVisitorFromApp(appDetails, visitorDetails)
+  	{
+        if(appDetails)
+    	{
+            var EmailManagerObj = new EmailManager();
+
+            var emailSettingsCollection = global.db.collection('emailsettings');
+
+            EmailManagerObj.getEmailSettingByCompany(appDetails.clientId, function(emailSetting){
+
+                if(!emailSetting.hasOwnProperty("unsubscribeList"))
+                {
+                    emailSetting.unsubscribeList = [];
+                }
+                emailSetting.unsubscribeList.push(visitorDetails._id);
+
+                emailSettingsCollection.update(
+                    { _id:  emailSetting._id},
+                    emailSetting,
+                    { upsert: false }
+                );
+
+            });
+
+            return true;
+        }
+
+  	}
 }
 
 

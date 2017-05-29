@@ -32,34 +32,33 @@
                     <div class="row">
                         <div class="col-md-12">
 
-                            <table class="table table-striped" id="ucVisitorDetailTable" style="display:none;">
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">Name</td>
-                                        <td class="text-center" rv-text="visitor.visitorData.name"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">ID</td>
-                                        <td class="text-center" rv-text="visitor.displayId"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">Email</td>
-                                        <td class="text-center" rv-text="visitor.visitorData.email"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">Sessions</td>
-                                        <td class="text-center" rv-text="visitor.displaySessionCount"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">Last Login</td>
-                                        <td class="text-center" rv-text="visitor.displayLastSeen"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">First Login</td>
-                                        <td class="text-center" rv-text="visitor.displayFirstSeen"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <br/>
+                            <div class="ucTable ucTableStripped" id="ucVisitorDetailTable" style="display:none;">
+                                <div class="ucTableRow">
+                                    <div class="ucTableCell text-center">Name</div>
+                                    <div class="ucTableCell text-center" rv-text="visitor.visitorData.name"></div>
+                                </div>
+                                <div class="ucTableRow">
+                                    <div class="ucTableCell text-center">ID</div>
+                                    <div class="ucTableCell text-center" rv-text="visitor.displayId"></div>
+                                </div>
+                                <div class="ucTableRow">
+                                    <div class="ucTableCell text-center">Email</div>
+                                    <div class="ucTableCell text-center" rv-text="visitor.visitorData.email"></div>
+                                </div>
+                                <div class="ucTableRow">
+                                    <div class="ucTableCell text-center">Sessions</div>
+                                    <div class="ucTableCell text-center" rv-text="visitor.displaySessionCount"></div>
+                                </div>
+                                <div class="ucTableRow">
+                                    <div class="ucTableCell text-center">Last Login</div>
+                                    <div class="ucTableCell text-center" rv-text="visitor.displayLastSeen"></div>
+                                </div>
+                                <div class="ucTableRow">
+                                    <div class="ucTableCell text-center">First Login</div>
+                                    <div class="ucTableCell text-center" rv-text="visitor.displayFirstSeen"></div>
+                                </div>
+                            </div>
 
                             <div id="ucVisitorDetailAjaxLoader" class='ucAjaxLoader'><div></div></div>
 
@@ -78,22 +77,20 @@
 
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="ucUserTabContentMessaging">
-                        <table class="table table=stripped" id="ucVisitorMessages">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Date &amp; Time</th>
-                                    <th class="text-center">Subject</th>
-                                    <th class="text-center">Message</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr rv-each-message="messageList">
-                                    <td rv-text="message.displayDate"></td>
-                                    <td rv-text="message.subject"></td>
-                                    <td rv-text="message.message"></td>
-                                </tr>
-                            </tbody>
-                        </table>
+
+                        <br/>
+                        <div class="ucTable" id="ucVisitorMessages">
+                            <div class="ucTableRow">
+                                <div class="ucTableHead text-center">Date &amp; Time</div>
+                                <div class="ucTableHead text-center">Subject</div>
+                                <div class="ucTableHead text-center">Message</div>
+                            </div>
+                            <div class="ucTableRow" rv-each-message="messageList">
+                                <div class="ucTableCell" rv-text="message.displayDate"></div>
+                                <div class="ucTableCell" rv-text="message.subject"></div>
+                                <div class="ucTableCell" rv-text="message.message"></div>
+                            </div>
+                        </div>
 
                         <div id="ucVisitorMessageAjaxLoader" class='ucAjaxLoader'><div></div></div>
 

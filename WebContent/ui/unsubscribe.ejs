@@ -1,0 +1,31 @@
+    <% include partials/header.ejs %>
+    <!-- external scripts -->
+    <% include partials/commoncss.ejs %>
+
+    <% include partials/commonscripts.ejs %>
+
+</head>
+<body>
+
+    <div class="container uc_mt_large">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <% if(confirmation){ %>
+                    <h4>Unsubscribe from <%- app.name %></h4>
+                    <p>On clicking the below button, you won't receive any emails from us to <%- visitor.visitorData.email %></p>
+
+                    <form method="post" action="">
+                        <button type="submit" class="btn btn-primary">Unsubscribe</button>
+                    </form>
+                <% } else{ %>
+                    <h4>You have been successfully unsubscribed from emails</h4>
+                <% } %>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
