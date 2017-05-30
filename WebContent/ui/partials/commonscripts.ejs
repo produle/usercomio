@@ -13,10 +13,12 @@
 
 
 
-
-
-
 <!-- internal scripts -->
+<% if(global.prodEnvType) {%>
+ <script type="text/javascript" src="/dist/js/internal/internal.min.js"></script>
+<% }
+else
+{ %>
 <script type="text/javascript" src="/js/src/internal/common/dao.js"></script>
 <script type="text/javascript" src="/js/src/internal/common/utils.js"></script>
 <script type="text/javascript" src="/js/src/internal/common/ajax.js"></script>
@@ -29,3 +31,7 @@
 <script type="text/javascript" src="/js/src/internal/main.js"></script>
 <script type="text/javascript" src="/js/src/internal/messaging/messaging.js"></script>
 <script type="text/javascript" src="/js/src/internal/messaging/emailmessaging.js"></script>
+<%}%>
+
+
+
