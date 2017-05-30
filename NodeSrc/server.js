@@ -16,9 +16,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const utils = require('./core/utils').utils;
-
-
-
+ 
 //lets require/import the mongodb native drivers.
 var mongodb = require('mongodb');
 
@@ -26,6 +24,9 @@ var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 
 var config = require('config');
+
+// initially set to the development platform 
+global.prodEnvType = false;
 
 if(config.has("database")) {
 
@@ -142,3 +143,9 @@ fs.readdirSync(path.join(__dirname, "managers")).forEach(function (file) {
         app.use(`/${basePath}`, controllerList[basePath].router);
     }
 });
+ 
+  
+if(process.argv[2] == "prod")
+{
+	global.prodEnvType = true;
+} 
