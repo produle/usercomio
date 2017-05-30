@@ -359,7 +359,8 @@ h2
 	top: 15px;
 	right: 10px;
 }
-.ucSearchBar .ucAddFilterBtn
+.ucSearchBar .ucAddFilterBtn,
+.ucSearchBar #ucVisitorFieldsPopover
 {
 	color: #B1B0BF;
     font-size: 25px;
@@ -368,7 +369,8 @@ h2
     position: relative;
     top: 2px;
 }
-.ucSearchBar .ucAddFilterBtn:hover
+.ucSearchBar .ucAddFilterBtn:hover,
+.ucSearchBar #ucVisitorFieldsPopover:hover
 {
 	color: #ccc;
 }

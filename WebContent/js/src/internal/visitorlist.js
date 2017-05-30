@@ -62,11 +62,13 @@ function UC_VisitorListController()
             $("#ucVisitorFieldsPopover").popover({
                 html: true,
                 content: function() {
-                    var popoverHTML = $('#ucVisitorFieldsPopoverContent').clone();
-                    $(popoverHTML).find("#ucVisitorFieldList").removeAttr("id").addClass("ucVisitorFieldList");
-                    return $(popoverHTML).html();
+                    return thisClass.getOrderedFieldsForPopover();
                 }
             });
+
+            $('#ucVisitorFieldsPopover').on('shown.bs.popover', function () {
+                $(".ucVisitorFieldList").sortable();
+            })
 
             $("#ucVisitorFieldsPopover").on('shown.bs.popover', function () {
                 for(var i = 0; i < thisClass.displayFields.length; i++)
@@ -285,6 +287,8 @@ function UC_VisitorListController()
         thisClass.rivetVisitorListObj.models.list = thisClass.visitors;
 
         thisClass.selectCurrentSort();
+
+        thisClass.reorderFieldsInUserlist();
 
         thisClass.toggleVisitorListFields();
 
@@ -565,10 +569,15 @@ function UC_VisitorListController()
     {
         thisClass.displayFields = [];
 
-        $(".ucVisitorFieldListItem").each(function(){
-            if($(this).is(":checked"))
+        var fieldsOrder = [];
+
+        $(".ucVisitorFieldList").find("li").each(function(){
+
+            fieldsOrder.push($(this).find(".ucVisitorFieldListItem").attr("data-fieldid"));
+
+            if($(this).find(".ucVisitorFieldListItem").is(":checked"))
             {
-                thisClass.displayFields.push($(this).attr("data-fieldid"));
+                thisClass.displayFields.push($(this).find(".ucVisitorFieldListItem").attr("data-fieldid"));
             }
         });
 
@@ -591,8 +600,11 @@ function UC_VisitorListController()
             UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
         }
         UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].displayFields = thisClass.displayFields;
+        UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].fieldsOrder = fieldsOrder;
 
         uc_main.filterController.saveAppPreference();
+
+        thisClass.reorderFieldsInUserlist();
 
         thisClass.toggleVisitorListFields();
     };
@@ -608,5 +620,68 @@ function UC_VisitorListController()
         {
             $(".ucVisitorListToggleField_"+thisClass.displayFields[i]).show();
         };
+    };
+
+    /*
+     * @desc Orders the fields in popover based on the user preference
+     */
+    this.getOrderedFieldsForPopover = function()
+    {
+        var popoverHTML = $('#ucVisitorFieldsPopoverContent').clone();
+
+        if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(uc_main.appController.currentAppId) && UC_UserSession.user.app[uc_main.appController.currentAppId].hasOwnProperty('filterOrder') && UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.hasOwnProperty(thisClass.currentFilterId) && UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].hasOwnProperty('fieldsOrder'))
+        {
+            var fieldsOrder = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].fieldsOrder;
+
+            var tmpOrderedHTML = "";
+
+            for(var i = 0; i < fieldsOrder.length; i++)
+            {
+                tmpOrderedHTML += $(popoverHTML).find("li[data-fieldid='"+fieldsOrder[i]+"']").prop('outerHTML') ;
+            }
+
+            $(popoverHTML).find("#ucVisitorFieldList").html(tmpOrderedHTML);
+        }
+
+        $(popoverHTML).find("#ucVisitorFieldList").removeAttr("id").addClass("ucVisitorFieldList");
+        return $(popoverHTML).html();
+    };
+
+    /*
+     * @desc Orders the fields in userlist based on the user preference
+     */
+    this.reorderFieldsInUserlist = function()
+    {
+        var fieldsOrder = [];
+
+        if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(uc_main.appController.currentAppId) && UC_UserSession.user.app[uc_main.appController.currentAppId].hasOwnProperty('filterOrder') && UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.hasOwnProperty(thisClass.currentFilterId) && UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].hasOwnProperty('fieldsOrder'))
+        {
+            fieldsOrder = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[thisClass.currentFilterId].fieldsOrder;
+
+        }
+        else
+        {
+            $("#ucVisitorFieldList").find("li").each(function(){
+                fieldsOrder.push($(this).find(".ucVisitorFieldListItem").attr("data-fieldid"));
+            });
+        }
+
+        $(".ucTableRow").each(function(){
+
+            var previousElement = ".ucVisitorListSession";
+
+            for(var i = 0; i < fieldsOrder.length; i++)
+            {
+                var tmpElement = $(this).find(".ucVisitorListToggleField_"+fieldsOrder[i]).clone();
+                $(this).find(".ucVisitorListToggleField_"+fieldsOrder[i]).remove();
+
+                $(tmpElement).insertAfter($(this).find(previousElement));
+
+                previousElement = ".ucVisitorListToggleField_"+fieldsOrder[i];
+
+            }
+
+
+        });
     };
 }
