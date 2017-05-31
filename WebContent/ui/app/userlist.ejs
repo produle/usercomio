@@ -10,21 +10,20 @@
                            <form class="form-inline">
                                 <div class="ucSearchWrapper row">
                                   <div class="form-group col-md-4 col-sm-4 col-xs-4">
-                                    <select class="form-control ucSearchSelect" id="">
-                                        <option>Name</option>
-                                        <option>Session</option>
-                                        <option>Browser</option>
-                                        <option>Operating System</option>
-                                        <option>Device</option>
-                                        <option>Country</option>
+                                    <select class="form-control ucSearchSelect" id="ucVisitorSearchField">
+                                        <option value="visitorData.name">Name</option>
+                                        <option value="sessions.agentInfo.browser">Browser</option>
+                                        <option value="sessions.agentInfo.os">Operating System</option>
+                                        <option value="sessions.agentInfo.device">Device</option>
+                                        <option value="sessions.geoLocationInfo.country">Country</option>
                                     </select>
                                     
                                   </div>
                                   <div class="form-group col-md-8 col-sm-8 col-xs-8 ">
-                                    <input type="text" class="form-control" >
+                                    <input type="text" class="form-control" id="ucVisitorSearchValue">
                                   </div>
                                 </div>
-                                <button type="submit" class="btn ucSearchBtn">Search</button>
+                                <button type="submit" class="btn ucSearchBtn" id="ucVisitorSearchBtn">Search</button>
                                   
                               
 
@@ -36,10 +35,10 @@
                         <div class="ucSendMessageWrapper">
                             <button class="btn btn-primary" id="ucSendMessageGroupBtn">Send Message</button>
                             <span class="ucAddFilterBtn"><i class="ico-filter2"></i></span>
-                            <button type="button" class="btn btn-sm btn-default" id="ucVisitorFieldsPopover" data-toggle="popover" title="Select Fields" data-placement="bottom" data-container="body" data-html="true"><i class="fa fa-th"></i></button>
+                            <span id="ucVisitorFieldsPopover" data-toggle="popover" title="Select Fields" data-placement="bottom" data-container="body" data-html="true" style="font-size: 23px;"><i class="ico-bill"></i></span>
                             <div id="ucVisitorFieldsPopoverContent" style="display:none;">
                                 <ul id="ucVisitorFieldList">
-                                    <li rv-each-field="fieldList">
+                                    <li rv-each-field="fieldList" rv-data-fieldid="field.value">
                                         <label>
                                             <input type="checkbox" class="ucVisitorFieldListItem" rv-data-fieldid="field.value" /> <span  rv-text="field.label"></span>
                                         </label>
@@ -78,7 +77,7 @@
                                                 Name <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
                                             </div>
                                         </div>
-                                        <div class="ucTableHead text-center">
+                                        <div class="ucTableHead text-center ucVisitorListSession">
                                             <div class="uc_table_header text-center">
                                                 Session
                                             </div>
@@ -132,7 +131,7 @@
 
                                            </div>
                                         </div>
-                                        <div class="ucTableCell text-center" rv-sessioncount="visitor.sessions">
+                                        <div class="ucTableCell text-center ucVisitorListSession" rv-sessioncount="visitor.sessions">
 
                                         </div>
                                         <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_browser">

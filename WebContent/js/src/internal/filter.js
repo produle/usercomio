@@ -184,6 +184,18 @@ function UC_FilterController()
             id: 'sessions.agentInfo.browser',
             label: 'Browser',
             type: 'string'
+          },{
+            id: 'sessions.agentInfo.os',
+            label: 'Operatig System',
+            type: 'string'
+          },{
+            id: 'sessions.agentInfo.device',
+            label: 'Device',
+            type: 'string'
+          },{
+            id: 'sessions.geoLocationInfo.country',
+            label: 'Country',
+            type: 'string'
           }],
 
           rules: filterRule
