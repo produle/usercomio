@@ -79,6 +79,8 @@ function UC_VisitorListController()
             })
 
             $(document).on("click","#ucVisitorFieldsPopoverSubmit",thisClass.saveFieldsListHandler);
+
+            $(document).on("click","#ucVisitorSearchBtn",thisClass.searchHandler);
         }
 	};
 
@@ -683,5 +685,22 @@ function UC_VisitorListController()
 
 
         });
+    };
+
+    /*
+     * @desc Handles the search process, frames the query and calls the visitor list (similar to draaft filter)
+     */
+    this.searchHandler = function(e)
+    {
+        e.preventDefault();
+
+        var searchField = $("#ucVisitorSearchField").val();
+
+        var searchValue = $("#ucVisitorSearchValue").val();
+
+        var mongoFilter = '{ "$and": [ { "'+searchField+'": { "$regex": "'+searchValue+'" } } ] }';
+
+        thisClass.resetPagination();
+        thisClass.getAllVisitors(mongoFilter);
     };
 }
