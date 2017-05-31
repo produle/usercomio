@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/produle/usercomio.svg?branch=master)](https://travis-ci.org/produle/usercomio)
+
 # UserCom
 A Open-Source platform to track, engage and convert users of your application, record events performed by them to improve usability with the help of reported metrics.
 
@@ -17,7 +19,8 @@ To run the application, execute the following commands
 ```
 cd path/to/application/root /* Change to application root directory */
 sudo mongod  /* This will start mongodb server with default port 27017 */
-npm run dev /* Starts the usercom application at port 3000 */
+npm run dev /* Starts the usercom application in development mode at port 3000 */
+npm run prod /* Starts the usercom application in production mode at port 3000 */
 ```
 
 ## Setup
@@ -48,8 +51,7 @@ npm run dev /* Starts the usercom application at port 3000 */
         rating:'5'  /* Sample Custom Data */
     })
     </script>
-    ```
-    
+    ``` 
 ## Copyright and license
 
 Copyright © 2008-2017 A Produle Systems Pvt Ltd. www.produle.com. All rights reserved. This project is released under the Apache 2.0 license. UserCom.io and usercomio names belong to 'A Produle Systems Pvt Ltd'

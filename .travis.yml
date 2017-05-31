@@ -1,0 +1,9 @@
+language: node_js
+
+node_js:
+  - "stable"
+ 
+script: grunt 
+
+after_success:
+  - sh push.sh

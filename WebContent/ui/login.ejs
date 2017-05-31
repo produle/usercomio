@@ -1,8 +1,15 @@
 <% include partials/header.ejs %>
 	<link rel="stylesheet" type="text/css" href="/css/external/jquery-ui.min.css" />
 <link rel="stylesheet" type="text/css" href="/css/external/bootstrap/bootstrap.min.css" />
-	  
-    <link rel="stylesheet" type="text/css" href="/css/internal/login.css" />
+	 
+	 <% if(global.prodEnvType) { %>
+		<link rel="stylesheet" type="text/css" href="/dist/styles/login.min.css" />  
+	<% }
+	else
+	{ %>
+	    <link rel="stylesheet" type="text/css" href="/css/internal/login.css" />
+	<%}%>
+   
 
     <!-- external scripts -->
     <% include partials/commonscripts.ejs %>
