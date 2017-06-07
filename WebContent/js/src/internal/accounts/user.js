@@ -228,7 +228,7 @@ function UC_UserController()
     {
         var user = UC_UserSession.user;
 
-        UC_AJAX.call('EmailManager/getemailsetting',{company:user.company},function(data,status,xhr)
+        UC_AJAX.call('EmailManager/getemailsetting',{appId:uc_main.appController.currentAppId,company:user.company},function(data,status,xhr)
         {
             if(data)
             {
@@ -244,6 +244,10 @@ function UC_UserController()
                 {
                     thisClass.emailSetting = data.emailsetting;
 
+                    var currentAppId = uc_main.appController.currentAppId
+                    var appIndex = UC_Utils.searchObjArray(uc_main.appController.apps,'_id',currentAppId);  
+                    $('#ucEmailSettings_App').text(uc_main.appController.apps[appIndex].name);
+                    
                     if(thisClass.emailSetting.emailType)
                     {
                         thisClass.currentEmailType = thisClass.emailSetting.emailType;
@@ -318,7 +322,7 @@ function UC_UserController()
             thisClass.emailSetting.smtp.host = smtphost;
             thisClass.emailSetting.smtp.port = smtpport;
             thisClass.emailSetting.smtp.user = smtpuser;
-            thisClass.emailSetting.smtp.pass = smtppass;
+            thisClass.emailSetting.smtp.pass = smtppass;  
         }
         else if(thisClass.currentEmailType == "Mailgun")
         {
@@ -364,12 +368,14 @@ function UC_UserController()
             thisClass.emailSetting.amazon.region = amazonregion;
             thisClass.emailSetting.amazon.from = amazonfrom;
         }
-
+ 
+        thisClass.emailSetting.appId = uc_main.appController.currentAppId;
+        
         $("#ucEditEmailAjaxLoader").show();
 
         var user = UC_UserSession.user;
 
-        UC_AJAX.call('EmailManager/saveemailsetting',{use:user,emailSetting:thisClass.emailSetting},function(data,status,xhr)
+        UC_AJAX.call('EmailManager/saveemailsetting',{user:user,emailSetting:thisClass.emailSetting},function(data,status,xhr)
         {
             if(data)
             {
