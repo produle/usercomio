@@ -618,7 +618,8 @@ h2
     float: left !important;
 }
 
-#ucDeleteTemplateBtn
+#ucDeleteEmailTemplateBtn,
+#ucDeleteBrowserNotificationTemplateBtn
 {	
 	width:16px !important;
 	margin-right:0 !important;

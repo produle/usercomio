@@ -1,0 +1,9 @@
+{
+  "short_name": "Usercom",
+  "name": "Test Application for Usercom",
+  "gcm_sender_id": "",
+  "gcm_user_visible_only": true,
+  "permissions": [
+    "gcm"
+  ]
+}
