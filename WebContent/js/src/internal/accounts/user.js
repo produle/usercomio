@@ -228,7 +228,7 @@ function UC_UserController()
     {
         var user = UC_UserSession.user;
 
-        UC_AJAX.call('EmailManager/getemailsetting',{company:user.company},function(data,status,xhr)
+        UC_AJAX.call('EmailManager/getemailsetting',{appId:uc_main.appController.currentAppId,company:user.company},function(data,status,xhr)
         {
             if(data)
             {
@@ -243,6 +243,10 @@ function UC_UserController()
                 else
                 {
                     thisClass.emailSetting = data.emailsetting;
+
+                    var currentAppId = uc_main.appController.currentAppId
+                    var appIndex = UC_Utils.searchObjArray(uc_main.appController.apps,'_id',currentAppId);
+                    $('#ucEmailSettings_App').text(uc_main.appController.apps[appIndex].name);
 
                     if(thisClass.emailSetting.emailType)
                     {
@@ -365,11 +369,13 @@ function UC_UserController()
             thisClass.emailSetting.amazon.from = amazonfrom;
         }
 
+        thisClass.emailSetting.appId = uc_main.appController.currentAppId;
+
         $("#ucEditEmailAjaxLoader").show();
 
         var user = UC_UserSession.user;
 
-        UC_AJAX.call('EmailManager/saveemailsetting',{use:user,emailSetting:thisClass.emailSetting},function(data,status,xhr)
+        UC_AJAX.call('EmailManager/saveemailsetting',{user:user,emailSetting:thisClass.emailSetting},function(data,status,xhr)
         {
             if(data)
             {

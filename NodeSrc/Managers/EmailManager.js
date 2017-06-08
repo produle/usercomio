@@ -26,14 +26,26 @@ class EmailManager {
 
         this.router.post("/getemailtemplates",(req, res) => { this.getAllEmailTemplates(req,res); });
         this.router.post("/deletetemplate",(req, res) => { this.deleteTemplate(req,res); });
-        this.router.post("/addemailsetting",(req, res) => { this.addEmailSettings(req,res); });
+        this.router.post("/addemailsetting",(req, res) => {
+        	   this.addEmailSettings(req.body.user,req.body.emailSettings,function(emailsetting){
+                   if(emailsetting)
+                   {
+                	   return res.send({status:'success'});
+                   }
+                   else
+                   {
+                       return res.send({status:'failure'});
+                   }
+               });
+        });
         this.router.post("/getemailsetting",(req, res) => {
-            this.getEmailSettingByCompany(req.body.company,function(emailsetting){
-                if(!req.isAuthenticated())
-                {
-                    return res.send({status:'authenticationfailed'});
-                }
+            this.getEmailSettingByCompany(req.body.appId,req.body.company,function(emailsetting){
 
+            	var config = require('config');
+           		if(config.has("setupCompleted") && config.get("setupCompleted") == 1 && !req.isAuthenticated())
+                 {
+                     return res.send({status:'authenticationfailed'});
+                 }
                 return res.send({status:"Success",emailsetting:emailsetting});
             });
         });
@@ -43,9 +55,9 @@ class EmailManager {
     /*
      * @desc Initializes email configuration
      */
-    initMailConfig(user)
+    initMailConfig(appId,user)
     {
-        this.getEmailSettingByCompany(user.company,function(emailSettingObj){
+        this.getEmailSettingByCompany(appId,user.company,function(emailSettingObj){
 
             emailSetting = emailSettingObj;
             if(emailSetting.emailType && emailSetting.emailType == "SMTP")
@@ -288,30 +300,30 @@ class EmailManager {
     /*
      * @desc Stores the new emailsettings in the DB
      */
-    addEmailSettings(req,res)
+    addEmailSettings(user,emailSettings,callback)
     {
-        var user = req.body.user;
-        var emailSettings = req.body.emailSettings;
-
         var emailSettingsCollection = global.db.collection('emailsettings');
         var userCollection = global.db.collection('users');
 
         emailSettings._id = utils.guidGenerator();
         emailSettings.clientId = user.company;
 
-        userCollection.findOne({ _id: user._id },function(err,userObj)
+        userCollection.findOne({ _id: user._id},function(err,userObj)
           {
-              if (err)
+
+              if(err)
               {
-                    res.status(500);
-                    return res.send({status:'failure'});
+                  callback(null);
+              }
+              else
+              {
+                  emailSettings.clientId = userObj.company;
+
+                  emailSettingsCollection.insert(emailSettings);
+
+                  callback(true);
               }
 
-              emailSettings.clientId = userObj.company;
-
-              emailSettingsCollection.insert(emailSettings);
-
-              return res.send({status:'success'});
           });
 
     }
@@ -319,12 +331,21 @@ class EmailManager {
     /*
      * @desc Returns the emailsetting object by given clientid
      */
-    getEmailSettingByCompany(clientId,callback)
+    getEmailSettingByCompany(appId,clientId,callback)
     {
         var emailSettingsCollection = global.db.collection('emailsettings').aggregate([
-                { $match :
-                    { clientId: clientId }
+             { $match :
+                { "$and": [
+                    {
+                      clientId:clientId
+                    },
+                    {
+                    	appId:appId
+                    }
+                  ]
                 }
+             }
+
             ]).toArray(function(err,emailsetting)
                 {
                     if(err)
@@ -345,14 +366,14 @@ class EmailManager {
     updateEmailSetting(req,res)
     {
 
-        if(!req.isAuthenticated())
+    	var config = require('config');
+   		if(config.has("setupCompleted") && config.get("setupCompleted") == 1 && !req.isAuthenticated())
         {
             return res.send({status:'authenticationfailed'});
         }
 
         var user = req.body.user;
         var emailSetting = req.body.emailSetting;
-
         var emailSettingsCollection = global.db.collection('emailsettings');
 
         emailSettingsCollection.update(
@@ -433,7 +454,7 @@ class EmailManager {
 
             var emailSettingsCollection = global.db.collection('emailsettings');
 
-            EmailManagerObj.getEmailSettingByCompany(appDetails.clientId, function(emailSetting){
+            EmailManagerObj.getEmailSettingByCompany(appDetails._id,appDetails.clientId, function(emailSetting){
 
                 if(!emailSetting.hasOwnProperty("unsubscribeList"))
                 {

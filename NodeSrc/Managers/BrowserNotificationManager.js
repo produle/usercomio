@@ -23,14 +23,26 @@ class BrowserNotificationManager {
 
         this.router.post("/getbrowsernotificationtemplates",(req, res) => { this.getAllBrowserNotificationTemplates(req,res); });
         this.router.post("/deletetemplate",(req, res) => { this.deleteTemplate(req,res); });
-        this.router.post("/addbrowserNotificationsetting",(req, res) => { this.addBrowserNotificationSettings(req,res); });
-        this.router.post("/getbrowserNotificationsetting",(req, res) => {
-            this.getBrowserNotificationSettingByCompany(req.body.company,function(browserNotificationSetting){
-                if(!req.isAuthenticated())
-                {
-                    return res.send({status:'authenticationfailed'});
-                }
+        this.router.post("/addbrowsernotificationsetting",(req, res) => {
+        	   this.addBrowserNotificationSettings(req.body.user,req.body.browserNotificationSettings,function(browserNotificationSetting){
+                   if(browserNotificationSetting)
+                   {
+                	   return res.send({status:'success'});
+                   }
+                   else
+                   {
+                       return res.send({status:'failure'});
+                   }
+               });
+        });
+        this.router.post("/getbrowsernotificationsetting",(req, res) => {
+            this.getBrowserNotificationSettingByCompany(req.body.appId,req.body.company,function(browserNotificationSetting){
 
+            	var config = require('config');
+           		if(config.has("setupCompleted") && config.get("setupCompleted") == 1 && !req.isAuthenticated())
+                 {
+                     return res.send({status:'authenticationfailed'});
+                 }
                 return res.send({status:"Success",browserNotificationSetting:browserNotificationSetting});
             });
         });
@@ -40,9 +52,9 @@ class BrowserNotificationManager {
     /*
      * @desc Initializes browser notification configuration
      */
-    initBrowserNotificationConfig(user)
+    initBrowserNotificationConfig(appId,user)
     {
-        this.getBrowserNotificationSettingByCompany(user.company,function(browserNotificationSettingObj){
+        this.getBrowserNotificationSettingByCompany(appId,user.company,function(browserNotificationSettingObj){
 
             browserNotificationSetting = browserNotificationSettingObj;
 
@@ -245,11 +257,8 @@ class BrowserNotificationManager {
     /*
      * @desc Stores the new browsernotificationsettings in the DB
      */
-    addBrowserNotificationSettings(req,res)
+    addBrowserNotificationSettings(user,browserNotificationSettings,callback)
     {
-        var user = req.body.user;
-        var browserNotificationSettings = req.body.browserNotificationSettings;
-
         var browserNotificationSettingsCollection = global.db.collection('browsernotificationsettings');
         var userCollection = global.db.collection('users');
 
@@ -258,17 +267,19 @@ class BrowserNotificationManager {
 
         userCollection.findOne({ _id: user._id },function(err,userObj)
           {
-              if (err)
+              if(err)
               {
-                    res.status(500);
-                    return res.send({status:'failure'});
+                  callback(null);
+              }
+              else
+              {
+                  browserNotificationSettings.clientId = userObj.company;
+
+                  browserNotificationSettingsCollection.insert(browserNotificationSettings);
+
+                  callback(true);
               }
 
-              browserNotificationSettings.clientId = userObj.company;
-
-              browserNotificationSettingsCollection.insert(browserNotificationSettings);
-
-              return res.send({status:'success'});
           });
 
     }
@@ -276,12 +287,20 @@ class BrowserNotificationManager {
     /*
      * @desc Returns the browserNotificationsetting object by given clientid
      */
-    getBrowserNotificationSettingByCompany(clientId,callback)
+    getBrowserNotificationSettingByCompany(appId,clientId,callback)
     {
         var browserNotificationSettingsCollection = global.db.collection('browsernotificationsettings').aggregate([
                 { $match :
-                    { clientId: clientId }
-                }
+                    { "$and": [
+                        {
+                          clientId:clientId
+                        },
+                        {
+                            appId:appId
+                        }
+                      ]
+                    }
+                 }
             ]).toArray(function(err,browserNotificationSetting)
                 {
                     if(err)
@@ -302,7 +321,8 @@ class BrowserNotificationManager {
     updateBrowserNotificationSetting(req,res)
     {
 
-        if(!req.isAuthenticated())
+        var config = require('config');
+   		if(config.has("setupCompleted") && config.get("setupCompleted") == 1 && !req.isAuthenticated())
         {
             return res.send({status:'authenticationfailed'});
         }
@@ -390,7 +410,7 @@ class BrowserNotificationManager {
 
             var browserNotificationSettingsCollection = global.db.collection('browsernotificationsettings');
 
-            BrowserNotificationManagerObj.getBrowserNotificationSettingByCompany(appDetails.clientId, function(browserNotificationSetting){
+            BrowserNotificationManagerObj.getBrowserNotificationSettingByCompany(appDetails._id,appDetails.clientId, function(browserNotificationSetting){
 
                 if(!browserNotificationSetting.hasOwnProperty("unsubscribeList"))
                 {

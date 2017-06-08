@@ -103,7 +103,7 @@ form
 .ucSetupProgressSteps li:after
 {
 	content: '';
-    width: 110%;
+    width: 125%;
     height: 2px;
     background: #e8eced;
     position: absolute;

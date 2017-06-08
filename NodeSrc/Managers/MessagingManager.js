@@ -53,7 +53,7 @@ class MessagingManager {
         {
             var EmailManagerObj = new EmailManager();
 
-            EmailManagerObj.initMailConfig(user);
+            EmailManagerObj.initMailConfig(appId,user);
 
             if(template == "new")
             {
@@ -73,7 +73,7 @@ class MessagingManager {
         {
             var BrowserNotificationManagerObj = new BrowserNotificationManager();
 
-            BrowserNotificationManagerObj.initBrowserNotificationConfig(user);
+            BrowserNotificationManagerObj.initBrowserNotificationConfig(appId,user);
 
             if(template == "new")
             {
@@ -146,7 +146,7 @@ class MessagingManager {
         {
             var EmailManagerObj = new EmailManager();
 
-            EmailManagerObj.getEmailSettingByCompany(clientId,function(emailSettingObj){
+            EmailManagerObj.getEmailSettingByCompany(appId,clientId,function(emailSettingObj){
 
                 MessagingManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId,messageType,emailSettingObj);
             });
@@ -155,7 +155,7 @@ class MessagingManager {
         {
             var BrowserNotificationManagerObj = new BrowserNotificationManager();
 
-            BrowserNotificationManagerObj.getBrowserNotificationSettingByCompany(clientId,function(browserNotificationSettingObj){
+            BrowserNotificationManagerObj.getBrowserNotificationSettingByCompany(appId,clientId,function(browserNotificationSettingObj){
 
                 MessagingManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId,messageType,browserNotificationSettingObj);
             });

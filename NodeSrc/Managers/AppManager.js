@@ -7,6 +7,7 @@
 
 var express = require("express");
 var app = require("../server").app;
+var EmailManager = require("./EmailManager").EmailManager;
 
 class AppManager {
 
@@ -14,8 +15,7 @@ class AppManager {
     {
 
         this.app = app;
-        this.router = express.Router(); 
-
+        this.router = express.Router();
         
         this.router.post("/createNewApp",(req, res) => { this.createNewApp(req,res); });
         this.router.post("/getAllUserApps",(req, res) => { this.getAllUserApps(req,res); });
@@ -109,6 +109,22 @@ class AppManager {
                         }
                         else
                         {
+                            var emailSettings = {
+                                    emailType : "SMTP",
+                                    smtp: {
+                                      host : "",
+                                      port : "",
+                                      user : "",
+                                      pass : "",
+                                    },
+                                    appId : newApp._id
+                                };
+
+                            var EmailManagerObj = new EmailManager();
+                            EmailManagerObj.addEmailSettings(user, emailSettings,function(){
+
+                            });
+
                             return res.send({status:newApp});
                         }
 
