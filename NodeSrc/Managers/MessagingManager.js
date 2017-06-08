@@ -73,21 +73,26 @@ class MessagingManager {
         {
             var BrowserNotificationManagerObj = new BrowserNotificationManager();
 
-            BrowserNotificationManagerObj.initBrowserNotificationConfig(appId,user);
+            BrowserNotificationManagerObj.initBrowserNotificationConfig(appId,user,function(response){
+                if(response)
+                {
 
-            if(template == "new")
-            {
-                BrowserNotificationManagerObj.saveNewTemplate(appId,user,subject,message,function(templateObj){
-                    MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate,messageType);
-                });
-            }
-            else
-            {
-                BrowserNotificationManagerObj.getTemplateById(appId,template,function(templateObj){
-                    BrowserNotificationManagerObj.updateTemplate(appId,user,subject,message,templateObj);
-                    MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate,messageType);
-                });
-            }
+                    if(template == "new")
+                    {
+                        BrowserNotificationManagerObj.saveNewTemplate(appId,user,subject,message,function(templateObj){
+                            MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate,messageType);
+                        });
+                    }
+                    else
+                    {
+                        BrowserNotificationManagerObj.getTemplateById(appId,template,function(templateObj){
+                            BrowserNotificationManagerObj.updateTemplate(appId,user,subject,message,templateObj);
+                            MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate,messageType);
+                        });
+                    }
+                }
+            });
+
         }
 
         return res.send({status:"Success"});

@@ -125,6 +125,19 @@ class AppManager {
 
                             });
 
+                            var browserNotificationSettings = {
+                                    fcmKey : "",
+                                    fcmSenderId : "",
+                                    fcmAppName : "",
+                                    icon : "",
+                                    appId : newApp._id
+                                };
+
+                            var BrowserNotificationManagerObj = new BrowserNotificationManager();
+                            BrowserNotificationManagerObj.addBrowserNotificationSettings(user, browserNotificationSettings,function(){
+
+                            });
+
                             return res.send({status:newApp});
                         }
 

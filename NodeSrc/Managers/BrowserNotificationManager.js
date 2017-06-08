@@ -52,13 +52,21 @@ class BrowserNotificationManager {
     /*
      * @desc Initializes browser notification configuration
      */
-    initBrowserNotificationConfig(appId,user)
+    initBrowserNotificationConfig(appId,user,callback)
     {
         this.getBrowserNotificationSettingByCompany(appId,user.company,function(browserNotificationSettingObj){
 
             browserNotificationSetting = browserNotificationSettingObj;
 
-            webpush.setGCMAPIKey(browserNotificationSetting.fcmKey);
+            if(browserNotificationSetting.fcmKey != null && browserNotificationSetting.fcmKey != "")
+            {
+                webpush.setGCMAPIKey(browserNotificationSetting.fcmKey);
+                callback(true);
+            }
+            else
+            {
+                callback(false);
+            }
 
         });
     }
@@ -309,7 +317,14 @@ class BrowserNotificationManager {
                     }
                     else
                     {
-                        callback(browserNotificationSetting[0]);
+                        if(browserNotificationSetting.length == 1)
+                        {
+                            callback(browserNotificationSetting[0]);
+                        }
+                        else
+                        {
+                            callback(null);
+                        }
                     }
                 }
             );

@@ -277,6 +277,65 @@
 </div>
 
 
+<div id="ucEditBrowserNotificationModal" class="modal ucModal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+               <img src="/images/app/modal/smtpIcon.png" alt=""/>
+               <h2>Browser Notification Settings for <span id="ucBrowserNotificationSettings_App"></span></h2>
+
+                <div class="row">
+
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <label>FCM Secret Key</label>
+                          </span>
+                          <input type="text" class="form-control" id="uceditbrowsernotification_fcmkey" placeholder="Secret Key from Google FCM console">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <label>FCM Sender ID</label>
+                          </span>
+                          <input type="text" class="form-control" id="uceditbrowsernotification_fcmsenderid" placeholder="Sender ID from Google FCM console">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <label>FCM App Name</label>
+                          </span>
+                          <input type="text" class="form-control" id="uceditbrowsernotification_fcmappname" placeholder="App Name from Google FCM console">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <label>Icon URL</label>
+                          </span>
+                          <input type="text" class="form-control" id="uceditbrowsernotification_icon" placeholder="URL of icon to be displayed in notification">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ucButtonWrapper">
+                    <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="uceditbrowsernotification_submit" class="btn ucSaveBtn">Save</button>
+                    <div id="ucEditBrowserNotificationAjaxLoader" class='ucAjaxLoader'><div></div></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 <div id="ucEditDatabaseModal" class="modal ucModal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
