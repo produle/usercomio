@@ -395,13 +395,13 @@ function UC_VisitorListController()
         {
             $(".uc-user-select").prop("checked",true);
             $("#ucSendMessageGroupBtn").text("Send Message to All");
-            $("#ucSendMessageSubmit").text("Send to All");
+            $("#ucSendMessageEmailSubmit,#ucSendMessageBrowserNotificationSubmit").text("Send to All");
         }
         else
         {
             $(".uc-user-select").prop("checked",false);
             $("#ucSendMessageGroupBtn").text("Send Message");
-            $("#ucSendMessageSubmit").text("Send");
+            $("#ucSendMessageEmailSubmit,#ucSendMessageBrowserNotificationSubmit").text("Send");
         }
     };
 
@@ -432,7 +432,7 @@ function UC_VisitorListController()
             });
         }
 
-        $("#ucSendMessageGroupBtn,#ucSendMessageSubmit").text("Send to "+recipientCount+" users");
+        $("#ucSendMessageGroupBtn,#ucSendMessageEmailSubmit,#ucSendMessageBrowserNotificationSubmit").text("Send to "+recipientCount+" users");
     };
 
     /*

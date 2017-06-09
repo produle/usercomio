@@ -8,8 +8,8 @@ function UC_UserRegistrationController()
     var thisClass = this;
 
     this.config = {};
-    
-    this.setupappId = ""; 
+
+    this.setupappId = "";
 
   this.constructor = function()
   {
@@ -25,7 +25,7 @@ function UC_UserRegistrationController()
 
 	$('#ucsetup_getting_startedbtn').on('click',thisClass.handleGettingStartedBtnAction);
     $('#ucuserreg_submitbtn').on('click',thisClass.handleRegisterBtnAction);
-    $('#ucsetup_dbsubmitbtn').on('click',thisClass.handleSetupDBAction); 
+    $('#ucsetup_dbsubmitbtn').on('click',thisClass.handleSetupDBAction);
     $('#ucsetup_usersubmitbtn').on('click',thisClass.handleSetupUserAction);
     $('#ucsetup_appsubmitbtn').on('click',thisClass.handleSetupAppAction);
     $('#ucsetup_smtpsubmitbtn').on('click',thisClass.handleSetupSMTPAction);
@@ -239,26 +239,26 @@ function UC_UserRegistrationController()
             host : smtphost,
             port : smtpport,
             user : smtpuser,
-            pass : smtppass 
+            pass : smtppass
           },
           appId: thisClass.setupappId
       };
-     
+
       var user = UC_UserSession.user;
- 
+
       var emailSettings;
-      
+
       UC_AJAX.call('EmailManager/getemailsetting',{appId:thisClass.setupappId,company:user.company },function(data,status,xhr)
     		  {
     			 if(data)
     			 {
     				 if(data.status == "failure")
     				 {
-    	                 alert("Error in adding Email settings"); 
+    	                 alert("Error in adding Email settings");
     				 }
     				 else
     				 {
-    					 emailSettings = data.emailsetting; 
+    					 emailSettings = data.emailsetting;
     				      UC_AJAX.call('EmailManager/saveemailsetting',{user:user,emailSetting:emailSettings},function(data,status,xhr)
     				    		  {
     				    			 if(data)
@@ -274,14 +274,14 @@ function UC_UserRegistrationController()
     				    	             }
     				    				 else
     				    				 {
-    				    					 thisClass.saveConfig(true); 
-    				    				  } 
-    				    			 } 
-    				     });  
+    				    					 thisClass.saveConfig(true);
+    				    				  }
+    				    			 }
+    				     });
     				 }
     			 }
-    		  });  
-        
+    		  });
+
   }
 
   /*
@@ -345,7 +345,7 @@ function UC_UserRegistrationController()
     newApp.creator = user.username;
     newApp._id = UC_Utils.guidGenerator();
     newApp.clientId = user.company;
-    
+
     thisClass.setupappId =  newApp._id;
 
     $('#ucSetupAppAjaxLoader').show();
@@ -365,12 +365,12 @@ function UC_UserRegistrationController()
              alert("An Error accured while saving data !");
          }
          else
-         {  
+         {
 			 $(".UC_SetupContainerCls").hide();
              $("#UC_Setup_SMTP").show();
              $("#UC_Setup_Progress_Step").text("4");
              $(".ucSetupProgressSteps li").removeClass("active");
-             $(".uc_smtp_details").addClass("active"); 
+             $(".uc_smtp_details").addClass("active");
              UC_UserSession.user.company = data.status.clientId;
          }
          $('#ucSetupAppAjaxLoader').hide();
@@ -499,10 +499,10 @@ function UC_UserRegistrationController()
              {
                  //Timeout provided as the server restarts on saving config file, redirecting immediately will lead to Service Not Found error
                  setTimeout(function(){
-                     location.href = "/"; 
+                     location.href = "/";
                  },2000);
              }
-		 } 
+		 }
           $('#ucSetupUserAjaxLoader').hide();
 
 	  });

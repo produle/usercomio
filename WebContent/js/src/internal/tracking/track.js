@@ -20,6 +20,7 @@
 	var DEFAULT_CONFIG = 
 	{
 			'api_host':   HTTP_PROTOCOL + 'localhost:3000',
+            'serviceWorkerFile' : '/usercom-sw.js'
 	}
 	
 	var utils = 
@@ -161,6 +162,8 @@
 	};
 	
 	var Usercom = {
+
+            sessionId : null,
 			
 			init : function(appid,userComSettings)
 			{
@@ -170,6 +173,7 @@
 					return;
 				}
 				
+                var thisClass = this;
 				var userComSettings = userComSettings || {};
 				
 				UsercomLib["appid"] = appid;
@@ -185,6 +189,11 @@
 				
 				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/ping', JSON.stringify(requestObj),function(data){
 					console.log(data);
+
+                    var response = JSON.parse(data);
+                    thisClass.sessionId = response.sessionId;
+
+                    thisClass.createServiceWorker();
 				});
 
                 window.onbeforeunload = function(){
@@ -244,6 +253,38 @@
 					
 					return false;
 				}
+			},
+
+			createServiceWorker : function()
+			{
+
+                var thisClass = this;
+
+				navigator.serviceWorker.register(DEFAULT_CONFIG.serviceWorkerFile)
+                .then(function(registration) {
+
+                    return registration.pushManager.getSubscription()
+                        .then(function(subscription) {
+                            if (subscription) {
+                              return subscription;
+                            }
+                        return registration.pushManager.subscribe({ userVisibleOnly: true });
+                  });
+                })
+                .then(function(subscription) {
+                    fetch(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/register', {
+                        method: 'post',
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            sessionId: thisClass.sessionId,
+                            endpoint: subscription.endpoint,
+                            p256dh: btoa(String.fromCharCode.apply(null,new Uint8Array(subscription.getKey('p256dh')))),
+                            auth: btoa(String.fromCharCode.apply(null,new Uint8Array(subscription.getKey('auth')))),
+                        }),
+                    });
+                });
 			}
 	}
 	

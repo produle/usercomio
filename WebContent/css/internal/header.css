@@ -93,6 +93,13 @@
 	font-size: 12px;
     line-height: 20px;
 }
+.uc_currentuser_submenu .ucEditBrowserNotification
+{
+	background: url(../../images/app/header/editEmailIcon.png) no-repeat left top;
+	padding-left: 25px;
+	font-size: 12px;
+    line-height: 20px;
+}
 .uc_currentuser_submenu .ucEditDatabase
 {
 	background: url(../../images/app/header/editDBIcon.png) no-repeat left top;
