@@ -74,7 +74,7 @@ class BrowserNotificationManager {
     /*
      * @desc Sends the browser notification via the specified interface
      */
-    sendBrowserNotification(visitorObj,subject,message)
+    sendBrowserNotification(visitorObj,subject,message,link,settingObj)
     {
 
         //Get sessions of the user
@@ -113,7 +113,7 @@ class BrowserNotificationManager {
                                             auth: sessionItem.notification.auth
                                         }
                                     },
-                                    '{"title":"'+subject+'","message":"'+message+'","url":"http://localhost:1234"}',
+                                    '{"title":"'+subject+'","message":"'+message+'","url":"'+link+'","icon":"'+settingObj.icon+'"}',
                                     {
                                         TTL: 10
                                     }
@@ -173,7 +173,7 @@ class BrowserNotificationManager {
     /*
      * @desc Stores the new browser notification template in the DB
      */
-    saveNewTemplate(appId,user,subject,message,callback)
+    saveNewTemplate(appId,user,subject,message,link,callback)
     {
         var browserNotificationTemplateCollection = global.db.collection('browsernotificationtemplates');
 
@@ -184,6 +184,7 @@ class BrowserNotificationManager {
             creator: user._id,
             subject: subject,
             message: message,
+            link: link,
             createdOn: new Date(),
             isHTML: false,
             recipientList: []
@@ -220,7 +221,7 @@ class BrowserNotificationManager {
     /*
      * @desc Updates the browser notification template in the DB
      */
-    updateTemplate(appId,user,subject,message,templateObj)
+    updateTemplate(appId,user,subject,message,link,templateObj)
     {
         var browserNotificationTemplateCollection = global.db.collection('browsernotificationtemplates');
 
@@ -229,7 +230,8 @@ class BrowserNotificationManager {
             { $set :
                 {
                     subject: subject,
-                    message: message
+                    message: message,
+                    link: link
                 }
             },
             { upsert: true }

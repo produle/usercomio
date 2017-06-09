@@ -92,7 +92,7 @@ function UC_MessagingController()
     /*
      * @desc Collects the filterId, inclusionList and exclusionList for send message
      */
-    this.sendMessageHandler = function(subject,message,template,blockDuplicate,messageType)
+    this.sendMessageHandler = function(subject,message,template,link,blockDuplicate,messageType)
     {
         var filterId = null;
         var exclusionList = [];
@@ -124,7 +124,7 @@ function UC_MessagingController()
 
         $('#ucSendMessageAjaxLoader').show();
 
-        UC_AJAX.call('MessagingManager/sendmessage',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,filterId:filterId,exclusionList:exclusionList,inclusionList:inclusionList,subject:subject,message:message,template:template,blockDuplicate:blockDuplicate,messageType:messageType},function(data,status,xhr){
+        UC_AJAX.call('MessagingManager/sendmessage',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,filterId:filterId,exclusionList:exclusionList,inclusionList:inclusionList,subject:subject,message:message,template:template,link:link,blockDuplicate:blockDuplicate,messageType:messageType},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {

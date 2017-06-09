@@ -46,7 +46,7 @@ function UC_BrowserNotificationController()
                 thisClass.rivetBrowserNotificationTemplateListObj.models.browserNotificationTemplateList = thisClass.browserNotificationTemplateList;
 
                 $('#ucSendMessageBrowserNotificationTemplate option:eq(0)').prop('selected', true);
-                $("#ucSendMessageBrowserNotificationTitle,#ucSendMessageBrowserNotificationBody").val("");
+                $("#ucSendMessageBrowserNotificationTitle,#ucSendMessageBrowserNotificationLink,#ucSendMessageBrowserNotificationBody").val("");
             }
         });
     };
@@ -54,6 +54,7 @@ function UC_BrowserNotificationController()
     this.submitBrowserNotificationMessageHandler = function()
     {
         var subject = $("#ucSendMessageBrowserNotificationTitle").val();
+        var link = $("#ucSendMessageBrowserNotificationLink").val();
         var message = $("#ucSendMessageBrowserNotificationBody").val();
         var template = $("#ucSendMessageBrowserNotificationTemplate").val();
         var blockDuplicate = false;
@@ -71,7 +72,7 @@ function UC_BrowserNotificationController()
             return;
         }
 
-        uc_main.messagingController.sendMessageHandler(subject,message,template,blockDuplicate,"browsernotification");
+        uc_main.messagingController.sendMessageHandler(subject,message,template,link,blockDuplicate,"browsernotification");
     };
 
     /*
@@ -81,13 +82,14 @@ function UC_BrowserNotificationController()
     {
         if($(this).val()=="new")
         {
-            $("#ucSendMessageBrowserNotificationTitle,#ucSendMessageBrowserNotificationBody").val("");
+            $("#ucSendMessageBrowserNotificationTitle,#ucSendMessageBrowserNotificationLink,#ucSendMessageBrowserNotificationBody").val("");
             $("#ucDeleteBrowserNotificationTemplateBtn").hide();
             $("#ucSendMessageBrowserNotificationTemplate").removeClass("ucExistTemplate");
         }
         else
         {
             $("#ucSendMessageBrowserNotificationTitle").val($(this).find("option:selected").text());
+            $("#ucSendMessageBrowserNotificationLink").val($(this).find("option:selected").attr("data-templatelink"));
             $("#ucSendMessageBrowserNotificationBody").val($(this).find("option:selected").attr("data-templatebody"));
             $("#ucDeleteBrowserNotificationTemplateBtn").show();
             $("#ucSendMessageBrowserNotificationTemplate").addClass("ucExistTemplate");
@@ -139,12 +141,17 @@ function UC_BrowserNotificationController()
 	  var result = {status:"success",msg:""};
 
 	  var subject = $("#ucSendMessageBrowserNotificationTitle").val(),
+          link = $("#ucSendMessageBrowserNotificationLink").val(),
           message = $("#ucSendMessageBrowserNotificationBody").val(),
 	  	  msg = "";
 
 	  if($.trim(subject) == "")
 	  {
 		  msg = "Subject is required";
+	  }
+	  else if($.trim(link) == "")
+	  {
+		  msg = "Link is required";
 	  }
 	  else if($.trim(message) == "")
 	  {

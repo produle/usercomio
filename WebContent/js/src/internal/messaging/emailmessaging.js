@@ -71,7 +71,7 @@ function UC_EmailMessagingController()
             return;
         }
 
-        uc_main.messagingController.sendMessageHandler(subject,message,template,blockDuplicate,"email");
+        uc_main.messagingController.sendMessageHandler(subject,message,template,"",blockDuplicate,"email");
     };
 
     /*

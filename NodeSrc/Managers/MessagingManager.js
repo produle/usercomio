@@ -42,6 +42,7 @@ class MessagingManager {
         var subject = req.body.subject;
         var message = req.body.message;
         var template = req.body.template;
+        var link = req.body.link;
         var blockDuplicate = req.body.blockDuplicate;
         var messageType = req.body.messageType;
 
@@ -58,14 +59,14 @@ class MessagingManager {
             if(template == "new")
             {
                 EmailManagerObj.saveNewTemplate(appId,user,subject,message,function(templateObj){
-                    MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate,messageType);
+                    MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType);
                 });
             }
             else
             {
                 EmailManagerObj.getTemplateById(appId,template,function(templateObj){
                     EmailManagerObj.updateTemplate(appId,user,subject,message,templateObj);
-                    MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate,messageType);
+                    MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType);
                 });
             }
         }
@@ -79,15 +80,15 @@ class MessagingManager {
 
                     if(template == "new")
                     {
-                        BrowserNotificationManagerObj.saveNewTemplate(appId,user,subject,message,function(templateObj){
-                            MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate,messageType);
+                        BrowserNotificationManagerObj.saveNewTemplate(appId,user,subject,message,link,function(templateObj){
+                            MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType);
                         });
                     }
                     else
                     {
                         BrowserNotificationManagerObj.getTemplateById(appId,template,function(templateObj){
-                            BrowserNotificationManagerObj.updateTemplate(appId,user,subject,message,templateObj);
-                            MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate,messageType);
+                            BrowserNotificationManagerObj.updateTemplate(appId,user,subject,message,link,templateObj);
+                            MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType);
                         });
                     }
                 }
@@ -102,7 +103,7 @@ class MessagingManager {
     /*
      * @desc Process the message with templateid
      */
-    processMessage(appId,clientId,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate,messageType)
+    processMessage(appId,clientId,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType)
     {
 
         var MessagingManagerObj = new MessagingManager();
@@ -112,7 +113,7 @@ class MessagingManager {
             var visitorListManagerObj = new visitorListManager();
             visitorListManagerObj.getFilterData(appId,filterId,"visitorMetaInfo.lastSeen",1,0,null,exclusionList,function(response,totalcount){
 
-                    MessagingManagerObj.getSettings(response,subject,message,templateObj,blockDuplicate,appId,clientId,messageType);
+                    MessagingManagerObj.getSettings(response,subject,message,templateObj,link,blockDuplicate,appId,clientId,messageType);
             });
         }
         else
@@ -134,7 +135,7 @@ class MessagingManager {
                         console.log("ERROR: "+err);
                     }
 
-                    MessagingManagerObj.getSettings(response,subject,message,templateObj,blockDuplicate,appId,clientId,messageType);
+                    MessagingManagerObj.getSettings(response,subject,message,templateObj,link,blockDuplicate,appId,clientId,messageType);
                 }
             );
         }
@@ -143,7 +144,7 @@ class MessagingManager {
     /*
      * @desc Obtains the email/browser notification settings
      */
-    getSettings(response,subject,message,templateObj,blockDuplicate,appId,clientId,messageType)
+    getSettings(response,subject,message,templateObj,link,blockDuplicate,appId,clientId,messageType)
     {
         var MessagingManagerObj = new MessagingManager();
 
@@ -153,7 +154,7 @@ class MessagingManager {
 
             EmailManagerObj.getEmailSettingByCompany(appId,clientId,function(emailSettingObj){
 
-                MessagingManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId,messageType,emailSettingObj);
+                MessagingManagerObj.selectRecipients(response,subject,message,templateObj,link,blockDuplicate,appId,clientId,messageType,emailSettingObj);
             });
         }
         else if(messageType == "browsernotification")
@@ -162,7 +163,7 @@ class MessagingManager {
 
             BrowserNotificationManagerObj.getBrowserNotificationSettingByCompany(appId,clientId,function(browserNotificationSettingObj){
 
-                MessagingManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId,messageType,browserNotificationSettingObj);
+                MessagingManagerObj.selectRecipients(response,subject,message,templateObj,link,blockDuplicate,appId,clientId,messageType,browserNotificationSettingObj);
             });
         }
 
@@ -171,7 +172,7 @@ class MessagingManager {
     /*
      * @desc Loops throught the recipient list and mails with a spam check
      */
-    selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId,messageType,settingObj)
+    selectRecipients(response,subject,message,templateObj,link,blockDuplicate,appId,clientId,messageType,settingObj)
     {
         var MessagingManagerObj = new MessagingManager();
 
@@ -213,9 +214,9 @@ class MessagingManager {
                     {
                         var BrowserNotificationManagerObj = new BrowserNotificationManager();
 
-                        BrowserNotificationManagerObj.sendBrowserNotification(recipientSingle,subject,parsedMessage);
+                        BrowserNotificationManagerObj.sendBrowserNotification(recipientSingle,subject,parsedMessage,link,settingObj);
                     }
-                    MessagingManagerObj.saveMessage(recipientSingle.id,recipientSingle.visitorData.email,subject,parsedMessage,templateObj,appId,clientId,messageType);
+                    MessagingManagerObj.saveMessage(recipientSingle.id,recipientSingle.visitorData.email,subject,parsedMessage,templateObj,link,appId,clientId,messageType);
 
                 });
             }
@@ -249,7 +250,7 @@ class MessagingManager {
     /*
      * @desc Stores the message sent in the DB
      */
-    saveMessage(visitorId,visitorEmail,subject,message,templateObj,appId,clientId,messageType)
+    saveMessage(visitorId,visitorEmail,subject,message,templateObj,link,appId,clientId,messageType)
     {
 
 
@@ -262,6 +263,7 @@ class MessagingManager {
             messageType: messageType,
             subject: subject,
             message: message,
+            link: link,
             templateId: templateObj._id,
             appId: appId,
             clientId: clientId,

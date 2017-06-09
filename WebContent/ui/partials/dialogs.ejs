@@ -529,7 +529,7 @@
                             <div class="col-sm-12">
                                 <select class="form-control" id="ucSendMessageBrowserNotificationTemplate">
                                     <option value="new">New Template</option>
-                                    <option rv-each-browsernotificationtemplate="browserNotificationTemplateList" rv-text="browsernotificationtemplate.subject" rv-data-templatebody="browsernotificationtemplate.message" rv-value="browsernotificationtemplate._id"></option>
+                                    <option rv-each-browsernotificationtemplate="browserNotificationTemplateList" rv-text="browsernotificationtemplate.subject" rv-data-templatelink="browsernotificationtemplate.link" rv-data-templatebody="browsernotificationtemplate.message" rv-value="browsernotificationtemplate._id"></option>
                                 </select>
                                 <button type="button" class="ucListingFilterDeleteIcon" id="ucDeleteBrowserNotificationTemplateBtn"></button>
                             </div>
@@ -537,6 +537,11 @@
                         <div class="row uc_mt_small">
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="ucSendMessageBrowserNotificationTitle" placeholder="Title" />
+                            </div>
+                        </div>
+                        <div class="row uc_mt_small">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="ucSendMessageBrowserNotificationLink" placeholder="Link to navigate on clicking the notification" />
                             </div>
                         </div>
                         <div class="row">
