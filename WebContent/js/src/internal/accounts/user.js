@@ -232,6 +232,9 @@ function UC_UserController()
     {
         var user = UC_UserSession.user;
 
+        //Reset Form
+        $('#uceditsmtp_host,#uceditsmtp_port,#uceditsmtp_user,#uceditsmtp_pass,#uceditmailgun_key,#uceditmailgun_domain,#uceditmailgun_from,#uceditamazon_key,#uceditamazon_secret,#uceditamazon_region,#uceditamazon_from').val("");
+
         UC_AJAX.call('EmailManager/getemailsetting',{appId:uc_main.appController.currentAppId,company:user.company},function(data,status,xhr)
         {
             if(data)
@@ -307,6 +310,9 @@ function UC_UserController()
     this.editBrowserNotificationHandler = function(e)
     {
         var user = UC_UserSession.user;
+
+        //Reset form
+        $('#uceditbrowsernotification_fcmkey,#uceditbrowsernotification_fcmsenderid,#uceditbrowsernotification_fcmappname,#uceditbrowsernotification_icon').val("");
 
         UC_AJAX.call('BrowserNotificationManager/getbrowsernotificationsetting',{appId:uc_main.appController.currentAppId,company:user.company},function(data,status,xhr)
         {

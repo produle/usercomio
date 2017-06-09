@@ -8,6 +8,7 @@
 var express = require("express");
 var app = require("../server").app;
 var EmailManager = require("./EmailManager").EmailManager;
+var BrowserNotificationManager = require("./BrowserNotificationManager").BrowserNotificationManager;
 
 class AppManager {
 

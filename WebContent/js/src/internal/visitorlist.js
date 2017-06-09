@@ -290,7 +290,7 @@ function UC_VisitorListController()
 
         thisClass.selectCurrentSort();
 
-        thisClass.reorderFieldsInUserlist();
+        //thisClass.reorderFieldsInUserlist();  //TODO Has issues in switch app, need to be fixed
 
         thisClass.toggleVisitorListFields();
 

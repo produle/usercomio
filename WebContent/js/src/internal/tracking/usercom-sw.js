@@ -10,6 +10,7 @@ self.addEventListener('push', function(event) {
 
     self.registration.showNotification(title, {
         body: message,
+        icon: data.icon,
         data: {"url": data.url},
     });
 });
