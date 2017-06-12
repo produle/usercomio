@@ -8,7 +8,6 @@
 var express = require("express");
 var app = require("../server").app;
 var moment = require("moment");
-var visitorListManager = require("./VisitorListManager").VisitorListManager;
 var mailer = require('express-mailer');
 var utils = require("../core/utils.js").utils;
 var mailgun = null;
@@ -25,191 +24,32 @@ class EmailManager {
 
         this.router = express.Router();
 
-
-        this.router.post("/sendmessage",(req, res) => { this.sendMessage(req,res); });
         this.router.post("/getemailtemplates",(req, res) => { this.getAllEmailTemplates(req,res); });
-        this.router.post("/deletetemplate",(req, res) => { this.deleteTemplate(req,res); }); 
-        this.router.post("/addemailsetting",(req, res) => {  
+        this.router.post("/deletetemplate",(req, res) => { this.deleteTemplate(req,res); });
+        this.router.post("/addemailsetting",(req, res) => {
         	   this.addEmailSettings(req.body.user,req.body.emailSettings,function(emailsetting){
-                   if(emailsetting) 
+                   if(emailsetting)
                    {
                 	   return res.send({status:'success'});
                    }
                    else
-                   { 
+                   {
                        return res.send({status:'failure'});
-                   }  
+                   }
                });
         });
         this.router.post("/getemailsetting",(req, res) => {
             this.getEmailSettingByCompany(req.body.appId,req.body.company,function(emailsetting){
-            	
-            	var config = require('config'); 
+
+            	var config = require('config');
            		if(config.has("setupCompleted") && config.get("setupCompleted") == 1 && !req.isAuthenticated())
                  {
                      return res.send({status:'authenticationfailed'});
-                 } 
+                 }
                 return res.send({status:"Success",emailsetting:emailsetting});
             });
         });
         this.router.post("/saveemailsetting",(req, res) => { this.updateEmailSetting(req,res); });
-    }
-
-  	/*
-  	 * @desc Collects the recipient list and triggers the mailing
-  	 */
-  	sendMessage(req,res)
-  	{
-        if(!req.isAuthenticated())
-        {
-            return res.send({status:'authenticationfailed'});
-        }
-
-        var appId = req.body.appid;
-        var user = req.body.user;
-        var filterId = req.body.filterId;
-        var exclusionList = req.body.exclusionList;
-        var inclusionList = req.body.inclusionList;
-        var subject = req.body.subject;
-        var message = req.body.message;
-        var template = req.body.template;
-        var blockDuplicate = req.body.blockDuplicate;
-
-        var recipientList = [];
-
-        var EmailManagerObj = new EmailManager();
-
-        EmailManagerObj.initMailConfig(appId,user);
-
-        if(template == "new")
-        {
-            EmailManagerObj.saveNewTemplate(appId,user,subject,message,function(templateObj){
-                EmailManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate);
-            });
-        }
-        else
-        {
-            EmailManagerObj.getTemplateById(appId,template,function(templateObj){
-                EmailManagerObj.updateTemplate(appId,user,subject,message,templateObj);
-                EmailManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate);
-            });
-        }
-
-        return res.send({status:"Success"});
-
-    }
-
-    /*
-     * @desc Checks whether spam protection is enabled and collects the list of visitors mailed already
-     */
-
-    /*
-     * @desc Process the message with templateid
-     */
-    processMessage(appId,clientId,filterId,exclusionList,inclusionList,subject,message,templateObj,blockDuplicate)
-    {
-
-        var EmailManagerObj = new EmailManager();
-
-        if(filterId != null)
-        {
-            var visitorListManagerObj = new visitorListManager();
-            visitorListManagerObj.getFilterData(appId,filterId,"visitorMetaInfo.lastSeen",1,0,null,exclusionList,function(response,totalcount){
-
-                    EmailManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId);
-            });
-        }
-        else
-        {
-            var visitorCollection = global.db.collection('visitors').aggregate([
-                    { $match :
-                        { "$and": [
-                            {
-                              appId:appId
-                            },
-                            { _id: {"$in": inclusionList}}
-                          ]
-                        }
-                    }
-                ]).toArray(function(err,response)
-                {
-                    if(err)
-                    {
-                        console.log("ERROR: "+err);
-                    }
-
-                    EmailManagerObj.selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId);
-                }
-            );
-        }
-    }
-
-    /*
-     * @desc Loops throught the recipient list and mails with a spam check
-     */
-    selectRecipients(response,subject,message,templateObj,blockDuplicate,appId,clientId)
-    {
-        var EmailManagerObj = new EmailManager();
-
-        EmailManagerObj.getEmailSettingByCompany(appId,clientId,function(emailSettingObj){
-
-            var config = require('config');
-            var baseURL = "";
-
-            if(config.has("baseURL")) {
-                baseURL = config.get("baseURL");
-            }
-
-            for(var iter = 0; iter < response.length; iter++)
-            {
-                if(blockDuplicate && templateObj.recipientList.includes(response[iter]._id))
-                {
-                    //Will not send email to prevent spam
-                }
-                else if(emailSettingObj.hasOwnProperty("unsubscribeList") && emailSettingObj.unsubscribeList.includes(response[iter]._id))
-                {
-                    //Will not send email to unsubscribed emails
-                }
-                else
-                {
-                    var recipientSingle = {};
-                    recipientSingle.id = response[iter]._id;
-                    recipientSingle.visitorData = response[iter].visitorData;
-
-                    EmailManagerObj.parseEmail(message,recipientSingle,function(parsedMessage,recipientSingle){
-
-                        //Set the unsubscribe link in the email
-                        parsedMessage = parsedMessage + "\r\n\r\n\r\nClick the link below to unsubscribe emails\r\n"+baseURL+"/unsubscribe/"+appId+"/"+recipientSingle.id;
-                        EmailManagerObj.saveEmailMessage(recipientSingle.id,recipientSingle.visitorData.email,subject,parsedMessage,templateObj,appId,clientId);
-                        EmailManagerObj.sendMail(recipientSingle.visitorData.email,subject,parsedMessage);
-                    });
-                }
-
-            }
-        });
-    }
-
-    /*
-     * @desc Parses the local variables in the email body to the user data
-     */
-    parseEmail(message,recipientSingle,callback)
-    {
-        var parsedMessage = message;
-
-        var variableArray = [];
-        for (var fieldSingle in recipientSingle.visitorData)
-        {
-            variableArray.push(fieldSingle);
-        }
-
-        for(var iter = 0; iter < variableArray.length; iter++)
-        {
-            var regExpObj = new RegExp('{'+variableArray[iter]+'}', 'g');
-
-            parsedMessage = parsedMessage.replace(regExpObj,recipientSingle.visitorData[variableArray[iter]]);
-        }
-
-        callback(parsedMessage,recipientSingle);
     }
 
     /*
@@ -262,12 +102,10 @@ class EmailManager {
     }
 
     /*
-     * @desc Parses the local variables in the email body to the user data
+     * @desc Sends the email via the specified interface
      */
     sendMail(toEmail,subject,message)
     {
-        var emailsetting = emailSetting;
-
         if(emailSetting.emailType && emailSetting.emailType == "SMTP")
         {
             app.mailer.send('email/plain', {
@@ -323,48 +161,12 @@ class EmailManager {
                 if(err)
                 {
                     // handle error
-                    console.log("ERROR in sending Email via Amazon SES, check the credentials"); 
+                    console.log("ERROR in sending Email via Amazon SES, check the credentials");
                 }
             });
         }
         
         
-    }
-
-    /*
-     * @desc Stores the email sent in the DB
-     */
-    saveEmailMessage(visitorId,visitorEmail,subject,message,templateObj,appId,clientId)
-    {
-
-
-        var messagesCollection = global.db.collection('messages');
-        var emailTemplatesCollection = global.db.collection('emailtemplates');
-
-        messagesCollection.insert({
-            _id: utils.guidGenerator(),
-            visitorId: visitorId,
-            visitorEmail: visitorEmail,
-            subject: subject,
-            message: message,
-            templateId: templateObj._id,
-            appId: appId,
-            clientId: clientId,
-            isHTML: false,
-            sentOn: new Date()
-        });
-
-        templateObj.recipientList.push(visitorId);
-
-        emailTemplatesCollection.update(
-            { _id:  templateObj._id},
-            { $set :
-                {
-                    recipientList: templateObj.recipientList
-                }
-            },
-            { upsert: true }
-        )
     }
 
   	/*
@@ -497,18 +299,18 @@ class EmailManager {
 
     /*
      * @desc Stores the new emailsettings in the DB
-     */ 
+     */
     addEmailSettings(user,emailSettings,callback)
-    { 
+    {
         var emailSettingsCollection = global.db.collection('emailsettings');
         var userCollection = global.db.collection('users');
 
         emailSettings._id = utils.guidGenerator();
-        emailSettings.clientId = user.company; 
-          
+        emailSettings.clientId = user.company;
+
         userCollection.findOne({ _id: user._id},function(err,userObj)
           {
-             
+
               if(err)
               {
                   callback(null);
@@ -518,12 +320,12 @@ class EmailManager {
                   emailSettings.clientId = userObj.company;
 
                   emailSettingsCollection.insert(emailSettings);
- 
+
                   callback(true);
               }
-              
+
           });
-    	
+
     }
 
     /*
@@ -531,7 +333,7 @@ class EmailManager {
      */
     getEmailSettingByCompany(appId,clientId,callback)
     {
-        var emailSettingsCollection = global.db.collection('emailsettings').aggregate([  
+        var emailSettingsCollection = global.db.collection('emailsettings').aggregate([
              { $match :
                 { "$and": [
                     {
@@ -543,7 +345,7 @@ class EmailManager {
                   ]
                 }
              }
-                
+
             ]).toArray(function(err,emailsetting)
                 {
                     if(err)
@@ -564,14 +366,14 @@ class EmailManager {
     updateEmailSetting(req,res)
     {
 
-    	var config = require('config'); 
+    	var config = require('config');
    		if(config.has("setupCompleted") && config.get("setupCompleted") == 1 && !req.isAuthenticated())
         {
             return res.send({status:'authenticationfailed'});
         }
 
         var user = req.body.user;
-        var emailSetting = req.body.emailSetting; 
+        var emailSetting = req.body.emailSetting;
         var emailSettingsCollection = global.db.collection('emailsettings');
 
         emailSettingsCollection.update(

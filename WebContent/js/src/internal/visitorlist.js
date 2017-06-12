@@ -292,7 +292,7 @@ function UC_VisitorListController()
 
         thisClass.selectCurrentSort();
 
-        thisClass.reorderFieldsInUserlist();
+        //thisClass.reorderFieldsInUserlist();  //TODO Has issues in switch app, need to be fixed
 
         thisClass.toggleVisitorListFields();
 
@@ -397,13 +397,13 @@ function UC_VisitorListController()
         {
             $(".uc-user-select").prop("checked",true);
             $("#ucSendMessageGroupBtn").text("Send Message to All");
-            $("#ucSendMessageSubmit").text("Send to All");
+            $("#ucSendMessageEmailSubmit,#ucSendMessageBrowserNotificationSubmit").text("Send to All");
         }
         else
         {
             $(".uc-user-select").prop("checked",false);
             $("#ucSendMessageGroupBtn").text("Send Message");
-            $("#ucSendMessageSubmit").text("Send");
+            $("#ucSendMessageEmailSubmit,#ucSendMessageBrowserNotificationSubmit").text("Send");
         }
     };
 
@@ -434,7 +434,7 @@ function UC_VisitorListController()
             });
         }
 
-        $("#ucSendMessageGroupBtn,#ucSendMessageSubmit").text("Send to "+recipientCount+" users");
+        $("#ucSendMessageGroupBtn,#ucSendMessageEmailSubmit,#ucSendMessageBrowserNotificationSubmit").text("Send to "+recipientCount+" users");
     };
 
     /*

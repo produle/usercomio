@@ -31,6 +31,7 @@ class VisitorTrackingManager {
         this.router.post("/event",(req, res) => { this.handleEvents(req,res); });
         this.router.post("/error",(req, res) => { this.handleError(req,res); });
         this.router.post("/logout",(req, res) => { this.handleLogout(req,res); });
+        this.router.post("/register",(req, res) => { this.handleRegistration(req,res); });
         
     }
   	
@@ -205,7 +206,7 @@ class VisitorTrackingManager {
                         }
                         else
                         {
-                            return res.send({status:visitorDetail});
+                            return res.send({status:visitorDetail,sessionId:sessionDetail["_id"]});
                         }
 
 
@@ -369,6 +370,46 @@ class VisitorTrackingManager {
             }
 
         });
+
+
+  	}
+
+  	/*
+  	 * @desc Handle the Registration of service worker
+  	 */
+  	handleRegistration(req,res)
+  	{
+        var sessionId = req.body.sessionId;
+
+        var notification = {
+            endpoint: req.body.endpoint,
+            p256dh: req.body.p256dh,
+            auth: req.body.auth
+        };
+
+        var sessionCollection = global.db.collection('sessions');
+
+        sessionCollection.update(
+            { _id:  sessionId},
+            { $set :
+                {
+                    notification: notification
+                }
+            },
+            { upsert: true },
+            function(updateErr)
+            {
+                if(updateErr)
+                {
+                    res.status(500);
+                    return res.send({status:'failure'});
+                }
+                else
+                {
+                    res.send({status:"success"});
+                }
+            }
+        );
 
 
   	}

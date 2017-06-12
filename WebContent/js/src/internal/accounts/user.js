@@ -13,17 +13,21 @@ function UC_UserController()
 
     this.emailSetting = {};
 
+    this.browserNotificationSetting = {};
+
 	this.constructor = function()
 	{
         $(document).on("click",".ucEditProfile",thisClass.editProfileHandler);
         $(document).on("click",".ucChangePassword",thisClass.editPasswordHandler);
         $(document).on("click",".ucEditMail",thisClass.editMailHandler);
+        $(document).on("click",".ucEditBrowserNotification",thisClass.editBrowserNotificationHandler);
         $(document).on("click",".ucEditDatabase",thisClass.editDatabaseHandler);
         $(document).on("click",".ucEditSystem",thisClass.editSystemHandler);
 
 		$(document).on("click","#uceditprofile_submit",thisClass.handleProfileSaveAction);
 		$(document).on("click","#ucchangepassword_submit",thisClass.handlePasswordSaveAction);
 		$(document).on("click","#uceditmail_submit",thisClass.handleMailSaveAction);
+		$(document).on("click","#uceditbrowsernotification_submit",thisClass.handleBrowserNotificationSaveAction);
 		$(document).on("click","#uceditdatabase_submit",thisClass.handleDatabaseSaveAction);
 		$(document).on("click","#uceditsystem_submit",thisClass.handleSystemSaveAction);
 
@@ -228,6 +232,9 @@ function UC_UserController()
     {
         var user = UC_UserSession.user;
 
+        //Reset Form
+        $('#uceditsmtp_host,#uceditsmtp_port,#uceditsmtp_user,#uceditsmtp_pass,#uceditmailgun_key,#uceditmailgun_domain,#uceditmailgun_from,#uceditamazon_key,#uceditamazon_secret,#uceditamazon_region,#uceditamazon_from').val("");
+
         UC_AJAX.call('EmailManager/getemailsetting',{appId:uc_main.appController.currentAppId,company:user.company},function(data,status,xhr)
         {
             if(data)
@@ -245,9 +252,9 @@ function UC_UserController()
                     thisClass.emailSetting = data.emailsetting;
 
                     var currentAppId = uc_main.appController.currentAppId
-                    var appIndex = UC_Utils.searchObjArray(uc_main.appController.apps,'_id',currentAppId);  
+                    var appIndex = UC_Utils.searchObjArray(uc_main.appController.apps,'_id',currentAppId);
                     $('#ucEmailSettings_App').text(uc_main.appController.apps[appIndex].name);
-                    
+
                     if(thisClass.emailSetting.emailType)
                     {
                         thisClass.currentEmailType = thisClass.emailSetting.emailType;
@@ -298,6 +305,53 @@ function UC_UserController()
     };
 
     /*
+     *  @desc Populates the form fields with the browser notification setting data
+     */
+    this.editBrowserNotificationHandler = function(e)
+    {
+        var user = UC_UserSession.user;
+
+        //Reset form
+        $('#uceditbrowsernotification_fcmkey,#uceditbrowsernotification_fcmsenderid,#uceditbrowsernotification_fcmappname,#uceditbrowsernotification_icon').val("");
+
+        UC_AJAX.call('BrowserNotificationManager/getbrowsernotificationsetting',{appId:uc_main.appController.currentAppId,company:user.company},function(data,status,xhr)
+        {
+            if(data)
+            {
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while retrieving browser notification settings!");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
+                else
+                {
+                    thisClass.browserNotificationSetting = data.browserNotificationSetting;
+
+                    var currentAppId = uc_main.appController.currentAppId
+                    var appIndex = UC_Utils.searchObjArray(uc_main.appController.apps,'_id',currentAppId);
+                    $('#ucBrowserNotificationSettings_App').text(uc_main.appController.apps[appIndex].name);
+
+                    $('#uceditbrowsernotification_fcmkey').val(thisClass.browserNotificationSetting.fcmKey);
+                    $('#uceditbrowsernotification_fcmsenderid').val(thisClass.browserNotificationSetting.fcmSenderId);
+                    $('#uceditbrowsernotification_fcmappname').val(thisClass.browserNotificationSetting.fcmAppName);
+                    $('#uceditbrowsernotification_icon').val(thisClass.browserNotificationSetting.icon);
+                    $("#ucEditBrowserNotificationModal").modal();
+
+                    $("#ucEditBrowserNotificationAjaxLoader").hide();
+                }
+            }
+
+        });
+
+
+
+        e.preventDefault();
+    };
+
+    /*
      *  @desc Handles the email data validation and sends it to server
      */
     this.handleMailSaveAction = function()
@@ -322,7 +376,7 @@ function UC_UserController()
             thisClass.emailSetting.smtp.host = smtphost;
             thisClass.emailSetting.smtp.port = smtpport;
             thisClass.emailSetting.smtp.user = smtpuser;
-            thisClass.emailSetting.smtp.pass = smtppass;  
+            thisClass.emailSetting.smtp.pass = smtppass;
         }
         else if(thisClass.currentEmailType == "Mailgun")
         {
@@ -368,9 +422,9 @@ function UC_UserController()
             thisClass.emailSetting.amazon.region = amazonregion;
             thisClass.emailSetting.amazon.from = amazonfrom;
         }
- 
+
         thisClass.emailSetting.appId = uc_main.appController.currentAppId;
-        
+
         $("#ucEditEmailAjaxLoader").show();
 
         var user = UC_UserSession.user;
@@ -394,6 +448,52 @@ function UC_UserController()
                 }
 
                 $("#ucEditEmailAjaxLoader").hide();
+            }
+
+        });
+    };
+
+    /*
+     *  @desc Handles the browser notification data validation and sends it to server
+     */
+    this.handleBrowserNotificationSaveAction = function()
+    {
+
+        var fcmKey = $('#uceditbrowsernotification_fcmkey').val(),
+            fcmSenderId = $('#uceditbrowsernotification_fcmsenderid').val(),
+            fcmAppName = $('#uceditbrowsernotification_fcmappname').val(),
+            iconUrl = $('#uceditbrowsernotification_icon').val();
+
+        thisClass.browserNotificationSetting.fcmKey = fcmKey;
+        thisClass.browserNotificationSetting.fcmSenderId = fcmSenderId;
+        thisClass.browserNotificationSetting.fcmAppName = fcmAppName;
+        thisClass.browserNotificationSetting.icon = iconUrl;
+
+        thisClass.browserNotificationSetting.appId = uc_main.appController.currentAppId;
+
+        $("#ucEditBrowserNotificationAjaxLoader").show();
+
+        var user = UC_UserSession.user;
+
+        UC_AJAX.call('BrowserNotificationManager/savebrowsernotificationsetting',{user:user,browserNotificationSetting:thisClass.browserNotificationSetting},function(data,status,xhr)
+        {
+            if(data)
+            {
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while saving browser notification settings!");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
+                else
+                {
+                    alert("Browser Notification settings changed successfully");
+                    $("#ucEditBrowserNotificationModal").modal("hide");
+                }
+
+                $("#ucEditBrowserNotificationAjaxLoader").hide();
             }
 
         });

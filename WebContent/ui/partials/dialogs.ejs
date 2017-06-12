@@ -277,6 +277,65 @@
 </div>
 
 
+<div id="ucEditBrowserNotificationModal" class="modal ucModal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+               <img src="/images/app/modal/smtpIcon.png" alt=""/>
+               <h2>Browser Notification Settings for <span id="ucBrowserNotificationSettings_App"></span></h2>
+
+                <div class="row">
+
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <label>FCM Secret Key</label>
+                          </span>
+                          <input type="text" class="form-control" id="uceditbrowsernotification_fcmkey" placeholder="Secret Key from Google FCM console">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <label>FCM Sender ID</label>
+                          </span>
+                          <input type="text" class="form-control" id="uceditbrowsernotification_fcmsenderid" placeholder="Sender ID from Google FCM console">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <label>FCM App Name</label>
+                          </span>
+                          <input type="text" class="form-control" id="uceditbrowsernotification_fcmappname" placeholder="App Name from Google FCM console">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <label>Icon URL</label>
+                          </span>
+                          <input type="text" class="form-control" id="uceditbrowsernotification_icon" placeholder="URL of icon to be displayed in notification">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ucButtonWrapper">
+                    <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="uceditbrowsernotification_submit" class="btn ucSaveBtn">Save</button>
+                    <div id="ucEditBrowserNotificationAjaxLoader" class='ucAjaxLoader'><div></div></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 <div id="ucEditDatabaseModal" class="modal ucModal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -421,42 +480,91 @@
                 <div class="ucSendMessageSection">
                <img src="/images/app/modal/smtpIcon.png" alt=""/>
                 <h2>Messaging</h2>
-                <div class="row">
+
+                <div class="btn-group ucTabBtnGroup" id="ucSendMessageTypeTabGroup" role="group">
+                    <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucSendMessageContainer" data-tabgroup-tabid="ucSendMessageEmailContainer" data-messageType="email">Email</button>
+                    <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucSendMessageContainer" data-tabgroup-tabid="ucSendMessageBrowserNotificationContainer" data-messageType="browser_notification">Browser Notification</button>
+                </div>
+
+                <div class="row ucSendMessageContainer" id="ucSendMessageEmailContainer">
 	                
 	                <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-12">
-                                <select class="form-control" id="ucSendMessageTemplate">
+                                <select class="form-control" id="ucSendMessageEmailTemplate">
                                     <option value="new">New Template</option>
                                     <option rv-each-emailtemplate="emailTemplateList" rv-text="emailtemplate.subject" rv-data-templatebody="emailtemplate.message" rv-value="emailtemplate._id"></option>
                                 </select>
-                                <button type="button" class="ucListingFilterDeleteIcon" id="ucDeleteTemplateBtn"></button>
+                                <button type="button" class="ucListingFilterDeleteIcon" id="ucDeleteEmailTemplateBtn"></button>
                             </div>
                         </div>
                         <div class="row uc_mt_small">
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="ucSendMessageSubject" placeholder="Subject" />
+                                <input type="text" class="form-control" id="ucSendMessageEmailSubject" placeholder="Subject" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <textarea class="form-control" id="ucSendMessageBody" rows="5" placeholder="Body of the message"></textarea>
+                                <textarea class="form-control" id="ucSendMessageEmailBody" rows="5" placeholder="Body of the message"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 text-left">
                                 <div class="checkbox">
                                     <label class="ucCheckboxLabel">
-                                        <input type="checkbox" id="ucSendMessageBlockDuplicate" checked> Exclude users who have already received this mail
+                                        <input type="checkbox" id="ucSendMessageEmailBlockDuplicate" checked> Exclude users who have already received this mail
                                     </label>
                                 </div>
                             </div>
                         </div>
+
+                        <button type="button" id="ucSendMessageEmailSubmit" class="btn ucSendBtn">Send</button>
+                    </div>
+                </div>
+
+                <div class="row ucSendMessageContainer" id="ucSendMessageBrowserNotificationContainer">
+
+	                <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <select class="form-control" id="ucSendMessageBrowserNotificationTemplate">
+                                    <option value="new">New Template</option>
+                                    <option rv-each-browsernotificationtemplate="browserNotificationTemplateList" rv-text="browsernotificationtemplate.subject" rv-data-templatelink="browsernotificationtemplate.link" rv-data-templatebody="browsernotificationtemplate.message" rv-value="browsernotificationtemplate._id"></option>
+                                </select>
+                                <button type="button" class="ucListingFilterDeleteIcon" id="ucDeleteBrowserNotificationTemplateBtn"></button>
+                            </div>
+                        </div>
+                        <div class="row uc_mt_small">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="ucSendMessageBrowserNotificationTitle" placeholder="Title" />
+                            </div>
+                        </div>
+                        <div class="row uc_mt_small">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="ucSendMessageBrowserNotificationLink" placeholder="Link to navigate on clicking the notification" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <textarea class="form-control" id="ucSendMessageBrowserNotificationBody" rows="5" placeholder="Body of the message"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 text-left">
+                                <div class="checkbox">
+                                    <label class="ucCheckboxLabel">
+                                        <input type="checkbox" id="ucSendMessageBrowserNotificationBlockDuplicate" checked> Exclude users who have already received this notification
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" id="ucSendMessageBrowserNotificationSubmit" class="btn ucSendBtn">Send</button>
                     </div>
                 </div>
                 
                 
-                <button type="button" id="ucSendMessageSubmit" class="btn ucSendBtn">Send</button>
+
                 <div id="ucSendMessageAjaxLoader" class='ucAjaxLoader'><div></div></div>
             </div>
             </div>
