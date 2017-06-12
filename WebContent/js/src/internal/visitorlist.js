@@ -22,6 +22,8 @@ function UC_VisitorListController()
     this.rivetVisitorDetailsObj = null;
 
     this.rivetVisitorMessagesObj = null;
+    
+    this.rivetVisitorSessionsObj = null;
 
     this.rivetVisitorColumnListObj = null;
 
@@ -514,6 +516,39 @@ function UC_VisitorListController()
                     $("#ucVisitorMessages").show();
                 }
             });
+            
+            
+            UC_AJAX.call('VisitorListManager/getvisitorsessions',{visitorId:visitorId},function(data,status,xhr){
+            	
+            	   if(data.status == "failure")
+                   {
+                       alert("An Error accured while fetching user details !");
+                   }
+                   else if(data.status == "authenticationfailed")
+                   {
+                       location.href="/";
+                   }
+                   else
+                   {
+                       if(data.sesssions != null)
+                       {
+                    	  var sessionsList = data.sesssions; 
+                    	  
+                    	  for(var i = 0; i < sessionsList.length; i++)
+                          {
+                    		  sessionsList[i].agentInfo.sessionStart = moment(sessionsList[i].agentInfo.sessionStart).format("DD MMM YYYY HH:mm:ss");
+                          }
+                    	  
+                          thisClass.rivetVisitorSessionsObj = rivets.bind(
+                        		  document.getElementById('ucUserTabContentActivities'), {
+                                	  sessionsList: sessionsList
+                                  }
+                              );
+                    	  
+                       } 
+                   } 
+            });
+            
         }
     };
 
