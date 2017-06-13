@@ -231,6 +231,15 @@ class AppManager {
                     }
                 });
 
+                //Delete browsernotificationtemplates of the app
+                global.db.collection('browsernotificationtemplates').remove({appId:appinfo._id},function(err,numberOfRemovedDocs)
+                {
+                     if(err)
+                    {
+                          console.log(err);
+                    }
+                });
+
                 //Delete filters of the app
                 global.db.collection('filters').remove({appId:appinfo._id},function(err,numberOfRemovedDocs)
                 {
@@ -260,6 +269,24 @@ class AppManager {
 
                 //Delete from app of the app
                 global.db.collection('apps').remove({_id:appinfo._id},function(err,numberOfRemovedDocs)
+                {
+                     if(err)
+                    {
+                          console.log(err);
+                    }
+                });
+
+                //Delete emailsettings of the app
+                global.db.collection('emailsettings').remove({appId:appinfo._id},function(err,numberOfRemovedDocs)
+                {
+                     if(err)
+                    {
+                          console.log(err);
+                    }
+                });
+
+                //Delete browsernotificationsettings of the app
+                global.db.collection('browsernotificationsettings').remove({appId:appinfo._id},function(err,numberOfRemovedDocs)
                 {
                      if(err)
                     {

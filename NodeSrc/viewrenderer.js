@@ -7,6 +7,8 @@
 
 var express = require("express");
 var moment = require("moment");
+var fs = require("fs");
+var path = require('path');
 var app = require("./server").app;
 var userManager = require("./Managers/UserManager").UserManager;
 var visitorListManager = require("./Managers/VisitorListManager").VisitorListManager;
@@ -219,6 +221,41 @@ class ViewRenderer
                 res.redirect('/');
             }
 		 });
+
+        app.get('/tracking/usercom-service-worker.js', function(req, res) {
+
+            var out = "Add Base URL";
+            var config = require('config');
+
+  		    if(config.has("baseURL"))
+            {
+                out = 'importScripts("'+config.get("baseURL")+'/js/src/internal/tracking/usercom-service-worker.js");';
+            }
+
+            res.setHeader('Content-disposition', 'attachment; filename=usercom-service-worker.js');
+            res.setHeader('Content-type', 'text/javascript');
+            res.write(out);
+            res.end();
+        });
+
+        app.get('/tracking/track.js', function(req, res) {
+
+            var out = "Add Base URL";
+            var config = require('config');
+
+  		    if(config.has("baseURL"))
+            {
+                var fileJs = fs.readFileSync(path.join(__dirname, '/../WebContent/js/src/internal/tracking/track.js'),'utf8');
+
+                var appId = req.query.appid;
+                out = fileJs.replace("VARIABLE_APPID", appId);
+            }
+
+            //res.setHeader('Content-disposition', 'attachment; filename=usercom-service-worker.js');
+            res.setHeader('Content-type', 'text/javascript');
+            res.write(out);
+            res.end();
+        });
 
 
 	}

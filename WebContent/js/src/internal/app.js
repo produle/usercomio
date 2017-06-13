@@ -31,7 +31,7 @@ function UC_AppController()
             {
                 if(appid == thisClass.apps[iter]._id)
                 {
-                    thisClass.switchApp(thisClass.apps[iter]);
+                    thisClass.switchApp(thisClass.apps[iter],false);
                     break;
                 }
             }
@@ -92,7 +92,7 @@ function UC_AppController()
 					thisClass.apps = data.status;
 					thisClass.listApps(thisClass.apps);
 
-                    thisClass.switchApp(thisClass.apps[0]);
+                    thisClass.switchApp(thisClass.apps[0],true);
 				}
 			}
 		});
@@ -139,7 +139,7 @@ function UC_AppController()
 					 thisClass.listApps(thisClass.apps);
 					 $('#uc_newapp_creation_modal').modal('hide');
 
-                     thisClass.switchApp(thisClass.apps[0]);
+                     thisClass.switchApp(thisClass.apps[0],false);
 				 }
 
                 $('#ucNewAppAjaxLoader').hide();
@@ -287,7 +287,7 @@ function UC_AppController()
 							 thisClass.apps.splice(appIndex, 1);
 
                              thisClass.listApps(thisClass.apps);
-                             thisClass.switchApp(thisClass.apps[0]);
+                             thisClass.switchApp(thisClass.apps[0],false);
 						 }
 					});
 				}
@@ -344,9 +344,9 @@ function UC_AppController()
 				$('#ucapp_update_appid_display').text(app._id);
 				$('#ucDeleteAppBtn').attr("data-appid",app._id);
 
-                var trackingSnippet = '<script type="text/javascript" src="'+uc_main.userController.config.baseURL+'/js/src/internal/tracking/track.js"></script>\n'+
+                var trackingSnippet = '<script type="text/javascript" src="'+uc_main.userController.config.baseURL+'/tracking/track.js?appid='+app._id+'"></script>\n'+
                     '<script>\n'+
-                    '\tUsercom.init("'+app._id+'",{ /* appID generated from the usercom application */\n'+
+                    '\tUsercom.init({\n'+
                         '\t\tname: "John Smith",   /* Fullname of the visitor */\n'+
                         '\t\temail: "jsmith@usercom.io",   /* Email Address of the visitor */\n'+
                         '\t\tcreated_at: new Date().getTime(), /* Current timestamp */\n'+
@@ -386,7 +386,7 @@ function UC_AppController()
     /**
      * @desc Changes the appid and related data
      */
-    this.switchApp = function(app)
+    this.switchApp = function(app,isInit)
     {
         thisClass.currentAppId = app._id;
         thisClass.rivetAppNameObj.models.currentAppName = app.name;
@@ -407,10 +407,17 @@ function UC_AppController()
             uc_main.visitorListController.displayFields = UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].displayFields;
         }
 
-        uc_main.dashboardController.getDashboardMetrics();
-        uc_main.dashboardController.drawNewUsersGraph();
-        uc_main.filterController.listUserdefinedFilters();
-        uc_main.visitorListController.getFieldsList();
+        if(thisClass.renderVisitors)
+        {
+            uc_main.dashboardController.getDashboardMetrics();
+            uc_main.dashboardController.drawNewUsersGraph();
+            uc_main.filterController.listUserdefinedFilters();
+            uc_main.visitorListController.getFieldsList();
+        }
+        else if(!isInit)
+        {
+            location.href="/";
+        }
 
     };
 }

@@ -83,7 +83,7 @@ class VisitorTrackingManager {
         browserInfo.timezone = req.body.timezone;
         browserInfo.rawAgentData = agent;
         browserInfo.rawAgentSource = agent.source;
-        browserInfo.sessionStart = req.body.sessionStart;
+        browserInfo.sessionStart = new Date();//req.body.sessionStart;
 
         if(agent.isDesktop)
         {
@@ -341,7 +341,7 @@ class VisitorTrackingManager {
             },
             { $match :
                 { "$and": [
-                    { "agentInfo.sessionStart" : req.body.sessionStart},
+                    { "_id" : req.body.sessionId},
                     { "visitors.visitorData.email" : req.body.userdata.email }
                   ]
                 }
