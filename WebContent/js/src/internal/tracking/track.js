@@ -169,10 +169,6 @@
 			{
                 var appid = "VARIABLE_APPID";
 
-                var url = new URL(location.href);
-                var c = url.searchParams.get("appid");
-
-                alert(c);
 				if(!appid || appid.length ==0)
 				{
 					console.error("Usercom Error: Invalid app id !");
