@@ -10,7 +10,7 @@
 {
 	"use strict";
 	
-	var thisClass = this;
+	var thisClass = this; 
 	
 	var HTTP_PROTOCOL = (('https:' === document.location.protocol) ? 'https://' : 'http://');
 
@@ -138,6 +138,11 @@
 			
 			userData : null,
 			
+			sessionId : null,
+			
+			visitorId : null,
+			
+			
 			track : function(eventName,properties)
 			{
 				if(!eventName || eventName.length == 0)
@@ -151,7 +156,8 @@
 						userdata : this.userData,
 						properties:properties,
 						eventname:eventName,
-						uid:utils.guidGenerator()
+						sessionId:this.sessionId,
+						visitorId:this.visitorId
 				}
 				
 				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/event', JSON.stringify(requestObj),function(data){
@@ -164,6 +170,8 @@
 	var Usercom = {
 
             sessionId : null,
+            
+            visitorId : null,
 			
 			init : function(appid,userComSettings)
 			{
@@ -184,7 +192,8 @@
 						userdata : userComSettings,
 						uid:utils.guidGenerator(),
                         screenResolution: screen.width+"x"+screen.height,
-                        timezone: -(new Date().getTimezoneOffset() / 60)
+                        timezone: -(new Date().getTimezoneOffset() / 60),
+                        sessionStart: new Date()
 				}
 				
 				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/ping', JSON.stringify(requestObj),function(data){
@@ -192,6 +201,9 @@
 
                     var response = JSON.parse(data);
                     thisClass.sessionId = response.sessionId;
+                    thisClass.visitorId = response.status._id;
+                    UsercomLib["sessionId"] = response.sessionId;
+    				UsercomLib["visitorId"] = response.status._id;
 
                     thisClass.createServiceWorker();
 				});
@@ -290,7 +302,7 @@
 	
 	
 	window.Usercom = Usercom;
-	
+	window.UsercomLib = UsercomLib;
 	
 	
 	
