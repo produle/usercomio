@@ -125,6 +125,7 @@
     
 // Collection name: emailsettings
     _id : String //Auto generated id
+    appId : String //id from apps collection
     clientId : String //company from users collection
     emailType : String //Either "SMTP","Mailgun","Amazon"
     smtp : {
@@ -144,4 +145,35 @@
         region : String //Amazon mail server region
         from : String //From account, to process reply
     }
+
+// Collection name: browsernotificationtemplates
+    _id : String //Auto generated id
+    appId : String //id from apps collection
+    clientId : String //company from users collection
+    creator : String //Email ID of the created user
+    subject : String
+    message : String
+    link : String
+    isHTML : Boolean
+    createdOn : Date //Datetime of when the record is created
+    recipientList : Array of Strings //contains list of visitor id from the visitors collection
+    
+// Collection name: browsernotificationsettings
+    _id : String //Auto generated id
+    appId : String //id from apps collection
+    clientId : String //company from users collection
+    fcmAppName : String //App name obtained from FCM console
+    fcmKey : String //App Key obtained from FCM console
+    fcmSenderId : String //Sender ID obtained from FCM console
+    icon : String //Link of the image to show in notification
+    
+// Collection name: visitorevents
+    _id : String //Auto generated id
+    appId : String //id from apps collection
+    clientId : String //company from users collection
+    createDate : Date //Datetime of when the record is created
+    eventName : String //Name of the event triggered
+    eventProperties : {} //Any type of data applied by the user
+    sessionId : String //id from sessions collection
+    visitorId : String //id from visitors collection
     
