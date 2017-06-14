@@ -83,7 +83,7 @@ class VisitorTrackingManager {
         browserInfo.timezone = req.body.timezone;
         browserInfo.rawAgentData = agent;
         browserInfo.rawAgentSource = agent.source;
-        browserInfo.sessionStart = new Date();//req.body.sessionStart;
+        browserInfo.sessionStart = new Date();
 
         if(agent.isDesktop)
         {

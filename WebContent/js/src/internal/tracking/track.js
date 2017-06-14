@@ -194,8 +194,7 @@
 						userdata : userComSettings,
 						uid:utils.guidGenerator(),
                         screenResolution: screen.width+"x"+screen.height,
-                        timezone: -(new Date().getTimezoneOffset() / 60),
-                        sessionStart: new Date()
+                        timezone: -(new Date().getTimezoneOffset() / 60)
 				}
 				
 				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/ping', JSON.stringify(requestObj),function(data){

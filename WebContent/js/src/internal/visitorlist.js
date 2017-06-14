@@ -580,9 +580,9 @@ function UC_VisitorListController()
                }
                else
                {
-                   if(data.sesssions != null)
+                   if(data.sessions != null)
                    {
-                	  var sessionsList = data.sesssions; 
+                	  var sessionsList = data.sessions;
                 	  
                 	  if(sessionsList.length == 0)
                       {
