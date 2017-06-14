@@ -9,8 +9,12 @@ function UC_VisitorListController()
 {
 	var thisClass = this;
 
-	this.visitors = [];
-
+	this.visitors = []; 
+	
+	this.activities = []; 
+	
+	this.visitorId = null;
+	 
     this.visitorListPageLimit = 30;
 
     this.visitorListSkipIndex = 0;
@@ -22,6 +26,14 @@ function UC_VisitorListController()
     this.rivetVisitorDetailsObj = null;
 
     this.rivetVisitorMessagesObj = null;
+    
+    this.rivetVisitorSessionsObj = null;
+    
+    this.activityListSkipIndex = 0;
+    
+    this.activityListPageLimit = 30;
+    
+    this.activityListloaded = false;
 
     this.rivetVisitorColumnListObj = null;
 
@@ -44,7 +56,7 @@ function UC_VisitorListController()
                    if(!thisClass.visitorListLoaded)
                    {
                        thisClass.getAllVisitors();
-                   }
+                   } 
                }
             });
 
@@ -81,7 +93,7 @@ function UC_VisitorListController()
             $(document).on("click","#ucVisitorFieldsPopoverSubmit",thisClass.saveFieldsListHandler);
 
             $(document).on("click","#ucVisitorSearchBtn",thisClass.searchHandler);
-        }
+        };
 	};
 
     /*
@@ -95,6 +107,7 @@ function UC_VisitorListController()
                 fieldList: []
             }
         );
+		 
 
         rivets.binders.visitorid = function (el, value) {
             $(el).attr("id","uc-user-select-"+value._id);
@@ -450,6 +463,8 @@ function UC_VisitorListController()
     {
         if(visitorId != null)
         {
+        	thisClass.visitorId = visitorId;
+        	
             $("#ucVisitorDetailAjaxLoader").show();
 
             UC_AJAX.call('VisitorListManager/getvisitordetails',{appid:uc_main.appController.currentAppId,visitorId:visitorId},function(data,status,xhr){
@@ -521,10 +536,78 @@ function UC_VisitorListController()
                     $("#ucVisitorMessageAjaxLoader").hide();
                     $("#ucVisitorMessages").show();
                 }
-            });
+            }); 
         }
-    };
+        
 
+        
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() == $(document).height()) { 
+                
+                if(!thisClass.activityListloaded)
+                {
+                    thisClass.getVisitorActivity(thisClass.visitorId);
+                }
+            }
+         });
+        
+	     thisClass.rivetVisitorSessionsObj = rivets.bind(
+	       		  document.querySelector("#ucVisitorActivity"), {
+	               	  sessionsList: thisClass.activities,
+	                 }
+	    );
+        
+        thisClass.getVisitorActivity(visitorId);
+    };
+    
+    /*
+     * @desc Obtains the activity list like sessions,events etc.,
+     */ 
+    
+    this.getVisitorActivity = function(visitorId)
+    { 
+        $("#ucVisitorActivity").hide();
+        $("#ucVisitorActivityAjaxLoader").show();
+        UC_AJAX.call('VisitorListManager/getvisitorsessions',{visitorId:visitorId,skipindex:thisClass.activityListSkipIndex,pagelimit:thisClass.activityListPageLimit},function(data,status,xhr){
+        	
+        	   if(data.status == "failure")
+               {
+                   alert("An Error accured while fetching user details !");
+               }
+               else if(data.status == "authenticationfailed")
+               {
+                   location.href="/";
+               }
+               else
+               {
+                   if(data.sesssions != null)
+                   {
+                	  var sessionsList = data.sesssions; 
+                	  
+                	  if(sessionsList.length == 0)
+                      {
+                          thisClass.activityListloaded = true;
+                      }
+                	  
+                	  thisClass.activityListSkipIndex = thisClass.activityListSkipIndex + sessionsList.length;
+                	  
+                	  for(var i = 0; i < sessionsList.length; i++)
+                      {
+                		  sessionsList[i].agentInfo.sessionStart = moment(sessionsList[i].agentInfo.sessionStart).format("DD MMM YYYY HH:mm:ss");
+                      }
+                	  
+                	  thisClass.activities = thisClass.activities.concat(sessionsList); 
+                	  
+                	  thisClass.rivetVisitorSessionsObj.models.sessionsList = thisClass.activities ;
+                	  
+                   } 
+                   $("#ucVisitorActivityAjaxLoader").hide(); 
+                   $("#ucVisitorActivity").show();
+               } 
+        });
+    	
+    }; 
+    
     /*
      * @desc Obtains the list of fields for the app
      */

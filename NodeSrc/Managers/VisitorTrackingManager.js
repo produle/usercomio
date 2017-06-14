@@ -173,6 +173,7 @@ class VisitorTrackingManager {
                         });
 
                         sessionDetail["visitorId"]  = visitor._id;
+                        visitorDetail["_id"] = visitor._id;
                   }
                   else
                   {
@@ -228,6 +229,8 @@ class VisitorTrackingManager {
   	{
   		var uid = null;
   		
+  		var sessionId;
+  		
   		if(!req.body.userdata.email || req.body.userdata.email.length == 0)
   		{
   			if(!req.body.userdata.userid || req.body.userdata.userid.length == 0)
@@ -236,44 +239,39 @@ class VisitorTrackingManager {
   			}
   			else
   			{
-  				uid = req.body.userdata.userid
+  				sessionId = req.body.sessionId
   			}
   		}
   		else
   		{
-  			uid = req.body.userdata.email;
+  			sessionId = req.body.sessionId;
   		}
-  		
+  		 
   		var visitorEventDetail = {};
   		
-  		visitorEventDetail["_id"] =  req.cookies["usercomio_session"];
+  		visitorEventDetail["_id"] = utils.guidGenerator();
   		visitorEventDetail["appId"] =  req.body.appid;
-  		visitorEventDetail["createdate"] = new Date();
-  		visitorEventDetail["userid"]  = uid;
-  		visitorEventDetail["eventname"] = req.body.eventname;
-  		visitorEventDetail["eventproperties"] = req.body.properties;
-  		
-  		
-  		
-  		
-  		// Get the documents collection
+  		visitorEventDetail["createDate"] = new Date();
+  		visitorEventDetail["sessionId"]  = sessionId;
+  		visitorEventDetail["eventName"] = req.body.eventname;
+  		visitorEventDetail["eventProperties"] = req.body.properties;
+  		visitorEventDetail["visitorId"]  = req.body.visitorId;
+ 
+  	  	// Get the documents collection
         var visitorEventCollection = global.db.collection('visitorevents');
 
-        visitorEventCollection.insert([visitorEventDetail], function (err, result) 
-                {
-      	            if (err)
-      	            {
-      	            	res.status(500);
-      	      		  	return res.send({status:'failure'});
-      	            }
-      	            else
-      	            {
-      	            	return res.send({status:'success'});
-      	            }
-      	            
-      	           
-      	        });
-  		
+        	visitorEventCollection.insert([visitorEventDetail], function (err, result) 
+        			{
+        	            if (err)
+        	            {
+        	            	res.status(500);
+        	      		  	return res.send({status:'failure'});
+        	            }
+        	            else
+        	            {
+        	            	return res.send({status:'success'});
+        	            }  
+        			}); 
   	}
   	
   	handleError(req,res)

@@ -99,7 +99,20 @@
                         Analysis Content
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ucUserTabContentActivities">
-                        Activities Content
+                           <div class="ucTable" id="ucVisitorActivity">
+                           <div class="ucTableRow">
+                                <div class="ucTableHead text-center">Date &amp; Time</div>  
+                                <div class="ucTableHead text-center">Type</div>
+                                <div class="ucTableHead text-center">Additional Info</div> 
+                            </div>
+                            <div class="ucTableRow" rv-each-session="sessionsList">
+                                <div class="ucTableCell" rv-text="session.agentInfo.sessionStart"></div> 
+                                <div class="ucTableCell">Logged in</div>
+                                <div class="ucTableCell">{session.agentInfo.device} - {session.agentInfo.platform}  - {session.agentInfo.os}  - {session.agentInfo.browser }  - {session.agentInfo.version}</div>
+						    </div>
+                            </div>
+                            
+                             <div id="ucVisitorActivityAjaxLoader" class='ucAjaxLoader'><div></div></div>
                     </div>
                 </div>
 

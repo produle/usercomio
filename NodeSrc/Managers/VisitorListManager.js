@@ -20,6 +20,7 @@ class VisitorListManager {
         this.router.post("/visitorlist",(req, res) => { this.getAllVisitors(req,res); });
         this.router.post("/getvisitordetails",(req, res) => { this.getVisitorById(req,res); });
         this.router.post("/getvisitormessages",(req, res) => { this.getVisitorMessages(req,res); });
+        this.router.post("/getvisitorsessions",(req, res) => { this.getVisitorSessions(req,res); });
         this.router.post("/getfieldslist",(req, res) => { this.getFieldsList(req,res); });
     }
 
@@ -238,6 +239,45 @@ class VisitorListManager {
     	}
 
   	}
+  	
+  	/*
+  	 * @desc Return collection of visitor sessions datas
+  	 */
+  	getVisitorSessions(req,res)
+  	{
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
+        var visitorId = req.body.visitorId;
+        var skipIndex = req.body.skipindex;
+        var pageLimit = req.body.pagelimit; 
+        
+        if(visitorId)
+    	{ 
+            var messagesCollection = global.db.collection('sessions').aggregate([
+                 { $skip : skipIndex },
+                 { $limit : pageLimit },
+                 { $match : { visitorId: visitorId } 
+                 }
+            ]).toArray(function(err,sesssions)
+                {
+                    if(err)
+                    {
+                        return res.send({status:'failure'});
+                    }
+                    else
+                    {
+                        return res.send({status:'success',sesssions:sesssions});
+                    }
+                }
+            );
+
+    	}
+
+  	}  
+  	
 
   	/*
   	 * @desc Return list of fields available for the app
