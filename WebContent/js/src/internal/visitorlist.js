@@ -214,7 +214,15 @@ function UC_VisitorListController()
         };
 
         rivets.binders.customfieldtest = function (el, value) {
-            $(el).text(value[$(el).attr("data-customField")]);
+
+            var displayData = value[$(el).attr("data-customField")]
+
+            if($(el).attr("data-customField") == "created_at")
+            {
+                displayData = moment(displayData).format("Do MMM YY, HH:mm");
+            }
+
+            $(el).text(displayData);
         };
 
         rivets.binders.country = function (el, value) {
