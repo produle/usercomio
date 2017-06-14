@@ -37,7 +37,8 @@ class AppManager {
         var appCollection = global.db.collection('apps');
   		var user = req.body.user;
         
-        appCollection.find({creator:user.username,clientId:user.company}).toArray(function(err,apps)
+        //Currently obtaining App list by company as specifics roles are not available
+        appCollection.find({/*creator:user.username,*/clientId:user.company}).toArray(function(err,apps)
         {
       	  if(err)
       	  {

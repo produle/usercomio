@@ -7,7 +7,7 @@ var express = require("express");
 var app = require("../server").app;
 var passport = require("../server").passport;
 var utils = require("../core/utils").utils;
-
+var moment = require('moment');
 
 class UserManager {
 
@@ -40,6 +40,7 @@ class UserManager {
           newUser._id = newUser.username;
           newUser.createDate = new Date();
           newUser.password = utils.encrypt(newUser.password);
+          newUser.timeZone = moment().format('Z');
           
           var status = "success";
           

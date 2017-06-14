@@ -257,11 +257,10 @@ class VisitorListManager {
         if(visitorId)
     	{ 
             var messagesCollection = global.db.collection('sessions').aggregate([
+                 { $match : { visitorId: visitorId } },
                  { $skip : skipIndex },
-                 { $limit : pageLimit },
-                 { $match : { visitorId: visitorId } 
-                 }
-            ]).toArray(function(err,sesssions)
+                 { $limit : pageLimit }
+            ]).toArray(function(err,sessions)
                 {
                     if(err)
                     {
@@ -269,7 +268,7 @@ class VisitorListManager {
                     }
                     else
                     {
-                        return res.send({status:'success',sesssions:sesssions});
+                        return res.send({status:'success',sessions:sessions});
                     }
                 }
             );
