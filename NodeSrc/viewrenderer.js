@@ -249,6 +249,7 @@ class ViewRenderer
 
                 var appId = req.query.appid;
                 out = fileJs.replace("VARIABLE_APPID", appId);
+                out = fileJs.replace("VARIABLE_BASEURL", config.get("baseURL"));
             }
 
             //res.setHeader('Content-disposition', 'attachment; filename=usercom-service-worker.js');

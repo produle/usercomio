@@ -10,7 +10,7 @@ function UC_AJAXController()
 
   var thisClass = this;
 
-  thisClass.baseUrl  = "http://localhost:3000";
+  thisClass.baseUrl  = "";
 
   this.get = function(reqObj,successCallback)
   {
