@@ -201,7 +201,11 @@
     <div class="ucCopyright">&copy; Produle.com</div>
 
     <script>
+        var momentObj = "<%- momentObj %>";
+        var timezoneList = momentObj.tz.names();
+
 	    var uc_userregistration  = new UC_UserRegistrationController();
+	    uc_userregistration.timezoneList = timezoneList;
 	    uc_userregistration.constructor();
   </script>
   </body>

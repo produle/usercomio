@@ -11,12 +11,16 @@ function UC_UserRegistrationController()
 
     this.setupappId = "";
 
+    this.timezoneList = "";
+
   this.constructor = function()
   {
      this.bindUIEvents();
 
       //$("#UC_Setup_Database").show();
      $("#UC_Setup_Welcome_Page").show();
+
+      thisClass.constructTimezoneArray();
 
   }
 
@@ -510,5 +514,17 @@ function UC_UserRegistrationController()
 
     }
 
+    /*
+     * @desc Parses the timezone list string and forms an array
+     */
+    this.constructTimezoneArray = function()
+    {
+        var timezoneNameArray = thisClass.timezoneList.split(",");
+        for(var i = 0; i < timezoneNameArray.length; i++)
+        {
+            console.log(moment.tz(timezoneNameArray[i]).format("Z"));
+        }
+
+    }
 }
 
