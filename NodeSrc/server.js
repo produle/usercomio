@@ -69,6 +69,15 @@ else {
 }
 
 
+var serverPort = 3000;
+
+if(process.argv[2] == "prod")
+{
+	global.prodEnvType = true;
+	serverPort = 80;
+} 
+
+
 const PUBLIC_SRC_PATH = path.resolve(__dirname, '../WebContent');
 
 
@@ -86,8 +95,8 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 
-app.listen(3000, function() {
-  console.log('listening on 3000')
+app.listen(serverPort, function() {
+  console.log('listening on '+serverPort);
 })
 
 passport.serializeUser(function(user, done) {
@@ -135,17 +144,11 @@ var views = new viewRender();
 var controllerList = {};
 
 
-fs.readdirSync(path.join(__dirname, "managers")).forEach(function (file) {
+fs.readdirSync(path.join(__dirname, "Managers")).forEach(function (file) {
     if (file.substr(-3) === ".js") {
         var basePath = path.basename(file, ".js");
-        var Controller = require(`./managers/${file}`);
+        var Controller = require(`./Managers/${file}`);
         controllerList[basePath] = new Controller[basePath]();
         app.use(`/${basePath}`, controllerList[basePath].router);
     }
 });
- 
-  
-if(process.argv[2] == "prod")
-{
-	global.prodEnvType = true;
-} 
