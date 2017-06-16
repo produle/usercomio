@@ -19,7 +19,7 @@
 	 */
 	var DEFAULT_CONFIG = 
 	{
-			'api_host':   HTTP_PROTOCOL + 'localhost:3000',
+			'api_host':   'VARIABLE_BASEURL',
             'serviceWorkerFile' : '/usercom-sw.js'
 	}
 	
