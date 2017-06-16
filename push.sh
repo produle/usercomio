@@ -5,13 +5,14 @@ setup_git() {
 }
 
 commit_website_files() { 
-  git fetch 
+  git fetch -p origin
   git checkout $Branch
   git add WebContent/dist/*
   git commit --message "Travis build: $TRAVIS_BUILD_NUMBER"
 }
 
 upload_files() {
+  echo $Branch
   git remote add origin-pages https://${GH_TOKEN}@github.com/ckavinkumar/usercomio.git > /dev/null 2>&1 
   git push origin-pages $Branch  
 }
