@@ -249,8 +249,9 @@ class ViewRenderer
                 var fileJs = fs.readFileSync(path.join(__dirname, '/../WebContent/js/src/internal/tracking/track.js'),'utf8');
 
                 var appId = req.query.appid;
-                out = fileJs.replace("VARIABLE_APPID", appId);
-                out = fileJs.replace("VARIABLE_BASEURL", config.get("baseURL"));
+                out = fileJs;
+                out = out.replace("VARIABLE_APPID", appId);
+                out = out.replace("VARIABLE_BASEURL", config.get("baseURL"));
             }
 
             //res.setHeader('Content-disposition', 'attachment; filename=usercom-service-worker.js');

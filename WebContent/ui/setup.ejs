@@ -85,6 +85,11 @@
 				<input type="text" class="form-control" id="ucsetup_dbnameinput" placeholder="MongoDB Name (usercom)">
 			</div>
 		</div>
+		<div class="form-group row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<input type="text" class="form-control" id="ucsetup_dbparaminput" placeholder="Extra params to be added to connection string (include ? at the beginning)">
+			</div>
+		</div>
 
 		<div class="form-group row">
 			<div class="col-sm-6 col-sm-offset-3 text-center">
@@ -201,11 +206,11 @@
     <div class="ucCopyright">&copy; Produle.com</div>
 
     <script>
-        var momentObj = "<%- momentObj %>";
-        var timezoneList = momentObj.tz.names();
+        //var momentObj = null;
+        //var timezoneList = null;//momentObj.tz.names();
 
 	    var uc_userregistration  = new UC_UserRegistrationController();
-	    uc_userregistration.timezoneList = timezoneList;
+	    //uc_userregistration.timezoneList = timezoneList;
 	    uc_userregistration.constructor();
   </script>
   </body>

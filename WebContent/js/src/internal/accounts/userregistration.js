@@ -11,7 +11,7 @@ function UC_UserRegistrationController()
 
     this.setupappId = "";
 
-    this.timezoneList = "";
+    //this.timezoneList = "";
 
   this.constructor = function()
   {
@@ -20,7 +20,7 @@ function UC_UserRegistrationController()
       //$("#UC_Setup_Database").show();
      $("#UC_Setup_Welcome_Page").show();
 
-      thisClass.constructTimezoneArray();
+      //thisClass.constructTimezoneArray();
 
   }
 
@@ -174,7 +174,8 @@ function UC_UserRegistrationController()
 	      dbport  = $('#ucsetup_dbportinput').val(),
 	      dbuser  = $('#ucsetup_dbuserinput').val(),
 	      dbpass  = $('#ucsetup_dbpassinput').val(),
-	      dbname  = $('#ucsetup_dbnameinput').val();
+	      dbname  = $('#ucsetup_dbnameinput').val(),
+	      dbparam  = $('#ucsetup_dbparaminput').val();
 
 
     var validationResult = thisClass.validateSetupDBInputs();
@@ -187,7 +188,7 @@ function UC_UserRegistrationController()
 
     $('#ucSetupDatabaseAjaxLoader').show();
 
-    UC_AJAX.call('UserManager/verifydbconnection',{dbhost:dbhost,dbport:dbport,dbuser:dbuser,dbpass:dbpass,dbname:dbname},function(data,status,xhr)
+    UC_AJAX.call('UserManager/verifydbconnection',{dbhost:dbhost,dbport:dbport,dbuser:dbuser,dbpass:dbpass,dbname:dbname,dbparam:dbparam},function(data,status,xhr)
 	  {
 		 if(data)
 		 {
@@ -200,6 +201,7 @@ function UC_UserRegistrationController()
                 thisClass.config.database.user = dbuser;
                 thisClass.config.database.pass = dbpass;
                 thisClass.config.database.name = dbname;
+                thisClass.config.database.param = dbparam;
 
                  thisClass.saveConfig(false);
 
