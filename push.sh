@@ -12,7 +12,7 @@ commit_website_files() {
 }
 
 upload_files() {
-  echo $Branch
+  echo "current Branch=" $Branch
   git remote add origin-pages https://${GH_TOKEN}@github.com/ckavinkumar/usercomio.git > /dev/null 2>&1 
   git push origin-pages $Branch  
 }
