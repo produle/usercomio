@@ -11,12 +11,16 @@ function UC_UserRegistrationController()
 
     this.setupappId = "";
 
+    //this.timezoneList = "";
+
   this.constructor = function()
   {
      this.bindUIEvents();
 
       //$("#UC_Setup_Database").show();
      $("#UC_Setup_Welcome_Page").show();
+
+      //thisClass.constructTimezoneArray();
 
   }
 
@@ -170,7 +174,8 @@ function UC_UserRegistrationController()
 	      dbport  = $('#ucsetup_dbportinput').val(),
 	      dbuser  = $('#ucsetup_dbuserinput').val(),
 	      dbpass  = $('#ucsetup_dbpassinput').val(),
-	      dbname  = $('#ucsetup_dbnameinput').val();
+	      dbname  = $('#ucsetup_dbnameinput').val(),
+	      dbparam  = $('#ucsetup_dbparaminput').val();
 
 
     var validationResult = thisClass.validateSetupDBInputs();
@@ -183,7 +188,7 @@ function UC_UserRegistrationController()
 
     $('#ucSetupDatabaseAjaxLoader').show();
 
-    UC_AJAX.call('UserManager/verifydbconnection',{dbhost:dbhost,dbport:dbport,dbuser:dbuser,dbpass:dbpass,dbname:dbname},function(data,status,xhr)
+    UC_AJAX.call('UserManager/verifydbconnection',{dbhost:dbhost,dbport:dbport,dbuser:dbuser,dbpass:dbpass,dbname:dbname,dbparam:dbparam},function(data,status,xhr)
 	  {
 		 if(data)
 		 {
@@ -196,6 +201,7 @@ function UC_UserRegistrationController()
                 thisClass.config.database.user = dbuser;
                 thisClass.config.database.pass = dbpass;
                 thisClass.config.database.name = dbname;
+                thisClass.config.database.param = dbparam;
 
                  thisClass.saveConfig(false);
 
@@ -510,5 +516,17 @@ function UC_UserRegistrationController()
 
     }
 
+    /*
+     * @desc Parses the timezone list string and forms an array
+     */
+    this.constructTimezoneArray = function()
+    {
+        var timezoneNameArray = thisClass.timezoneList.split(",");
+        for(var i = 0; i < timezoneNameArray.length; i++)
+        {
+            console.log(moment.tz(timezoneNameArray[i]).format("Z"));
+        }
+
+    }
 }
 

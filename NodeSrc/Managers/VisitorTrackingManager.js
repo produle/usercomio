@@ -354,7 +354,7 @@ class VisitorTrackingManager {
                 return res.send({status:'failure'});
             }
 
-            if(session)
+            if(session && session.length == 1)
             {
                 sessionCollection.update(
                     { _id: session[0]._id },

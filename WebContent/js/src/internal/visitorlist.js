@@ -29,6 +29,8 @@ function UC_VisitorListController()
     
     this.rivetVisitorSessionsObj = null;
     
+    this.rivetVisitorPlaceholderObj = null;
+
     this.activityListSkipIndex = 0;
     
     this.activityListPageLimit = 30;
@@ -241,6 +243,12 @@ function UC_VisitorListController()
         rivets.binders.country = function (el, value) {
             $(el).html(value[0].geoLocationInfo.country);
         };
+
+		thisClass.rivetVisitorPlaceholderObj = rivets.bind(
+            document.querySelector('#ucVisitorListPlaceholder'), {
+                display: true
+            }
+        );
 	};
 
 	/*
@@ -314,6 +322,15 @@ function UC_VisitorListController()
         //thisClass.reorderFieldsInUserlist();  //TODO Has issues in switch app, need to be fixed
 
         thisClass.toggleVisitorListFields();
+
+        if(thisClass.currentFilterId == "1" && thisClass.visitors.length == 0)
+        {
+            thisClass.rivetVisitorPlaceholderObj.models.display = true;
+        }
+        else
+        {
+            thisClass.rivetVisitorPlaceholderObj.models.display = false;
+        }
 
 	};
 

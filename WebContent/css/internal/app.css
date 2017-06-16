@@ -689,6 +689,13 @@ h2
     cursor: pointer;
 }
 
+#ucVisitorListPlaceholder {
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 40px;
+    border: 1px solid #AAAAAA;
+    text-align: center;
+}
 /**
  * CSS Loader animation - Start
  */
