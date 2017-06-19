@@ -59,37 +59,51 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="btn-group ucTabBtnGroup" id="ucSetupDatabaseTabGroup" role="group">
+                    <button type="button" class="btn btn-default uc_tab_trigger active" data-tabgroup-class="ucSetupDatabaseContainer" data-tabgroup-tabid="ucSetupDatabaseSimpleContainer" data-connectionType="Simple">Simple</button>
+                    <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucSetupDatabaseContainer" data-tabgroup-tabid="ucSetupDatabaseAdvancedContainer" data-connectionType="Advanced">Advanced</button>
+                </div>
+            </div>
+        </div>
 
-    	<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_dbhostinput" placeholder="MongoDB Host (127.0.0.1, localhost, etc)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_dbportinput" placeholder="MongoDB Port (27017)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_dbuserinput" placeholder="MongoDB Username (root)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="password" class="form-control" id="ucsetup_dbpassinput" placeholder="MongoDB Password (********)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_dbnameinput" placeholder="MongoDB Name (usercom)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_dbparaminput" placeholder="Extra params to be added to connection string (include ? at the beginning)">
-			</div>
-		</div>
+
+        <div class="ucSetupDatabaseContainer" id="ucSetupDatabaseSimpleContainer">
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input type="text" class="form-control" id="ucsetup_dbhostinput" placeholder="MongoDB Host (127.0.0.1, localhost, etc)">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input type="text" class="form-control" id="ucsetup_dbportinput" placeholder="MongoDB Port (27017)">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input type="text" class="form-control" id="ucsetup_dbuserinput" placeholder="MongoDB Username (root)">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input type="password" class="form-control" id="ucsetup_dbpassinput" placeholder="MongoDB Password (********)">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input type="text" class="form-control" id="ucsetup_dbnameinput" placeholder="MongoDB Name (usercom)">
+                </div>
+            </div>
+        </div>
+
+        <div class="ucSetupDatabaseContainer" id="ucSetupDatabaseAdvancedContainer" style="display: none;">
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <textarea rows="10" class="form-control" id="ucsetup_dbconnectionstringinput" placeholder="Connection String (eg: mongodb://<USERNAME>:<PASSWORD>@cluster0-shard-00-00-xwjiy.mongodb.net:27017/<DATABASE>?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin)"></textarea>
+                </div>
+            </div>
+        </div>
 
 		<div class="form-group row">
 			<div class="col-sm-6 col-sm-offset-3 text-center">

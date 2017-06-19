@@ -22,6 +22,8 @@ function UC_UserRegistrationController()
 
       //thisClass.constructTimezoneArray();
 
+      $(".uc_tab_trigger").on("click",thisClass.toggleTabs);
+
   }
 
   this.bindUIEvents = function()
@@ -175,7 +177,9 @@ function UC_UserRegistrationController()
 	      dbuser  = $('#ucsetup_dbuserinput').val(),
 	      dbpass  = $('#ucsetup_dbpassinput').val(),
 	      dbname  = $('#ucsetup_dbnameinput').val(),
-	      dbparam  = $('#ucsetup_dbparaminput').val();
+	      dbconnectionstring  = $('#ucsetup_dbconnectionstringinput').val();
+
+    var dbconnectiontype = $("#ucSetupDatabaseTabGroup .active").attr("data-connectionType");
 
 
     var validationResult = thisClass.validateSetupDBInputs();
@@ -188,7 +192,7 @@ function UC_UserRegistrationController()
 
     $('#ucSetupDatabaseAjaxLoader').show();
 
-    UC_AJAX.call('UserManager/verifydbconnection',{dbhost:dbhost,dbport:dbport,dbuser:dbuser,dbpass:dbpass,dbname:dbname,dbparam:dbparam},function(data,status,xhr)
+    UC_AJAX.call('UserManager/verifydbconnection',{dbhost:dbhost,dbport:dbport,dbuser:dbuser,dbpass:dbpass,dbname:dbname,dbconnectionstring:dbconnectionstring,dbconnectiontype:dbconnectiontype},function(data,status,xhr)
 	  {
 		 if(data)
 		 {
@@ -201,7 +205,8 @@ function UC_UserRegistrationController()
                 thisClass.config.database.user = dbuser;
                 thisClass.config.database.pass = dbpass;
                 thisClass.config.database.name = dbname;
-                thisClass.config.database.param = dbparam;
+                thisClass.config.database.connectionstring = dbconnectionstring;
+                thisClass.config.database.connectiontype = dbconnectiontype;
 
                  thisClass.saveConfig(false);
 
@@ -341,6 +346,11 @@ function UC_UserRegistrationController()
     }
 
 
+    if(baseurl.substr(baseurl.length - 1) == "/")
+    {
+        baseurl = baseurl.substr(0,baseurl.length - 1);
+    }
+
     thisClass.config.baseURL= baseurl;
     thisClass.config.setupCompleted = 1;
 
@@ -395,26 +405,44 @@ function UC_UserRegistrationController()
 	      dbuser  = $('#ucsetup_dbuserinput').val(),
 	      dbpass  = $('#ucsetup_dbpassinput').val(),
 	      dbname  = $('#ucsetup_dbnameinput').val(),
+	      dbconnectionstring  = $('#ucsetup_dbconnectionstringinput').val(),
 	  	  msg = "";
 
-	  if($.trim(dbhost) == "")
-	  {
-		  msg = "Invalid Database Host !";
-	  }
-	  else if($.trim(dbport) == "")
-	  {
-		  msg = "Invalid Database Port !";
-	  }
-	  else if($.trim(dbname) == "")
-	  {
-		  msg = "Invalid Database Name !";
-	  }
+      var dbconnectiontype = $("#ucSetupDatabaseTabGroup .active").attr("data-connectionType");
 
-	  if(msg != "")
-	  {
-		  result.status = "failure";
-		  result.msg = msg;
-	  }
+      if(dbconnectiontype == "Simple")
+      {
+
+          if($.trim(dbhost) == "")
+          {
+              msg = "Invalid Database Host !";
+          }
+          else if($.trim(dbport) == "")
+          {
+              msg = "Invalid Database Port !";
+          }
+          else if($.trim(dbname) == "")
+          {
+              msg = "Invalid Database Name !";
+          }
+      }
+      else if(dbconnectiontype == "Advanced")
+      {
+          if($.trim(dbconnectionstring) == "")
+          {
+              msg = "Invalid Connection String";
+          }
+      }
+      else
+      {
+          msg = "Invalid Connection Type";
+      }
+
+      if(msg != "")
+      {
+          result.status = "failure";
+          result.msg = msg;
+      }
 
 	  return result;
   }
@@ -468,6 +496,11 @@ function UC_UserRegistrationController()
 	  var baseurl  = $('#ucsetup_baseurlinput').val(),
 	      appname  = $('#ucsetup_appnameinput').val(),
 	  	  msg = "";
+
+      if(baseurl.substr(baseurl.length - 1) == "/")
+      {
+          baseurl = baseurl.substr(0,baseurl.length - 1);
+      }
 
 	  if($.trim(baseurl) == "")
 	  {
@@ -528,5 +561,17 @@ function UC_UserRegistrationController()
         }
 
     }
+
+    /**
+     * @desc Toggles between tabs. This is a global function, not specific to specific tab group
+     */
+    this.toggleTabs = function()
+    {
+        $("."+$(this).attr("data-tabgroup-class")).hide();
+        $("#"+$(this).attr("data-tabgroup-tabid")).show();
+
+        $(this).closest(".btn-group").find(".btn").removeClass("active");
+        $(this).addClass("active");
+    };
 }
 

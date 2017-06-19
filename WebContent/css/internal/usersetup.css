@@ -29,6 +29,20 @@ body
 	outline: none;
 }
 
+.ucTabBtnGroup .btn-default,
+.ucTabBtnGroup .btn-default:hover,
+.ucTabBtnGroup .btn-default:focus
+{
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+}
+
+
+.ucTabBtnGroup .btn-default.active
+{
+    background-color: #2586d4;
+}
+
 .UC_SetupContainerCls
 {
 	width: 1000px;

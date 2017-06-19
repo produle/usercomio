@@ -35,7 +35,8 @@ if(config.has("database")) {
     var dbuser = config.get("database.user");
     var dbpass = config.get("database.pass");
     var dbname = config.get("database.name");
-    var dbparam = config.get("database.param");
+    var dbconnectionstring = config.get("database.connectionstring");
+    var dbconnectiontype = config.get("database.connectiontype");
 
     var credentials = "";
     if(dbuser != "")
@@ -49,7 +50,11 @@ if(config.has("database")) {
     }
 
     // Connection URL. This is where your mongodb server is running.
-    var url = 'mongodb://'+credentials+dbhost+':'+dbport+'/'+dbname+dbparam;
+    var url = 'mongodb://'+credentials+dbhost+':'+dbport+'/'+dbname;
+    if(dbconnectiontype == "Advanced")
+    {
+        url = dbconnectionstring;
+    }
 
     // Use connect method to connect to the Server
     MongoClient.connect(url, function (err, db) {
