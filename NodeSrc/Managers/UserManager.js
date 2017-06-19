@@ -138,7 +138,8 @@ class UserManager {
         var dbuser = req.body.dbuser;
         var dbpass = req.body.dbpass;
         var dbname = req.body.dbname;
-        var dbparam = req.body.dbparam;
+        var dbconnectionstring = req.body.dbconnectionstring;
+        var dbconnectiontype = req.body.dbconnectiontype;
 
         var status = "failure";
 
@@ -160,7 +161,11 @@ class UserManager {
         }
 
         // Connection URL. This is where your mongodb server is running.
-        var url = 'mongodb://'+credentials+dbhost+':'+dbport+'/'+dbname+dbparam;
+        var url = 'mongodb://'+credentials+dbhost+':'+dbport+'/'+dbname;
+        if(dbconnectiontype == "Advanced")
+        {
+            url = dbconnectionstring;
+        }
 
         // Use connect method to connect to the Server
         MongoClient.connect(url, function (err, db) {

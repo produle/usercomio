@@ -609,6 +609,13 @@ function UC_UserController()
         $('#uceditdatabase_host').val(thisClass.config.database.host);
         $('#uceditdatabase_port').val(thisClass.config.database.port);
         $('#uceditdatabase_user').val(thisClass.config.database.user);
+        $('#uceditdatabase_connectionstring').val(thisClass.config.database.connectionstring);
+
+        $("#ucEditDatabaseTabGroup .uc_tab_trigger").removeClass("active");
+        $("#ucEditDatabaseTabGroup .uc_tab_trigger[data-connectionType="+thisClass.config.database.connectiontype+"]").addClass("active");
+
+        $(".ucEditDatabaseContainer").hide();
+        $("#ucEditDatabase"+thisClass.config.database.connectiontype+"Container").show();
 
         $("#ucEditDatabaseModal").modal();
 
@@ -625,7 +632,9 @@ function UC_UserController()
         var databasehost = $('#uceditdatabase_host').val(),
             databaseport = $('#uceditdatabase_port').val(),
             databaseuser = $('#uceditdatabase_user').val(),
-            databasepass = $('#uceditdatabase_pass').val();
+            databasepass = $('#uceditdatabase_pass').val(),
+            databaseconnectionstring = $('#uceditdatabase_connectionstring').val(),
+            databaseconnectiontype = $("#ucEditDatabaseTabGroup .active").attr("data-connectionType");
 
 
         var validationResult = thisClass.validateDatabaseInputs();
@@ -640,10 +649,12 @@ function UC_UserController()
         thisClass.config.database.port = databaseport;
         thisClass.config.database.user = databaseuser;
         thisClass.config.database.pass = databasepass;
+        thisClass.config.database.connectionstring = databaseconnectionstring;
+        thisClass.config.database.connectiontype = databaseconnectiontype;
 
         $("#ucEditDatabaseAjaxLoader").show();
 
-        UC_AJAX.call('UserManager/verifydbconnection',{dbhost:databasehost,dbport:databaseport,dbuser:databaseuser,dbpass:databasepass,dbname:thisClass.config.database.name},function(data,status,xhr)
+        UC_AJAX.call('UserManager/verifydbconnection',{dbhost:databasehost,dbport:databaseport,dbuser:databaseuser,dbpass:databasepass,dbname:thisClass.config.database.name,dbconnectionstring:databaseconnectionstring,dbconnectiontype:databaseconnectiontype},function(data,status,xhr)
               {
                  if(data)
                  {
@@ -697,15 +708,31 @@ function UC_UserController()
 
         var databasehost = $('#uceditdatabase_host').val(),
             databaseport = $('#uceditdatabase_port').val(),
+            databaseconnectionstring = $('#uceditdatabase_connectionstring').val(),
+            databaseconnectiontype = $("#ucEditDatabaseTabGroup .active").attr("data-connectionType"),
             msg = "";
 
-        if($.trim(databasehost) == "")
+        if(databaseconnectiontype == "Simple")
         {
-            msg = "Invalid Host Name !";
+            if($.trim(databasehost) == "")
+            {
+                msg = "Invalid Host Name !";
+            }
+            else if($.trim(databaseport) == "")
+            {
+                msg = "Invalid Port !";
+            }
         }
-        else if($.trim(databaseport) == "")
+        else if(databaseconnectiontype == "Advanced")
         {
-            msg = "Invalid Port !";
+            if($.trim(databaseconnectionstring) == "")
+            {
+                msg = "Invalid Connection String";
+            }
+        }
+        else
+        {
+            msg = "Invalid Connection Type";
         }
 
         if(msg != "")
@@ -747,6 +774,12 @@ function UC_UserController()
             return;
         }
 
+
+        if(baseurl.substr(baseurl.length - 1) == "/")
+        {
+            baseurl = baseurl.substr(0,baseurl.length - 1);
+        }
+
         thisClass.config.baseURL = baseurl;
 
         $("#ucEditSystemAjaxLoader").show();
@@ -781,9 +814,15 @@ function UC_UserController()
         var baseurl = $('#uceditsystem_baseurl').val(),
             msg = "";
 
+
+        if(baseurl.substr(baseurl.length - 1) == "/")
+        {
+            baseurl = baseurl.substr(0,baseurl.length - 1);
+        }
+
         if($.trim(baseurl) == "")
         {
-            msg = "Invalid Host Name !";
+            msg = "Invalid Base URL";
         }
 
         if(msg != "")
