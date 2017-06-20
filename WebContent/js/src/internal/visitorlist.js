@@ -570,7 +570,7 @@ function UC_VisitorListController()
         
 	     thisClass.rivetVisitorSessionsObj = rivets.bind(
 	       		  document.querySelector("#ucVisitorActivity"), {
-	               	  sessionsList: thisClass.activities,
+	               	  ActivityList: thisClass.activities,
 	                 }
 	    );
         
@@ -599,23 +599,33 @@ function UC_VisitorListController()
                {
                    if(data.sessions != null)
                    {
-                	  var sessionsList = data.sessions;
+                	  var ActivityList = data.sessions;
                 	  
-                	  if(sessionsList.length == 0)
+                	  if(ActivityList.length == 0)
                       {
                           thisClass.activityListloaded = true;
                       }
                 	  
-                	  thisClass.activityListSkipIndex = thisClass.activityListSkipIndex + sessionsList.length;
+                	  thisClass.activityListSkipIndex = thisClass.activityListSkipIndex + ActivityList.length;
                 	  
-                	  for(var i = 0; i < sessionsList.length; i++)
+                	  for(var i = 0; i < ActivityList.length; i++)
                       {
-                		  sessionsList[i].agentInfo.sessionStart = moment(sessionsList[i].agentInfo.sessionStart).format("DD MMM YYYY HH:mm:ss");
+                		  ActivityList[i].sessions = ActivityList[i].sessions[0];
+                		  ActivityList[i].sessions.agentInfo.sessionStart = moment(ActivityList[i].sessions.agentInfosessionStart).format("DD MMM YYYY HH:mm:ss");
+                		  if(ActivityList[i].eventName == "Logged In")
+                		  {
+                			  ActivityList[i].eventType =   ActivityList[i].sessions.agentInfo.device + "-" + ActivityList[i].sessions.agentInfo.platform +"-"+  ActivityList[i].sessions.agentInfo.os  +"-"+  ActivityList[i].sessions.agentInfo.browser  +"-"+  ActivityList[i].sessions.agentInfo.version;
+                		  }
+                		  else
+                		  {
+                			  ActivityList[i].eventType = JSON.stringify(ActivityList[i].eventProperties);
+                		  }
+                		 
                       }
                 	  
-                	  thisClass.activities = thisClass.activities.concat(sessionsList); 
+                	  thisClass.activities = thisClass.activities.concat(ActivityList); 
                 	  
-                	  thisClass.rivetVisitorSessionsObj.models.sessionsList = thisClass.activities ;
+                	  thisClass.rivetVisitorSessionsObj.models.ActivityList = thisClass.activities ;
                 	  
                    } 
                    $("#ucVisitorActivityAjaxLoader").hide(); 

@@ -140,8 +140,7 @@
 			
 			sessionId : null,
 			
-			visitorId : null,
-			
+			visitorId : null, 
 			
 			track : function(eventName,properties)
 			{
@@ -158,11 +157,27 @@
 						eventname:eventName,
 						sessionId:this.sessionId,
 						visitorId:this.visitorId
-				}
+				} 
 				
-				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/event', JSON.stringify(requestObj),function(data){
-					console.log(data);
-				})
+				this.call(requestObj);
+			},
+			call :function(requestObj)
+			{
+				thisClass = this;
+				if(this.sessionId!=null)
+				{
+					requestObj.sessionId = this.sessionId;
+					requestObj.visitorId = this.visitorId;
+					xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/event', JSON.stringify(requestObj),function(data){
+						console.log(data);
+					}) 
+				}
+				else
+				{
+					setTimeout(function(){
+						thisClass.call(requestObj);
+					},500);
+				}
 			}
 			
 	};
@@ -207,7 +222,10 @@
     				UsercomLib["visitorId"] = response.status._id;
 
                     thisClass.createServiceWorker();
+                    
+                    UsercomLib.track("Logged In",{});
 				});
+				 
 
                 window.onbeforeunload = function(){
 
