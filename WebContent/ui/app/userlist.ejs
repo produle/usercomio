@@ -98,9 +98,9 @@
                                        <tr rv-each-visitor="list">
                                            <td class="uc_td_input_control"><input rv-visitorid="visitor" class="uc-user-select" type="checkbox"><label></label></td>
                                            <td>
-                                               <div class="ucUserBaseDetails ucVisitorPageTrigger" rv-data-visitorid="visitor._id">
+                                               <div class="ucUserBaseDetails ucVisitorPageTrigger" rv-data-visitoremail="visitor.visitorData.email" rv-data-visitorid="visitor._id">
                                                    <div class="ucUserCurrentStatus">
-                                                       <span class="ucUserOnline"></span>
+                                                       <span rv-class-ucUserOnline="visitor.isVisitorOnline" rv-class-ucUserOffline="visitor.isVisitorOffline"></span>
                                                        <div class="ucUserPicWrapper">
                                                            <img src="images/app/listing/ucUserPic.png" alt=""/>
                                                        </div>

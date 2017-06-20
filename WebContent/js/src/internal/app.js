@@ -135,6 +135,8 @@ function UC_AppController()
 				 }
 
                 $('#ucNewAppAjaxLoader').hide();
+                
+              
 				
 			});
 			
@@ -365,5 +367,14 @@ function UC_AppController()
             uc_main.dashboardController.drawNewUsersGraph();
             uc_main.filterController.listUserdefinedFilters();
         }
+        
+        console.log(thisClass.currentAppId);
+        console.log(uc_main.rtcController.socket);
+        //update it websocket client list
+        var msg = {};
+		msg.name = "establishappconnection";
+		msg.key =  thisClass.currentAppId;
+		msg  = JSON.stringify(msg);
+		uc_main.rtcController.sendMessageToServer(msg);
     };
 }

@@ -15,6 +15,7 @@ function UC_MainController()
 	this.userController = new UC_UserController();
 	this.filterController = new UC_FilterController();
 	this.messagingController = new UC_MessagingController();
+	this.rtcController = new UC_RTCController();
 
     this.rivetUserNameObj = null;
 	
@@ -27,6 +28,9 @@ function UC_MainController()
         thisClass.userController.constructor();
         thisClass.filterController.constructor();
         thisClass.messagingController.constructor();
+        
+		thisClass.rtcController.sessionID = UC_Utils.guidGenerator();
+		thisClass.rtcController.connect();
 
         thisClass.initRivetBinds();
 
