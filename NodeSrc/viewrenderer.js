@@ -13,7 +13,6 @@ var app = require("./server").app;
 var userManager = require("./Managers/UserManager").UserManager;
 var visitorListManager = require("./Managers/VisitorListManager").VisitorListManager;
 var emailManager = require("./Managers/EmailManager").EmailManager;
-//var momentTimezone = require('moment-timezone');
 
 class ViewRenderer
 {
