@@ -231,21 +231,14 @@ class VisitorTrackingManager {
   		
   		var sessionId;
   		
-  		if(!req.body.userdata.email || req.body.userdata.email.length == 0)
-  		{
-  			if(!req.body.userdata.userid || req.body.userdata.userid.length == 0)
-  			{
-  				return res.send({status:'failure',msg:'Either email or userid should be provided'})
-  			}
-  			else
-  			{
-  				sessionId = req.body.sessionId
-  			}
+  		if(!req.body.sessionId || req.body.sessionId.length == 0)
+  		{ 
+  		    return res.send({status:'failure',msg:'SessionID is empty'})
   		}
   		else
   		{
-  			sessionId = req.body.sessionId;
-  		}
+  			sessionId = req.body.sessionId
+  		 } 
   		 
   		var visitorEventDetail = {};
   		
@@ -264,6 +257,7 @@ class VisitorTrackingManager {
         			{
         	            if (err)
         	            {
+        	            	console.log(err)
         	            	res.status(500);
         	      		  	return res.send({status:'failure'});
         	            }

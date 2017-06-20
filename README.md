@@ -51,6 +51,14 @@ npm run prod /* Starts the usercom application in production mode at port 3000 *
     })
     </script>
     ``` 
+## Using event tracking code inside the application
+
+1. Copy and paste the below mentioned code to track the custom activity of the user.
+2. The event details can be viewed under activities in user details view page
+
+	```
+	UsercomLib.track("View Product",{"product_id":1});   /* 1-Event Name(String) , 2-Event Properties(Object of any time)*/
+	```
     
 ## Email Notification
 Email settings can be saved in `Edit Email Settings`, which is available in the top-right corner dropdown. You can send emails through any of the following interfaces:
