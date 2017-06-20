@@ -7,9 +7,13 @@
 
 var express = require("express");
 var moment = require("moment");
+var fs = require("fs");
+var path = require('path');
 var app = require("./server").app;
 var userManager = require("./Managers/UserManager").UserManager;
 var visitorListManager = require("./Managers/VisitorListManager").VisitorListManager;
+var emailManager = require("./Managers/EmailManager").EmailManager;
+//var momentTimezone = require('moment-timezone');
 
 class ViewRenderer
 {
@@ -161,6 +165,100 @@ class ViewRenderer
 
 
 		 });
+
+		/*
+		 * @desc Renders unsubscribe page
+		 */
+		app.get('/unsubscribe/:appid/:visitorid', function(req, res)
+		{
+
+            if(req.params.appid != null && req.params.appid != "" && req.params.visitorid != null && req.params.visitorid != "")
+            {
+                var emailManagerObj = new emailManager();
+
+                emailManagerObj.validateAppDetails(req.params.appid,req.params.visitorid,function(appDetails, visitorDetails){
+
+                    if(appDetails)
+                    {
+                        res.render('unsubscribe',{confirmation:true,app:appDetails,visitor:visitorDetails});
+                    }
+                    else
+                    {
+                        res.redirect('/');
+                    }
+                });
+            }
+            else
+            {
+                res.redirect('/');
+            }
+		 });
+
+		/*
+		 * @desc Unsubscribes the email upon confirmation page
+		 */
+		app.post('/unsubscribe/:appid/:visitorid', function(req, res)
+		{
+
+            if(req.params.appid != null && req.params.appid != "" && req.params.visitorid != null && req.params.visitorid != "")
+            {
+                var emailManagerObj = new emailManager();
+
+                emailManagerObj.validateAppDetails(req.params.appid,req.params.visitorid,function(appDetails, visitorDetails){
+
+                    if(appDetails)
+                    {
+                        emailManagerObj.unsubscribeVisitorFromApp(appDetails,visitorDetails);
+                        res.render('unsubscribe',{confirmation:false});
+                    }
+                    else
+                    {
+                        res.redirect('/');
+                    }
+                });
+            }
+            else
+            {
+                res.redirect('/');
+            }
+		 });
+
+        app.get('/tracking/usercom-service-worker.js', function(req, res) {
+
+            var out = "Add Base URL";
+            var config = require('config');
+
+  		    if(config.has("baseURL"))
+            {
+                out = 'importScripts("'+config.get("baseURL")+'/js/src/internal/tracking/usercom-service-worker.js");';
+            }
+
+            res.setHeader('Content-disposition', 'attachment; filename=usercom-service-worker.js');
+            res.setHeader('Content-type', 'text/javascript');
+            res.write(out);
+            res.end();
+        });
+
+        app.get('/tracking/track.js', function(req, res) {
+
+            var out = "Add Base URL";
+            var config = require('config');
+
+  		    if(config.has("baseURL"))
+            {
+                var fileJs = fs.readFileSync(path.join(__dirname, '/../WebContent/js/src/internal/tracking/track.js'),'utf8');
+
+                var appId = req.query.appid;
+                out = fileJs;
+                out = out.replace("VARIABLE_APPID", appId);
+                out = out.replace("VARIABLE_BASEURL", config.get("baseURL"));
+            }
+
+            //res.setHeader('Content-disposition', 'attachment; filename=usercom-service-worker.js');
+            res.setHeader('Content-type', 'text/javascript');
+            res.write(out);
+            res.end();
+        });
 
 
 	}

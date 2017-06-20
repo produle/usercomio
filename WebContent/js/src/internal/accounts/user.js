@@ -11,17 +11,23 @@ function UC_UserController()
 
     this.config = {};
 
+    this.emailSetting = {};
+
+    this.browserNotificationSetting = {};
+
 	this.constructor = function()
 	{
         $(document).on("click",".ucEditProfile",thisClass.editProfileHandler);
         $(document).on("click",".ucChangePassword",thisClass.editPasswordHandler);
         $(document).on("click",".ucEditMail",thisClass.editMailHandler);
+        $(document).on("click",".ucEditBrowserNotification",thisClass.editBrowserNotificationHandler);
         $(document).on("click",".ucEditDatabase",thisClass.editDatabaseHandler);
         $(document).on("click",".ucEditSystem",thisClass.editSystemHandler);
 
 		$(document).on("click","#uceditprofile_submit",thisClass.handleProfileSaveAction);
 		$(document).on("click","#ucchangepassword_submit",thisClass.handlePasswordSaveAction);
 		$(document).on("click","#uceditmail_submit",thisClass.handleMailSaveAction);
+		$(document).on("click","#uceditbrowsernotification_submit",thisClass.handleBrowserNotificationSaveAction);
 		$(document).on("click","#uceditdatabase_submit",thisClass.handleDatabaseSaveAction);
 		$(document).on("click","#uceditsystem_submit",thisClass.handleSystemSaveAction);
 
@@ -76,6 +82,10 @@ function UC_UserController()
                 if(data.status == "failure")
                 {
                     alert("An Error accured while saving data !");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
                 }
                 else
                 {
@@ -169,6 +179,10 @@ function UC_UserController()
                 {
                     alert("An Error accured while saving data !");
                 }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
                 else
                 {
                     alert("Password changed successfully");
@@ -216,45 +230,123 @@ function UC_UserController()
      */
     this.editMailHandler = function(e)
     {
-        if(thisClass.config.emailType)
-        {
-            thisClass.currentEmailType = thisClass.config.emailType;
-        }
-        else
-        {
-            thisClass.currentEmailType = "SMTP";
-        }
+        var user = UC_UserSession.user;
 
-        $(".ucEditEmailContainer").hide();
-        $("#ucEditEmail"+thisClass.currentEmailType+"Container").show();
+        //Reset Form
+        $('#uceditsmtp_host,#uceditsmtp_port,#uceditsmtp_user,#uceditsmtp_pass,#uceditmailgun_key,#uceditmailgun_domain,#uceditmailgun_from,#uceditamazon_key,#uceditamazon_secret,#uceditamazon_region,#uceditamazon_from').val("");
 
-        $("#ucEditEmailTypeTabGroup button").removeClass("active");
-        $("#ucEditEmailTypeTabGroup button[data-tabgroup-tabid=ucEditEmail"+thisClass.currentEmailType+"Container]").addClass("active");
-
-        if(thisClass.config.smtp)
+        UC_AJAX.call('EmailManager/getemailsetting',{appId:uc_main.appController.currentAppId,company:user.company},function(data,status,xhr)
         {
-            $('#uceditsmtp_host').val(thisClass.config.smtp.host);
-            $('#uceditsmtp_port').val(thisClass.config.smtp.port);
-            $('#uceditsmtp_user').val(thisClass.config.smtp.user);
-            $('#uceditsmtp_pass').val(thisClass.config.smtp.pass);
-        }
-        if(thisClass.config.mailgun)
-        {
-            $('#uceditmailgun_key').val(thisClass.config.mailgun.key);
-            $('#uceditmailgun_domain').val(thisClass.config.mailgun.domain);
-            $('#uceditmailgun_from').val(thisClass.config.mailgun.from);
-        }
-        if(thisClass.config.amazon)
-        {
-            $('#uceditamazon_key').val(thisClass.config.amazon.key);
-            $('#uceditamazon_secret').val(thisClass.config.amazon.secret);
-            $('#uceditamazon_region').val(thisClass.config.amazon.region);
-            $('#uceditamazon_from').val(thisClass.config.amazon.from);
-        }
+            if(data)
+            {
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while retrieving email settings!");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
+                else
+                {
+                    thisClass.emailSetting = data.emailsetting;
 
-        $("#ucEditMailModal").modal();
+                    var currentAppId = uc_main.appController.currentAppId
+                    var appIndex = UC_Utils.searchObjArray(uc_main.appController.apps,'_id',currentAppId);
+                    $('#ucEmailSettings_App').text(uc_main.appController.apps[appIndex].name);
 
-        $("#ucEditEmailAjaxLoader").hide();
+                    if(thisClass.emailSetting.emailType)
+                    {
+                        thisClass.currentEmailType = thisClass.emailSetting.emailType;
+                    }
+                    else
+                    {
+                        thisClass.currentEmailType = "SMTP";
+                    }
+
+                    $(".ucEditEmailContainer").hide();
+                    $("#ucEditEmail"+thisClass.currentEmailType+"Container").show();
+
+                    $("#ucEditEmailTypeTabGroup button").removeClass("active");
+                    $("#ucEditEmailTypeTabGroup button[data-tabgroup-tabid=ucEditEmail"+thisClass.currentEmailType+"Container]").addClass("active");
+
+                    if(thisClass.emailSetting.smtp)
+                    {
+                        $('#uceditsmtp_host').val(thisClass.emailSetting.smtp.host);
+                        $('#uceditsmtp_port').val(thisClass.emailSetting.smtp.port);
+                        $('#uceditsmtp_user').val(thisClass.emailSetting.smtp.user);
+                        $('#uceditsmtp_pass').val(thisClass.emailSetting.smtp.pass);
+                    }
+                    if(thisClass.emailSetting.mailgun)
+                    {
+                        $('#uceditmailgun_key').val(thisClass.emailSetting.mailgun.key);
+                        $('#uceditmailgun_domain').val(thisClass.emailSetting.mailgun.domain);
+                        $('#uceditmailgun_from').val(thisClass.emailSetting.mailgun.from);
+                    }
+                    if(thisClass.emailSetting.amazon)
+                    {
+                        $('#uceditamazon_key').val(thisClass.emailSetting.amazon.key);
+                        $('#uceditamazon_secret').val(thisClass.emailSetting.amazon.secret);
+                        $('#uceditamazon_region').val(thisClass.emailSetting.amazon.region);
+                        $('#uceditamazon_from').val(thisClass.emailSetting.amazon.from);
+                    }
+
+                    $("#ucEditMailModal").modal();
+
+                    $("#ucEditEmailAjaxLoader").hide();
+                }
+            }
+
+        });
+
+
+
+        e.preventDefault();
+    };
+
+    /*
+     *  @desc Populates the form fields with the browser notification setting data
+     */
+    this.editBrowserNotificationHandler = function(e)
+    {
+        var user = UC_UserSession.user;
+
+        //Reset form
+        $('#uceditbrowsernotification_fcmkey,#uceditbrowsernotification_fcmsenderid,#uceditbrowsernotification_fcmappname,#uceditbrowsernotification_icon').val("");
+
+        UC_AJAX.call('BrowserNotificationManager/getbrowsernotificationsetting',{appId:uc_main.appController.currentAppId,company:user.company},function(data,status,xhr)
+        {
+            if(data)
+            {
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while retrieving browser notification settings!");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
+                else
+                {
+                    thisClass.browserNotificationSetting = data.browserNotificationSetting;
+
+                    var currentAppId = uc_main.appController.currentAppId
+                    var appIndex = UC_Utils.searchObjArray(uc_main.appController.apps,'_id',currentAppId);
+                    $('#ucBrowserNotificationSettings_App').text(uc_main.appController.apps[appIndex].name);
+
+                    $('#uceditbrowsernotification_fcmkey').val(thisClass.browserNotificationSetting.fcmKey);
+                    $('#uceditbrowsernotification_fcmsenderid').val(thisClass.browserNotificationSetting.fcmSenderId);
+                    $('#uceditbrowsernotification_fcmappname').val(thisClass.browserNotificationSetting.fcmAppName);
+                    $('#uceditbrowsernotification_icon').val(thisClass.browserNotificationSetting.icon);
+                    $("#ucEditBrowserNotificationModal").modal();
+
+                    $("#ucEditBrowserNotificationAjaxLoader").hide();
+                }
+            }
+
+        });
+
+
 
         e.preventDefault();
     };
@@ -280,11 +372,11 @@ function UC_UserController()
                 return;
             }
 
-            thisClass.config.emailType = "SMTP";
-            thisClass.config.smtp.host = smtphost;
-            thisClass.config.smtp.port = smtpport;
-            thisClass.config.smtp.user = smtpuser;
-            thisClass.config.smtp.pass = smtppass;
+            thisClass.emailSetting.emailType = "SMTP";
+            thisClass.emailSetting.smtp.host = smtphost;
+            thisClass.emailSetting.smtp.port = smtpport;
+            thisClass.emailSetting.smtp.user = smtpuser;
+            thisClass.emailSetting.smtp.pass = smtppass;
         }
         else if(thisClass.currentEmailType == "Mailgun")
         {
@@ -301,11 +393,11 @@ function UC_UserController()
                 return;
             }
 
-            thisClass.config.emailType = "Mailgun";
-            thisClass.config.mailgun = {};
-            thisClass.config.mailgun.key = mailgunkey;
-            thisClass.config.mailgun.domain = mailgundomain;
-            thisClass.config.mailgun.from = mailgunfrom;
+            thisClass.emailSetting.emailType = "Mailgun";
+            thisClass.emailSetting.mailgun = {};
+            thisClass.emailSetting.mailgun.key = mailgunkey;
+            thisClass.emailSetting.mailgun.domain = mailgundomain;
+            thisClass.emailSetting.mailgun.from = mailgunfrom;
         }
         else if(thisClass.currentEmailType == "Amazon")
         {
@@ -323,23 +415,31 @@ function UC_UserController()
                 return;
             }
 
-            thisClass.config.emailType = "Amazon";
-            thisClass.config.amazon = {};
-            thisClass.config.amazon.key = amazonkey;
-            thisClass.config.amazon.secret = amazonsecret;
-            thisClass.config.amazon.region = amazonregion;
-            thisClass.config.amazon.from = amazonfrom;
+            thisClass.emailSetting.emailType = "Amazon";
+            thisClass.emailSetting.amazon = {};
+            thisClass.emailSetting.amazon.key = amazonkey;
+            thisClass.emailSetting.amazon.secret = amazonsecret;
+            thisClass.emailSetting.amazon.region = amazonregion;
+            thisClass.emailSetting.amazon.from = amazonfrom;
         }
+
+        thisClass.emailSetting.appId = uc_main.appController.currentAppId;
 
         $("#ucEditEmailAjaxLoader").show();
 
-        UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
+        var user = UC_UserSession.user;
+
+        UC_AJAX.call('EmailManager/saveemailsetting',{user:user,emailSetting:thisClass.emailSetting},function(data,status,xhr)
         {
             if(data)
             {
                 if(data.status == "failure")
                 {
-                    alert("An Error accured while saving config file!");
+                    alert("An Error accured while saving email settings!");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
                 }
                 else
                 {
@@ -348,6 +448,52 @@ function UC_UserController()
                 }
 
                 $("#ucEditEmailAjaxLoader").hide();
+            }
+
+        });
+    };
+
+    /*
+     *  @desc Handles the browser notification data validation and sends it to server
+     */
+    this.handleBrowserNotificationSaveAction = function()
+    {
+
+        var fcmKey = $('#uceditbrowsernotification_fcmkey').val(),
+            fcmSenderId = $('#uceditbrowsernotification_fcmsenderid').val(),
+            fcmAppName = $('#uceditbrowsernotification_fcmappname').val(),
+            iconUrl = $('#uceditbrowsernotification_icon').val();
+
+        thisClass.browserNotificationSetting.fcmKey = fcmKey;
+        thisClass.browserNotificationSetting.fcmSenderId = fcmSenderId;
+        thisClass.browserNotificationSetting.fcmAppName = fcmAppName;
+        thisClass.browserNotificationSetting.icon = iconUrl;
+
+        thisClass.browserNotificationSetting.appId = uc_main.appController.currentAppId;
+
+        $("#ucEditBrowserNotificationAjaxLoader").show();
+
+        var user = UC_UserSession.user;
+
+        UC_AJAX.call('BrowserNotificationManager/savebrowsernotificationsetting',{user:user,browserNotificationSetting:thisClass.browserNotificationSetting},function(data,status,xhr)
+        {
+            if(data)
+            {
+                if(data.status == "failure")
+                {
+                    alert("An Error accured while saving browser notification settings!");
+                }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
+                else
+                {
+                    alert("Browser Notification settings changed successfully");
+                    $("#ucEditBrowserNotificationModal").modal("hide");
+                }
+
+                $("#ucEditBrowserNotificationAjaxLoader").hide();
             }
 
         });
@@ -463,6 +609,13 @@ function UC_UserController()
         $('#uceditdatabase_host').val(thisClass.config.database.host);
         $('#uceditdatabase_port').val(thisClass.config.database.port);
         $('#uceditdatabase_user').val(thisClass.config.database.user);
+        $('#uceditdatabase_connectionstring').val(thisClass.config.database.connectionstring);
+
+        $("#ucEditDatabaseTabGroup .uc_tab_trigger").removeClass("active");
+        $("#ucEditDatabaseTabGroup .uc_tab_trigger[data-connectionType="+thisClass.config.database.connectiontype+"]").addClass("active");
+
+        $(".ucEditDatabaseContainer").hide();
+        $("#ucEditDatabase"+thisClass.config.database.connectiontype+"Container").show();
 
         $("#ucEditDatabaseModal").modal();
 
@@ -479,7 +632,9 @@ function UC_UserController()
         var databasehost = $('#uceditdatabase_host').val(),
             databaseport = $('#uceditdatabase_port').val(),
             databaseuser = $('#uceditdatabase_user').val(),
-            databasepass = $('#uceditdatabase_pass').val();
+            databasepass = $('#uceditdatabase_pass').val(),
+            databaseconnectionstring = $('#uceditdatabase_connectionstring').val(),
+            databaseconnectiontype = $("#ucEditDatabaseTabGroup .active").attr("data-connectionType");
 
 
         var validationResult = thisClass.validateDatabaseInputs();
@@ -494,10 +649,12 @@ function UC_UserController()
         thisClass.config.database.port = databaseport;
         thisClass.config.database.user = databaseuser;
         thisClass.config.database.pass = databasepass;
+        thisClass.config.database.connectionstring = databaseconnectionstring;
+        thisClass.config.database.connectiontype = databaseconnectiontype;
 
         $("#ucEditDatabaseAjaxLoader").show();
 
-        UC_AJAX.call('UserManager/verifydbconnection',{dbhost:databasehost,dbport:databaseport,dbuser:databaseuser,dbpass:databasepass,dbname:thisClass.config.database.name},function(data,status,xhr)
+        UC_AJAX.call('UserManager/verifydbconnection',{dbhost:databasehost,dbport:databaseport,dbuser:databaseuser,dbpass:databasepass,dbname:thisClass.config.database.name,dbconnectionstring:databaseconnectionstring,dbconnectiontype:databaseconnectiontype},function(data,status,xhr)
               {
                  if(data)
                  {
@@ -551,15 +708,31 @@ function UC_UserController()
 
         var databasehost = $('#uceditdatabase_host').val(),
             databaseport = $('#uceditdatabase_port').val(),
+            databaseconnectionstring = $('#uceditdatabase_connectionstring').val(),
+            databaseconnectiontype = $("#ucEditDatabaseTabGroup .active").attr("data-connectionType"),
             msg = "";
 
-        if($.trim(databasehost) == "")
+        if(databaseconnectiontype == "Simple")
         {
-            msg = "Invalid Host Name !";
+            if($.trim(databasehost) == "")
+            {
+                msg = "Invalid Host Name !";
+            }
+            else if($.trim(databaseport) == "")
+            {
+                msg = "Invalid Port !";
+            }
         }
-        else if($.trim(databaseport) == "")
+        else if(databaseconnectiontype == "Advanced")
         {
-            msg = "Invalid Port !";
+            if($.trim(databaseconnectionstring) == "")
+            {
+                msg = "Invalid Connection String";
+            }
+        }
+        else
+        {
+            msg = "Invalid Connection Type";
         }
 
         if(msg != "")
@@ -601,6 +774,12 @@ function UC_UserController()
             return;
         }
 
+
+        if(baseurl.substr(baseurl.length - 1) == "/")
+        {
+            baseurl = baseurl.substr(0,baseurl.length - 1);
+        }
+
         thisClass.config.baseURL = baseurl;
 
         $("#ucEditSystemAjaxLoader").show();
@@ -635,9 +814,15 @@ function UC_UserController()
         var baseurl = $('#uceditsystem_baseurl').val(),
             msg = "";
 
+
+        if(baseurl.substr(baseurl.length - 1) == "/")
+        {
+            baseurl = baseurl.substr(0,baseurl.length - 1);
+        }
+
         if($.trim(baseurl) == "")
         {
-            msg = "Invalid Host Name !";
+            msg = "Invalid Base URL";
         }
 
         if(msg != "")

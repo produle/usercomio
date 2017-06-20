@@ -10,7 +10,7 @@
 {
 	"use strict";
 	
-	var thisClass = this;
+	var thisClass = this; 
 	
 	var HTTP_PROTOCOL = (('https:' === document.location.protocol) ? 'https://' : 'http://');
 
@@ -19,7 +19,8 @@
 	 */
 	var DEFAULT_CONFIG = 
 	{
-			'api_host':   HTTP_PROTOCOL + 'localhost:3000',
+			'api_host':   'VARIABLE_BASEURL',
+            'serviceWorkerFile' : '/usercom-sw.js'
 	}
 	
 	var utils = 
@@ -137,6 +138,11 @@
 			
 			userData : null,
 			
+			sessionId : null,
+			
+			visitorId : null,
+			
+			
 			track : function(eventName,properties)
 			{
 				if(!eventName || eventName.length == 0)
@@ -150,7 +156,8 @@
 						userdata : this.userData,
 						properties:properties,
 						eventname:eventName,
-						uid:utils.guidGenerator()
+						sessionId:this.sessionId,
+						visitorId:this.visitorId
 				}
 				
 				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/event', JSON.stringify(requestObj),function(data){
@@ -161,15 +168,22 @@
 	};
 	
 	var Usercom = {
+
+            sessionId : null,
+            
+            visitorId : null,
 			
-			init : function(appid,userComSettings)
+			init : function(userComSettings)
 			{
+                var appid = "VARIABLE_APPID";
+
 				if(!appid || appid.length ==0)
 				{
 					console.error("Usercom Error: Invalid app id !");
 					return;
 				}
 				
+                var thisClass = this;
 				var userComSettings = userComSettings || {};
 				
 				UsercomLib["appid"] = appid;
@@ -185,6 +199,14 @@
 				
 				xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/ping', JSON.stringify(requestObj),function(data){
 					console.log(data);
+
+                    var response = JSON.parse(data);
+                    thisClass.sessionId = response.sessionId;
+                    thisClass.visitorId = response.status._id;
+                    UsercomLib["sessionId"] = response.sessionId;
+    				UsercomLib["visitorId"] = response.status._id;
+
+                    thisClass.createServiceWorker();
 				});
 
                 window.onbeforeunload = function(){
@@ -193,7 +215,7 @@
                             appid : appid,
                             userdata : userComSettings,
                             uid:requestObj.uid,
-                            sessionStart: sessionstart
+                            sessionId: thisClass.sessionId
                     };
 
                     xhr.raw(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/logout', JSON.stringify(logoutRequestObj),function(data){
@@ -244,12 +266,44 @@
 					
 					return false;
 				}
+			},
+
+			createServiceWorker : function()
+			{
+
+                var thisClass = this;
+
+				navigator.serviceWorker.register(DEFAULT_CONFIG.serviceWorkerFile)
+                .then(function(registration) {
+
+                    return registration.pushManager.getSubscription()
+                        .then(function(subscription) {
+                            if (subscription) {
+                              return subscription;
+                            }
+                        return registration.pushManager.subscribe({ userVisibleOnly: true });
+                  });
+                })
+                .then(function(subscription) {
+                    fetch(DEFAULT_CONFIG.api_host+'/VisitorTrackingManager/register', {
+                        method: 'post',
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            sessionId: thisClass.sessionId,
+                            endpoint: subscription.endpoint,
+                            p256dh: btoa(String.fromCharCode.apply(null,new Uint8Array(subscription.getKey('p256dh')))),
+                            auth: btoa(String.fromCharCode.apply(null,new Uint8Array(subscription.getKey('auth')))),
+                        }),
+                    });
+                });
 			}
 	}
 	
 	
 	window.Usercom = Usercom;
-	
+	window.UsercomLib = UsercomLib;
 	
 	
 	

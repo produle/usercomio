@@ -29,6 +29,7 @@ function UC_FilterController()
             $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li span",thisClass.changeFilterHandler);
             $(document).on("click",".ucAddFilterBtn",thisClass.addFilterHandler);
             $(document).on("click","#ucEditFilterSubmit",thisClass.saveFilterHandler);
+            $(document).on("click","#ucEditFilterDraftBtn",thisClass.draftFilterHandler);
             $(document).on("click",".ucFilterSettingBtn .ico-edit",thisClass.editFilterHandler);
             $(document).on("click",".ucFilterSettingBtn .ico-trash2",thisClass.deleteFilterHandler);
 
@@ -72,6 +73,10 @@ function UC_FilterController()
             {
                 alert("An Error accured while fetching filters list");
             }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
+            }
             else
             {
                 thisClass.predefinedFiltersList = data.status;
@@ -94,6 +99,10 @@ function UC_FilterController()
             if(data.status == "failure")
             {
                 alert("An Error accured while fetching filters list");
+            }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
             }
             else
             {
@@ -175,6 +184,18 @@ function UC_FilterController()
             id: 'sessions.agentInfo.browser',
             label: 'Browser',
             type: 'string'
+          },{
+            id: 'sessions.agentInfo.os',
+            label: 'Operatig System',
+            type: 'string'
+          },{
+            id: 'sessions.agentInfo.device',
+            label: 'Device',
+            type: 'string'
+          },{
+            id: 'sessions.geoLocationInfo.country',
+            label: 'Country',
+            type: 'string'
           }],
 
           rules: filterRule
@@ -238,6 +259,8 @@ function UC_FilterController()
 
         $("#ucEditFilterModal").modal();
         
+        $('#ucUpdateFilterAjaxLoader').hide();
+
         $('.rule-container .rule-actions .btn-danger').text('');
 		$('.rule-container .rule-actions .btn-danger').addClass('ucListingFilterDeleteIcon');
 		
@@ -299,7 +322,7 @@ function UC_FilterController()
             }
             else
             {
-                UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterObj._id] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+                UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterObj._id] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
             }
 
             thisClass.saveAppPreference();
@@ -321,6 +344,10 @@ function UC_FilterController()
                  if(data.status == "failure")
                  {
                      alert("An Error accured while saving data !");
+                 }
+                 else if(data.status == "authenticationfailed")
+                 {
+                     location.href="/";
                  }
                  else
                  {
@@ -399,6 +426,10 @@ function UC_FilterController()
                      {
                          alert("An Error accured while deleting");
                      }
+                     else if(data.status == "authenticationfailed")
+                     {
+                         location.href="/";
+                     }
                      else
                      {
                          thisClass.listUserdefinedFilters();
@@ -427,7 +458,7 @@ function UC_FilterController()
 
             if(!oldFilterOrder.hasOwnProperty($(this).attr("data-filterid")))
             {
-                filterIdOrder[$(this).attr("data-filterid")] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+                filterIdOrder[$(this).attr("data-filterid")] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
             }
             else
             {
@@ -462,6 +493,10 @@ function UC_FilterController()
                 {
                     alert("An Error accured while saving data");
                 }
+                else if(data.status == "authenticationfailed")
+                {
+                    location.href="/";
+                }
             }
 
         });
@@ -490,12 +525,13 @@ function UC_FilterController()
         }
         if(!UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder.hasOwnProperty(filterId))
         {
-            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1};
+            UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
         }
         UC_UserSession.user.app[uc_main.appController.currentAppId].currentFilter = filterId;
 
         uc_main.visitorListController.currentSortColumn = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId].currentSortColumn;
         uc_main.visitorListController.currentSortOrder = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId].currentSortOrder;
+        uc_main.visitorListController.displayFields = UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterId].displayFields;
 
         thisClass.saveAppPreference();
 
@@ -510,5 +546,26 @@ function UC_FilterController()
         $("#ucPredefinedFilterList li,#ucUserdefinedFilterList li").removeClass("ucCurrentFilter");
         $("#ucPredefinedFilterList li[data-filterid='"+uc_main.visitorListController.currentFilterId+"']").addClass("ucCurrentFilter");
         $("#ucUserdefinedFilterList li[data-filterid='"+uc_main.visitorListController.currentFilterId+"']").addClass("ucCurrentFilter");
+    };
+
+    /*
+     * @desc Converts the filter into json query and saves to server
+     */
+    this.draftFilterHandler = function()
+    {
+        var filter = $('#ucFilterQueryBuilderUI').queryBuilder('getRules');
+
+        if (!$.isEmptyObject(filter)) {
+            filter = JSON.stringify(filter, null, 2);
+        }
+        var mongoFilter = $('#ucFilterQueryBuilderUI').queryBuilder('getMongo');
+
+        if (!$.isEmptyObject(mongoFilter)) {
+            mongoFilter = JSON.stringify(mongoFilter, null, 2);
+        }
+
+        $("#ucEditFilterModal").modal("hide");
+        uc_main.visitorListController.resetPagination();
+        uc_main.visitorListController.getAllVisitors(mongoFilter);
     };
 }

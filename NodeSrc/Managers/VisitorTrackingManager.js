@@ -32,6 +32,7 @@ class VisitorTrackingManager {
         this.router.post("/event",(req, res) => { this.handleEvents(req,res); });
         this.router.post("/error",(req, res) => { this.handleError(req,res); });
         this.router.post("/logout",(req, res) => { this.handleLogout(req,res); });
+        this.router.post("/register",(req, res) => { this.handleRegistration(req,res); });
         
     }
   	
@@ -81,8 +82,9 @@ class VisitorTrackingManager {
   		browserInfo.browserLanguage = req.headers["accept-language"].split(',')[0];
         browserInfo.screenResolution = req.body.screenResolution;
         browserInfo.timezone = req.body.timezone;
-        browserInfo.rawAgentData = agent.source;
-        browserInfo.sessionStart = req.body.sessionStart;
+        browserInfo.rawAgentData = agent;
+        browserInfo.rawAgentSource = agent.source;
+        browserInfo.sessionStart = new Date();
 
         if(agent.isDesktop)
         {
@@ -172,6 +174,7 @@ class VisitorTrackingManager {
                         });
 
                         sessionDetail["visitorId"]  = visitor._id;
+                        visitorDetail["_id"] = visitor._id;
                   }
                   else
                   {
@@ -207,8 +210,8 @@ class VisitorTrackingManager {
                         }
                         else
                         {
-                        	
-                            return res.send({status:visitorDetail});
+                        	return res.send({status:visitorDetail,sessionId:sessionDetail["_id"]});
+
                         }
 
                         	
@@ -230,6 +233,8 @@ class VisitorTrackingManager {
   	{
   		var uid = null;
   		
+  		var sessionId;
+  		
   		if(!req.body.userdata.email || req.body.userdata.email.length == 0)
   		{
   			if(!req.body.userdata.userid || req.body.userdata.userid.length == 0)
@@ -238,44 +243,39 @@ class VisitorTrackingManager {
   			}
   			else
   			{
-  				uid = req.body.userdata.userid
+  				sessionId = req.body.sessionId
   			}
   		}
   		else
   		{
-  			uid = req.body.userdata.email;
+  			sessionId = req.body.sessionId;
   		}
-  		
+  		 
   		var visitorEventDetail = {};
   		
-  		visitorEventDetail["_id"] =  req.cookies["usercomio_session"];
+  		visitorEventDetail["_id"] = utils.guidGenerator();
   		visitorEventDetail["appId"] =  req.body.appid;
-  		visitorEventDetail["createdate"] = new Date();
-  		visitorEventDetail["userid"]  = uid;
-  		visitorEventDetail["eventname"] = req.body.eventname;
-  		visitorEventDetail["eventproperties"] = req.body.properties;
-  		
-  		
-  		
-  		
-  		// Get the documents collection
+  		visitorEventDetail["createDate"] = new Date();
+  		visitorEventDetail["sessionId"]  = sessionId;
+  		visitorEventDetail["eventName"] = req.body.eventname;
+  		visitorEventDetail["eventProperties"] = req.body.properties;
+  		visitorEventDetail["visitorId"]  = req.body.visitorId;
+ 
+  	  	// Get the documents collection
         var visitorEventCollection = global.db.collection('visitorevents');
 
-        visitorEventCollection.insert([visitorEventDetail], function (err, result) 
-                {
-      	            if (err)
-      	            {
-      	            	res.status(500);
-      	      		  	return res.send({status:'failure'});
-      	            }
-      	            else
-      	            {
-      	            	return res.send({status:'success'});
-      	            }
-      	            
-      	           
-      	        });
-  		
+        	visitorEventCollection.insert([visitorEventDetail], function (err, result) 
+        			{
+        	            if (err)
+        	            {
+        	            	res.status(500);
+        	      		  	return res.send({status:'failure'});
+        	            }
+        	            else
+        	            {
+        	            	return res.send({status:'success'});
+        	            }  
+        			}); 
   	}
   	
   	handleError(req,res)
@@ -345,7 +345,7 @@ class VisitorTrackingManager {
             },
             { $match :
                 { "$and": [
-                    { "agentInfo.sessionStart" : req.body.sessionStart},
+                    { "_id" : req.body.sessionId},
                     { "visitors.visitorData.email" : req.body.userdata.email }
                   ]
                 }
@@ -358,7 +358,7 @@ class VisitorTrackingManager {
                 return res.send({status:'failure'});
             }
 
-            if(session)
+            if(session && session.length == 1)
             {
                 sessionCollection.update(
                     { _id: session[0]._id },
@@ -372,6 +372,46 @@ class VisitorTrackingManager {
             }
 
         });
+
+
+  	}
+
+  	/*
+  	 * @desc Handle the Registration of service worker
+  	 */
+  	handleRegistration(req,res)
+  	{
+        var sessionId = req.body.sessionId;
+
+        var notification = {
+            endpoint: req.body.endpoint,
+            p256dh: req.body.p256dh,
+            auth: req.body.auth
+        };
+
+        var sessionCollection = global.db.collection('sessions');
+
+        sessionCollection.update(
+            { _id:  sessionId},
+            { $set :
+                {
+                    notification: notification
+                }
+            },
+            { upsert: true },
+            function(updateErr)
+            {
+                if(updateErr)
+                {
+                    res.status(500);
+                    return res.send({status:'failure'});
+                }
+                else
+                {
+                    res.send({status:"success"});
+                }
+            }
+        );
 
 
   	}

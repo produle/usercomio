@@ -7,7 +7,7 @@ var express = require("express");
 var app = require("../server").app;
 var passport = require("../server").passport;
 var utils = require("../core/utils").utils;
-
+var moment = require('moment');
 
 class UserManager {
 
@@ -40,6 +40,7 @@ class UserManager {
           newUser._id = newUser.username;
           newUser.createDate = new Date();
           newUser.password = utils.encrypt(newUser.password);
+          newUser.timeZone = moment().format('Z');
           
           var status = "success";
           
@@ -137,6 +138,8 @@ class UserManager {
         var dbuser = req.body.dbuser;
         var dbpass = req.body.dbpass;
         var dbname = req.body.dbname;
+        var dbconnectionstring = req.body.dbconnectionstring;
+        var dbconnectiontype = req.body.dbconnectiontype;
 
         var status = "failure";
 
@@ -159,6 +162,10 @@ class UserManager {
 
         // Connection URL. This is where your mongodb server is running.
         var url = 'mongodb://'+credentials+dbhost+':'+dbport+'/'+dbname;
+        if(dbconnectiontype == "Advanced")
+        {
+            url = dbconnectionstring;
+        }
 
         // Use connect method to connect to the Server
         MongoClient.connect(url, function (err, db) {
@@ -219,6 +226,11 @@ class UserManager {
   	 */
     saveUserProfile(req,res)
     {
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
         // Get the documents collection
         var userCollection = global.db.collection('users');
 
@@ -272,6 +284,11 @@ class UserManager {
   	 */
     saveUserPassword(req,res)
     {
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
         // Get the documents collection
         var userCollection = global.db.collection('users');
 
@@ -326,7 +343,7 @@ class UserManager {
     {
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         // Get the documents collection

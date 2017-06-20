@@ -1,7 +1,16 @@
      <% include partials/header.ejs %>
 	 <% include partials/commoncss.ejs %>
 
-    <link rel="stylesheet" type="text/css" href="/css/internal/usersetup.css" />
+    
+     
+    <% if(global.prodEnvType) {%>   
+        <link rel="stylesheet" type="text/css" href="/dist/styles/usersetup.min.css" />  
+	<% }
+	else
+	{ %> 
+    	<link rel="stylesheet" type="text/css" href="/css/internal/usersetup.css" />
+	<% }%> 
+	
 
     <!-- external scripts -->
     <% include partials/commonscripts.ejs %>
@@ -16,9 +25,9 @@
                  <ul class="ucSetupProgressSteps">
                         <li class="uc_welcome_step active"><span>1</span> Welcome to usercom</li>
                         <li class="uc_database_details"><span>2</span>Database Details</li>
-                        <li class="uc_smtp_details"><span>3</span>SMTP Details</li>
-                        <li class="uc_admin_details"><span>4</span>Admin User Details</li>
-                        <li class="uc_user_settings"><span>5</span>System User Settings</li>
+                        <li class="uc_admin_details"><span>3</span>Admin User Details</li>
+                        <li class="uc_user_settings"><span>4</span>System User Settings</li>
+                        <li class="uc_smtp_details"><span>5</span>SMTP Details</li>
                   </ul>
              </div>
         </div>
@@ -50,74 +59,56 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="btn-group ucTabBtnGroup" id="ucSetupDatabaseTabGroup" role="group">
+                    <button type="button" class="btn btn-default uc_tab_trigger active" data-tabgroup-class="ucSetupDatabaseContainer" data-tabgroup-tabid="ucSetupDatabaseSimpleContainer" data-connectionType="Simple">Simple</button>
+                    <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucSetupDatabaseContainer" data-tabgroup-tabid="ucSetupDatabaseAdvancedContainer" data-connectionType="Advanced">Advanced</button>
+                </div>
+            </div>
+        </div>
 
-    	<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_dbhostinput" placeholder="MongoDB Host (127.0.0.1, localhost, etc)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_dbportinput" placeholder="MongoDB Port (27017)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_dbuserinput" placeholder="MongoDB Username (root)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="password" class="form-control" id="ucsetup_dbpassinput" placeholder="MongoDB Password (********)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_dbnameinput" placeholder="MongoDB Name (usercom)">
-			</div>
-		</div>
+
+        <div class="ucSetupDatabaseContainer" id="ucSetupDatabaseSimpleContainer">
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input type="text" class="form-control" id="ucsetup_dbhostinput" placeholder="MongoDB Host (127.0.0.1, localhost, etc)">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input type="text" class="form-control" id="ucsetup_dbportinput" placeholder="MongoDB Port (27017)">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input type="text" class="form-control" id="ucsetup_dbuserinput" placeholder="MongoDB Username (root)">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input type="password" class="form-control" id="ucsetup_dbpassinput" placeholder="MongoDB Password (********)">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input type="text" class="form-control" id="ucsetup_dbnameinput" placeholder="MongoDB Name (usercom)">
+                </div>
+            </div>
+        </div>
+
+        <div class="ucSetupDatabaseContainer" id="ucSetupDatabaseAdvancedContainer" style="display: none;">
+            <div class="form-group row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <textarea rows="10" class="form-control" id="ucsetup_dbconnectionstringinput" placeholder="Connection String (eg: mongodb://<USERNAME>:<PASSWORD>@cluster0-shard-00-00-xwjiy.mongodb.net:27017/<DATABASE>?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin)"></textarea>
+                </div>
+            </div>
+        </div>
 
 		<div class="form-group row">
 			<div class="col-sm-6 col-sm-offset-3 text-center">
 				<button type="submit" id="ucsetup_dbsubmitbtn" class="btn btn-default">Next</button>
                 <div id="ucSetupDatabaseAjaxLoader" class='ucAjaxLoader'><div></div></div>
-			</div>
-		</div>
-    </div>
-
-  	<div class="UC_SetupContainerCls" id="UC_Setup_SMTP">
-        <div class="UC_SetupLogo"><img src="../images/app/setup/emailIcon.png" alt="emailIcon" /></div>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h2>SMTP Details</h2>
-            </div>
-        </div>
-
-    	<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_smtphostinput" placeholder="SMTP Host (smtp.google.com)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_smtpportinput" placeholder="SMTP Port (25)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="text" class="form-control" id="ucsetup_smtpuserinput" placeholder="SMTP Username (johndoe@gmail.com)">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<input type="password" class="form-control" id="ucsetup_smtppassinput" placeholder="SMTP Password (********)">
-			</div>
-		</div>
-
-		<div class="form-group row">
-			<div class="col-sm-offset-3 col-sm-6 text-center">
-				<button type="submit" id="ucsetup_smtpsubmitbtn" class="btn btn-default">Next</button>
-                <div id="ucSetupEmailAjaxLoader" class='ucAjaxLoader'><div></div></div>
 			</div>
 		</div>
     </div>
@@ -181,17 +172,59 @@
 			</div>
 		</div>
 
+       	<div class="form-group row">
+			<div class="col-sm-offset-3 col-sm-6 text-center">
+				<button type="submit" id="ucsetup_appsubmitbtn" class="btn btn-default">Next</button>
+                <div id="ucSetupEmailAjaxLoader" class='ucAjaxLoader'><div></div></div>
+			</div>
+		</div>
+
+    </div>
+
+    <div class="UC_SetupContainerCls" id="UC_Setup_SMTP">
+        <div class="UC_SetupLogo"><img src="../images/app/setup/emailIcon.png" alt="emailIcon" /></div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2>SMTP Details</h2>
+            </div>
+        </div>
+
+    	<div class="form-group row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<input type="text" class="form-control" id="ucsetup_smtphostinput" placeholder="SMTP Host (smtp.google.com)">
+			</div>
+		</div>
 		<div class="form-group row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<input type="text" class="form-control" id="ucsetup_smtpportinput" placeholder="SMTP Port (25)">
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<input type="text" class="form-control" id="ucsetup_smtpuserinput" placeholder="SMTP Username (johndoe@gmail.com)">
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<input type="password" class="form-control" id="ucsetup_smtppassinput" placeholder="SMTP Password (********)">
+			</div>
+		</div>
+	    <div class="form-group row">
 			<div class="col-sm-6 col-sm-offset-3 text-center">
-				<button type="submit" id="ucsetup_appsubmitbtn" class="btn btn-primary">Finish</button>
+				<button type="submit" id="ucsetup_smtpsubmitbtn" class="btn btn-primary">Finish</button>
                 <div id="ucSetupAppAjaxLoader" class='ucAjaxLoader'><div></div></div>
 			</div>
 		</div>
     </div>
+
     <div class="ucCopyright">&copy; Produle.com</div>
 
     <script>
+        //var momentObj = null;
+        //var timezoneList = null;//momentObj.tz.names();
+
 	    var uc_userregistration  = new UC_UserRegistrationController();
+	    //uc_userregistration.timezoneList = timezoneList;
 	    uc_userregistration.constructor();
   </script>
   </body>

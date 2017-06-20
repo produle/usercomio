@@ -31,7 +31,7 @@ function UC_AppController()
             {
                 if(appid == thisClass.apps[iter]._id)
                 {
-                    thisClass.switchApp(thisClass.apps[iter]);
+                    thisClass.switchApp(thisClass.apps[iter],false);
                     break;
                 }
             }
@@ -81,6 +81,10 @@ function UC_AppController()
 			 {
 				 alert("An Error accured while fetching user's app !");
 			 }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
+            }
 			else
 			{
 				if(data.status.length > 0)
@@ -88,7 +92,7 @@ function UC_AppController()
 					thisClass.apps = data.status;
 					thisClass.listApps(thisClass.apps);
 
-                    thisClass.switchApp(thisClass.apps[0]);
+                    thisClass.switchApp(thisClass.apps[0],true);
 				}
 			}
 		});
@@ -125,13 +129,17 @@ function UC_AppController()
 				 {
 					 alert("An Error accured while saving data !");
 				 }
+                 else if(data.status == "authenticationfailed")
+                 {
+                     location.href="/";
+                 }
 				 else 
 				 {
 					 thisClass.apps.push(data.status);
 					 thisClass.listApps(thisClass.apps);
 					 $('#uc_newapp_creation_modal').modal('hide');
 
-                     thisClass.switchApp(thisClass.apps[0]);
+                     thisClass.switchApp(thisClass.apps[0],false);
 				 }
 
                 $('#ucNewAppAjaxLoader').hide();
@@ -184,7 +192,7 @@ function UC_AppController()
             $('#ucUpdateAppAjaxLoader').hide();
 		});
 		
-		$('.ucapp_deletebtncls').on('click',function(e){
+		$('#ucDeleteAppBtn').on('click',function(e){
 			e.stopImmediatePropagation();
 			var appid = $(this).attr('data-appid');
 			thisClass.deleteAnApp(appid);
@@ -218,6 +226,10 @@ function UC_AppController()
 				 {
 					 alert("An Error accured while saving data !");
 				 }
+                 else if(data.status == "authenticationfailed")
+                 {
+                     location.href="/";
+                 }
 				 else 
 				 {
 					 thisClass.updateAppDetailsInAppsListing(app);
@@ -242,11 +254,13 @@ function UC_AppController()
 	this.deleteAnApp = function(appid)
 	{
 		
-			var appIndex = UC_Utils.searchObjArray(thisClass.apps,'id',appid);
+        if(thisClass.apps.length > 1)
+        {
+			var appIndex = UC_Utils.searchObjArray(thisClass.apps,'_id',appid);
 			
 			var app = thisClass.apps[appIndex];
 			
-			var ans = confirm("Do you want to delete "+app.name+" ?")
+			var ans = confirm("Do you want to delete "+app.name+" and all its contents?")
 			
 			if(ans)
 			{
@@ -260,16 +274,32 @@ function UC_AppController()
 						 {
 							 alert("An Error accured while deleting the app entry !");
 						 }
+                         else if(data.status == "authenticationfailed")
+                         {
+                             location.href="/";
+                         }
+						 else if(data.status == "defaultapp")
+						 {
+							 alert("There should be a minimum of one app.");
+						 }
 						 else 
 						 {
+                             $('#ucapp_update_modal').modal('hide');
+
 							 thisClass.apps.splice(appIndex, 1);
-							 thisClass.deleteAnAppEntryFromListing(app._id);
+
+                             thisClass.listApps(thisClass.apps);
+                             thisClass.switchApp(thisClass.apps[0],false);
 						 }
 					});
 				}
 			}
 		
-		
+        }
+        else
+        {
+            alert("There should be a minimum of one app.");
+        }
 		
 	}
 	
@@ -314,6 +344,21 @@ function UC_AppController()
 				$('#ucapp_update_nameinput').val(app.name);
 				$('#ucapp_update_appid').val(app._id);
 				$('#ucapp_update_appid_display').text(app._id);
+				$('#ucDeleteAppBtn').attr("data-appid",app._id);
+
+                var trackingSnippet = '<script type="text/javascript" src="'+uc_main.userController.config.baseURL+'/tracking/track.js?appid='+app._id+'"></script>\n'+
+                    '<script>\n'+
+                    '\tUsercom.init({\n'+
+                        '\t\tname: "John Smith",   /* Fullname of the visitor */\n'+
+                        '\t\temail: "jsmith@usercom.io",   /* Email Address of the visitor */\n'+
+                        '\t\tcreated_at: new Date().getTime(), /* Current timestamp */\n'+
+                        '\t\tpaid: true, /* Boolean */\n'+
+                        '\t\tbirthdate: "1990-01-01", /* Date in format YYYY-MM-DD */\n'+
+                        '\t\tgender: "male", /* possible values ("male","female","other") */\n'+
+                        '\t\tprofilepicture: "", /* a valid profile picture url */\n'+
+                    '\t});\n'+
+                    '</script>\n';
+				$('#ucapp_update_trackingcode').text(trackingSnippet);
 			}
 		}
 	}
@@ -343,7 +388,7 @@ function UC_AppController()
     /**
      * @desc Changes the appid and related data
      */
-    this.switchApp = function(app)
+    this.switchApp = function(app,isInit)
     {
         thisClass.currentAppId = app._id;
         thisClass.rivetAppNameObj.models.currentAppName = app.name;
@@ -359,22 +404,31 @@ function UC_AppController()
             uc_main.visitorListController.currentSortOrder = UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].currentSortOrder;
         }
 
+        if(UC_UserSession.user.hasOwnProperty('app') && UC_UserSession.user.app.hasOwnProperty(thisClass.currentAppId) && UC_UserSession.user.app[thisClass.currentAppId].hasOwnProperty('filterOrder') && UC_UserSession.user.app[thisClass.currentAppId].filterOrder.hasOwnProperty(uc_main.visitorListController.currentFilterId) && UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].hasOwnProperty('displayFields'))
+        {
+            uc_main.visitorListController.displayFields = UC_UserSession.user.app[thisClass.currentAppId].filterOrder[uc_main.visitorListController.currentFilterId].displayFields;
+        }
+
         if(thisClass.renderVisitors)
         {
-            uc_main.visitorListController.resetPagination();
-            uc_main.visitorListController.getAllVisitors();
             uc_main.dashboardController.getDashboardMetrics();
             uc_main.dashboardController.drawNewUsersGraph();
             uc_main.filterController.listUserdefinedFilters();
+            uc_main.visitorListController.getFieldsList();
         }
         
-        console.log(thisClass.currentAppId);
-        console.log(uc_main.rtcController.socket);
+        else if(!isInit)
+        {
+            location.href="/";
+        }
+
+        
         //update it websocket client list
         var msg = {};
 		msg.name = "establishappconnection";
 		msg.key =  thisClass.currentAppId;
 		msg  = JSON.stringify(msg);
 		uc_main.rtcController.sendMessageToServer(msg);
+
     };
 }

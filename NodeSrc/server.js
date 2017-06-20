@@ -19,7 +19,6 @@ const utils = require('./core/utils').utils;
 const socket = require('./rtcserver');
 
 
-
 //lets require/import the mongodb native drivers.
 var mongodb = require('mongodb');
 
@@ -28,6 +27,9 @@ var MongoClient = mongodb.MongoClient;
 
 var config = require('config');
 
+// initially set to the development platform 
+global.prodEnvType = false;
+
 if(config.has("database")) {
 
     var dbhost = config.get("database.host");
@@ -35,6 +37,8 @@ if(config.has("database")) {
     var dbuser = config.get("database.user");
     var dbpass = config.get("database.pass");
     var dbname = config.get("database.name");
+    var dbconnectionstring = config.get("database.connectionstring");
+    var dbconnectiontype = config.get("database.connectiontype");
 
     var credentials = "";
     if(dbuser != "")
@@ -49,6 +53,10 @@ if(config.has("database")) {
 
     // Connection URL. This is where your mongodb server is running.
     var url = 'mongodb://'+credentials+dbhost+':'+dbport+'/'+dbname;
+    if(dbconnectiontype == "Advanced")
+    {
+        url = dbconnectionstring;
+    }
 
     // Use connect method to connect to the Server
     MongoClient.connect(url, function (err, db) {
@@ -69,6 +77,15 @@ else {
 }
 
 
+var serverPort = 3000;
+
+if(process.argv[2] == "prod")
+{
+	global.prodEnvType = true;
+	serverPort = 80;
+} 
+
+
 const PUBLIC_SRC_PATH = path.resolve(__dirname, '../WebContent');
 
 
@@ -86,8 +103,8 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 
-app.listen(3000, function() {
-  console.log('listening on 3000')
+app.listen(serverPort, function() {
+  console.log('listening on '+serverPort);
 })
 
 passport.serializeUser(function(user, done) {
@@ -134,10 +151,10 @@ var views = new viewRender();
 var controllerList = {};
 
 
-fs.readdirSync(path.join(__dirname, "managers")).forEach(function (file) {
+fs.readdirSync(path.join(__dirname, "Managers")).forEach(function (file) {
     if (file.substr(-3) === ".js") {
         var basePath = path.basename(file, ".js");
-        var Controller = require(`./managers/${file}`);
+        var Controller = require(`./Managers/${file}`);
         controllerList[basePath] = new Controller[basePath]();
         app.use(`/${basePath}`, controllerList[basePath].router);
     }

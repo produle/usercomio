@@ -10,21 +10,20 @@
                            <form class="form-inline">
                                 <div class="ucSearchWrapper row">
                                   <div class="form-group col-md-4 col-sm-4 col-xs-4">
-                                    <select class="form-control ucSearchSelect" id="">
-                                        <option>Name</option>
-                                        <option>Session</option>
-                                        <option>Browser</option>
-                                        <option>Operating System</option>
-                                        <option>Device</option>
-                                        <option>Country</option>
+                                    <select class="form-control ucSearchSelect" id="ucVisitorSearchField">
+                                        <option value="visitorData.name">Name</option>
+                                        <option value="sessions.agentInfo.browser">Browser</option>
+                                        <option value="sessions.agentInfo.os">Operating System</option>
+                                        <option value="sessions.agentInfo.device">Device</option>
+                                        <option value="sessions.geoLocationInfo.country">Country</option>
                                     </select>
                                     
                                   </div>
                                   <div class="form-group col-md-8 col-sm-8 col-xs-8 ">
-                                    <input type="text" class="form-control" >
+                                    <input type="text" class="form-control" id="ucVisitorSearchValue">
                                   </div>
                                 </div>
-                                <button type="submit" class="btn ucSearchBtn">Search</button>
+                                <button type="submit" class="btn ucSearchBtn" id="ucVisitorSearchBtn">Search</button>
                                   
                               
 
@@ -36,6 +35,18 @@
                         <div class="ucSendMessageWrapper">
                             <button class="btn btn-primary" id="ucSendMessageGroupBtn">Send Message</button>
                             <span class="ucAddFilterBtn"><i class="ico-filter2"></i></span>
+                            <span id="ucVisitorFieldsPopover" data-toggle="popover" title="Select Fields" data-placement="bottom" data-container="body" data-html="true" style="font-size: 23px;"><i class="ico-bill"></i></span>
+                            <div id="ucVisitorFieldsPopoverContent" style="display:none;">
+                                <ul id="ucVisitorFieldList">
+                                    <li rv-each-field="fieldList" rv-data-fieldid="field.value">
+                                        <label>
+                                            <input type="checkbox" class="ucVisitorFieldListItem" rv-data-fieldid="field.value" /> <span  rv-text="field.label"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+
+                                <button class="btn btn-primary" id="ucVisitorFieldsPopoverSubmit">Save</button>
+                            </div>
                         </div>
                         
                  </div>
@@ -55,191 +66,113 @@
                             <div class="col-md-12">
                                 
                                 
-                                
 
-                                <table class="table table-striped uc_table" id="uc_visitor_list">
-                                    <thead>
-                                        <tr>
-                                            <th class="uc_table_input_control"><input id="uc-all-user-select" type="checkbox"><label for="uc-all-user-select"></label></th>
-                                            <th class="ucUserListSortableColumn" data-sortColumn="visitorData.name">
-                                                <div class="uc_table_header">
-                                                    Name <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
-                                                </div>
-                                            </th>
-                                            <th>
-                                                <div class="uc_table_header">
-                                                    Session
-                                                </div>
-                                            </th>
-                                            <th class="ucUserListSortableColumn" data-sortColumn="sessions.agentInfo.browser">
-                                                <div class="uc_table_header">
-                                                    Browser <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
-                                                </div>
-                                            </th>
-                                            <th class="ucUserListSortableColumn" data-sortColumn="sessions.agentInfo.os">
-                                                <div class="uc_table_header">
-                                                    Operating System <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
-                                                </div>
-                                            </th>
-                                            <th>
-                                                <div class="uc_table_header">
-                                                    Device
-                                                </div>
-                                            </th>
-                                            <th class="ucUserListSortableColumn" data-sortColumn="sessions.geolocationinfo.country">
-                                                <div class="uc_table_header">
-                                                    Country <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
-                                                </div>
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                       <tr rv-each-visitor="list">
-                                           <td class="uc_td_input_control"><input rv-visitorid="visitor" class="uc-user-select" type="checkbox"><label></label></td>
-                                           <td>
-                                               <div class="ucUserBaseDetails ucVisitorPageTrigger" rv-data-visitoremail="visitor.visitorData.email" rv-data-visitorid="visitor._id">
-                                                   <div class="ucUserCurrentStatus">
-                                                       <span rv-class-ucUserOnline="visitor.isVisitorOnline" rv-class-ucUserOffline="visitor.isVisitorOffline"></span>
-                                                       <div class="ucUserPicWrapper">
-                                                           <img src="images/app/listing/ucUserPic.png" alt=""/>
-                                                       </div>
+                                <div class="ucTable uc_table" id="uc_visitor_list">
+                                    <div class="ucTableRow">
+                                        <div class="ucTableHead uc_table_input_control">
+                                            <input id="uc-all-user-select" type="checkbox"><label for="uc-all-user-select"></label>
+                                        </div>
+                                        <div class="ucTableHead ucUserListSortableColumn" data-sortColumn="visitorData.name">
+                                            <div class="uc_table_header">
+                                                Name <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                            </div>
+                                        </div>
+                                        <div class="ucTableHead text-center ucVisitorListSession">
+                                            <div class="uc_table_header text-center">
+                                                Session
+                                            </div>
+                                        </div>
+                                        <div class="ucTableHead ucUserListSortableColumn ucVisitorListToggleField ucVisitorListToggleField_browser" data-sortColumn="sessions.agentInfo.browser">
+                                            <div class="uc_table_header text-center">
+                                                Browser <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                            </div>
+                                        </div>
+                                        <div class="ucTableHead ucUserListSortableColumn ucVisitorListToggleField ucVisitorListToggleField_os" data-sortColumn="sessions.agentInfo.os">
+                                            <div class="uc_table_header text-center">
+                                                Operating System <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                            </div>
+                                        </div>
+                                        <div class="ucTableHead ucVisitorListToggleField ucVisitorListToggleField_device">
+                                            <div class="uc_table_header text-center">
+                                                Device
+                                            </div>
+                                        </div>
+                                        <div class="ucTableHead ucUserListSortableColumn ucVisitorListToggleField ucVisitorListToggleField_country" data-sortColumn="sessions.geolocationinfo.country">
+                                            <div class="uc_table_header text-center">
+                                                Country <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                            </div>
+                                        </div>
+                                        <div class="ucTableHead ucUserListSortableColumn ucVisitorListToggleField" rv-each-customfield="fieldList" rv-customfieldheader="customfield">
+                                            <div class="uc_table_header text-center">
+                                                <span class="ucVisitorListHeaderLabel"></span> <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                            </div>
+                                        </div>
+                                        <div class="ucTableHead">
+                                        </div>
+                                    </div>
+                                    <div class="ucTableRow" rv-each-visitor="list">
+                                        <div class="ucTableCell uc_td_input_control">
+                                            <input rv-visitorid="visitor" class="uc-user-select" type="checkbox"><label></label>
+                                        </div>
+                                        <div class="ucTableCell">
+                                            <div class="ucUserBaseDetails ucVisitorPageTrigger" rv-data-visitorid="visitor._id">
+                                               <div class="ucUserCurrentStatus">
+                                                   <span class="ucUserOnline"></span>
+                                                   <div class="ucUserPicWrapper" rv-profilepicture="visitor.visitorData">
+                                                       <img class="ucUserProfileImage" src="" alt=""/>
+                                                       <div class="ucUserProfileIntial"></div>
 
-                                                       <div class="ucUserNameAndEmail">
-                                                           <span class="ucUserName">{visitor.visitorData.name}</span>
-                                                           <span class="ucUserEmail">{visitor.visitorData.email}</span>
-                                                       </div>
                                                    </div>
 
-                                               </div>
-                                           </td>
-                                           <td class="text-center" rv-sessioncount="visitor.sessions"></td>
-                                           <td> <div class="ucUserBrowserIcon" rv-latestbrowser="visitor.sessions"></div></td>
-                                           <td> <div class="ucUserOSIcon" rv-latestplatform="visitor.sessions"></div> </td>
-                                           <td class="text-center"><div class="ucUserDeviceIcon desktop"></div></td>
-                                           <td>India</td>
-                                           <td>
-                                               <div class="dropdown ucUsersListMoreOptions">
-                                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    &#8226;&#8226;&#8226;
-                                                  </span>
-                                                  <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="ucUsersListMoreOptions">
-                                                    <li><a href="#" class="ucSendMessageSingleTrigger">Send Email</a></li>
-                                                    <li><a href="#" class="ucVisitorPageTrigger" rv-data-visitorid="visitor._id">User Profile</a></li>
-                                                  </ul>
-                                                </div>
-                                           </td>
-                                       </tr>
-
-                                       <!--<tr>
-                                           <td class="uc_td_input_control"><input id="uc-user-select" type="checkbox"><label for="uc-user-select"></label></td>
-                                           <td>
-                                               <div class="ucUserBaseDetails">
-                                                   <div class="ucUserCurrentStatus">
-                                                       <span class="ucUserOnline"></span>
-                                                       <div class="ucUserPicWrapper">
-                                                           <img src="images/app/listing/ucUserPic.png" alt=""/>
-                                                       </div>
-
-                                                       <div class="ucUserNameAndEmail">
-                                                           <span class="ucUserName">John</span>
-                                                           <span class="ucUserEmail">info@johnabragham.com</span>
-                                                       </div>
+                                                   <div class="ucUserNameAndEmail">
+                                                       <span class="ucUserName">{visitor.visitorData.name}</span>
+                                                       <span class="ucUserEmail">{visitor.visitorData.email}</span>
                                                    </div>
-
                                                </div>
-                                           </td>
-                                           <td class="text-center">20</td>
-                                           <td> <div class="ucUserBrowserIcon chrome">Chrome<span>(v56.0)</span></div></td>
-                                           <td> <div class="ucUserOSIcon ios">macOS Sierra<span>(v10.12)</span></div> </td>
-                                           <td class="text-center"><div class="ucUserDeviceIcon desktop"></div></td>
-                                           <td>India</td>
-                                           <td>
-                                               <div class="dropdown ucUsersListMoreOptions">
-                                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    &#8226;&#8226;&#8226;
-                                                  </span>
-                                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
-                                                    <li><a href="#">Send Email</a></li>
-                                                    <li><a href="#">User Profile</a></li>
-                                                  </ul>
-                                                </div>
-                                           </td>
-                                       </tr>
-                                       <tr>
-                                           <td class="uc_td_input_control"><input id="uc-user-select2" type="checkbox"><label for="uc-user-select2"></label></td>
-                                           <td>
-                                               <div class="ucUserBaseDetails">
-                                                   <div class="ucUserCurrentStatus">
-                                                       <span class="ucUserOffline"></span>
-                                                       <div class="ucUserPicWrapper">
-                                                           <span class="ucUserPicWithText">G</span>
-                                                       </div>
 
-                                                       <div class="ucUserNameAndEmail">
-                                                           <span class="ucUserName">George</span>
-                                                           <span class="ucUserEmail">george@gmail.com</span>
-                                                       </div>
-                                                   </div>
+                                           </div>
+                                        </div>
+                                        <div class="ucTableCell text-center ucVisitorListSession" rv-sessioncount="visitor.sessions">
 
-                                               </div>
-                                           </td>
-                                           <td class="text-center">20</td>
-                                           <td><div class="ucUserBrowserIcon safari">Safari<span>(v10.0)</span></div></td>
-                                           <td><div class="ucUserOSIcon windows">Windows 10<span>(v10.0)</span></div></td>
-                                           <td class="text-center"><div class="ucUserDeviceIcon mobile"></div></td>
-                                           <td>India</td>
-                                           <td>
-                                               <div class="dropdown ucUsersListMoreOptions">
-                                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    &#8226;&#8226;&#8226;
-                                                  </span>
-                                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
-                                                    <li><a href="#">Send Email</a></li>
-                                                    <li><a href="#">User Profile</a></li>
-                                                  </ul>
-                                                </div>
-                                           </td>
-                                       </tr>
-                                       <tr>
-                                           <td class="uc_td_input_control"><input id="uc-user-select3" type="checkbox"><label for="uc-user-select3"></label></td>
-                                           <td>
-                                               <div class="ucUserBaseDetails">
-                                                   <div class="ucUserCurrentStatus">
-                                                       <span class="ucUserOnline"></span>
-                                                       <div class="ucUserPicWrapper">
-                                                           <span class="ucUserPicWithText">G</span>
-                                                       </div>
+                                        </div>
+                                        <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_browser">
+                                            <div class="ucUserBrowserIcon" rv-latestbrowser="visitor.sessions"></div>
+                                        </div>
+                                        <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_os">
+                                            <div class="ucUserOSIcon" rv-latestplatform="visitor.sessions"></div>
+                                        </div>
+                                        <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_device text-center">
+                                            <div class="ucUserDeviceIcon desktop text-center"></div>
+                                        </div>
+                                        <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_country" rv-country="visitor.sessions">
+                                        </div>
+                                        <div class="ucTableCell ucVisitorListToggleField" rv-each-customfield="fieldList" rv-customfielddata="customfield" rv-customfieldtest="visitor.visitorData">
+                                        </div>
+                                        <div class="ucTableCell">
+                                            <div class="dropdown ucUsersListMoreOptions">
+                                              <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                &#8226;&#8226;&#8226;
+                                              </span>
+                                              <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="ucUsersListMoreOptions">
+                                                <li><a href="#" class="ucSendMessageSingleTrigger">Send Message</a></li>
+                                                <li><a href="#" class="ucVisitorPageTrigger" rv-data-visitorid="visitor._id">User Profile</a></li>
+                                              </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                                       <div class="ucUserNameAndEmail">
-                                                           <span class="ucUserName">George</span>
-                                                           <span class="ucUserEmail">george@gmail.com</span>
-                                                       </div>
-                                                   </div>
-
-                                               </div>
-                                           </td>
-                                           <td class="text-center">20</td>
-                                           <td><div class="ucUserBrowserIcon firefox">Firefox<span>(v10.5)</span></div></td>
-                                           <td><div class="ucUserOSIcon linux">Linux<span>(v10.0)</span></div></td>
-                                           <td class="text-center"><div class="ucUserDeviceIcon tablet"></div></td>
-                                           <td>India</td>
-                                           <td>
-                                               <div class="dropdown ucUsersListMoreOptions">
-                                                  <span class="dropdown-toggle" type="button" id="ucUsersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    &#8226;&#8226;&#8226;
-                                                  </span>
-                                                  <ul class="dropdown-menu" aria-labelledby="ucUsersListMoreOptions">
-                                                    <li><a href="#">Send Email</a></li>
-                                                    <li><a href="#">User Profile</a></li>
-                                                  </ul>
-                                                </div>
-                                           </td>
-                                       </tr>-->
-                                    </tbody>
-                                </table>
+                                <br/>
 
                                 <div id="ucVisitorListAjaxLoader" class='ucAjaxLoader'><div></div></div>
+
+                                <br/>
+
+                                <div id="ucVisitorListPlaceholder" rv-show="display">
+                                    <div>
+                                        To track visitors, copy the tracking code to your application. You can get the tracking code by clicking app list dropdown at the top-right corner and then the settings icon near your app name.
+                                    </div>
+                                </div>
 
 
                             </div>

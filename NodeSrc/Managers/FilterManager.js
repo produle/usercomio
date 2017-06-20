@@ -29,7 +29,7 @@ class FilterManager {
   	{
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var predefinedFiltersList = [
@@ -48,7 +48,7 @@ class FilterManager {
   	{
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var appId = req.body.appid;
@@ -82,7 +82,7 @@ class FilterManager {
 
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var filter = req.body.filter;
@@ -110,7 +110,7 @@ class FilterManager {
 
         if(!req.isAuthenticated())
         {
-            return res.send({status:'failure'});
+            return res.send({status:'authenticationfailed'});
         }
 
         var filter = req.body.filter;

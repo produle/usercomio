@@ -359,7 +359,8 @@ h2
 	top: 15px;
 	right: 10px;
 }
-.ucSearchBar .ucAddFilterBtn
+.ucSearchBar .ucAddFilterBtn,
+.ucSearchBar #ucVisitorFieldsPopover
 {
 	color: #B1B0BF;
     font-size: 25px;
@@ -368,7 +369,8 @@ h2
     position: relative;
     top: 2px;
 }
-.ucSearchBar .ucAddFilterBtn:hover
+.ucSearchBar .ucAddFilterBtn:hover,
+.ucSearchBar #ucVisitorFieldsPopover:hover
 {
 	color: #ccc;
 }
@@ -421,9 +423,9 @@ h2
 }
 .ucModal .modal-body .input-group-btn label
 {
-	width: 140px;
+	width: 150px;
 	border:none;
-	border-bottom: 1px solid #e8eced;
+	/*border-bottom: 1px solid #e8eced;*/
     color: #8ea4b1;
     font-weight: 400;
     font-size: 13px;
@@ -434,6 +436,10 @@ h2
 .ucModal .modal-body .input-group
 {
 	margin-bottom:20px;
+}
+.ucModal .modal-body .input-group .form-control
+{
+	padding:0px;
 }
 .ucModal .modal-body .ucCancelBtn
 {
@@ -550,7 +556,7 @@ h2
 .uc_table_header
 {
     position: relative;
-    text-align: left;
+    text-align: center;
 }
 
 .uc_table_header .fa-caret-up,
@@ -591,7 +597,34 @@ h2
 {
     cursor: pointer;
 }
+#ucSendMessageModal .close
+{
+	position: absolute;
+	top:10px; 
+	right:10px;
+}
+.close:hover, .close:focus
+{
+	outline: none;
+}
+#ucSendMessageModal .ucSendBtn
+{
+	float:right;
+}
+.ucExistTemplate
+{
+	width: calc(100% - 25px) !important;
+    display: inline-block !important;
+    float: left !important;
+}
 
+#ucDeleteEmailTemplateBtn,
+#ucDeleteBrowserNotificationTemplateBtn
+{	
+	width:16px !important;
+	margin-right:0 !important;
+	float: right;
+}
 @media only screen and (max-width:992px) 
 {
 	.ucSidebar{width:0; position: fixed; padding:0;top:0; left:0; height: 100%; display:none; overflow: auto; }
@@ -643,6 +676,26 @@ h2
 	margin-bottom: 20px;
 }
 
+.ucVisitorFieldList
+{
+    width: 200px;
+    list-style: none;
+    padding: 0px;
+}
+
+.ucVisitorFieldList li span
+{
+    font-weight: normal;
+    cursor: pointer;
+}
+
+#ucVisitorListPlaceholder {
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 40px;
+    border: 1px solid #AAAAAA;
+    text-align: center;
+}
 /**
  * CSS Loader animation - Start
  */
@@ -800,3 +853,59 @@ h2
  * CSS Loader animation - End
 **/
 
+/**
+ * Div Table Global styles - Start
+**/
+.ucTable
+{
+    display: table;
+    width: 100%;
+    border-top: 1px solid #ddd;
+}
+.ucTableRow
+{
+    display: table-row;
+}
+.ucTableHeading
+{
+    display: table-header-group;
+}
+.ucTableBody
+{
+    display: table-row-group;
+}
+.ucTableFoot
+{
+    display: table-footer-group;
+}
+.ucTableCell,
+.ucTableHead
+{
+    display: table-cell;
+    border-bottom: 1px solid #ddd;
+    padding: 8px 5px;
+    vertical-align: middle;
+}
+.ucTableRow:hover .ucTableCell
+{
+    box-shadow: inset 0px -10px 18px -18px rgba(0,0,0,0.6);
+    -webkit-box-shadow: inset 0px -12px 18px -18px rgba(0,0,0,0.6);
+    -moz-box-shadow: inset 0px -10px 18px -18px rgba(0,0,0,0.6);
+}
+
+.ucTableHead
+{
+    background: #fff;
+    color: #8ea4b1;
+	text-transform: uppercase;
+    font-size:13px;
+	font-weight: normal;
+}
+
+.ucTableStripped .ucTableRow:nth-child(odd)
+{
+    background-color: #f9f9f9;
+}
+/**
+ * Div Table Global styles - End
+**/
