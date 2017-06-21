@@ -14,11 +14,12 @@ commit_website_files() {
 
 upload_files() {
   Branch="$(git rev-parse --abbrev-ref HEAD)"
-  echo "current Branch=" $Branch 
+  echo "active current Branch=" $Branch 
   TRAVIS_Branch="$(TRAVIS_BRANCH)"
   echo "TRAVIS_Branch=" $TRAVIS_Branch
+  echo $(TRAVIS_BRANCH)
   git remote add origin-pages https://${GH_TOKEN}@github.com/ckavinkumar/usercomio.git > /dev/null 2>&1 
-  git push origin-pages $Branch  
+  git push origin-pages $(TRAVIS_BRANCH)
 }
 
 setup_git
