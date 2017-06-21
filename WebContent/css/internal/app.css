@@ -22,6 +22,7 @@ body
 {
     outline: none !important;
 }
+
 btn
 {
 	height: 35px;
@@ -902,3 +903,5 @@ h2
 /**
  * Div Table Global styles - End
 **/
+
+.testTravis{color:#FFF;}
