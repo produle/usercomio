@@ -15,6 +15,7 @@ commit_website_files() {
 upload_files() {
   Branch="$(git rev-parse --abbrev-ref HEAD)"
   echo "current Branch=" $Branch
+  echo "TRAVIS_BRANCH=" $TRAVIS_BRANCH
   git remote add origin-pages https://${GH_TOKEN}@github.com/ckavinkumar/usercomio.git > /dev/null 2>&1 
   git push origin-pages $Branch  
 }
