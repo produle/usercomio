@@ -12,12 +12,7 @@ commit_website_files() {
   git commit --message "Travis build: $TRAVIS_BUILD_NUMBER"
 }
 
-upload_files() {
-  Branch="$(git rev-parse --abbrev-ref HEAD)"
-  echo "active current Branch=" $Branch 
-  TRAVIS_Branch="$TRAVIS_BRANCH"
-  echo "TRAVIS_Branch=" $TRAVIS_Branch
-  echo $TRAVIS_BRANCH
+upload_files() { 
   git remote add origin-pages https://${GH_TOKEN}@github.com/ckavinkumar/usercomio.git > /dev/null 2>&1 
   git push origin-pages $TRAVIS_BRANCH
 }
