@@ -7,7 +7,7 @@ setup_git() {
 commit_website_files() { 
   git fetch -p origin
   Branch="$(git rev-parse --abbrev-ref HEAD)"
-  git checkout $Branch
+  git checkout $TRAVIS_BRANCH
   git add WebContent/dist/*
   git commit --message "Travis build: $TRAVIS_BUILD_NUMBER"
 }
