@@ -512,9 +512,9 @@ h2
 	padding: 3px 0;
 }
 
-#ucSendMessageModal textarea.form-control
+#ucSendMessageEmailBodyWrapper
 {
-	margin: 10px 0 20px !important;
+	margin: 20px 0 20px !important;
 }
 #ucSendMessageModal .modal-body
 {
@@ -860,8 +860,13 @@ h2
 {
     display: table;
     width: 100%;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #ddd; 
 }
+#ucUserTabContentMessaging .ucTable
+{ 
+    table-layout: fixed;
+}
+
 .ucTableRow
 {
     display: table-row;
@@ -885,6 +890,7 @@ h2
     border-bottom: 1px solid #ddd;
     padding: 8px 5px;
     vertical-align: middle;
+    word-break: break-word;
 }
 .ucTableRow:hover .ucTableCell
 {

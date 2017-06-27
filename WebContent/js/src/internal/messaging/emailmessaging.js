@@ -46,16 +46,17 @@ function UC_EmailMessagingController()
                 thisClass.rivetEmailTemplateListObj.models.emailTemplateList = thisClass.emailTemplateList;
 
                 $('#ucSendMessageEmailTemplate option:eq(0)').prop('selected', true);
-                $("#ucSendMessageEmailSubject,#ucSendMessageEmailBody").val("");
+                $("#ucSendMessageEmailSubject").val("");
+                uc_main.messagingController.quill.setText('');
             }
         });
     };
 
     this.submitEmailMessageHandler = function()
     {
-        var subject = $("#ucSendMessageEmailSubject").val();
-        var message = $("#ucSendMessageEmailBody").val();
-        var template = $("#ucSendMessageEmailTemplate").val();
+        var subject  =  $("#ucSendMessageEmailSubject").val();
+        var message  =  uc_main.messagingController.quill.container.firstChild.innerHTML;
+        var template =  $("#ucSendMessageEmailTemplate").val();
         var blockDuplicate = false;
 
         if($("#ucSendMessageEmailBlockDuplicate").is(":checked"))
@@ -81,14 +82,15 @@ function UC_EmailMessagingController()
     {
         if($(this).val()=="new")
         {
-            $("#ucSendMessageEmailSubject,#ucSendMessageEmailBody").val("");
+            $("#ucSendMessageEmailSubject").val("");
+            uc_main.messagingController.quill.setText('');
             $("#ucDeleteEmailTemplateBtn").hide();
             $("#ucSendMessageEmailTemplate").removeClass("ucExistTemplate");
         }
         else
         {
-            $("#ucSendMessageEmailSubject").val($(this).find("option:selected").text());
-            $("#ucSendMessageEmailBody").val($(this).find("option:selected").attr("data-templatebody"));
+            $("#ucSendMessageEmailSubject").val($(this).find("option:selected").text()); 
+            uc_main.messagingController.quill.container.firstChild.innerHTML =$(this).find("option:selected").attr("data-templatebody");
             $("#ucDeleteEmailTemplateBtn").show();
             $("#ucSendMessageEmailTemplate").addClass("ucExistTemplate");
         }
@@ -139,7 +141,7 @@ function UC_EmailMessagingController()
 	  var result = {status:"success",msg:""};
 
 	  var subject = $("#ucSendMessageEmailSubject").val(),
-          message = $("#ucSendMessageEmailBody").val(),
+          message = uc_main.messagingController.quill.getText(),
 	  	  msg = "";
 
 	  if($.trim(subject) == "")

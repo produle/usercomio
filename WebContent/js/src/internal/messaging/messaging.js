@@ -14,6 +14,8 @@ function UC_MessagingController()
     this.browserNotificationController = new UC_BrowserNotificationController();
 
     this.rivetFieldListObj = null;
+    
+    this.quill = null;
 
 	this.constructor = function()
 	{
@@ -31,6 +33,14 @@ function UC_MessagingController()
                 fieldList: []
             }
         );
+		
+		var toolbarOptions = [{ 'header': [1, 2, 3, 4, 5, 6, false] },'bold', 'italic', 'underline','link',{ 'list': 'ordered'}, { 'list': 'bullet' }, 'clean'];
+		thisClass.quill = new Quill('#ucSendMessageEmailBody', {
+			theme: 'snow',
+			modules: {
+				toolbar: toolbarOptions
+			},
+		});
 	};
 
     this.openSendMessageModal = function()
@@ -48,6 +58,8 @@ function UC_MessagingController()
 
         $("#ucSendMessageTypeTabGroup button").removeClass("active");
         $("#ucSendMessageTypeTabGroup button[data-tabgroup-tabid=ucSendMessageEmailContainer]").addClass("active");
+        
+        thisClass.quill.setText("");
 
         thisClass.emailMessagingController.getEmailTemplates();
 
