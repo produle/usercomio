@@ -558,7 +558,26 @@
                             </div>
                         </div>
 
-                        <button type="button" id="ucSendMessageEmailSubmit" class="btn ucSendBtn">Send</button>
+                        <div class="row">
+                            <div class="col-sm-6 text-left">
+                                <div id="ucSendMessageEmailScheduleContainer">
+                                    <input type="text" class="form-control" id="ucSendMessageEmailScheduleDatetime" placeholder="Send On" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6 text-right" style="margin-bottom: 100px;">
+                                <div class="btn-group">
+                                    <button type="button" class="btn ucSendBtn" id="ucSendMessageEmailSubmit">Send Now</button>
+                                    <button type="button" class="btn ucSendBtn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a href="#" class="ucSendMessageEmailSendTypeItem" data-sendtype="now">Send Now</a></li>
+                                        <li><a href="#" class="ucSendMessageEmailSendTypeItem" data-sendtype="later">Send Later</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
