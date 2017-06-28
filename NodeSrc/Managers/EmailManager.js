@@ -55,7 +55,7 @@ class EmailManager {
     /*
      * @desc Initializes email configuration
      */
-    initMailConfig(appId,companyId,callback)
+    initMailConfig(appId,companyId,callbackObj,callback)
     {
         this.getEmailSettingByCompany(appId,companyId,function(emailSettingObj){
 
@@ -98,7 +98,7 @@ class EmailManager {
                 }
             }
 
-            callback();
+            callback(callbackObj);
 
         });
     }

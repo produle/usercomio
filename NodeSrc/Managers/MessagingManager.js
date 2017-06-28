@@ -57,7 +57,7 @@ class MessagingManager {
         {
             var EmailManagerObj = new EmailManager();
 
-            EmailManagerObj.initMailConfig(appId,user.company,function(){
+            EmailManagerObj.initMailConfig(appId,user.company,null,function(callbackObj){
 
                 if(template == "new")
                 {
@@ -217,25 +217,6 @@ class MessagingManager {
 
                         EmailManagerObj.sendMail(recipientSingle.visitorData.email,subject,parsedMessage);
                     }
-                    else if(messageType == "email" && sendType == "later")
-                    {
-                        var momentObj = moment(scheduleDatetime);
-                        var scheduleDateObj = new Date(
-                            parseInt(momentObj.format("YYYY")),
-                            parseInt(momentObj.format("MM")) - 1,
-                            parseInt(momentObj.format("DD")),
-                            parseInt(momentObj.format("HH")),
-                            parseInt(momentObj.format("mm")),
-                            0
-                        );
-
-                        var job = scheduler.scheduleJob(scheduleDateObj, function(){
-
-                            MessagingManagerObj.sendScheduledMessage(appId,scheduleDatetime);
-
-                            job.cancel();
-                        });
-                    }
                     else if(messageType == "browsernotification")
                     {
                         var BrowserNotificationManagerObj = new BrowserNotificationManager();
@@ -247,6 +228,26 @@ class MessagingManager {
                 });
             }
 
+        }
+
+        if(response.length > 0 && messageType == "email" && sendType == "later")
+        {
+            var momentObj = moment(scheduleDatetime);
+            var scheduleDateObj = new Date(
+                parseInt(momentObj.format("YYYY")),
+                parseInt(momentObj.format("MM")) - 1,
+                parseInt(momentObj.format("DD")),
+                parseInt(momentObj.format("HH")),
+                parseInt(momentObj.format("mm")),
+                0
+            );
+
+            var job = scheduler.scheduleJob(scheduleDateObj, function(){
+
+                MessagingManagerObj.sendScheduledMessage(appId,scheduleDatetime);
+
+                job.cancel();
+            });
         }
     }
 
@@ -389,7 +390,7 @@ class MessagingManager {
                             //Set the unsubscribe link in the email
                             messageItem.message = messageItem.message + "\r\n\r\n\r\nClick the link below to unsubscribe emails\r\n"+baseURL+"/unsubscribe/"+appId+"/"+messageItem.visitorId;
 
-                            EmailManagerObj.initMailConfig(appId,messageItem.clientId, function(){
+                            EmailManagerObj.initMailConfig(appId,messageItem.clientId,messageItem, function(messageItem){
                                 EmailManagerObj.sendMail(messageItem.visitorEmail,messageItem.subject,messageItem.message);
                             });
 
