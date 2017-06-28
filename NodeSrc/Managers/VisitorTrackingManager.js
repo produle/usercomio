@@ -13,7 +13,10 @@ var BrowserInfo = require("../dao/BrowserInfo").BrowserInfo;
 var GeoLocation = require("../dao/GeoLocation").GeoLocation;
 var VisitorMetaInfo = require("../dao/VisitorMetaInfo").VisitorMetaInfo;
 var utils = require("../core/utils.js").utils;
-var geoip = require("geoip-lite");
+var geoip = require("geoip-lite"); 
+var fs = require("fs");
+var path = require('path');  
+
 
 class VisitorTrackingManager {
 
@@ -105,15 +108,22 @@ class VisitorTrackingManager {
         geolocation.city = "";
         geolocation.country = "";
         geolocation.region = "";
-        geolocation.timezone = "";
-
+        geolocation.timezone = ""; 
+        geolocation.countryName = "";
+        
+        
         if(locationInfo != null)
         {
             geolocation.city = locationInfo.city;
             geolocation.country = locationInfo.country;
             geolocation.region = locationInfo.region;
-        }
-  		
+            
+            var fileJs = fs.readFileSync(path.join(__dirname, '../core/country.json'),'utf8'); 
+            var country_JSON = JSON.parse(fileJs); 
+            var loccode = locationInfo.country.toLowerCase(); 
+            geolocation.countryName = country_JSON[loccode]; 
+        }  
+          
 		sessionDetail["agentInfo"]  = browserInfo;
   		sessionDetail["geoLocationInfo"]  = geolocation;
   		sessionDetail["visitorId"]  = uid;

@@ -243,7 +243,7 @@ function UC_VisitorListController()
         rivets.binders.country = function (el, value) {
             
         	if(value[0].geoLocationInfo.country !="") {
-        		$(el).html( "<span data-toggle='tooltip' data-placement='left'  class='mfTooltip flag "+ value[0].geoLocationInfo.country.toLowerCase()+"' data-original-title='"+value[0].geoLocationInfo.country+"'></span>" ); 
+        		$(el).html( "<span data-toggle='tooltip' data-placement='left'  class='mfTooltip flag "+ value[0].geoLocationInfo.country.toLowerCase()+"' data-original-title='"+value[0].geoLocationInfo.countryName+"'></span>" ); 
         	}
         	else {
         		$(el).html('');
