@@ -55,9 +55,9 @@ class EmailManager {
     /*
      * @desc Initializes email configuration
      */
-    initMailConfig(appId,user,callback)
+    initMailConfig(appId,companyId,callback)
     {
-        this.getEmailSettingByCompany(appId,user.company,function(emailSettingObj){
+        this.getEmailSettingByCompany(appId,companyId,function(emailSettingObj){
 
             emailSetting = emailSettingObj;
             if(emailSetting.emailType && emailSetting.emailType == "SMTP")

@@ -12,6 +12,7 @@ var visitorListManager = require("./VisitorListManager").VisitorListManager;
 var EmailManager = require("./EmailManager").EmailManager;
 var BrowserNotificationManager = require("./BrowserNotificationManager").BrowserNotificationManager;
 var utils = require("../core/utils.js").utils;
+var scheduler = require('node-schedule');
 
 class MessagingManager {
 
@@ -56,7 +57,7 @@ class MessagingManager {
         {
             var EmailManagerObj = new EmailManager();
 
-            EmailManagerObj.initMailConfig(appId,user,function(){
+            EmailManagerObj.initMailConfig(appId,user.company,function(){
 
                 if(template == "new")
                 {
@@ -216,6 +217,25 @@ class MessagingManager {
 
                         EmailManagerObj.sendMail(recipientSingle.visitorData.email,subject,parsedMessage);
                     }
+                    else if(messageType == "email" && sendType == "later")
+                    {
+                        var momentObj = moment(scheduleDatetime);
+                        var scheduleDateObj = new Date(
+                            parseInt(momentObj.format("YYYY")),
+                            parseInt(momentObj.format("MM")) - 1,
+                            parseInt(momentObj.format("DD")),
+                            parseInt(momentObj.format("HH")),
+                            parseInt(momentObj.format("mm")),
+                            0
+                        );
+
+                        var job = scheduler.scheduleJob(scheduleDateObj, function(){
+
+                            MessagingManagerObj.sendScheduledMessage(appId,scheduleDatetime);
+
+                            job.cancel();
+                        });
+                    }
                     else if(messageType == "browsernotification")
                     {
                         var BrowserNotificationManagerObj = new BrowserNotificationManager();
@@ -323,7 +343,7 @@ class MessagingManager {
     /*
      * @desc Triggers the sendmail / sendbrowsernotification based on the provided schedule datetime
      */
-    sendScheduledMessage(user,appId,scheduleDatetime)
+    sendScheduledMessage(appId,scheduleDatetime)
     {
 
         var config = require('config');
@@ -369,7 +389,7 @@ class MessagingManager {
                             //Set the unsubscribe link in the email
                             messageItem.message = messageItem.message + "\r\n\r\n\r\nClick the link below to unsubscribe emails\r\n"+baseURL+"/unsubscribe/"+appId+"/"+messageItem.visitorId;
 
-                            EmailManagerObj.initMailConfig(appId,user, function(){
+                            EmailManagerObj.initMailConfig(appId,messageItem.clientId, function(){
                                 EmailManagerObj.sendMail(messageItem.visitorEmail,messageItem.subject,messageItem.message);
                             });
 

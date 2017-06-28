@@ -34,7 +34,8 @@ function UC_EmailMessagingController()
         $("#ucSendMessageEmailScheduleDatetime").datetimepicker({
             minDate : new Date(),
             maxDate : maxDate,
-            step: 5
+            step: 5,
+            format:'Y-m-d H:i'
         });
 
         $(".ucSendMessageEmailSendTypeItem").click(function(){
