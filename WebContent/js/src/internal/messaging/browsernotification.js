@@ -72,7 +72,7 @@ function UC_BrowserNotificationController()
             return;
         }
 
-        uc_main.messagingController.sendMessageHandler(subject,message,template,link,blockDuplicate,"browsernotification");
+        uc_main.messagingController.sendMessageHandler(subject,message,template,link,blockDuplicate,"browsernotification","","");
     };
 
     /*
