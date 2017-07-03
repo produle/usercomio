@@ -82,7 +82,7 @@ var serverPort = 3000;
 if(process.argv[2] == "prod")
 {
 	global.prodEnvType = true;
-	serverPort = 80;
+	//serverPort = 80;
 } 
 
 

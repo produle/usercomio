@@ -609,7 +609,23 @@ h2
 }
 #ucSendMessageModal .ucSendBtn
 {
-	float:right;
+	padding: 10px 15px;
+    margin: 15px 0px 0px;
+}
+.btn-group .ucSendBtn:first-child
+{
+    padding-left: 25px;
+    border-top-left-radius: 22px;
+    border-bottom-left-radius: 22px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.btn-group .ucSendBtn.dropdown-toggle
+{
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 22px;
+    border-bottom-right-radius: 22px;
 }
 .ucExistTemplate
 {
