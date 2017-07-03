@@ -32,6 +32,8 @@ function UC_UserController()
 		$(document).on("click","#uceditsystem_submit",thisClass.handleSystemSaveAction);
 
 		$(document).on("click","#ucEditEmailTypeTabGroup button",thisClass.handleTypeSelectionAction);
+
+        thisClass.getConfig();
 	};
 
     /*
@@ -864,5 +866,16 @@ function UC_UserController()
     this.handleTypeSelectionAction  = function()
     {
         thisClass.currentEmailType = $(this).attr("data-emailType");
+    };
+
+    /*
+     * @desc Obtains the config and stores as local var
+     */
+    this.getConfig  = function()
+    {
+        UC_AJAX.call('UserManager/getconfig',{user:UC_UserSession.user},function(data,status,xhr)
+        {
+            thisClass.config = data.config;
+        });
     };
 }
