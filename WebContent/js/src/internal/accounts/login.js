@@ -23,8 +23,10 @@ function UC_LoginController()
   /*
   *  @desc Handles click event of login button
   */
-  this.handleLoginBtnAction = function()
+  this.handleLoginBtnAction = function(e)
   {
+      e.preventDefault();
+
     var username = $('#uclogin_usernameinput').val();
     var password = $('#uclogin_passwordinput').val();
 
@@ -43,6 +45,9 @@ function UC_LoginController()
   {
     if(loginObj.username && loginObj.password)
     {
+
+        $("#uclogin_submitbtn").hide();
+        $("#ucLogin_loader").show();
 	    UC_AJAX.call('LoginManager/validateUser',{username:loginObj.username,password:loginObj.password},function(data,status,xhr)
 	      {
 	    	  if(data)
@@ -50,7 +55,9 @@ function UC_LoginController()
 
 	    		  if(data.error)
 	    		  {
-	    			  alert(data.error)
+	    			  alert(data.error);
+                      $("#ucLogin_loader").hide();
+                      $("#uclogin_submitbtn").show();
 	    		  }
 	    		  else
     			  {
@@ -65,7 +72,7 @@ function UC_LoginController()
     }
     else
     {
-        throw "username or password  was not provided."
+        alert("Username and Password are required");
     }
 
 

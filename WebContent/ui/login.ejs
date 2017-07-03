@@ -19,31 +19,34 @@
 </head>
   <body>
     <div class="UC_LoginContainerCls">
-    	    <div class="UC_logo"><img src="../../images/app/usercomLogo.png" alt=""/></div>
-    		<div class="form-group" style="overflow:auto">
-			<div class="col-sm-12">
-				<input type="email" value="" class="form-control" id="uclogin_usernameinput" placeholder="Email">
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-sm-12">
-				<input type="password" value="" class="form-control" id="uclogin_passwordinput" placeholder="Password">
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-sm-12">
-				<div class="checkbox">
-					<div id="uclogin_forgotpasswordbtn">Forgot Password</div>
-				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="">
-				<button type="submit" id="uclogin_submitbtn" class="btn btn-default">Sign
-					in</button>
-			</div>
-		</div>
-    	
+        <div class="UC_logo"><img src="../../images/app/usercomLogo.png" alt=""/></div>
+
+            <form action="">
+                <div class="form-group" style="overflow:auto">
+                    <div class="col-sm-12">
+                        <input type="email" value="" class="form-control" id="uclogin_usernameinput" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <input type="password" value="" class="form-control" id="uclogin_passwordinput" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="checkbox">
+                            <div id="uclogin_forgotpasswordbtn">Forgot Password</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="">
+                        <button type="submit" id="uclogin_submitbtn" class="btn btn-default">Sign
+                            in</button>
+                        <div class="ucLoaderContent" id="ucLogin_loader" style="display: none;">Signing In...</div>
+                    </div>
+                </div>
+        </form>
     	
 	
 	</div>
