@@ -424,11 +424,15 @@ function UC_AppController()
 
         
         //update it websocket client list
-        var msg = {};
-		msg.name = "establishappconnection";
-		msg.key =  thisClass.currentAppId;
-		msg  = JSON.stringify(msg);
-		uc_main.rtcController.sendMessageToServer(msg);
+        if(uc_main.rtcController.socket)
+        {
+        	 var msg = {};
+     		msg.name = "establishappconnection";
+     		msg.key =  thisClass.currentAppId;
+     		msg  = JSON.stringify(msg);
+     		uc_main.rtcController.sendMessageToServer(msg);
+        }
+       
 
     };
 }

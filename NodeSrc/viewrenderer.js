@@ -10,6 +10,7 @@ var moment = require("moment");
 var fs = require("fs");
 var path = require('path');
 var app = require("./server").app;
+var uglify = require("uglify-js"); 
 var userManager = require("./Managers/UserManager").UserManager;
 var visitorListManager = require("./Managers/VisitorListManager").VisitorListManager;
 var emailManager = require("./Managers/EmailManager").EmailManager;
@@ -241,23 +242,22 @@ class ViewRenderer
 
         app.get('/tracking/track.js', function(req, res) {
 
-            var out = "Add Base URL";
-            var config = require('config');
-
-  		    if(config.has("baseURL"))
-            {
-                var fileJs = fs.readFileSync(path.join(__dirname, '/../WebContent/js/src/internal/tracking/track.js'),'utf8');
-
-                var appId = req.query.appid;
-                out = fileJs;
-                out = out.replace("VARIABLE_APPID", appId);
-                out = out.replace("VARIABLE_BASEURL", config.get("baseURL"));
-            }
-
-            //res.setHeader('Content-disposition', 'attachment; filename=usercom-service-worker.js');
-            res.setHeader('Content-type', 'text/javascript');
-            res.write(out);
-            res.end();
+        	try
+        	{
+        		var trackjscode = fs.readFileSync(path.join(__dirname, '/../trackjs/','track-'+req.query.appid+'.min.js'),'utf8');
+                
+                res.setHeader('Content-type', 'text/javascript');
+                
+                res.write(trackjscode);
+                
+                res.end();
+        	}
+        	catch(err)
+        	{
+        		res.status(404).end();
+        	}
+        
+            
         });
 
 
