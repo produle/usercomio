@@ -43,6 +43,23 @@ function UC_UserController()
         $('#uceditprofile_firstname').val(user.firstName);
         $('#uceditprofile_lastname').val(user.lastName);
 
+        //Construct timezone list
+        var timezoneList = moment.tz.names();
+        $("#uceditprofile_timezoneinput").html("");
+        $("#uceditprofile_timezoneinput").append('<option value="">Select a Timezone</option>');
+        for(var i = 0; i < timezoneList.length; i++)
+        {
+            var selected = '';
+            if(user.timeZone == moment.tz(timezoneList[i]).format("Z"))
+            {
+                selected = ' selected';
+            }
+
+            $("#uceditprofile_timezoneinput").append('<option value="'+moment.tz(timezoneList[i]).format("Z")+'"'+selected+'>'+timezoneList[i]+' ('+moment.tz(timezoneList[i]).format("Z")+')</option>');
+        }
+
+        $("#uceditprofile_timezoneinput").select2();
+
         $("#ucEditProfileModal").modal();
 
         $("#ucEditProfileAjaxLoader").hide();
@@ -56,7 +73,8 @@ function UC_UserController()
     this.handleProfileSaveAction = function()
     {
         var firstname = $('#uceditprofile_firstname').val(),
-            lastname = $('#uceditprofile_lastname').val();
+            lastname = $('#uceditprofile_lastname').val(),
+            timezone = $('#uceditprofile_timezoneinput').val();
 
 
         var validationResult = thisClass.validateProfileInputs();
@@ -71,6 +89,7 @@ function UC_UserController()
 
         user.firstName = firstname;
         user.lastName = lastname;
+        user.timeZone = timezone;
 
         UC_UserSession.user = user;
 
@@ -112,15 +131,20 @@ function UC_UserController()
 
         var firstname = $('#uceditprofile_firstname').val(),
             lastname = $('#uceditprofile_lastname').val(),
+            timezone = $('#uceditprofile_timezoneinput').val(),
             msg = "";
 
         if($.trim(firstname) == "")
         {
-            msg = "Invalid First Name !";
+            msg = "Invalid First Name";
         }
         else if($.trim(lastname) == "")
         {
-            msg = "Invalid Last Name !";
+            msg = "Invalid Last Name";
+        }
+        else if($.trim(timezone) == "")
+        {
+            msg = "Invalid Timezone";
         }
 
         if(msg != "")

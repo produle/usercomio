@@ -256,9 +256,17 @@ class VisitorListManager {
         
         if(visitorId)
     	{ 
-            var messagesCollection = global.db.collection('sessions').aggregate([
+            var messagesCollection = global.db.collection('visitorevents').aggregate([
                  { $match : { visitorId: visitorId } },
                  { $skip : skipIndex },
+                 { $lookup:
+                 {
+                   from: "sessions",
+                   localField: "sessionId",
+                   foreignField: "_id",
+                   as: "sessions"
+                 }
+                 },
                  { $limit : pageLimit }
             ]).toArray(function(err,sessions)
                 {

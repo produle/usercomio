@@ -28,6 +28,62 @@ npm run prod /* Starts the usercom application in production mode at port 3000 *
 2. Fill in the Database, SMTP Email, Admin User and Basic settings in the wizard.
 3. Once setup is completed, you can login at `http://localhost:3000/login`.
 
+## Setup Nginx as a reverse proxy
+It is optional to use nginx in front of the NodeJS server, as it helps improving the overall performance. The following steps can be applied to run Usercom on top of nginx.
+1. [Install](https://www.nginx.com/resources/wiki/start/topics/tutorials/install/) Nginx on the server.
+2. In `nginx.conf`, modify the following snippet to route the HTTP requests to NodeJS
+	```
+    server {
+        listen       80;
+        server_name  localhost;
+
+        location / {
+                proxy_pass http://localhost:3000;	#Path to NodeJS server
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+        
+        .....
+        .....
+    ```
+    
+3. Restart Nginx server using `sudo nginx -s reload`
+
+### Using HTTPS connections
+1. Generate the required SSL certificates and copy them to the nginx installation path.
+2. In `nginx.conf`, modify the following snippet to route the HTTPS requests to NodeJS
+	```
+    server {
+        listen       443 ssl;
+        server_name  localhost;
+        
+        ssl_certificate      local.example.com.crt; #Path of certificate relative to nginx installation directory
+        ssl_certificate_key  local.example.com;	#Path of key file relative to nginx installation directory
+
+        ssl_session_cache    shared:SSL:1m;
+        ssl_session_timeout  5m;
+
+        ssl_ciphers  HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers  on;
+
+        location / {
+                proxy_pass http://localhost:3000;	#Path to NodeJS server
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+        
+        ....
+        ....
+    ```
+3. You can also include verified certificate in the `ssl_certificate` config
+4. Restart Nginx server using `sudo nginx -s reload`
+
 ## Using the trackingcode in your application
 1. Login to Usercom.
 2. Click the dropdown menu at top-right corner, near the name and click the gear icon next to your app name.
@@ -51,6 +107,14 @@ npm run prod /* Starts the usercom application in production mode at port 3000 *
     })
     </script>
     ``` 
+## Using event tracking code inside the application
+
+1. Copy and paste the below mentioned code to track the custom activity of the user.
+2. The event details can be viewed under activities in user details view page
+
+	```
+	UsercomLib.track("View Product",{"product_id":1});   /* 1-Event Name(String) , 2-Event Properties(Object of any time)*/
+	```
     
 ## Email Notification
 Email settings can be saved in `Edit Email Settings`, which is available in the top-right corner dropdown. You can send emails through any of the following interfaces:

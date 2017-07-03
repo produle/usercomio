@@ -13,6 +13,8 @@ function UC_EmailMessagingController()
 
     this.emailTemplateList = [];
 
+    this.sendtype = "now";
+
 	this.constructor = function()
 	{
 		$(document).on("click","#ucSendMessageEmailSubmit",thisClass.submitEmailMessageHandler);
@@ -26,6 +28,32 @@ function UC_EmailMessagingController()
                 emailTemplateList: thisClass.emailTemplateList
             }
         );
+
+        var maxDate = new Date();
+        maxDate.setDate(maxDate.getDate() + 30);
+        $("#ucSendMessageEmailScheduleDatetime").datetimepicker({
+            minDate : new Date(),
+            maxDate : maxDate,
+            step: 5,
+            format:'Y-m-d H:i'
+        });
+
+        $(".ucSendMessageEmailSendTypeItem").click(function(){
+
+            thisClass.sendtype = $(this).attr("data-sendtype");
+            if($(this).attr("data-sendtype") == "later")
+            {
+                $("#ucSendMessageEmailScheduleContainer").show();
+                $("#ucSendMessageEmailSubmit").text("Send Later");
+            }
+            else
+            {
+                $("#ucSendMessageEmailScheduleContainer").hide();
+                $("#ucSendMessageEmailSubmit").text("Send Now");
+            }
+            $(".ucSendMessageEmailSendTypeItem").show();
+            $(this).hide();
+        });
 	};
 
     this.getEmailTemplates = function()
@@ -56,6 +84,7 @@ function UC_EmailMessagingController()
         var subject = $("#ucSendMessageEmailSubject").val();
         var message = $("#ucSendMessageEmailBody").val();
         var template = $("#ucSendMessageEmailTemplate").val();
+        var scheduledatetime = $("#ucSendMessageEmailScheduleDatetime").val();
         var blockDuplicate = false;
 
         if($("#ucSendMessageEmailBlockDuplicate").is(":checked"))
@@ -71,7 +100,7 @@ function UC_EmailMessagingController()
             return;
         }
 
-        uc_main.messagingController.sendMessageHandler(subject,message,template,"",blockDuplicate,"email");
+        uc_main.messagingController.sendMessageHandler(subject,message,template,"",blockDuplicate,"email",thisClass.sendtype,scheduledatetime);
     };
 
     /*
@@ -140,6 +169,7 @@ function UC_EmailMessagingController()
 
 	  var subject = $("#ucSendMessageEmailSubject").val(),
           message = $("#ucSendMessageEmailBody").val(),
+          scheduledatetime = $("#ucSendMessageEmailScheduleDatetime").val(),
 	  	  msg = "";
 
 	  if($.trim(subject) == "")
@@ -151,6 +181,11 @@ function UC_EmailMessagingController()
 		  msg = "Message is required";
 	  }
 
+      if(thisClass.sendtype == "later" && $.trim(scheduledatetime) == "")
+      {
+		  msg = "Schedule Date and Time required";
+	  }
+
 	  if(msg != "")
 	  {
 		  result.status = "failure";
@@ -159,4 +194,16 @@ function UC_EmailMessagingController()
 
 	  return result;
   }
+
+    /*
+     * @desc Initializes the settings for sending type on modal load
+     */
+    this.initSendTypeSettings = function()
+    {
+        thisClass.sendtype = "now";
+        $("#ucSendMessageEmailScheduleContainer").hide();
+        $("#ucSendMessageEmailSubmit").text("Send Now");
+        $(".ucSendMessageEmailSendTypeItem").show();
+        $(".ucSendMessageEmailSendTypeItem[data-sendtype=now]").hide();
+    }
 }

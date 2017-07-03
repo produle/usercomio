@@ -40,7 +40,6 @@ class UserManager {
           newUser._id = newUser.username;
           newUser.createDate = new Date();
           newUser.password = utils.encrypt(newUser.password);
-          newUser.timeZone = moment().format('Z');
           
           var status = "success";
           
@@ -251,7 +250,8 @@ class UserManager {
                     { $set :
                         {
                             firstName: updateUser.firstName,
-                            lastName: updateUser.lastName
+                            lastName: updateUser.lastName,
+                            timeZone: updateUser.timeZone
                         }
                     },
                     { upsert: true },

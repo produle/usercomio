@@ -11,7 +11,7 @@ function UC_UserRegistrationController()
 
     this.setupappId = "";
 
-    //this.timezoneList = "";
+    this.timezoneList = [];
 
   this.constructor = function()
   {
@@ -20,7 +20,7 @@ function UC_UserRegistrationController()
       //$("#UC_Setup_Database").show();
      $("#UC_Setup_Welcome_Page").show();
 
-      //thisClass.constructTimezoneArray();
+      thisClass.constructTimezoneArray();
 
       $(".uc_tab_trigger").on("click",thisClass.toggleTabs);
 
@@ -305,7 +305,8 @@ function UC_UserRegistrationController()
 	var email = $('#ucsetup_emailinput').val(),
 		password = $('#ucsetup_passwordinput').val(),
 		confirmPassword = $('#ucsetup_confirmpasswordinput').val(),
-		fullname  = $('#ucsetup_fullnameinput').val();
+		fullname  = $('#ucsetup_fullnameinput').val(),
+		timezone  = $('#ucsetup_timezoneinput').val();
 
 
     var validationResult = thisClass.validateSetupUserInputs();
@@ -324,6 +325,7 @@ function UC_UserRegistrationController()
     newUser.password = password;
     newUser.password = password;
     newUser.company = 'C'+UC_Utils.guidGenerator();
+    newUser.timezone = timezone;
 
     thisClass.sendLoginRequest(newUser,false);
   }
@@ -458,6 +460,7 @@ function UC_UserRegistrationController()
 	      password = $('#ucsetup_passwordinput').val(),
 	      confirmPassword = $('#ucsetup_confirmpasswordinput').val(),
 	      fullname  = $('#ucsetup_fullnameinput').val(),
+          timezone  = $('#ucsetup_timezoneinput').val(),
 	  	  msg = "";
 
 	  if($.trim(fullname) == "")
@@ -475,6 +478,10 @@ function UC_UserRegistrationController()
 	  else if(password != confirmPassword)
       {
 	  	msg = "Password & Confirm Password doesn't match !";
+      }
+	  else if($.trim(timezone) == "")
+      {
+	  	msg = "Select a Timezone";
       }
 
 	  if(msg != "")
@@ -554,12 +561,14 @@ function UC_UserRegistrationController()
      */
     this.constructTimezoneArray = function()
     {
-        var timezoneNameArray = thisClass.timezoneList.split(",");
-        for(var i = 0; i < timezoneNameArray.length; i++)
+        $("#ucsetup_timezoneinput").html("");
+        $("#ucsetup_timezoneinput").append('<option value="">Select a Timezone</option>');
+        for(var i = 0; i < thisClass.timezoneList.length; i++)
         {
-            console.log(moment.tz(timezoneNameArray[i]).format("Z"));
+            $("#ucsetup_timezoneinput").append('<option value="'+moment.tz(thisClass.timezoneList[i]).format("Z")+'">'+thisClass.timezoneList[i]+' ('+moment.tz(thisClass.timezoneList[i]).format("Z")+')</option>');
         }
 
+        $("#ucsetup_timezoneinput").select2();
     }
 
     /**
