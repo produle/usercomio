@@ -25,6 +25,7 @@ class UserManager {
         this.router.post("/saveUserProfile",(req, res) => { this.saveUserProfile(req,res); });
         this.router.post("/saveUserPassword",(req, res) => { this.saveUserPassword(req,res); });
         this.router.post("/updateAppPreference",(req, res) => { this.updateAppPreference(req,res); });
+        this.router.post("/getconfig",(req, res) => { this.getConfig(req,res); });
     }
 
   	/*
@@ -451,6 +452,22 @@ class UserManager {
               }
 
         });
+    }
+
+    /*
+     * @desc Return the config data
+     */
+    getConfig(req,res)
+    {
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
+        delete require.cache[require.resolve('config')];
+        var config = require('config');
+
+        return res.send({config:config});
     }
 
 }
