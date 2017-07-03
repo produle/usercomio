@@ -12,7 +12,7 @@
 	var DEFAULT_CONFIG = 
 	{
 			'api_baseurl':   'VARIABLE_BASEURL',
-			'api_host':'VARIABLE_BASEURL',
+			'api_host': 'VARIABLE_APIHOST',
             'serviceWorkerFile' : '/usercom-sw.js'
 	}
 	
@@ -86,7 +86,7 @@
 			
 			establishSocketConnection : function(usercomlib)
 			{
-				var ws = new WebSocket("ws://"+DEFAULT_CONFIG.api_baseurl+":8001/");
+				var ws = new WebSocket("ws://"+DEFAULT_CONFIG.api_host+":8001/");
 
 				ws.onopen = function()
 				{
