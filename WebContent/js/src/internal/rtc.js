@@ -51,28 +51,41 @@ function UC_RTCController()
 		// On new user
 		if(msg.name === 'newvisitor')
 		{
-			uc_main.visitorListController.newVisitorAction(msg);
+			if(msg.reciever == uc_main.appController.currentAppId)
+			{
+				uc_main.visitorListController.newVisitorAction(msg);
+			}
 		}
 		
 		if(msg.name === 'visitorjoined')
 		{
 			var email = msg.visitorKey.split("-")[0]; 
+			var appid = msg.visitorKey.split("-")[1]; 
 			
-			var visitor = $.grep(uc_main.visitorListController.visitors, function(e){ return e.visitorData.email == email });
+			if(appid == uc_main.appController.currentAppId)
+			{
+				var visitor = $.grep(uc_main.visitorListController.visitors, function(e){ return e.visitorData.email == email });
+				
+				visitor[0].isVisitorOffline = false;
+				visitor[0].isVisitorOnline = true;
+			}
 			
-			visitor[0].isVisitorOffline = false;
-			visitor[0].isVisitorOnline = true;
 			
 		}
 		
 		if(msg.name === 'visitordisconnected')
 		{
 			var email = msg.visitorKey.split("-")[0]; 
+			var appid = msg.visitorKey.split("-")[1]; 
 			
-			var visitor = $.grep(uc_main.visitorListController.visitors, function(e){ return e.visitorData.email == email });
+			if(appid == uc_main.appController.currentAppId)
+			{
 			
-			visitor[0].isVisitorOffline = true;
-			visitor[0].isVisitorOnline = false;
+				var visitor = $.grep(uc_main.visitorListController.visitors, function(e){ return e.visitorData.email == email });
+				
+				visitor[0].isVisitorOffline = true;
+				visitor[0].isVisitorOnline = false;
+			}
 			
 		}
 	}
