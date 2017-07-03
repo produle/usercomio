@@ -143,6 +143,8 @@ function UC_AppController()
 				 }
 
                 $('#ucNewAppAjaxLoader').hide();
+                
+              
 				
 			});
 			
@@ -414,10 +416,23 @@ function UC_AppController()
             uc_main.filterController.listUserdefinedFilters();
             uc_main.visitorListController.getFieldsList();
         }
+        
         else if(!isInit)
         {
             location.href="/";
         }
+
+        
+        //update it websocket client list
+        if(uc_main.rtcController.socket)
+        {
+        	 var msg = {};
+     		msg.name = "establishappconnection";
+     		msg.key =  thisClass.currentAppId;
+     		msg  = JSON.stringify(msg);
+     		uc_main.rtcController.sendMessageToServer(msg);
+        }
+       
 
     };
 }

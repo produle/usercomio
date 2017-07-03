@@ -14,6 +14,7 @@ var GeoLocation = require("../dao/GeoLocation").GeoLocation;
 var VisitorMetaInfo = require("../dao/VisitorMetaInfo").VisitorMetaInfo;
 var utils = require("../core/utils.js").utils;
 var geoip = require("geoip-lite");
+var RTCManager = require("./RTCManager").RTCManager;
 
 class VisitorTrackingManager {
 
@@ -192,7 +193,9 @@ class VisitorTrackingManager {
                                 return res.send({status:'failure'});
                             }
 
-
+                            
+                            var rtcManager = new RTCManager();
+                        	rtcManager.newVisitor(visitorDetail);
                         });
                   }
 
@@ -207,10 +210,11 @@ class VisitorTrackingManager {
                         }
                         else
                         {
-                            return res.send({status:visitorDetail,sessionId:sessionDetail["_id"]});
+                        	return res.send({status:visitorDetail,sessionId:sessionDetail["_id"]});
+
                         }
 
-
+                        	
                     });
 
                 });
@@ -405,6 +409,8 @@ class VisitorTrackingManager {
 
 
   	}
+  	
+  	
   
   	
 }
