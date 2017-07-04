@@ -91,3 +91,8 @@ form
   color: #f5f5f5;
   font-size: 13px;
 }
+
+.ucLoaderContent {
+    color: #2B9AF3;
+    font-style: italic;
+}

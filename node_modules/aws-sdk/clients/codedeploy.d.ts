@@ -68,11 +68,11 @@ declare class CodeDeploy extends Service {
    */
   batchGetOnPremisesInstances(callback?: (err: AWSError, data: CodeDeploy.Types.BatchGetOnPremisesInstancesOutput) => void): Request<CodeDeploy.Types.BatchGetOnPremisesInstancesOutput, AWSError>;
   /**
-   * Starts the process of rerouting traffic from instances in the original environment to instances in thereplacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) 
+   * For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) 
    */
   continueDeployment(params: CodeDeploy.Types.ContinueDeploymentInput, callback?: (err: AWSError, data: {}) => void): Request<{}, AWSError>;
   /**
-   * Starts the process of rerouting traffic from instances in the original environment to instances in thereplacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) 
+   * For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) 
    */
   continueDeployment(callback?: (err: AWSError, data: {}) => void): Request<{}, AWSError>;
   /**
@@ -244,6 +244,14 @@ declare class CodeDeploy extends Service {
    */
   listDeployments(callback?: (err: AWSError, data: CodeDeploy.Types.ListDeploymentsOutput) => void): Request<CodeDeploy.Types.ListDeploymentsOutput, AWSError>;
   /**
+   * Lists the names of stored connections to GitHub accounts.
+   */
+  listGitHubAccountTokenNames(params: CodeDeploy.Types.ListGitHubAccountTokenNamesInput, callback?: (err: AWSError, data: CodeDeploy.Types.ListGitHubAccountTokenNamesOutput) => void): Request<CodeDeploy.Types.ListGitHubAccountTokenNamesOutput, AWSError>;
+  /**
+   * Lists the names of stored connections to GitHub accounts.
+   */
+  listGitHubAccountTokenNames(callback?: (err: AWSError, data: CodeDeploy.Types.ListGitHubAccountTokenNamesOutput) => void): Request<CodeDeploy.Types.ListGitHubAccountTokenNamesOutput, AWSError>;
+  /**
    * Gets a list of names for one or more on-premises instances. Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.
    */
   listOnPremisesInstances(params: CodeDeploy.Types.ListOnPremisesInstancesInput, callback?: (err: AWSError, data: CodeDeploy.Types.ListOnPremisesInstancesOutput) => void): Request<CodeDeploy.Types.ListOnPremisesInstancesOutput, AWSError>;
@@ -368,6 +376,10 @@ declare namespace CodeDeploy {
      * True if the user has authenticated with GitHub for the specified application; otherwise, false.
      */
     linkedToGitHub?: Boolean;
+    /**
+     * The name for a connection to a GitHub account.
+     */
+    gitHubAccountName?: GitHubAccountTokenName;
   }
   export type ApplicationName = string;
   export type ApplicationRevisionSortBy = "registerTime"|"firstUsedTime"|"lastUsedTime"|string;
@@ -570,15 +582,15 @@ declare namespace CodeDeploy {
      */
     deploymentGroupName: DeploymentGroupName;
     /**
-     * If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation. CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or the deployment group. For more information about the predefined deployment configurations in AWS CodeDeploy, see see Working with Deployment Groups in AWS CodeDeploy in the AWS CodeDeploy User Guide.
+     * If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation. CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or the deployment group. For more information about the predefined deployment configurations in AWS CodeDeploy, see Working with Deployment Groups in AWS CodeDeploy in the AWS CodeDeploy User Guide.
      */
     deploymentConfigName?: DeploymentConfigName;
     /**
-     * The Amazon EC2 tags on which to filter.
+     * The Amazon EC2 tags on which to filter. The deployment group will include EC2 instances with any of the specified tags.
      */
     ec2TagFilters?: EC2TagFilterList;
     /**
-     * The on-premises instance tags on which to filter.
+     * The on-premises instance tags on which to filter. The deployment group will include on-premises instances with any of the specified tags.
      */
     onPremisesInstanceTagFilters?: TagFilterList;
     /**
@@ -594,7 +606,7 @@ declare namespace CodeDeploy {
      */
     triggerConfigurations?: TriggerConfigList;
     /**
-     * Information to add about Amazon CloudWatch alarms when the deployment group is created. 
+     * Information to add about Amazon CloudWatch alarms when the deployment group is created.
      */
     alarmConfiguration?: AlarmConfiguration;
     /**
@@ -602,7 +614,7 @@ declare namespace CodeDeploy {
      */
     autoRollbackConfiguration?: AutoRollbackConfiguration;
     /**
-     * Information about the type of deployment, standard or blue/green, that you want to run and whether to route deployment traffic behind a load balancer.
+     * Information about the type of deployment, in-place or blue/green, that you want to run and whether to route deployment traffic behind a load balancer.
      */
     deploymentStyle?: DeploymentStyle;
     /**
@@ -610,7 +622,7 @@ declare namespace CodeDeploy {
      */
     blueGreenDeploymentConfiguration?: BlueGreenDeploymentConfiguration;
     /**
-     * Information about the load balancer used in a blue/green deployment.
+     * Information about the load balancer used in a deployment.
      */
     loadBalancerInfo?: LoadBalancerInfo;
   }
@@ -657,6 +669,10 @@ declare namespace CodeDeploy {
      * Indicates whether to deploy to all instances or only to instances that are not running the latest application revision.
      */
     updateOutdatedInstancesOnly?: Boolean;
+    /**
+     * Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment. The fileExistsBehavior parameter takes any of the following values:   DISALLOW: The deployment fails. This is also the default behavior if no option is specified.   OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.   RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.  
+     */
+    fileExistsBehavior?: FileExistsBehavior;
   }
   export interface CreateDeploymentOutput {
     /**
@@ -765,7 +781,7 @@ declare namespace CodeDeploy {
      */
     autoRollbackConfiguration?: AutoRollbackConfiguration;
     /**
-     * Information about the type of deployment, either standard or blue/green, you want to run and whether to route deployment traffic behind a load balancer.
+     * Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.
      */
     deploymentStyle?: DeploymentStyle;
     /**
@@ -773,9 +789,17 @@ declare namespace CodeDeploy {
      */
     blueGreenDeploymentConfiguration?: BlueGreenDeploymentConfiguration;
     /**
-     * Information about the load balancer to use in a blue/green deployment.
+     * Information about the load balancer to use in a deployment.
      */
     loadBalancerInfo?: LoadBalancerInfo;
+    /**
+     * Information about the most recent successful deployment to the deployment group.
+     */
+    lastSuccessfulDeployment?: LastDeploymentInfo;
+    /**
+     * Information about the most recent attempted deployment to the deployment group.
+     */
+    lastAttemptedDeployment?: LastDeploymentInfo;
   }
   export type DeploymentGroupInfoList = DeploymentGroupInfo[];
   export type DeploymentGroupName = string;
@@ -798,6 +822,10 @@ declare namespace CodeDeploy {
      * The deployment ID.
      */
     deploymentId?: DeploymentId;
+    /**
+     * Information about the application revision that was deployed to the deployment group before the most recent successful deployment.
+     */
+    previousRevision?: RevisionLocation;
     /**
      * Information about the location of stored application artifacts and the service from which to retrieve them.
      */
@@ -851,7 +879,7 @@ declare namespace CodeDeploy {
      */
     rollbackInfo?: RollbackInfo;
     /**
-     * Information about the type of deployment, either standard or blue/green, you want to run and whether to route deployment traffic behind a load balancer.
+     * Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.
      */
     deploymentStyle?: DeploymentStyle;
     /**
@@ -867,13 +895,17 @@ declare namespace CodeDeploy {
      */
     blueGreenDeploymentConfiguration?: BlueGreenDeploymentConfiguration;
     /**
-     * Information about the load balancer used in this blue/green deployment.
+     * Information about the load balancer used in the deployment.
      */
     loadBalancerInfo?: LoadBalancerInfo;
     /**
      * Provides information about the results of a deployment, such as whether instances in the original environment in a blue/green deployment were not terminated.
      */
     additionalDeploymentStatusInfo?: AdditionalDeploymentStatusInfo;
+    /**
+     * Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.   DISALLOW: The deployment fails. This is also the default behavior if no option is specified.   OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.   RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.  
+     */
+    fileExistsBehavior?: FileExistsBehavior;
   }
   export type DeploymentOption = "WITH_TRAFFIC_CONTROL"|"WITHOUT_TRAFFIC_CONTROL"|string;
   export interface DeploymentOverview {
@@ -917,7 +949,7 @@ declare namespace CodeDeploy {
   export type DeploymentStatusList = DeploymentStatus[];
   export interface DeploymentStyle {
     /**
-     * Indicates whether to run a standard deployment or a blue/green deployment.
+     * Indicates whether to run an in-place deployment or a blue/green deployment.
      */
     deploymentType?: DeploymentType;
     /**
@@ -972,7 +1004,7 @@ declare namespace CodeDeploy {
   export type EC2TagFilterType = "KEY_ONLY"|"VALUE_ONLY"|"KEY_AND_VALUE"|string;
   export interface ELBInfo {
     /**
-     * The name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment.
+     * For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.
      */
     name?: ELBName;
   }
@@ -991,6 +1023,7 @@ declare namespace CodeDeploy {
     message?: ErrorMessage;
   }
   export type ErrorMessage = string;
+  export type FileExistsBehavior = "DISALLOW"|"OVERWRITE"|"RETAIN"|string;
   export interface GenericRevisionInfo {
     /**
      * A comment about the revision.
@@ -1117,6 +1150,8 @@ declare namespace CodeDeploy {
      */
     instanceInfo?: InstanceInfo;
   }
+  export type GitHubAccountTokenName = string;
+  export type GitHubAccountTokenNameList = GitHubAccountTokenName[];
   export interface GitHubLocation {
     /**
      * The GitHub account and repository pair that stores a reference to the commit that represents the bundled artifacts for the application revision.  Specified as account/repository.
@@ -1206,6 +1241,24 @@ declare namespace CodeDeploy {
   export type InstanceTypeList = InstanceType[];
   export type InstancesList = InstanceId[];
   export type Key = string;
+  export interface LastDeploymentInfo {
+    /**
+     * The deployment ID.
+     */
+    deploymentId?: DeploymentId;
+    /**
+     * The status of the most recent deployment.
+     */
+    status?: DeploymentStatus;
+    /**
+     * A timestamp indicating when the most recent deployment to the deployment group completed.
+     */
+    endTime?: Timestamp;
+    /**
+     * A timestamp indicating when the most recent deployment to the deployment group started.
+     */
+    createTime?: Timestamp;
+  }
   export type LifecycleErrorCode = "Success"|"ScriptMissing"|"ScriptNotExecutable"|"ScriptTimedOut"|"ScriptFailed"|"UnknownError"|string;
   export interface LifecycleEvent {
     /**
@@ -1389,6 +1442,22 @@ declare namespace CodeDeploy {
      */
     nextToken?: NextToken;
   }
+  export interface ListGitHubAccountTokenNamesInput {
+    /**
+     * An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list. 
+     */
+    nextToken?: NextToken;
+  }
+  export interface ListGitHubAccountTokenNamesOutput {
+    /**
+     * A list of names of connections to GitHub accounts.
+     */
+    tokenNameList?: GitHubAccountTokenNameList;
+    /**
+     * If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list. 
+     */
+    nextToken?: NextToken;
+  }
   export interface ListOnPremisesInstancesInput {
     /**
      * The registration status of the on-premises instances:   Deregistered: Include deregistered on-premises instances in the resulting list.   Registered: Include registered on-premises instances in the resulting list.  
@@ -1416,7 +1485,7 @@ declare namespace CodeDeploy {
   export type ListStateFilterAction = "include"|"exclude"|"ignore"|string;
   export interface LoadBalancerInfo {
     /**
-     * An array containing information about the load balancer in Elastic Load Balancing to use in a blue/green deployment.
+     * An array containing information about the load balancer in Elastic Load Balancing to use in a deployment.
      */
     elbInfoList?: ELBInfoList;
   }
@@ -1428,7 +1497,7 @@ declare namespace CodeDeploy {
      */
     value?: MinimumHealthyHostsValue;
     /**
-     * The minimum healthy instance type:   HOST_COUNT: The minimum number of healthy instance as an absolute value.   FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.   In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment will be successful if six or more instances are deployed to successfully; otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment will be successful if four or more instance are deployed to successfully; otherwise, the deployment fails.  In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime will return a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy will try to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment still succeeds. 
+     * The minimum healthy instance type:   HOST_COUNT: The minimum number of healthy instance as an absolute value.   FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.   In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment will be successful if six or more instances are deployed to successfully; otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment will be successful if four or more instance are deployed to successfully; otherwise, the deployment fails.  In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime will return a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy will try to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment still succeeds.  For more information, see AWS CodeDeploy Instance Health in the AWS CodeDeploy User Guide.
      */
     type?: MinimumHealthyHostsType;
   }
@@ -1686,7 +1755,7 @@ declare namespace CodeDeploy {
      */
     triggerConfigurations?: TriggerConfigList;
     /**
-     * Information to add or change about Amazon CloudWatch alarms when the deployment group is updated. 
+     * Information to add or change about Amazon CloudWatch alarms when the deployment group is updated.
      */
     alarmConfiguration?: AlarmConfiguration;
     /**
@@ -1694,7 +1763,7 @@ declare namespace CodeDeploy {
      */
     autoRollbackConfiguration?: AutoRollbackConfiguration;
     /**
-     * Information about the type of deployment, either standard or blue/green, you want to run and whether to route deployment traffic behind a load balancer.
+     * Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.
      */
     deploymentStyle?: DeploymentStyle;
     /**
@@ -1702,7 +1771,7 @@ declare namespace CodeDeploy {
      */
     blueGreenDeploymentConfiguration?: BlueGreenDeploymentConfiguration;
     /**
-     * Information about the load balancer used in a blue/green deployment.
+     * Information about the load balancer used in a deployment.
      */
     loadBalancerInfo?: LoadBalancerInfo;
   }

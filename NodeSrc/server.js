@@ -16,7 +16,9 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const utils = require('./core/utils').utils;
- 
+const socket = require('./rtcserver');
+
+
 //lets require/import the mongodb native drivers.
 var mongodb = require('mongodb');
 
@@ -138,10 +140,9 @@ passport.use(new LocalStrategy(
 ));
 
 
-
-
 exports.passport = passport;
 exports.app = app;
+
 
 
 var viewRender =  require('./viewrenderer').ViewRenderer;

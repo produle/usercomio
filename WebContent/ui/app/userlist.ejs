@@ -66,7 +66,7 @@
                             <div class="col-md-12">
                                 
                                 
-                                
+
                                 <div class="ucTable uc_table" id="uc_visitor_list">
                                     <div class="ucTableRow">
                                         <div class="ucTableHead uc_table_input_control">
@@ -117,10 +117,11 @@
                                         <div class="ucTableCell">
                                             <div class="ucUserBaseDetails ucVisitorPageTrigger" rv-data-visitorid="visitor._id">
                                                <div class="ucUserCurrentStatus">
-                                                   <span class="ucUserOnline"></span>
+                                                       <span rv-class-ucUserOnline="visitor.isVisitorOnline" rv-class-ucUserOffline="visitor.isVisitorOffline"></span>
                                                    <div class="ucUserPicWrapper" rv-profilepicture="visitor.visitorData">
                                                        <img class="ucUserProfileImage" src="" alt=""/>
                                                        <div class="ucUserProfileIntial"></div>
+
                                                    </div>
 
                                                    <div class="ucUserNameAndEmail">
