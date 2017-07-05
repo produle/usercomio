@@ -37,7 +37,9 @@ function UC_MessagingController()
     {
         $("#ucSendMessageModal").modal();
 
-        $('#ucSendMessageAjaxLoader').hide();
+        $('#ucEmailTemplateDeleteAjaxLoader,#ucBrowserNotificationTemplateDeleteAjaxLoader').hide();
+        $("#ucSendMessageEmailSubmit").button('reset');
+        $("#ucSendMessageBrowserNotificationSubmit").button('reset');
 
         $("#ucDeleteEmailTemplateBtn, #ucDeleteBrowserNotificationTemplateBtn").hide();
 
@@ -124,7 +126,9 @@ function UC_MessagingController()
 
         //call the email trigger server function
 
-        $('#ucSendMessageAjaxLoader').show();
+        $("#ucSendMessageEmailSubmit").button('loading');
+        $("#ucSendMessageEmailSubmit").next(".dropdown-toggle").attr("disabled",true);
+        $("#ucSendMessageBrowserNotificationSubmit").button('loading');
 
         UC_AJAX.call('MessagingManager/sendmessage',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,filterId:filterId,exclusionList:exclusionList,inclusionList:inclusionList,subject:subject,message:message,template:template,link:link,blockDuplicate:blockDuplicate,messageType:messageType,sendType:sendType,scheduleDatetime:scheduleDatetime},function(data,status,xhr){
 
@@ -141,7 +145,9 @@ function UC_MessagingController()
                     $("#ucSendMessageModal").modal("hide");
                 }
 
-                $('#ucSendMessageAjaxLoader').hide();
+                $("#ucSendMessageEmailSubmit").button('reset');
+                $("#ucSendMessageEmailSubmit").next(".dropdown-toggle").attr("disabled",false);
+                $("#ucSendMessageBrowserNotificationSubmit").button('reset');
             });
     };
 }

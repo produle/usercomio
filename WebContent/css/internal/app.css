@@ -646,6 +646,15 @@ h2
     font-style: italic;
 }
 
+#ucEmailTemplateDeleteAjaxLoader,
+#ucBrowserNotificationTemplateDeleteAjaxLoader {
+    margin: 0px;
+    float: right;
+    height: 20px;
+    width: 20px;
+    transform: scale(0.4);
+    margin-right: 5px;
+}
 
 
 @media only screen and (max-width:992px) 

@@ -33,7 +33,6 @@ form
 {
   margin: 0 auto;
   width: 300px;
-  margin-top: 300px;
 }
 .UC_LoginContainerCls input[type="email"], .UC_LoginContainerCls input[type="password"]
 {

@@ -64,7 +64,7 @@ function UC_UserController()
 
         $("#ucEditProfileModal").modal();
 
-        $("#ucEditProfileAjaxLoader").hide();
+        $("#uceditprofile_submit").button('reset');
 
         e.preventDefault();
     };
@@ -72,8 +72,10 @@ function UC_UserController()
     /*
      *  @desc Handles the user data validation and sends it to server
      */
-    this.handleProfileSaveAction = function()
+    this.handleProfileSaveAction = function(e)
     {
+        e.preventDefault();
+
         var firstname = $('#uceditprofile_firstname').val(),
             lastname = $('#uceditprofile_lastname').val(),
             timezone = $('#uceditprofile_timezoneinput').val();
@@ -95,7 +97,7 @@ function UC_UserController()
 
         UC_UserSession.user = user;
 
-        $("#ucEditProfileAjaxLoader").show();
+        $("#uceditprofile_submit").button('loading');
         UC_AJAX.call('UserManager/saveUserProfile',{user:user},function(data,status,xhr)
         {
             if(data)
@@ -117,7 +119,7 @@ function UC_UserController()
                 }
             }
 
-            $("#ucEditProfileAjaxLoader").hide();
+            $("#uceditprofile_submit").button('reset');
 
         });
 
@@ -165,7 +167,7 @@ function UC_UserController()
     {
         $("#ucEditPasswordModal").modal();
 
-        $("#ucEditPasswordAjaxLoader").hide();
+        $("#ucchangepassword_submit").button('reset');
 
         e.preventDefault();
     };
@@ -173,8 +175,10 @@ function UC_UserController()
     /*
      *  @desc Handles the user data validation and sends it to server
      */
-    this.handlePasswordSaveAction = function()
+    this.handlePasswordSaveAction = function(e)
     {
+        e.preventDefault();
+
         var password = $('#ucchangepassword_password').val(),
             confirmpassword = $('#ucchangepassword_confirmpassword').val();
 
@@ -193,7 +197,7 @@ function UC_UserController()
 
         UC_UserSession.user = user;
 
-        $("#ucEditPasswordAjaxLoader").show();
+        $("#ucchangepassword_submit").button('loading');
 
         UC_AJAX.call('UserManager/saveUserPassword',{user:user},function(data,status,xhr)
         {
@@ -216,7 +220,7 @@ function UC_UserController()
                     $("#ucEditPasswordModal").modal("hide");
                 }
 
-                $("#ucEditPasswordAjaxLoader").hide();
+                $("#ucchangepassword_submit").button('reset');
             }
 
         });
@@ -319,7 +323,7 @@ function UC_UserController()
 
                     $("#ucEditMailModal").modal();
 
-                    $("#ucEditEmailAjaxLoader").hide();
+                    $("#uceditmail_submit").button('reset');
                 }
             }
 
@@ -366,7 +370,7 @@ function UC_UserController()
                     $('#uceditbrowsernotification_icon').val(thisClass.browserNotificationSetting.icon);
                     $("#ucEditBrowserNotificationModal").modal();
 
-                    $("#ucEditBrowserNotificationAjaxLoader").hide();
+                    $("#uceditbrowsernotification_submit").button('reset');
                 }
             }
 
@@ -380,8 +384,10 @@ function UC_UserController()
     /*
      *  @desc Handles the email data validation and sends it to server
      */
-    this.handleMailSaveAction = function()
+    this.handleMailSaveAction = function(e)
     {
+        e.preventDefault();
+
         if(thisClass.currentEmailType == "SMTP")
         {
             var smtphost = $('#uceditsmtp_host').val(),
@@ -451,7 +457,7 @@ function UC_UserController()
 
         thisClass.emailSetting.appId = uc_main.appController.currentAppId;
 
-        $("#ucEditEmailAjaxLoader").show();
+        $("#uceditmail_submit").button('loading');
 
         var user = UC_UserSession.user;
 
@@ -473,7 +479,7 @@ function UC_UserController()
                     $("#ucEditMailModal").modal("hide");
                 }
 
-                $("#ucEditEmailAjaxLoader").hide();
+                $("#uceditmail_submit").button('reset');
             }
 
         });
@@ -482,8 +488,9 @@ function UC_UserController()
     /*
      *  @desc Handles the browser notification data validation and sends it to server
      */
-    this.handleBrowserNotificationSaveAction = function()
+    this.handleBrowserNotificationSaveAction = function(e)
     {
+        e.preventDefault();
 
         var fcmKey = $('#uceditbrowsernotification_fcmkey').val(),
             fcmSenderId = $('#uceditbrowsernotification_fcmsenderid').val(),
@@ -497,7 +504,7 @@ function UC_UserController()
 
         thisClass.browserNotificationSetting.appId = uc_main.appController.currentAppId;
 
-        $("#ucEditBrowserNotificationAjaxLoader").show();
+        $("#uceditbrowsernotification_submit").button('loading');
 
         var user = UC_UserSession.user;
 
@@ -519,7 +526,7 @@ function UC_UserController()
                     $("#ucEditBrowserNotificationModal").modal("hide");
                 }
 
-                $("#ucEditBrowserNotificationAjaxLoader").hide();
+                $("#uceditbrowsernotification_submit").button('reset');
             }
 
         });
@@ -645,7 +652,7 @@ function UC_UserController()
 
         $("#ucEditDatabaseModal").modal();
 
-        $("#ucEditDatabaseAjaxLoader").hide();
+        $("#uceditdatabase_submit").button('reset');
 
         e.preventDefault();
     };
@@ -653,8 +660,10 @@ function UC_UserController()
     /*
      *  @desc Handles the Database data validation and sends it to server
      */
-    this.handleDatabaseSaveAction = function()
+    this.handleDatabaseSaveAction = function(e)
     {
+        e.preventDefault();
+
         var databasehost = $('#uceditdatabase_host').val(),
             databaseport = $('#uceditdatabase_port').val(),
             databaseuser = $('#uceditdatabase_user').val(),
@@ -678,7 +687,7 @@ function UC_UserController()
         thisClass.config.database.connectionstring = databaseconnectionstring;
         thisClass.config.database.connectiontype = databaseconnectiontype;
 
-        $("#ucEditDatabaseAjaxLoader").show();
+        $("#uceditdatabase_submit").button('loading');
 
         UC_AJAX.call('UserManager/verifydbconnection',{dbhost:databasehost,dbport:databaseport,dbuser:databaseuser,dbpass:databasepass,dbname:thisClass.config.database.name,dbconnectionstring:databaseconnectionstring,dbconnectiontype:databaseconnectiontype},function(data,status,xhr)
               {
@@ -702,7 +711,7 @@ function UC_UserController()
                                     $("#ucEditDatabaseModal").modal("hide");
                                 }
 
-                                $("#ucEditDatabaseAjaxLoader").hide();
+                                $("#uceditdatabase_submit").button('reset');
                             }
 
                         });
@@ -711,12 +720,12 @@ function UC_UserController()
                      else if(data.status == "failure")
                      {
                          alert("Database connection cannot be established with the provided details");
-                         $("#ucEditDatabaseAjaxLoader").hide();
+                         $("#uceditdatabase_submit").button('reset');
                      }
                      else
                      {
                          alert("An Error accured while saving data. Try again!");
-                         $("#ucEditDatabaseAjaxLoader").hide();
+                         $("#uceditdatabase_submit").button('reset');
                      }
                  }
 
@@ -779,7 +788,7 @@ function UC_UserController()
 
         $("#ucEditSystemModal").modal();
 
-        $("#ucEditSystemAjaxLoader").hide();
+        $("#uceditsystem_submit").button('reset');
 
         e.preventDefault();
     };
@@ -787,8 +796,10 @@ function UC_UserController()
     /*
      *  @desc Handles the System data validation and sends it to server
      */
-    this.handleSystemSaveAction = function()
+    this.handleSystemSaveAction = function(e)
     {
+        e.preventDefault();
+
         var baseurl = $('#uceditsystem_baseurl').val();
 
 
@@ -808,7 +819,7 @@ function UC_UserController()
 
         thisClass.config.baseURL = baseurl;
 
-        $("#ucEditSystemAjaxLoader").show();
+        $("#uceditsystem_submit").button('loading');
 
         UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
         {
@@ -824,7 +835,7 @@ function UC_UserController()
                     $("#ucEditSystemModal").modal("hide");
                 }
 
-                $("#ucEditSystemAjaxLoader").hide();
+                $("#uceditsystem_submit").button('reset');
             }
 
         });
