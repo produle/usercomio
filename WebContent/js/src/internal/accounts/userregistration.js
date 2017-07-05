@@ -305,8 +305,7 @@ function UC_UserRegistrationController()
 	var email = $('#ucsetup_emailinput').val(),
 		password = $('#ucsetup_passwordinput').val(),
 		confirmPassword = $('#ucsetup_confirmpasswordinput').val(),
-		fullname  = $('#ucsetup_fullnameinput').val(),
-		timezone  = $('#ucsetup_timezoneinput').val();
+		fullname  = $('#ucsetup_fullnameinput').val();
 
 
     var validationResult = thisClass.validateSetupUserInputs();
@@ -325,7 +324,6 @@ function UC_UserRegistrationController()
     newUser.password = password;
     newUser.password = password;
     newUser.company = 'C'+UC_Utils.guidGenerator();
-    newUser.timezone = timezone;
 
     thisClass.sendLoginRequest(newUser,false);
   }
@@ -336,7 +334,8 @@ function UC_UserRegistrationController()
   this.handleSetupAppAction = function()
   {
 	var baseurl = $('#ucsetup_baseurlinput').val(),
-		appName = $('#ucsetup_appnameinput').val();
+		appName = $('#ucsetup_appnameinput').val(),
+		timezone  = $('#ucsetup_timezoneinput').val();
 
 
     var validationResult = thisClass.validateSetupAppInputs();
@@ -384,12 +383,30 @@ function UC_UserRegistrationController()
          }
          else
          {
-			 $(".UC_SetupContainerCls").hide();
-             $("#UC_Setup_SMTP").show();
-             $("#UC_Setup_Progress_Step").text("4");
-             $(".ucSetupProgressSteps li").removeClass("active");
-             $(".uc_smtp_details").addClass("active");
+
+
+
              UC_UserSession.user.company = data.status.clientId;
+
+                UC_AJAX.call('UserManager/updateTimezone',{user:user,timezone:timezone},function(data,status,xhr){
+
+                    if(data.status == "authenticationfailed")
+                     {
+                         location.href="/";
+                     }
+                     else if(data.status == "failure")
+                     {
+                         alert("An Error accured while saving data !");
+                     }
+                     else
+                     {
+                         $(".UC_SetupContainerCls").hide();
+                         $("#UC_Setup_SMTP").show();
+                         $("#UC_Setup_Progress_Step").text("4");
+                         $(".ucSetupProgressSteps li").removeClass("active");
+                         $(".uc_smtp_details").addClass("active");
+                     }
+                });
          }
          $('#ucSetupAppAjaxLoader').hide();
     });
@@ -460,7 +477,6 @@ function UC_UserRegistrationController()
 	      password = $('#ucsetup_passwordinput').val(),
 	      confirmPassword = $('#ucsetup_confirmpasswordinput').val(),
 	      fullname  = $('#ucsetup_fullnameinput').val(),
-          timezone  = $('#ucsetup_timezoneinput').val(),
 	  	  msg = "";
 
 	  if($.trim(fullname) == "")
@@ -478,10 +494,6 @@ function UC_UserRegistrationController()
 	  else if(password != confirmPassword)
       {
 	  	msg = "Password & Confirm Password doesn't match !";
-      }
-	  else if($.trim(timezone) == "")
-      {
-	  	msg = "Select a Timezone";
       }
 
 	  if(msg != "")
@@ -502,6 +514,7 @@ function UC_UserRegistrationController()
 
 	  var baseurl  = $('#ucsetup_baseurlinput').val(),
 	      appname  = $('#ucsetup_appnameinput').val(),
+          timezone  = $('#ucsetup_timezoneinput').val(),
 	  	  msg = "";
 
       if(baseurl.substr(baseurl.length - 1) == "/")
@@ -517,6 +530,10 @@ function UC_UserRegistrationController()
 	  {
 		  msg = "Invalid App Name !";
 	  }
+	  else if($.trim(timezone) == "")
+      {
+	  	msg = "Select a Timezone";
+      }
 
 	  if(msg != "")
 	  {
@@ -565,7 +582,7 @@ function UC_UserRegistrationController()
         $("#ucsetup_timezoneinput").append('<option value="">Select a Timezone</option>');
         for(var i = 0; i < thisClass.timezoneList.length; i++)
         {
-            $("#ucsetup_timezoneinput").append('<option value="'+moment.tz(thisClass.timezoneList[i]).format("Z")+'">'+thisClass.timezoneList[i]+' ('+moment.tz(thisClass.timezoneList[i]).format("Z")+')</option>');
+            $("#ucsetup_timezoneinput").append('<option value="'+thisClass.timezoneList[i]+'">'+thisClass.timezoneList[i]+' ('+moment.tz(thisClass.timezoneList[i]).format("Z")+')</option>');
         }
 
         $("#ucsetup_timezoneinput").select2();

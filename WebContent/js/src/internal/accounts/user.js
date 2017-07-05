@@ -45,23 +45,6 @@ function UC_UserController()
         $('#uceditprofile_firstname').val(user.firstName);
         $('#uceditprofile_lastname').val(user.lastName);
 
-        //Construct timezone list
-        var timezoneList = moment.tz.names();
-        $("#uceditprofile_timezoneinput").html("");
-        $("#uceditprofile_timezoneinput").append('<option value="">Select a Timezone</option>');
-        for(var i = 0; i < timezoneList.length; i++)
-        {
-            var selected = '';
-            if(user.timeZone == moment.tz(timezoneList[i]).format("Z"))
-            {
-                selected = ' selected';
-            }
-
-            $("#uceditprofile_timezoneinput").append('<option value="'+moment.tz(timezoneList[i]).format("Z")+'"'+selected+'>'+timezoneList[i]+' ('+moment.tz(timezoneList[i]).format("Z")+')</option>');
-        }
-
-        $("#uceditprofile_timezoneinput").select2();
-
         $("#ucEditProfileModal").modal();
 
         $("#uceditprofile_submit").button('reset');
@@ -77,8 +60,7 @@ function UC_UserController()
         e.preventDefault();
 
         var firstname = $('#uceditprofile_firstname').val(),
-            lastname = $('#uceditprofile_lastname').val(),
-            timezone = $('#uceditprofile_timezoneinput').val();
+            lastname = $('#uceditprofile_lastname').val();
 
 
         var validationResult = thisClass.validateProfileInputs();
@@ -93,7 +75,6 @@ function UC_UserController()
 
         user.firstName = firstname;
         user.lastName = lastname;
-        user.timeZone = timezone;
 
         UC_UserSession.user = user;
 
@@ -135,7 +116,6 @@ function UC_UserController()
 
         var firstname = $('#uceditprofile_firstname').val(),
             lastname = $('#uceditprofile_lastname').val(),
-            timezone = $('#uceditprofile_timezoneinput').val(),
             msg = "";
 
         if($.trim(firstname) == "")
@@ -145,10 +125,6 @@ function UC_UserController()
         else if($.trim(lastname) == "")
         {
             msg = "Invalid Last Name";
-        }
-        else if($.trim(timezone) == "")
-        {
-            msg = "Invalid Timezone";
         }
 
         if(msg != "")
@@ -786,6 +762,23 @@ function UC_UserController()
     {
         $('#uceditsystem_baseurl').val(thisClass.config.baseURL);
 
+        //Construct timezone list
+        var timezoneList = moment.tz.names();
+        $("#uceditsystem_timezoneinput").html("");
+        $("#uceditsystem_timezoneinput").append('<option value="">Select a Timezone</option>');
+        for(var i = 0; i < timezoneList.length; i++)
+        {
+            var selected = '';
+            if(UC_UserSession.user.companyTimezone == timezoneList[i])
+            {
+                selected = ' selected';
+            }
+
+            $("#uceditsystem_timezoneinput").append('<option value="'+timezoneList[i]+'"'+selected+'>'+timezoneList[i]+' ('+moment.tz(timezoneList[i]).format("Z")+')</option>');
+        }
+
+        $("#uceditsystem_timezoneinput").select2();
+
         $("#ucEditSystemModal").modal();
 
         $("#uceditsystem_submit").button('reset');
@@ -800,7 +793,8 @@ function UC_UserController()
     {
         e.preventDefault();
 
-        var baseurl = $('#uceditsystem_baseurl').val();
+        var baseurl = $('#uceditsystem_baseurl').val(),
+            timezone = $('#uceditsystem_timezoneinput').val();
 
 
         var validationResult = thisClass.validateSystemInputs();
@@ -828,14 +822,30 @@ function UC_UserController()
                 if(data.status == "failure")
                 {
                     alert("An Error accured while saving config file!");
+                    $("#uceditsystem_submit").button('reset');
                 }
                 else
                 {
-                    alert("System settings changed successfully");
-                    $("#ucEditSystemModal").modal("hide");
+                    UC_AJAX.call('UserManager/updateTimezone',{user:UC_UserSession.user,timezone:timezone},function(data,status,xhr){
+
+                        if(data.status == "authenticationfailed")
+                         {
+                             location.href="/";
+                         }
+                         else if(data.status == "failure")
+                         {
+                             alert("An Error accured while saving data !");
+                         }
+                         else
+                         {
+                             alert("System settings changed successfully");
+                             $("#ucEditSystemModal").modal("hide");
+                         }
+                         $("#uceditsystem_submit").button('reset');
+                    });
+
                 }
 
-                $("#uceditsystem_submit").button('reset');
             }
 
         });
@@ -849,6 +859,7 @@ function UC_UserController()
         var result = {status:"success",msg:""};
 
         var baseurl = $('#uceditsystem_baseurl').val(),
+            timezone = $('#uceditsystem_timezoneinput').val(),
             msg = "";
 
 
@@ -860,6 +871,10 @@ function UC_UserController()
         if($.trim(baseurl) == "")
         {
             msg = "Invalid Base URL";
+        }
+        else if($.trim(timezone) == "")
+        {
+            msg = "Invalid Timezone";
         }
 
         if(msg != "")
