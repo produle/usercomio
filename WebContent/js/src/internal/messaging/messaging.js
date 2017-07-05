@@ -34,7 +34,16 @@ function UC_MessagingController()
             }
         );
 		
-		var toolbarOptions = [{ 'header': [1, 2, 3, 4, 5, 6, false] },'bold', 'italic', 'underline','link',{ 'list': 'ordered'}, { 'list': 'bullet' }, 'clean'];
+		var toolbarOptions = [{ 'header': [1, 2, 3, 4, 5, 6, false] },'bold', 'italic', 'underline','link', 'image',{ 'list': 'ordered'}, { 'list': 'bullet' }, 'clean'];
+		
+		var toolbarOptions = [
+		                      ['bold', 'italic', 'underline'],        // toggled buttons
+		                      ['link','image'],      
+		                      [{ 'color': ['#F44336','#E91E63','#F44336','#E91E63','#F44336','#E91E63'] }, { 'background': ['#F44336','#E91E63'] }],          // dropdown with defaults from theme
+		                      [{ 'font': [] },{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown],                                         
+		                    ];
+		
+		
 		thisClass.quill = new Quill('#ucSendMessageEmailBody', {
 			theme: 'snow',
 			modules: {
