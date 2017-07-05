@@ -55,14 +55,16 @@ function UC_AppController()
 	{
 		$(document).on('click','#uc_create_newapp_modalopen_btn',function(){
 			$('#uc_newapp_creation_modal').modal('show');
-			$('#ucNewAppAjaxLoader').hide();
+			$("#uc_create_newapp_submitbtn").button('reset');
 		});
 		
-		$('#uc_create_newapp_submitbtn').on('click',function(){
+		$('#uc_create_newapp_submitbtn').on('click',function(e){
+            e.preventDefault();
 			thisClass.createNewApp();
 		});
 		
 		$('#ucupdate_app_submitbtn').on('click',function(e){
+			e.preventDefault();
 			e.stopImmediatePropagation();
 			thisClass.updateAppDetails();
 		})
@@ -117,7 +119,7 @@ function UC_AppController()
 			newApp._id = UC_Utils.guidGenerator();
 			newApp.clientId = user.company;
 			
-            $('#ucNewAppAjaxLoader').show();
+            $("#uc_create_newapp_submitbtn").button('loading');
 
 			UC_AJAX.call('AppManager/createNewApp',{newApp:newApp,user:user},function(data,status,xhr){
 				
@@ -142,9 +144,7 @@ function UC_AppController()
                      thisClass.switchApp(thisClass.apps[0],false);
 				 }
 
-                $('#ucNewAppAjaxLoader').hide();
-                
-              
+                $("#uc_create_newapp_submitbtn").button('reset');
 				
 			});
 			
@@ -189,7 +189,7 @@ function UC_AppController()
 			$('#ucapp_update_modal').modal('show');
 			var appid = $(this).attr('data-appid');
 			thisClass.fillAppInformationInUpdateModal(appid);
-            $('#ucUpdateAppAjaxLoader').hide();
+            $("#ucupdate_app_submitbtn").button('reset');
 		});
 		
 		$('#ucDeleteAppBtn').on('click',function(e){
@@ -214,7 +214,7 @@ function UC_AppController()
 			var app = thisClass.apps[appIndex];
 			app.name = editedAppName;
 			
-            $('#ucUpdateAppAjaxLoader').show();
+            $("#ucupdate_app_submitbtn").button('loading');
 
 			UC_AJAX.call('AppManager/updateAnAppDetails',{app:app},function(data,status,xhr){
 				
@@ -241,7 +241,7 @@ function UC_AppController()
 					 $('#ucapp_update_modal').modal('hide');
 				 }
 
-                $('#ucUpdateAppAjaxLoader').hide();
+                $("#ucupdate_app_submitbtn").button('reset');
 			});
 		}
 		

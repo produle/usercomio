@@ -79,8 +79,10 @@ function UC_EmailMessagingController()
         });
     };
 
-    this.submitEmailMessageHandler = function()
+    this.submitEmailMessageHandler = function(e)
     {
+        e.preventDefault();
+
         var subject = $("#ucSendMessageEmailSubject").val();
         var message = $("#ucSendMessageEmailBody").val();
         var template = $("#ucSendMessageEmailTemplate").val();
@@ -135,7 +137,8 @@ function UC_EmailMessagingController()
         {
             if(confirm("Are you sure you want to delete the template?"))
             {
-                $('#ucSendMessageAjaxLoader').show();
+                $('#ucEmailTemplateDeleteAjaxLoader').show();
+                $('#ucDeleteEmailTemplateBtn').hide();
 
                 UC_AJAX.call('EmailManager/deletetemplate',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,templateId:templateId},function(data,status,xhr){
 
@@ -150,10 +153,10 @@ function UC_EmailMessagingController()
                     else
                     {
                         $("#ucSendMessageModal").modal("hide");
-                        
                     }
 
-                    $('#ucSendMessageAjaxLoader').hide();
+                    $('#ucDeleteEmailTemplateBtn').show();
+                    $('#ucEmailTemplateDeleteAjaxLoader').hide();
                 });
             }
         }

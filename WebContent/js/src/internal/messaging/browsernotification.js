@@ -51,8 +51,10 @@ function UC_BrowserNotificationController()
         });
     };
 
-    this.submitBrowserNotificationMessageHandler = function()
+    this.submitBrowserNotificationMessageHandler = function(e)
     {
+        e.preventDefault();
+
         var subject = $("#ucSendMessageBrowserNotificationTitle").val();
         var link = $("#ucSendMessageBrowserNotificationLink").val();
         var message = $("#ucSendMessageBrowserNotificationBody").val();
@@ -108,7 +110,8 @@ function UC_BrowserNotificationController()
         {
             if(confirm("Are you sure you want to delete the template?"))
             {
-                $('#ucSendMessageAjaxLoader').show();
+                $('#ucBrowserNotificationTemplateDeleteAjaxLoader').show();
+                $('#ucDeleteBrowserNotificationTemplateBtn').hide();
 
                 UC_AJAX.call('BrowserNotificationManager/deletetemplate',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,templateId:templateId},function(data,status,xhr){
 
@@ -126,7 +129,8 @@ function UC_BrowserNotificationController()
 
                     }
 
-                    $('#ucSendMessageAjaxLoader').hide();
+                    $('#ucBrowserNotificationTemplateDeleteAjaxLoader').hide();
+                    $('#ucDeleteBrowserNotificationTemplateBtn').show();
                 });
             }
         }

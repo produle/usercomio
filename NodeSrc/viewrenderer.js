@@ -63,8 +63,18 @@ class ViewRenderer
 
                         var user = userManagerObj.getUserByUsername(uname,function(user){
                             delete user.password; //To avoid the encrypted password transmitted to client
-                            res.render('index',{user:user})
-                        })
+
+                            userManagerObj.getCompanyByID(user.company,function(company){
+
+                                user.companyTimezone = null;
+                                if(company)
+                                {
+                                    user.companyTimezone = company.timezone;
+                                }
+                                res.render('index',{user:user})
+                            });
+
+                        });
                     }
                     else
                     {

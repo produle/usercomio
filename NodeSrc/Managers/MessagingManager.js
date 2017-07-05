@@ -53,6 +53,10 @@ class MessagingManager {
 
         var MessagingManagerObj = new MessagingManager();
 
+        //Convert schedule time to server time
+        var scheduleDatetimeServer = moment.tz(scheduleDatetime, user.companyTimezone);
+        scheduleDatetime = scheduleDatetimeServer.local().format("YYYY-MM-DD HH:mm:ss");
+
         if(messageType == "email")
         {
             var EmailManagerObj = new EmailManager();

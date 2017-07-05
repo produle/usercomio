@@ -26,6 +26,7 @@ class UserManager {
         this.router.post("/saveUserPassword",(req, res) => { this.saveUserPassword(req,res); });
         this.router.post("/updateAppPreference",(req, res) => { this.updateAppPreference(req,res); });
         this.router.post("/getconfig",(req, res) => { this.getConfig(req,res); });
+        this.router.post("/updateTimezone",(req, res) => { this.updateTimezone(req,res); });
     }
 
   	/*
@@ -469,6 +470,94 @@ class UserManager {
 
         return res.send({config:config});
     }
+
+  	/*
+  	 * @desc Updates timezone of user's company
+  	 */
+    updateTimezone(req,res)
+    {
+        var config = require('config');
+
+  		if(config.has("setupCompleted") && config.get("setupCompleted") == 1 && !req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
+        // Get the documents collection
+        var companyCollection = global.db.collection('companies');
+
+        var updateUser = req.body.user;
+        var timezone = req.body.timezone;
+
+        companyCollection.findOne({ _id: updateUser.company },function(err,company)
+        {
+            if(err)
+            {
+                res.status(500);
+                return res.send({status:'failure'});
+            }
+
+            if(company)
+            {
+                companyCollection.update(
+                    { _id:  company._id},
+                    { $set :
+                        {
+                            timezone: timezone
+                        }
+                    },
+                    { upsert: true },
+                    function(updateErr)
+                    {
+                        if(updateErr)
+                        {
+                            res.status(500);
+                            return res.send({status:'failure'});
+                        }
+                        else
+                        {
+                            res.send({status:"success"});
+                        }
+                    }
+                )
+            }
+            else
+            {
+                res.status(500);
+                return res.send({status:'failure'});
+            }
+
+        });
+
+    };
+
+  	/*
+  	 * @desc Returns the company object based on ID
+  	 */
+    getCompanyByID(companyID,callback)
+    {
+        // Get the documents collection
+        var companyCollection = global.db.collection('companies');
+
+        companyCollection.findOne({ _id: companyID },function(err,company)
+        {
+            if(err)
+            {
+                callback(false);
+            }
+
+            if(company)
+            {
+                callback(company);
+            }
+            else
+            {
+                callback(false);
+            }
+
+        });
+
+    };
 
 }
 
