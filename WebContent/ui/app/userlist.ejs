@@ -102,6 +102,16 @@
                                                 Country <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
                                             </div>
                                         </div>
+                                        <div class="ucTableHead ucUserListSortableColumn ucVisitorListToggleField ucVisitorListToggleField_lastseen" data-sortColumn="visitorMetaInfo.lastSeen">
+                                            <div class="uc_table_header text-center">
+                                                Last Seen <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                            </div>
+                                        </div>
+                                        <div class="ucTableHead ucUserListSortableColumn ucVisitorListToggleField ucVisitorListToggleField_firstseen" data-sortColumn="visitorMetaInfo.firstSeen">
+                                            <div class="uc_table_header text-center">
+                                                First Seen <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                            </div>
+                                        </div>
                                         <div class="ucTableHead ucUserListSortableColumn ucVisitorListToggleField" rv-each-customfield="fieldList" rv-customfieldheader="customfield">
                                             <div class="uc_table_header text-center">
                                                 <span class="ucVisitorListHeaderLabel"></span> <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
@@ -145,6 +155,10 @@
                                             <div class="ucUserDeviceIcon desktop text-center"></div>
                                         </div>
                                         <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_country" rv-country="visitor.sessions">
+                                        </div>
+                                        <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_lastseen" rv-lastseen="visitor.visitorMetaInfo.lastSeen">
+                                        </div>
+                                        <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_firstseen" rv-firstseen="visitor.visitorMetaInfo.firstSeen">
                                         </div>
                                         <div class="ucTableCell ucVisitorListToggleField" rv-each-customfield="fieldList" rv-customfielddata="customfield" rv-customfieldtest="visitor.visitorData">
                                         </div>
