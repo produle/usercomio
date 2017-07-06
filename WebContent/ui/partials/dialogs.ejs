@@ -523,6 +523,7 @@
                             <div class="col-sm-12">
                                 <select class="form-control" id="ucSendMessageEmailTemplate">
                                     <option value="new">New Template</option>
+                                    <option value="noTemplate">No Template</option>
                                     <option rv-each-emailtemplate="emailTemplateList" rv-text="emailtemplate.subject" rv-data-templatebody="emailtemplate.message" rv-value="emailtemplate._id"></option>
                                 </select>
                                 <button type="button" class="ucListingFilterDeleteIcon" id="ucDeleteEmailTemplateBtn"></button>
@@ -535,9 +536,20 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
+                            
+                                <div style="text-align: right;">
+                                    <span>Editor &nbsp;</span>
+                                	<label class="UctoggleSwitch" style="vertical-align: middle;">
+  										<input type="checkbox" id="ucEditorTogglebtn" checked>
+ 									 	 <div class="UctoggleSlider round"></div>
+							    	</label>
+							    </div>
+									
                                 <div id="ucSendMessageEmailBodyWrapper">
-                               		 <div class="form-control" id="ucSendMessageEmailBody" style="height:150px" placeholder="Body of the message"></div>
+                               		 <div class="form-control" id="ucSendMessageEmailBody" style="height:150px" placeholder="Body of the message"></div> 
                                 </div>
+                                <textarea class="form-control" id="ucSendMessageCodeEditor" style="display:none;height:150px" placeholder="Type the html Code"></textarea> 
+                                
                             </div>
                         </div>
                         <div class="row">

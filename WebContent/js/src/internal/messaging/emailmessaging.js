@@ -55,8 +55,15 @@ function UC_EmailMessagingController()
     this.submitEmailMessageHandler = function()
     {
         var subject  =  $("#ucSendMessageEmailSubject").val();
-        var message  =  uc_main.messagingController.quill.container.firstChild.innerHTML;
-        var template =  $("#ucSendMessageEmailTemplate").val();
+        var message;
+        
+        if($('#ucEditorTogglebtn').prop('checked')==true){
+        	message = uc_main.messagingController.quill.container.firstChild.innerHTML;
+        }else
+        	message = $("#ucSendMessageCodeEditor").val();  
+        
+        template = $('#ucSendMessageEmailTemplate').val();  
+        
         var blockDuplicate = false;
 
         if($("#ucSendMessageEmailBlockDuplicate").is(":checked"))
@@ -80,7 +87,7 @@ function UC_EmailMessagingController()
      */
     this.templateChangeHandler = function()
     {
-        if($(this).val()=="new")
+        if($(this).val()=="new" || $(this).val()=="noTemplate")
         {
             $("#ucSendMessageEmailSubject").val("");
             uc_main.messagingController.quill.setText('');
@@ -104,7 +111,7 @@ function UC_EmailMessagingController()
 
         var templateId = $("#ucSendMessageEmailTemplate").val();
 
-        if(templateId != "new")
+        if(templateId != "new" && templateId != "noTemplate")
         {
             if(confirm("Are you sure you want to delete the template?"))
             {

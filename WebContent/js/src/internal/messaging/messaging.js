@@ -27,22 +27,23 @@ function UC_MessagingController()
         $(document).on("click","#ucSendMessageGroupBtn",thisClass.openSendMessageModal);
 
         $(document).on("click",".ucSendMessageSingleTrigger",thisClass.selectCurrentVisitor);
+        
+        $("#ucEditorTogglebtn").on("change",thisClass.editorToggleHandler);
+        
 
 		thisClass.rivetFieldListObj = rivets.bind(
             document.querySelector('#ucEmailFieldList'), {
                 fieldList: []
             }
-        );
-		
-		var toolbarOptions = [{ 'header': [1, 2, 3, 4, 5, 6, false] },'bold', 'italic', 'underline','link', 'image',{ 'list': 'ordered'}, { 'list': 'bullet' }, 'clean'];
-		
+        ); 	
+		var materialCodes = [ "#F44336", "#FF5722", "#E91E63", "#9C27B0", "#673AB7", "#3F51B5", "#2196F3", "#03A9F4", "#00BCD4", "#009688", "#4CAF50", "#8BC34A", "#CDDC39", "#FFEB3B", "#FFC107", "#FF9800", "#795548", "#9E9E9E",  "#607D8B", "#FFFFFF", "#000000", "#212121",  "#424242", "#616161", "#757575", "#9E9E9E", "#BDBDBD",  "#E0E0E0", "#EEEEEE", "#F5F5F5", "#FAFAFA"];
+		 	
 		var toolbarOptions = [
-		                      ['bold', 'italic', 'underline'],        // toggled buttons
-		                      ['link','image'],      
-		                      [{ 'color': ['#F44336','#E91E63','#F44336','#E91E63','#F44336','#E91E63'] }, { 'background': ['#F44336','#E91E63'] }],          // dropdown with defaults from theme
-		                      [{ 'font': [] },{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown],                                         
-		                    ];
-		
+		                      ['bold', 'italic', 'underline','image'],        // toggled buttons
+		                      ['link'],      
+		                      [{ 'color': materialCodes}, { 'background': materialCodes }],     // dropdown with defaults from theme
+		                      [{ 'font': [] },{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown],  
+		                      ];  
 		
 		thisClass.quill = new Quill('#ucSendMessageEmailBody', {
 			theme: 'snow',
@@ -50,8 +51,20 @@ function UC_MessagingController()
 				toolbar: toolbarOptions
 			},
 		});
+		
+ 		var toolbar = thisClass.quill.getModule('toolbar');
+     	toolbar.addHandler('image', thisClass.imagelinkHandler); 
 	};
-
+	
+	this.imagelinkHandler = function()
+	{
+		 var range = this.quill.getSelection();
+		 var value = prompt('Paste the image URL');
+		 if(value != null)
+		 this.quill.insertEmbed(range.index, 'image', value, Quill.sources.USER);
+		
+	};
+	 
     this.openSendMessageModal = function()
     {
         $("#ucSendMessageModal").modal();
@@ -163,4 +176,27 @@ function UC_MessagingController()
                 $('#ucSendMessageAjaxLoader').hide();
             });
     };
+    
+
+    /*
+     * @desc Handles showing the Quil Editor / Code Editor in message diaglog
+     */
+    
+    this.editorToggleHandler = function()
+    {
+    	
+  	    $('#ucSendMessageEmailBodyWrapper,#ucSendMessageCodeEditor').hide();
+    	
+    	if($(this).prop('checked') == true)
+    	{ 
+    		thisClass.quill.setText("");
+    		thisClass.quill.clipboard.dangerouslyPasteHTML($('#ucSendMessageCodeEditor').val());
+    		$('#ucSendMessageEmailBodyWrapper').show(); 
+    	}
+    	else 
+    	{ 
+    		$('#ucSendMessageCodeEditor').show().val(uc_main.messagingController.quill.container.firstChild.innerHTML.replace("<p><br></p>", ""));  
+    	}
+    		
+    } 
 }

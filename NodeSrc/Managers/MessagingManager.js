@@ -62,7 +62,11 @@ class MessagingManager {
                     MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType);
                 });
             }
-            else
+            else if(template == "noTemplate")
+            { 
+                  MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,null,link,blockDuplicate,messageType); 
+            }
+            else 
             {
                 EmailManagerObj.getTemplateById(appId,template,function(templateObj){
                     EmailManagerObj.updateTemplate(appId,user,subject,message,templateObj);
@@ -83,6 +87,10 @@ class MessagingManager {
                         BrowserNotificationManagerObj.saveNewTemplate(appId,user,subject,message,link,function(templateObj){
                             MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType);
                         });
+                    }
+                    else if(template == "noTemplate")
+                    { 
+                    	 MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,null,link,blockDuplicate,messageType);
                     }
                     else
                     {
@@ -185,7 +193,7 @@ class MessagingManager {
 
         for(var iter = 0; iter < response.length; iter++)
         {
-            if(blockDuplicate && templateObj.recipientList.includes(response[iter]._id))
+            if(blockDuplicate && templateObj !=null && templateObj.recipientList.includes(response[iter]._id))
             {
                 //Will not send email to prevent spam
             }
@@ -256,6 +264,13 @@ class MessagingManager {
 
         var messagesCollection = global.db.collection('messages');
 
+        var templateId = null;
+        
+        if(templateObj != null)
+        {
+        	templateId = templateObj._id;
+        }
+        
         messagesCollection.insert({
             _id: utils.guidGenerator(),
             visitorId: visitorId,
@@ -264,14 +279,14 @@ class MessagingManager {
             subject: subject,
             message: message,
             link: link,
-            templateId: templateObj._id,
+            templateId: templateId,
             appId: appId,
             clientId: clientId,
             isHTML: false,
             sentOn: new Date()
         });
 
-        if(messageType == "email")
+        if(templateObj != null && messageType == "email")
         {
             var emailTemplatesCollection = global.db.collection('emailtemplates');
 
@@ -287,7 +302,7 @@ class MessagingManager {
                 { upsert: true }
             )
         }
-        else if(messageType == "browsernotification")
+        else if(templateObj != null && messageType == "browsernotification")
         {
             var browserNotificationTemplatesCollection = global.db.collection('browsernotificationtemplates');
 
