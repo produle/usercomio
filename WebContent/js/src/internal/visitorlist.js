@@ -306,7 +306,7 @@ function UC_VisitorListController()
                     thisClass.visitors = thisClass.visitors.concat(data.status);
                     thisClass.visitorListSkipIndex = thisClass.visitorListSkipIndex + data.status.length;
 
-                    if(data.status.length == 0)
+                    if(thisClass.visitors.length >= thisClass.currentFilterTotalVisitors)
                     {
                         thisClass.visitorListLoaded = true;
                     }

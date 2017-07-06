@@ -98,7 +98,6 @@ class VisitorListManager {
         var sortQuery = JSON.parse('{"'+sortColumn+'":'+sortOrder+'}');
 
         var aggregateArray = [
-            { $skip : skipIndex },
             {
               $lookup:
                 {
@@ -123,11 +122,12 @@ class VisitorListManager {
             }
         ];
 
-        var aggregateWithLimit = aggregateArray;
-        var aggregateWithCount = aggregateArray;
+        var aggregateWithLimit = JSON.parse(JSON.stringify(aggregateArray));
+        var aggregateWithCount = JSON.parse(JSON.stringify(aggregateArray));
 
         if(pageLimit != null)
         {
+            aggregateWithLimit.push({ $skip : skipIndex });
             aggregateWithLimit.push({ $limit : pageLimit });
         }
 
