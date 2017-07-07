@@ -134,7 +134,7 @@ function UC_MessagingController()
 
                 if(data.status == "failure")
                 {
-                    alert("Could not send emails, kindly check the Email Settings");
+                    alert("Could not send messages, kindly check the "+messageType+" Settings");
                 }
                 else if(data.status == "authenticationfailed")
                 {

@@ -59,9 +59,18 @@ class EmailManager {
     {
         this.getEmailSettingByCompany(appId,companyId,function(emailSettingObj){
 
+            var sendCallback = true;
+
             emailSetting = emailSettingObj;
             if(emailSetting.emailType && emailSetting.emailType == "SMTP")
             {
+                //Validate if SMTP setting is made
+                if(emailSetting.smtp.host == "" || emailSetting.smtp.port == "" || emailSetting.smtp.user == "" || emailSetting.smtp.pass == "")
+                {
+                    sendCallback = false;
+                    callback(false);
+                }
+
                 if(typeof app.mailer == "undefined")
                 {
                     mailer.extend(app, {
@@ -98,7 +107,10 @@ class EmailManager {
                 }
             }
 
-            callback(callbackObj);
+            if(sendCallback)
+            {
+                callback(callbackObj);
+            }
 
         });
     }

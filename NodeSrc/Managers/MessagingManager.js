@@ -61,20 +61,29 @@ class MessagingManager {
         {
             var EmailManagerObj = new EmailManager();
 
-            EmailManagerObj.initMailConfig(appId,user.company,null,function(callbackObj){
+            EmailManagerObj.initMailConfig(appId,user.company,true,function(callbackObj){
 
-                if(template == "new")
+                if(callbackObj)
                 {
-                    EmailManagerObj.saveNewTemplate(appId,user,subject,message,function(templateObj){
-                        MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType,sendType,scheduleDatetime);
-                    });
+                    if(template == "new")
+                    {
+                        EmailManagerObj.saveNewTemplate(appId,user,subject,message,function(templateObj){
+                            MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType,sendType,scheduleDatetime);
+                        });
+                    }
+                    else
+                    {
+                        EmailManagerObj.getTemplateById(appId,template,function(templateObj){
+                            EmailManagerObj.updateTemplate(appId,user,subject,message,templateObj);
+                            MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType,sendType,scheduleDatetime);
+                        });
+                    }
+
+                    return res.send({status:"Success"});
                 }
                 else
                 {
-                    EmailManagerObj.getTemplateById(appId,template,function(templateObj){
-                        EmailManagerObj.updateTemplate(appId,user,subject,message,templateObj);
-                        MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType,sendType,scheduleDatetime);
-                    });
+                    return res.send({status:"failure"});
                 }
 
             });
@@ -102,12 +111,18 @@ class MessagingManager {
                             MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType,sendType,scheduleDatetime);
                         });
                     }
+
+                    return res.send({status:"Success"});
                 }
+                else
+                {
+                    return res.send({status:"failure"});
+                }
+
+
             });
 
         }
-
-        return res.send({status:"Success"});
 
     }
 
