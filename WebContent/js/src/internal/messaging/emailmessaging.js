@@ -148,8 +148,13 @@ function UC_EmailMessagingController()
 	  var result = {status:"success",msg:""};
 
 	  var subject = $("#ucSendMessageEmailSubject").val(),
-          message = uc_main.messagingController.quill.getText(),
+          message,
 	  	  msg = "";
+	  
+	  if($('#ucEditorTogglebtn').prop('checked')==true){
+      	message = uc_main.messagingController.quill.container.firstChild.innerHTML;
+      }else
+      	message = $("#ucSendMessageCodeEditor").val();  
 
 	  if($.trim(subject) == "")
 	  {
