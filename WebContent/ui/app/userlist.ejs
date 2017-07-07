@@ -7,7 +7,7 @@
                          
                          <div class="row">
                           <div class="col-lg-8 col-md-10">
-                           <form class="form-inline">
+                           <form class="form-inline ucSearchForm">
                                 <div class="ucSearchWrapper row">
                                   <div class="form-group col-md-4 col-sm-4 col-xs-4">
                                     <select class="form-control ucSearchSelect" id="ucVisitorSearchField">
@@ -53,7 +53,7 @@
             </div>
               
                
-                
+                <div class="ucTableWrapper">
                   <div class="col-md-12">
 
               
@@ -125,15 +125,15 @@
                                             <input rv-visitorid="visitor" class="uc-user-select" type="checkbox"><label></label>
                                         </div>
                                         <div class="ucTableCell">
-                                            <div class="ucUserBaseDetails ucVisitorPageTrigger" rv-data-visitorid="visitor._id">
+                                            <div class="ucUserBaseDetails ucVisitorPageTrigger " rv-data-visitorid="visitor._id">
                                                <div class="ucUserCurrentStatus">
                                                        <span rv-class-ucUserOnline="visitor.isVisitorOnline" rv-class-ucUserOffline="visitor.isVisitorOffline"></span>
-                                                   <div class="ucUserPicWrapper" rv-profilepicture="visitor.visitorData">
-                                                       <img class="ucUserProfileImage" src="" alt=""/>
-                                                       <div class="ucUserProfileIntial"></div>
-
-                                                   </div>
-
+                                                   <div class="ucUserPic">
+                                                       <div class="ucUserPicWrapper" rv-profilepicture="visitor.visitorData">
+                                                           <img class="ucUserProfileImage" src="" alt=""/>
+                                                           <div class="ucUserProfileIntial"></div>
+                                                       </div>
+                                                    </div>
                                                    <div class="ucUserNameAndEmail">
                                                        <span class="ucUserName">{visitor.visitorData.name}</span>
                                                        <span class="ucUserEmail">{visitor.visitorData.email}</span>
@@ -192,5 +192,5 @@
                             </div>
                         </div>
                     </div>
-
+                    </div>
                 </div>
