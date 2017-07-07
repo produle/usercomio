@@ -7,7 +7,7 @@
                          
                          <div class="row">
                           <div class="col-lg-8 col-md-10">
-                           <form class="form-inline">
+                           <form class="form-inline ucSearchForm">
                                 <div class="ucSearchWrapper row">
                                   <div class="form-group col-md-4 col-sm-4 col-xs-4">
                                     <select class="form-control ucSearchSelect" id="ucVisitorSearchField">
@@ -53,7 +53,7 @@
             </div>
               
                
-                
+                <div class="ucTableWrapper">
                   <div class="col-md-12">
 
               
@@ -102,6 +102,16 @@
                                                 Country <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
                                             </div>
                                         </div>
+                                        <div class="ucTableHead ucUserListSortableColumn ucVisitorListToggleField ucVisitorListToggleField_lastseen" data-sortColumn="visitorMetaInfo.lastSeen">
+                                            <div class="uc_table_header text-center">
+                                                Last Seen <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                            </div>
+                                        </div>
+                                        <div class="ucTableHead ucUserListSortableColumn ucVisitorListToggleField ucVisitorListToggleField_firstseen" data-sortColumn="visitorMetaInfo.firstSeen">
+                                            <div class="uc_table_header text-center">
+                                                First Seen <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
+                                            </div>
+                                        </div>
                                         <div class="ucTableHead ucUserListSortableColumn ucVisitorListToggleField" rv-each-customfield="fieldList" rv-customfieldheader="customfield">
                                             <div class="uc_table_header text-center">
                                                 <span class="ucVisitorListHeaderLabel"></span> <i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i>
@@ -115,15 +125,15 @@
                                             <input rv-visitorid="visitor" class="uc-user-select" type="checkbox"><label></label>
                                         </div>
                                         <div class="ucTableCell">
-                                            <div class="ucUserBaseDetails ucVisitorPageTrigger" rv-data-visitorid="visitor._id">
+                                            <div class="ucUserBaseDetails ucVisitorPageTrigger " rv-data-visitorid="visitor._id">
                                                <div class="ucUserCurrentStatus">
                                                        <span rv-class-ucUserOnline="visitor.isVisitorOnline" rv-class-ucUserOffline="visitor.isVisitorOffline"></span>
-                                                   <div class="ucUserPicWrapper" rv-profilepicture="visitor.visitorData">
-                                                       <img class="ucUserProfileImage" src="" alt=""/>
-                                                       <div class="ucUserProfileIntial"></div>
-
-                                                   </div>
-
+                                                   <div class="ucUserPic">
+                                                       <div class="ucUserPicWrapper" rv-profilepicture="visitor.visitorData">
+                                                           <img class="ucUserProfileImage" src="" alt=""/>
+                                                           <div class="ucUserProfileIntial"></div>
+                                                       </div>
+                                                    </div>
                                                    <div class="ucUserNameAndEmail">
                                                        <span class="ucUserName">{visitor.visitorData.name}</span>
                                                        <span class="ucUserEmail">{visitor.visitorData.email}</span>
@@ -145,6 +155,10 @@
                                             <div class="ucUserDeviceIcon desktop text-center"></div>
                                         </div>
                                         <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_country" rv-country="visitor.sessions">
+                                        </div>
+                                        <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_lastseen" rv-lastseen="visitor.visitorMetaInfo.lastSeen">
+                                        </div>
+                                        <div class="ucTableCell ucVisitorListToggleField ucVisitorListToggleField_firstseen" rv-firstseen="visitor.visitorMetaInfo.firstSeen">
                                         </div>
                                         <div class="ucTableCell ucVisitorListToggleField" rv-each-customfield="fieldList" rv-customfielddata="customfield" rv-customfieldtest="visitor.visitorData">
                                         </div>
@@ -178,5 +192,5 @@
                             </div>
                         </div>
                     </div>
-
+                    </div>
                 </div>

@@ -15,6 +15,9 @@ function UC_UserController()
 
     this.browserNotificationSetting = {};
 
+    this.rivetAppNameEmailObj = null;
+    this.rivetAppNameBrowserNotificationObj = null;
+
 	this.constructor = function()
 	{
         $(document).on("click",".ucEditProfile",thisClass.editProfileHandler);
@@ -34,6 +37,18 @@ function UC_UserController()
 		$(document).on("click","#ucEditEmailTypeTabGroup button",thisClass.handleTypeSelectionAction);
 
         thisClass.getConfig();
+
+        thisClass.rivetAppNameEmailObj = rivets.bind(
+            document.querySelector('#ucEmailSettings_App'), {
+                appName: ""
+            }
+        );
+
+        thisClass.rivetAppNameBrowserNotificationObj = rivets.bind(
+            document.querySelector('#ucBrowserNotificationSettings_App'), {
+                appName: ""
+            }
+        );
 	};
 
     /*
@@ -259,7 +274,7 @@ function UC_UserController()
 
                     var currentAppId = uc_main.appController.currentAppId
                     var appIndex = UC_Utils.searchObjArray(uc_main.appController.apps,'_id',currentAppId);
-                    $('#ucEmailSettings_App').text(uc_main.appController.apps[appIndex].name);
+                    thisClass.rivetAppNameEmailObj.models.appName = uc_main.appController.apps[appIndex].name;
 
                     if(thisClass.emailSetting.emailType)
                     {
@@ -338,7 +353,7 @@ function UC_UserController()
 
                     var currentAppId = uc_main.appController.currentAppId
                     var appIndex = UC_Utils.searchObjArray(uc_main.appController.apps,'_id',currentAppId);
-                    $('#ucBrowserNotificationSettings_App').text(uc_main.appController.apps[appIndex].name);
+                    thisClass.rivetAppNameBrowserNotificationObj.models.appName = uc_main.appController.apps[appIndex].name;
 
                     $('#uceditbrowsernotification_fcmkey').val(thisClass.browserNotificationSetting.fcmKey);
                     $('#uceditbrowsernotification_fcmsenderid').val(thisClass.browserNotificationSetting.fcmSenderId);

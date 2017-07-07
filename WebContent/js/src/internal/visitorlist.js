@@ -246,6 +246,14 @@ function UC_VisitorListController()
             $(el).html(value[0].geoLocationInfo.country);
         };
 
+        rivets.binders.lastseen = function (el, value) {
+            $(el).html(moment(value).format("Do MMM YY, HH:mm"));
+        };
+
+        rivets.binders.firstseen = function (el, value) {
+            $(el).html(moment(value).format("Do MMM YY, HH:mm"));
+        };
+
 		thisClass.rivetVisitorPlaceholderObj = rivets.bind(
             document.querySelector('#ucVisitorListPlaceholder'), {
                 display: true
@@ -298,12 +306,15 @@ function UC_VisitorListController()
                     thisClass.visitors = thisClass.visitors.concat(data.status);
                     thisClass.visitorListSkipIndex = thisClass.visitorListSkipIndex + data.status.length;
 
-                    if(data.status.length == 0)
+                    if(thisClass.visitors.length >= thisClass.currentFilterTotalVisitors)
                     {
                         thisClass.visitorListLoaded = true;
                     }
 
                     thisClass.listVisitors();
+
+                    $("#ucPredefinedFilterList").find("li[data-filterid="+filterId+"] .ucFilterListVisitorCount").text(thisClass.currentFilterTotalVisitors);
+                    $("#ucUserdefinedFilterList").find("li[data-filterid="+filterId+"] .ucFilterListVisitorCount").text(thisClass.currentFilterTotalVisitors);
                 }
 
                 $("#ucVisitorListAjaxLoader").hide();
@@ -682,7 +693,9 @@ function UC_VisitorListController()
                     {value:"browser",label:"Browser"},
                     {value:"os",label:"Operating System"},
                     {value:"device",label:"Device"},
-                    {value:"country",label:"Country"}
+                    {value:"country",label:"Country"},
+                    {value:"lastseen",label:"Last Seen"},
+                    {value:"firstseen",label:"First Seen"}
                 ];
 
                 thisClass.rivetVisitorColumnListObj.models.fieldList = fieldListDropdown.concat(fieldList);
@@ -769,9 +782,10 @@ function UC_VisitorListController()
             for(var i = 0; i < fieldsOrder.length; i++)
             {
                 tmpOrderedHTML += $(popoverHTML).find("li[data-fieldid='"+fieldsOrder[i]+"']").prop('outerHTML') ;
+                $(popoverHTML).find("li[data-fieldid='"+fieldsOrder[i]+"']").remove();
             }
 
-            $(popoverHTML).find("#ucVisitorFieldList").html(tmpOrderedHTML);
+            $(popoverHTML).find("#ucVisitorFieldList").prepend(tmpOrderedHTML);
         }
 
         $(popoverHTML).find("#ucVisitorFieldList").removeAttr("id").addClass("ucVisitorFieldList");
