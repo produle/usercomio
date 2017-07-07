@@ -322,7 +322,7 @@ function UC_FilterController()
             }
             else
             {
-                UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterObj._id] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
+                UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterObj._id] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:["browser", "os", "device", "country"]};
             }
 
             thisClass.saveAppPreference();
