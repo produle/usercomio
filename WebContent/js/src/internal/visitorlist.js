@@ -312,6 +312,9 @@ function UC_VisitorListController()
                     }
 
                     thisClass.listVisitors();
+
+                    $("#ucPredefinedFilterList").find("li[data-filterid="+filterId+"] .ucFilterListVisitorCount").text(thisClass.currentFilterTotalVisitors);
+                    $("#ucUserdefinedFilterList").find("li[data-filterid="+filterId+"] .ucFilterListVisitorCount").text(thisClass.currentFilterTotalVisitors);
                 }
 
                 $("#ucVisitorListAjaxLoader").hide();

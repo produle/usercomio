@@ -250,14 +250,21 @@ h2
 }
 
 
-.ucUserDefinedFilterOptions li span
+.ucUserDefinedFilterOptions li .ucFilterListName
 {
 	white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 140px;
+    width: 110px;
     position: absolute;
     
+}
+.ucListingOptions li .ucFilterListVisitorCount,
+.ucUserDefinedFilterOptions li .ucFilterListVisitorCount
+{
+	width: 30px;
+    float: right;
+
 }
 .ucSidebar ul li i
 {
