@@ -275,8 +275,10 @@ function UC_UserRegistrationController()
     				 }
     				 else
     				 {
-    					 emailSettings = data.emailsetting;
-    				      UC_AJAX.call('EmailManager/saveemailsetting',{user:user,emailSetting:emailSettings},function(data,status,xhr)
+                         newEmailSetting = data.emailsetting
+    					 newEmailSetting.smtp = emailSettings.smtp;
+
+    				      UC_AJAX.call('EmailManager/saveemailsetting',{user:user,emailSetting:newEmailSetting},function(data,status,xhr)
     				    		  {
     				    			 if(data)
     				    			 {
@@ -285,14 +287,13 @@ function UC_UserRegistrationController()
     				    	                 alert("Error in adding Email settings");
 
     				    				 }
-    				    	             else if(data.status == "authenticationfailed")
+    				    	             else
     				    	             {
-    				    	                 location.href="/";
+                                             thisClass.config.setupCompleted = 1;
+                                             thisClass.saveConfig(function(){
+    				    	                       location.href="/";
+                                             });
     				    	             }
-    				    				 else
-    				    				 {
-    				    					 thisClass.saveConfig(true);
-    				    				  }
     				    			 }
     				     });
     				 }
@@ -361,7 +362,6 @@ function UC_UserRegistrationController()
     }
 
     thisClass.config.baseURL= baseurl;
-    thisClass.config.setupCompleted = 1;
 
     var newApp = new UC_App();
     var user = UC_UserSession.user;
@@ -375,50 +375,61 @@ function UC_UserRegistrationController()
 
     $("#ucsetup_appsubmitbtn").button('loading');
 
-    UC_AJAX.call('AppManager/createNewApp',{newApp:newApp,user:user},function(data,status,xhr){
+    thisClass.saveConfig(function(){
+        UC_AJAX.call('AppManager/createNewApp',{newApp:newApp,user:user},function(data,status,xhr){
 
-        if(data.status == "appexists")
-         {
-             alert("App with this name already exists !");
-         }
-         else if(data.status == "authenticationfailed")
-         {
-             location.href="/";
-         }
-         else if(data.status == "failure")
-         {
-             alert("An Error accured while saving data !");
-         }
-         else
-         {
+            if(data.status == "appexists")
+             {
+                 alert("App with this name already exists !");
+             }
+             else if(data.status == "authenticationfailed")
+             {
+                 location.href="/";
+             }
+             else if(data.status == "failure")
+             {
+                 alert("An Error accured while saving data !");
+             }
+             else
+             {
 
 
 
-             UC_UserSession.user.company = data.status.clientId;
+                 UC_UserSession.user.company = data.status.clientId;
 
-                UC_AJAX.call('UserManager/updateTimezone',{user:user,timezone:timezone},function(data,status,xhr){
+                 //Timeout provided as the server restarts on saving the track file for the app, proceeding immediately will lead to Service Not Found error
+                 setTimeout(function(){
+                     UC_AJAX.call('UserManager/updateTimezone',{user:user,timezone:timezone},function(data,status,xhr){
 
-                    if(data.status == "authenticationfailed")
-                     {
-                         location.href="/";
-                     }
-                     else if(data.status == "failure")
-                     {
-                         alert("An Error accured while saving data !");
-                     }
-                     else
-                     {
-                         $(".UC_SetupContainerCls").hide();
-                         $("#UC_Setup_SMTP").show();
-                         $("#UC_Setup_Progress_Step").text("4");
-                         $(".ucSetupProgressSteps li").removeClass("active");
-                         $(".uc_smtp_details").addClass("active");
-                         $("#ucsetup_smtpsubmitbtn").button('reset');
-                     }
-                });
-         }
-         $("#ucsetup_appsubmitbtn").button('reset');
+                        if(data.status == "authenticationfailed")
+                         {
+                             location.href="/";
+                         }
+                         else if(data.status == "failure")
+                         {
+                             alert("An Error accured while saving data !");
+                         }
+                         else
+                         {
+                             $(".UC_SetupContainerCls").hide();
+                             $("#UC_Setup_SMTP").show();
+                             $("#UC_Setup_Progress_Step").text("4");
+                             $(".ucSetupProgressSteps li").removeClass("active");
+                             $(".uc_smtp_details").addClass("active");
+                             $("#ucsetup_smtpsubmitbtn").button('reset');
+                         }
+
+                         $("#ucsetup_appsubmitbtn").button('reset');
+                    });
+                 },3000);
+
+
+             }
+
+        });
     });
+
+
   }
 
   /*
@@ -556,7 +567,7 @@ function UC_UserRegistrationController()
   /*
   *  @desc Saves the config data to the server
   */
-  this.saveConfig = function(isRedirect)
+  this.saveConfig = function(callback)
   {
 
 	  UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
@@ -567,12 +578,13 @@ function UC_UserRegistrationController()
 			 {
 				 alert("An Error accured while saving config file!");
 			 }
-			 else if(isRedirect)
+			 else if(callback)
              {
                  //Timeout provided as the server restarts on saving config file, redirecting immediately will lead to Service Not Found error
                  setTimeout(function(){
-                     location.href = "/";
-                 },2000);
+                     callback();
+                 },3000);
+
              }
 		 }
           $("#ucsetup_usersubmitbtn").button('reset');
