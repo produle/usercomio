@@ -34,14 +34,34 @@ form
   margin: 0 auto;
   width: 300px;
 }
+.ucLoginTextInput
+{
+	border-bottom: 1px solid #E9EDF0;
+}
+.ucLoginEmailIcon
+{
+	width: 20px;
+	height: 34px;
+	background: url(../../images/app/login/ucLoginEmailIcon.png) no-repeat left center;
+	float:left;
+}
+.ucLoginPasswordIcon
+{
+	width: 20px;
+	height: 34px;
+	background: url(../../images/app/login/ucLoginPasswordIcon.png) no-repeat left center;
+	float:left;
+}
 .UC_LoginContainerCls input[type="email"], .UC_LoginContainerCls input[type="password"]
 {
 	border:none; 
-	border-bottom: 1px solid #E9EDF0;
+	
     box-shadow: none;
     border-radius: 0;
     font-weight: 300;
     font-size: 13px;
+    width: calc(100% - 20px);
+    padding: 12px;
 }
 .UC_logo img
 {
@@ -51,16 +71,6 @@ form
 .UC_logo 
 {
 	margin-bottom:40px;
-}
-#uclogin_usernameinput
-{
-	background: url(../../images/app/login/ucLoginEmailIcon.png) no-repeat left center;
-	padding-left: 30px;
-}
-#uclogin_passwordinput
-{
-	background: url(../../images/app/login/ucLoginPasswordIcon.png) no-repeat left center;
-	padding-left: 30px;
 }
 #uclogin_forgotpasswordbtn
 {

@@ -56,6 +56,12 @@ function UC_MainController()
 
             });
         });
+        
+        $(window).resize(function(){
+        	thisClass.interfaceResize();
+        });
+        
+        thisClass.interfaceResize();
 	};
 
     /*
@@ -129,4 +135,22 @@ function UC_MainController()
     		
     		
     };
+    /**
+     * @desc Resize Div layouts by calculating current window size so we have a fixed window size application like a desktop app
+     */
+    this.interfaceResize  = function() 
+	{
+    	
+    	 $('.ucSidebar').height($(window).height()-$('.ucSidebar').offset().top-30);
+    	 
+    	 var sidebarWidth = 0;
+    	 if($('.ucSidebar').css("display") == "block")
+    	{
+    		 sidebarWidth = $('.ucSidebar').width() + 40;
+    		 
+    	}
+    	 
+    	 $('.ucTableWrapper').height($(window).height()-178); 
+    	 $('.ucTableWrapper').width($(window).width()-sidebarWidth);
+	};
 }

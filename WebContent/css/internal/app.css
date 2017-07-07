@@ -167,7 +167,6 @@ h2
 .ucSidebar
 {
 	width: 270px;
-	height: 100vh;
 	background-color: #f9f9f9;
 	border-right: 1px solid #e9edee;
 	float:left;
@@ -237,7 +236,7 @@ h2
 	line-height: 40px;
     font-size: 12px;
     color: #777;
-    transition: all 0.5s ease;
+    transition: color 0.5s ease;
     cursor: pointer;
 }
 .ucSidebar ul li:hover
@@ -484,7 +483,7 @@ h2
 	color: #333;
 	padding: 20px;
 	width: 200px;
-    height: 538px;
+    height: 655px;
     position: relative;
     float: left;
     text-align: left;
@@ -596,6 +595,11 @@ h2
 .ucUserBaseDetails
 {
     cursor: pointer;
+    display:table;
+}
+.ucUserCurrentStatus 
+{
+	display:table-row;
 }
 #ucSendMessageModal .close
 {
@@ -666,13 +670,13 @@ h2
 	#ucHeader.navbar-default .navbar-toggle { background: #3e3c5a; border-color: transparent;}
 	#ucHeader.navbar-default .navbar-toggle .icon-bar{background-color: #dfdef5;}
 	.ucSideBarMenuTrigger { display: block; }
-	.ucSidebar.open{width:270px; padding:15px;position: fixed; top:0; left:0; height: 100%;display:block; z-index: 999;}
+	.ucSidebar.open{width:270px; padding:15px;position: fixed; top:0; left:0; height: 100% !important;display:block; z-index: 999;}
 	.ucMainContent.open{margin-left: 270px;}
 	.ucIndexPageWrapper.open{overflow:hidden;}
 	#ucHeader.open{margin-left: 270px;}
 	.ucSidebarCloseBtn{display: block;}
 	.ucMainContent.open:after {    content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index:99; }
-	.ucSearchWrapper{width:60%;}
+	.ucSearchWrapper , #ucVisitorSearchBtn, .ucSearchForm{/* width:60%; */ display:none;}
 	#ucSendMessageModal .modal-dialog { width:auto; }
 }
 @media only screen and (max-width:580px) 
@@ -685,7 +689,7 @@ h2
 }
 @media only screen and (max-width:480px) 
 {
-	.ucSearchBar .form-inline { width:100%; display: inline-block; margin-top: 10px;}
+	.ucSearchBar .form-inline { width:100%; /* display: inline-block; */, display:none; margin-top: 10px;}
 	.ucSearchWrapper {width: 65%; margin-right: 10px;}
 	.ucFilterModal .group-actions , .ucFilterModal .modal-footer .ucCancelBtn, .rules-list select.form-control { margin-bottom:10px !important;}
 	
@@ -915,8 +919,9 @@ h2
 {
     display: table-cell;
     border-bottom: 1px solid #ddd;
-    padding: 8px 5px;
+    padding: 8px 18px;
     vertical-align: middle;
+    white-space: nowrap;
 }
 .ucTableRow:hover .ucTableCell
 {
