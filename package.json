@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon NodeSrc/server.js",
+    "dev": "nodemon NodeSrc/server.js --ignore trackjs/",
     "prod": "nodemon NodeSrc/server.js prod"
   },
   "author": "",

@@ -26,6 +26,7 @@ class AppManager {
         this.router.post("/getAllUserApps",(req, res) => { this.getAllUserApps(req,res); });
         this.router.post("/updateAnAppDetails",(req, res) => { this.updateAnAppDetails(req,res); });
         this.router.post("/deleteAnApp",(req, res) => { this.deleteAnApp(req,res); });
+        this.router.post("/regeneratetrackjs",(req, res) => { this.regenerateTrackjs(req,res); });
     }
   	
   	/*
@@ -350,11 +351,29 @@ class AppManager {
 	            if(err) {
             	    console.log(err);
             	  } else {
-            	    console.log("Script generated and saved:", 'concat.min.js');
+            	    console.log("Trackjs script generated for appId:"+appId);
             	  }      
             	});
         }
 	  };      	
+
+
+    /*
+     * @desc
+     */
+    regenerateTrackjs(req,res)
+    {
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
+        var appId = req.body.appId;
+
+        this.generateTrackingCodeForApp(appId);
+
+        return res.send({status:'success'});
+    }
 }
 
 

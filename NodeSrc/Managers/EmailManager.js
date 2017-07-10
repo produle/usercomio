@@ -396,6 +396,10 @@ class EmailManager {
             { upsert: false }
         )
 
+        //Regenerate tracking code for the app
+        var appManagerObj = global.controllerList["AppManager"];
+        appManagerObj.generateTrackingCodeForApp(emailSetting.appId);
+
         return res.send({status:'success'});
     }
 

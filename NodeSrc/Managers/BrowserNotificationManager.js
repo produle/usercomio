@@ -355,6 +355,10 @@ class BrowserNotificationManager {
             { upsert: false }
         )
 
+        //Regenerate tracking code for the app
+        var appManagerObj = global.controllerList["AppManager"];
+        appManagerObj.generateTrackingCodeForApp(browserNotificationSetting.appId);
+
         return res.send({status:'success'});
     }
 
