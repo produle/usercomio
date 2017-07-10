@@ -143,11 +143,6 @@ passport.use(new LocalStrategy(
 exports.passport = passport;
 exports.app = app;
 
-
-
-var viewRender =  require('./viewrenderer').ViewRenderer;
-var views = new viewRender();
-
 var controllerList = {};
 
 
@@ -158,4 +153,12 @@ fs.readdirSync(path.join(__dirname, "Managers")).forEach(function (file) {
         controllerList[basePath] = new Controller[basePath]();
         app.use(`/${basePath}`, controllerList[basePath].router);
     }
+
 });
+
+global.controllerList = controllerList;
+
+var viewRender =  require('./viewrenderer').ViewRenderer;
+var views = new viewRender();
+
+

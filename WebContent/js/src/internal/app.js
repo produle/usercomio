@@ -37,6 +37,8 @@ function UC_AppController()
             }
 
         });
+
+        $(document).on("click","#ucAppGenerateTrackjs",thisClass.regenerateTrackjs);
 	};
 
     /*
@@ -344,7 +346,7 @@ function UC_AppController()
 				$('#ucapp_update_nameinput').val(app.name);
 				$('#ucapp_update_appid').val(app._id);
 				$('#ucapp_update_appid_display').text(app._id);
-				$('#ucDeleteAppBtn').attr("data-appid",app._id);
+				$('#ucDeleteAppBtn,#ucAppGenerateTrackjs').attr("data-appid",app._id);
 
                 var trackingSnippet = '<script type="text/javascript" src="'+uc_main.userController.config.baseURL+'/tracking/track.js?appid='+app._id+'"></script>\n'+
                     '<script>\n'+
@@ -434,5 +436,32 @@ function UC_AppController()
         }
        
 
+    };
+
+    /*
+     * @desc Calls the server to regenerate the tracking js file for the application
+     */
+    this.regenerateTrackjs = function()
+    {
+        var appId = $(this).attr('data-appid');
+
+        $("#ucAppGenerateTrackjs").button('loading');
+
+        UC_AJAX.call('AppManager/regeneratetrackjs',{user:UC_UserSession.user,appId:appId},function(data,status,xhr){
+
+			if(data.status == "failure")
+			 {
+				 alert("An Error accured while generating trackjs");
+			 }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
+            }
+			else
+			{
+				alert("Trackjs re-generated successfully");
+			}
+            $("#ucAppGenerateTrackjs").button('reset');
+		});
     };
 }
