@@ -26,12 +26,12 @@ function UC_FilterController()
         {
             thisClass.listPredefinedFilters();
 
-            $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li span",thisClass.changeFilterHandler);
+            $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li .ucFilterListName",thisClass.changeFilterHandler);
             $(document).on("click",".ucAddFilterBtn",thisClass.addFilterHandler);
             $(document).on("click","#ucEditFilterSubmit",thisClass.saveFilterHandler);
             $(document).on("click","#ucEditFilterDraftBtn",thisClass.draftFilterHandler);
-            $(document).on("click",".ucFilterSettingBtn .ico-edit",thisClass.editFilterHandler);
-            $(document).on("click",".ucFilterSettingBtn .ico-trash2",thisClass.deleteFilterHandler);
+            $(document).on("click",".ucFilterSettingBtn .ucFilterListEditBtn",thisClass.editFilterHandler);
+            $(document).on("click",".ucFilterSettingBtn .ucFilterListDeleteBtn",thisClass.deleteFilterHandler);
 
             $("#ucUserdefinedFilterList").sortable({
                 update: thisClass.updateFilterOrder
@@ -207,7 +207,7 @@ function UC_FilterController()
      */
     this.editFilterHandler = function()
     {
-        var filterObj = thisClass.getFilterById($(this).closest("li").attr("data-filterid"));
+        var filterObj = thisClass.getFilterById($(this).closest(".ucSwitchContentTrigger").attr("data-filterid"));
 
         thisClass.filterOnEdit = filterObj;
 

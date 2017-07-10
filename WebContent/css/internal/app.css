@@ -548,14 +548,14 @@ h2
 #ucPredefinedFilterList li .ucFilterSettingBtn,
 #ucUserdefinedFilterList li .ucFilterSettingBtn
 {
-    display: none;
+    display: inline-block;
     float: right;
 }
 
-#ucPredefinedFilterList li:hover .ucFilterSettingBtn,
-#ucUserdefinedFilterList li:hover .ucFilterSettingBtn
+#ucPredefinedFilterList li .ucFilterSettingBtn i,
+#ucUserdefinedFilterList li .ucFilterSettingBtn i
 {
-    display: inline-block;
+    font-weight: normal;
 }
 
 
