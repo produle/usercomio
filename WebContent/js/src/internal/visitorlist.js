@@ -158,7 +158,7 @@ function UC_VisitorListController()
 
             $(el).html(browserName+" <span>(v"+browserVersion+")</span>");
             $(el).removeClass("chrome safari firefox edge ie");
-            $(el).addClass(browserIcon);
+            $(el).addClass(browserIcon); 
         };
 
         rivets.binders.latestplatform = function (el, value) {
@@ -243,7 +243,14 @@ function UC_VisitorListController()
         };
 
         rivets.binders.country = function (el, value) {
-            $(el).html(value[0].geoLocationInfo.country);
+            
+        	if(value[0].geoLocationInfo.country !="") {
+        		$(el).html( "<span data-toggle='tooltip' data-placement='left'  class='mfTooltip flag "+ value[0].geoLocationInfo.country.toLowerCase()+"' data-original-title='"+value[0].geoLocationInfo.countryName+"'></span>" ); 
+        	}
+        	else {
+        		$(el).html('');
+        	}
+            
         };
 
         rivets.binders.lastseen = function (el, value) {
@@ -352,7 +359,8 @@ function UC_VisitorListController()
         {
             thisClass.rivetVisitorPlaceholderObj.models.display = false;
         }
-
+        
+        $('.mfTooltip').tooltip(); 
 	};
 
     /*

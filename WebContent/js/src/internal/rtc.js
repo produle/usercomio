@@ -18,7 +18,7 @@ function UC_RTCController()
 	
 	this.connect = function()
 	{
-		thisClass.socket =  new WebSocket("ws://localhost:8001/echo");
+		thisClass.socket =  new WebSocket("ws://"+location.hostname+":8001/echo");
 		
 		
 		// on connection to server, ask for user's name with an anonymous callback

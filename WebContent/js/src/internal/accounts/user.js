@@ -830,40 +830,60 @@ function UC_UserController()
 
         $("#uceditsystem_submit").button('loading');
 
-        UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
-        {
-            if(data)
-            {
-                if(data.status == "failure")
-                {
-                    alert("An Error accured while saving config file!");
-                    $("#uceditsystem_submit").button('reset');
-                }
-                else
-                {
-                    UC_AJAX.call('UserManager/updateTimezone',{user:UC_UserSession.user,timezone:timezone},function(data,status,xhr){
+        UC_AJAX.call('UserManager/updateTimezone',{user:UC_UserSession.user,timezone:timezone},function(data,status,xhr){
 
-                        if(data.status == "authenticationfailed")
-                         {
-                             location.href="/";
-                         }
-                         else if(data.status == "failure")
-                         {
-                             alert("An Error accured while saving data !");
-                         }
-                         else
-                         {
-                             alert("System settings changed successfully");
-                             $("#ucEditSystemModal").modal("hide");
-                         }
-                         $("#uceditsystem_submit").button('reset');
+            if(data.status == "authenticationfailed")
+             {
+                 location.href="/";
+             }
+             else if(data.status == "failure")
+             {
+                 alert("An Error accured while saving data !");
+             }
+             else
+             {
+                 UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
+                    {
+                        if(data)
+                        {
+                            if(data.status == "failure")
+                            {
+                                alert("An Error accured while saving config file!");
+                                $("#uceditsystem_submit").button('reset');
+                            }
+                            else
+                            {
+                                //Timeout provided as the server restarts on saving the config file, proceeding immediately will lead to Service Not Found error
+                                setTimeout(function(){
+                                    UC_AJAX.call('AppManager/regeneratetrackjs',{user:UC_UserSession.user,appId:null},function(data,status,xhr){
+
+                                        if(data.status == "failure")
+                                         {
+                                             alert("An Error accured while generating trackjs");
+                                         }
+                                        else if(data.status == "authenticationfailed")
+                                        {
+                                            location.href="/";
+                                        }
+                                        else
+                                        {
+                                            alert("System settings changed successfully");
+                                            $("#ucEditSystemModal").modal("hide");
+                                        }
+                                        $("#uceditsystem_submit").button('reset');
+                                    });
+                                },3000);
+
+                            }
+
+                        }
+
                     });
 
-                }
-
-            }
-
+             }
         });
+
+
     };
 
     /*

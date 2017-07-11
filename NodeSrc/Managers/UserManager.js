@@ -525,27 +525,6 @@ class UserManager {
 
         });
 
-        //Regenerate tracking code for the app
-        var appManagerObj = global.controllerList["AppManager"];
-        var appCollection = global.db.collection('apps');
-
-        //Obtaining App list
-        appCollection.find().toArray(function(err,apps)
-        {
-            if(err)
-            {
-                console.log("ERROR:"+err);
-            }
-
-            if(apps)
-            {
-                for(var i = 0 ; i < apps.length; i++)
-                {
-                    appManagerObj.generateTrackingCodeForApp(apps[i]._id);
-                }
-            }
-        });
-
         res.send({status:"success"});
     };
 
