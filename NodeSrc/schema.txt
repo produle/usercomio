@@ -66,6 +66,7 @@
         country : String //Obtained from geoip
         region : String //Obtained from geoip
         timezone : String //Empty for now
+        countryName : String //Obtained from country.json using countrycode
     }
     visitorId : String //id from visitors collection
     ipAddress : String //Obtained from request headers

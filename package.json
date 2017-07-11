@@ -29,6 +29,7 @@
     "grunt-contrib-uglify": "^2.3.0",
     "mailgun-js": "^0.10.1",
     "moment": "^2.18.0",
+    "moment-timezone": "^0.5.13",
     "mongodb": "^2.2.20",
     "node-schedule": "^1.2.3",
     "passport": "^0.3.2",

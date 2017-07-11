@@ -1,0 +1,49 @@
+{
+  "name": "usercom",
+  "version": "1.0.0",
+  "description": "Customer Support Tool",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon NodeSrc/server.js",
+    "prod": "nodemon NodeSrc/server.js prod"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "accept-language": "^3.0.15",
+    "aws-sdk": "^2.45.0",
+    "body-parser": "^1.15.2",
+    "config": "^1.25.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.1",
+    "ejs": "^2.5.5",
+    "express": "^4.14.0",
+    "express-mailer": "^0.3.1",
+    "express-session": "^1.14.2",
+    "express-useragent": "^1.0.6",
+    "geoip-lite": "^1.2.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-cssmin": "^2.1.0",
+    "grunt-contrib-uglify": "^2.3.0",
+    "mailgun-js": "^0.10.1",
+    "moment": "^2.18.0",
+    "moment-timezone": "^0.5.13",
+    "mongodb": "^2.2.20",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "web-push": "^3.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckavinkumar/usercomio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ckavinkumar/usercomio/issues"
+  },
+  "homepage": "https://github.com/ckavinkumar/usercomio#readme"
+}
