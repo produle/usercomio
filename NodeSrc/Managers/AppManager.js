@@ -346,6 +346,10 @@ class AppManager {
             out = out +  "SERVICES.push('trackElement,')";
             
             var trackjsFolderPath = path.join(__dirname, '/../../trackjs');
+
+            if (!fs.existsSync(trackjsFolderPath)){
+                fs.mkdirSync(trackjsFolderPath);
+            }
             
             fs.writeFile(trackjsFolderPath+'/track-'+appId+'.min.js',out,  function (err){
 	            if(err) {
@@ -363,14 +367,44 @@ class AppManager {
      */
     regenerateTrackjs(req,res)
     {
-        if(!req.isAuthenticated())
-        {
-            return res.send({status:'authenticationfailed'});
-        }
+        //TODO Authentication is skipped as server restarts when config file is changed
+//        if(!req.isAuthenticated())
+//        {
+//            return res.send({status:'authenticationfailed'});
+//        }
 
         var appId = req.body.appId;
 
-        this.generateTrackingCodeForApp(appId);
+        if(appId != null)
+        {
+
+            this.generateTrackingCodeForApp(appId);
+
+        }
+        else
+        {
+
+            //Regenerate tracking code for all the app
+            var appManagerObj = global.controllerList["AppManager"];
+            var appCollection = global.db.collection('apps');
+
+            //Obtaining App list
+            appCollection.find().toArray(function(err,apps)
+            {
+                if(err)
+                {
+                    console.log("ERROR:"+err);
+                }
+
+                if(apps)
+                {
+                    for(var i = 0 ; i < apps.length; i++)
+                    {
+                        appManagerObj.generateTrackingCodeForApp(apps[i]._id);
+                    }
+                }
+            });
+        }
 
         return res.send({status:'success'});
     }
