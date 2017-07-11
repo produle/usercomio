@@ -86,7 +86,13 @@
 			
 			establishSocketConnection : function(usercomlib)
 			{
-				var ws = new WebSocket("ws://"+DEFAULT_CONFIG.api_host+":8001/");
+				var protocol = "ws";
+                if(location.protocol == "https:")
+                {
+                    protocol = "wss";
+                }
+
+                var ws = new WebSocket(protocol+"://"+DEFAULT_CONFIG.api_host+":8001/");
 
 				ws.onopen = function()
 				{

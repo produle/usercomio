@@ -9,7 +9,9 @@
            <ul id="ucPredefinedFilterList" class="ucListingOptions">
                <li rv-each-filter="list" rv-data-filterid="filter._id" class="ucSwitchContentTrigger" switch-to="uc_tab_data_listuser"><span>{filter.name}</span><span class="ucFilterListVisitorCount"></span></li>
            </ul>
-            <div id="ucPredefinedFilterAjaxLoader" class='ucAjaxLoader' style="display: none;"><div></div></div>
+            <div id="ucPredefinedFilterAjaxLoader" class='ucAjaxLoader' style="display: none;">
+                <img alt="Loading..." src="/images/app/ajax-loader.gif"   />
+            </div>
            
            <h5 id="ucCustomFilter">Custom Filter <span class="ucAddNewFilter ucAddFilterBtn" class="ucAddFilterBtn"><i class="ico-plus2"></i></span></h5>
            <ul id="ucUserdefinedFilterList" class="ucUserDefinedFilterOptions">
@@ -28,4 +30,6 @@
                    <span class="ucFilterListVisitorCount"></span>
                </li>
            </ul>
-            <div id="ucUserdefinedFilterAjaxLoader" class='ucAjaxLoader' style="display: none;"><div></div></div>
+            <div id="ucUserdefinedFilterAjaxLoader" class='ucAjaxLoader' style="display: none;">
+                <img alt="Loading..." src="/images/app/ajax-loader.gif"   />
+            </div>
