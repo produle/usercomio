@@ -489,16 +489,10 @@ h2
 	background-color: #f8f8f8;
 	border-radius: 5px;
 	color: #333;
-	padding: 20px;
-<<<<<<< HEAD
+	padding: 20px; 
 	width: 200px; 
     position: absolute;
-    height: 100%;
-=======
-	width: 200px;
-    height: 655px;
-    position: relative;
->>>>>>> upstream/master
+    height: 100%; 
     float: left;
     text-align: left;
     overflow-y: auto;
