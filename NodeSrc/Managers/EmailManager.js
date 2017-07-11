@@ -127,7 +127,7 @@ class EmailManager {
                 from: emailSetting.mailgun.from,
                 to: toEmail,
                 subject: subject,
-                text: message
+                html: message
             };
 
             mailgun.messages().send(data, function (err, body) {
@@ -152,7 +152,7 @@ class EmailManager {
                         Data: subject
                     },
                     Body: {
-                        Text: {
+                    	Html: {
                             Data: message,
                         }
                     }

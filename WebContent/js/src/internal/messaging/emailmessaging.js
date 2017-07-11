@@ -46,16 +46,24 @@ function UC_EmailMessagingController()
                 thisClass.rivetEmailTemplateListObj.models.emailTemplateList = thisClass.emailTemplateList;
 
                 $('#ucSendMessageEmailTemplate option:eq(0)').prop('selected', true);
-                $("#ucSendMessageEmailSubject,#ucSendMessageEmailBody").val("");
+                $("#ucSendMessageEmailSubject").val("");
+                uc_main.messagingController.quill.setText('');
             }
         });
     };
 
     this.submitEmailMessageHandler = function()
     {
-        var subject = $("#ucSendMessageEmailSubject").val();
-        var message = $("#ucSendMessageEmailBody").val();
-        var template = $("#ucSendMessageEmailTemplate").val();
+        var subject  =  $("#ucSendMessageEmailSubject").val();
+        var message;
+        
+        if($('#ucEditorTogglebtn').prop('checked')==true){
+        	message = uc_main.messagingController.quill.container.firstChild.innerHTML;
+        }else
+        	message = $("#ucSendMessageCodeEditor").val();  
+        
+        template = $('#ucSendMessageEmailTemplate').val();  
+        
         var blockDuplicate = false;
 
         if($("#ucSendMessageEmailBlockDuplicate").is(":checked"))
@@ -79,16 +87,19 @@ function UC_EmailMessagingController()
      */
     this.templateChangeHandler = function()
     {
-        if($(this).val()=="new")
+        if($(this).val()=="new" || $(this).val()=="noTemplate")
         {
-            $("#ucSendMessageEmailSubject,#ucSendMessageEmailBody").val("");
+            $("#ucSendMessageEmailSubject").val("");
+            uc_main.messagingController.quill.setText('');
+            $('#ucSendMessageCodeEditor').val('');
             $("#ucDeleteEmailTemplateBtn").hide();
             $("#ucSendMessageEmailTemplate").removeClass("ucExistTemplate");
         }
         else
         {
-            $("#ucSendMessageEmailSubject").val($(this).find("option:selected").text());
-            $("#ucSendMessageEmailBody").val($(this).find("option:selected").attr("data-templatebody"));
+            $("#ucSendMessageEmailSubject").val($(this).find("option:selected").text()); 
+            uc_main.messagingController.quill.container.firstChild.innerHTML = $(this).find("option:selected").attr("data-templatebody");
+            $('#ucSendMessageCodeEditor').val($(this).find("option:selected").attr("data-templatebody"));
             $("#ucDeleteEmailTemplateBtn").show();
             $("#ucSendMessageEmailTemplate").addClass("ucExistTemplate");
         }
@@ -102,7 +113,7 @@ function UC_EmailMessagingController()
 
         var templateId = $("#ucSendMessageEmailTemplate").val();
 
-        if(templateId != "new")
+        if(templateId != "new" && templateId != "noTemplate")
         {
             if(confirm("Are you sure you want to delete the template?"))
             {
@@ -139,8 +150,15 @@ function UC_EmailMessagingController()
 	  var result = {status:"success",msg:""};
 
 	  var subject = $("#ucSendMessageEmailSubject").val(),
-          message = $("#ucSendMessageEmailBody").val(),
+          message,
 	  	  msg = "";
+	  
+	  if($('#ucEditorTogglebtn').prop('checked')==true)
+	  {
+	      	message = uc_main.messagingController.quill.getText();
+	  }
+	  else
+	      	message = $("#ucSendMessageCodeEditor").val();  
 
 	  if($.trim(subject) == "")
 	  {

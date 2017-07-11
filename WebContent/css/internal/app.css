@@ -484,9 +484,9 @@ h2
 	border-radius: 5px;
 	color: #333;
 	padding: 20px;
-	width: 200px;
-    height: 538px;
-    position: relative;
+	width: 200px; 
+    position: absolute;
+    height: 100%;
     float: left;
     text-align: left;
     overflow-y: auto;
@@ -513,9 +513,9 @@ h2
 	padding: 3px 0;
 }
 
-#ucSendMessageModal textarea.form-control
+#ucSendMessageEmailBodyWrapper
 {
-	margin: 10px 0 20px !important;
+	margin: 5px 0 20px !important;
 }
 #ucSendMessageModal .modal-body
 {
@@ -697,6 +697,11 @@ h2
     border: 1px solid #AAAAAA;
     text-align: center;
 }
+
+#ucVisitorMessages .ucTableCell
+{
+    word-break: break-word;
+}
 /**
  * CSS Loader animation - Start
  */
@@ -861,8 +866,13 @@ h2
 {
     display: table;
     width: 100%;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #ddd; 
 }
+#ucUserTabContentMessaging .ucTable
+{ 
+    table-layout: fixed;
+}
+
 .ucTableRow
 {
     display: table-row;
@@ -885,8 +895,8 @@ h2
     display: table-cell;
     border-bottom: 1px solid #ddd;
     padding: 8px 5px;
-    vertical-align: middle;
-}
+    vertical-align: middle; 
+}  
 .ucTableRow:hover .ucTableCell
 {
     box-shadow: inset 0px -10px 18px -18px rgba(0,0,0,0.6);
@@ -909,5 +919,79 @@ h2
 }
 /**
  * Div Table Global styles - End
+**/ 
+
+/**
+ * Toggle Switch styles - Start
 **/
- 
+
+.UctoggleSwitch 
+{
+  position: relative;
+  display: inline-block;
+  width: 55px;
+  height: 30px;
+}
+
+.UctoggleSwitch input 
+{ 
+	display:none;
+}
+
+.UctoggleSlider 
+{
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.UctoggleSlider:before 
+{
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .UctoggleSlider 
+{
+  background-color: #2196F3;
+}
+
+input:focus + .UctoggleSlider 
+{
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .UctoggleSlider:before 
+{
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.UctoggleSlider.round 
+{
+  border-radius: 34px;
+}
+
+.UctoggleSlider.round:before 
+{
+  border-radius: 50%;
+}
+/**
+ * Toggle Switch styles - End
+**/
+>>>>>>> refs/heads/UC-76_Rich_text_editor_in_message
