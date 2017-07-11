@@ -696,6 +696,11 @@ h2
     border: 1px solid #AAAAAA;
     text-align: center;
 }
+
+#ucVisitorMessages .ucTableCell
+{
+    word-break: break-word;
+}
 /**
  * CSS Loader animation - Start
  */
@@ -889,9 +894,8 @@ h2
     display: table-cell;
     border-bottom: 1px solid #ddd;
     padding: 8px 5px;
-    vertical-align: middle;
-    word-break: break-word;
-}
+    vertical-align: middle; 
+}  
 .ucTableRow:hover .ucTableCell
 {
     box-shadow: inset 0px -10px 18px -18px rgba(0,0,0,0.6);
@@ -924,8 +928,8 @@ h2
 {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 55px;
+  height: 30px;
 }
 
 .UctoggleSwitch input 
@@ -950,8 +954,8 @@ h2
 {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
+  height: 22px;
+  width: 22px;
   left: 4px;
   bottom: 4px;
   background-color: white;

@@ -91,13 +91,15 @@ function UC_EmailMessagingController()
         {
             $("#ucSendMessageEmailSubject").val("");
             uc_main.messagingController.quill.setText('');
+            $('#ucSendMessageCodeEditor').val('');
             $("#ucDeleteEmailTemplateBtn").hide();
             $("#ucSendMessageEmailTemplate").removeClass("ucExistTemplate");
         }
         else
         {
             $("#ucSendMessageEmailSubject").val($(this).find("option:selected").text()); 
-            uc_main.messagingController.quill.container.firstChild.innerHTML =$(this).find("option:selected").attr("data-templatebody");
+            uc_main.messagingController.quill.container.firstChild.innerHTML = $(this).find("option:selected").attr("data-templatebody");
+            $('#ucSendMessageCodeEditor').val($(this).find("option:selected").attr("data-templatebody"));
             $("#ucDeleteEmailTemplateBtn").show();
             $("#ucSendMessageEmailTemplate").addClass("ucExistTemplate");
         }
@@ -151,10 +153,12 @@ function UC_EmailMessagingController()
           message,
 	  	  msg = "";
 	  
-	  if($('#ucEditorTogglebtn').prop('checked')==true){
-      	message = uc_main.messagingController.quill.container.firstChild.innerHTML;
-      }else
-      	message = $("#ucSendMessageCodeEditor").val();  
+	  if($('#ucEditorTogglebtn').prop('checked')==true)
+	  {
+	      	message = uc_main.messagingController.quill.getText();
+	  }
+	  else
+	      	message = $("#ucSendMessageCodeEditor").val();  
 
 	  if($.trim(subject) == "")
 	  {

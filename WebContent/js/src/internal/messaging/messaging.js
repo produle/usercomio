@@ -82,6 +82,7 @@ function UC_MessagingController()
         $("#ucSendMessageTypeTabGroup button[data-tabgroup-tabid=ucSendMessageEmailContainer]").addClass("active");
         
         thisClass.quill.setText("");
+        $('#ucSendMessageCodeEditor').val('');
 
         thisClass.emailMessagingController.getEmailTemplates();
 
@@ -189,10 +190,19 @@ function UC_MessagingController()
     	
     	if($(this).prop('checked') == true)
     	{ 
-    		thisClass.quill.setText("");
-    		thisClass.quill.clipboard.dangerouslyPasteHTML($('#ucSendMessageCodeEditor').val());
-    		$('#ucSendMessageEmailBodyWrapper').show(); 
-    	}
+    		var ans = confirm("Switching to Editor will modify the HTML layout. Click OK to proceed"); 
+			if(ans)
+			{
+				thisClass.quill.setText("");
+	    		thisClass.quill.clipboard.dangerouslyPasteHTML($('#ucSendMessageCodeEditor').val());
+	    		$('#ucSendMessageEmailBodyWrapper').show(); 
+			}
+			else
+			{
+				$(this).prop('checked',false);  
+				$('#ucSendMessageCodeEditor').show();    	
+			}
+    	}	
     	else 
     	{ 
     		$('#ucSendMessageCodeEditor').show().val(uc_main.messagingController.quill.container.firstChild.innerHTML.replace("<p><br></p>", ""));  
