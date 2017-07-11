@@ -263,7 +263,7 @@ function UC_VisitorListController()
 
 		thisClass.rivetVisitorPlaceholderObj = rivets.bind(
             document.querySelector('#ucVisitorListPlaceholder'), {
-                display: true
+                display: false
             }
         );
 	};
@@ -425,6 +425,8 @@ function UC_VisitorListController()
         thisClass.visitorListLoaded = false;
 
         $("#uc-all-user-select").prop("checked",false);
+
+        thisClass.rivetVisitorPlaceholderObj.models.display = false;
     };
 
     /*
