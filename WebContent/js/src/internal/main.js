@@ -140,9 +140,11 @@ function UC_MainController()
      */
     this.interfaceResize  = function() 
 	{
+    	if($('.ucSidebar').length==1)
+    		{
+    		$('.ucSidebar').height($(window).height()-$('.ucSidebar').offset().top-30);
+    		}
     	
-    	 $('.ucSidebar').height($(window).height()-$('.ucSidebar').offset().top-30);
-    	 
     	 var sidebarWidth = 0;
     	 if($('.ucSidebar').css("display") == "block")
     	{
@@ -150,7 +152,7 @@ function UC_MainController()
     		 
     	}
     	 
-    	 $('.ucTableWrapper').height($(window).height()-178); 
-    	 $('.ucTableWrapper').width($(window).width()-sidebarWidth);
+    	 $('.ucTableWrapper').height($(window).height()-195); 
+    	 $('.ucTableWrapper').width($(window).width()-sidebarWidth-20);
 	};
 }
