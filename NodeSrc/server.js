@@ -16,7 +16,9 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const utils = require('./core/utils').utils;
- 
+const socket = require('./rtcserver');
+
+
 //lets require/import the mongodb native drivers.
 var mongodb = require('mongodb');
 
@@ -80,7 +82,7 @@ var serverPort = 3000;
 if(process.argv[2] == "prod")
 {
 	global.prodEnvType = true;
-	serverPort = 80;
+	//serverPort = 80;
 } 
 
 
@@ -138,14 +140,8 @@ passport.use(new LocalStrategy(
 ));
 
 
-
-
 exports.passport = passport;
 exports.app = app;
-
-
-var viewRender =  require('./viewrenderer').ViewRenderer;
-var views = new viewRender();
 
 var controllerList = {};
 
@@ -157,4 +153,12 @@ fs.readdirSync(path.join(__dirname, "Managers")).forEach(function (file) {
         controllerList[basePath] = new Controller[basePath]();
         app.use(`/${basePath}`, controllerList[basePath].router);
     }
+
 });
+
+global.controllerList = controllerList;
+
+var viewRender =  require('./viewrenderer').ViewRenderer;
+var views = new viewRender();
+
+

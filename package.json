@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon NodeSrc/server.js",
+    "dev": "nodemon NodeSrc/server.js --ignore trackjs/",
     "prod": "nodemon NodeSrc/server.js prod"
   },
   "author": "",
@@ -31,9 +31,11 @@
     "moment": "^2.18.0",
     "moment-timezone": "^0.5.13",
     "mongodb": "^2.2.20",
+    "node-schedule": "^1.2.3",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "web-push": "^3.2.2"
+	"ws": "^3.0.0",
+	"web-push": "^3.2.2"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

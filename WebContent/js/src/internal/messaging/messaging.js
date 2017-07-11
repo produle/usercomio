@@ -69,7 +69,9 @@ function UC_MessagingController()
     {
         $("#ucSendMessageModal").modal();
 
-        $('#ucSendMessageAjaxLoader').hide();
+        $('#ucEmailTemplateDeleteAjaxLoader,#ucBrowserNotificationTemplateDeleteAjaxLoader').hide();
+        $("#ucSendMessageEmailSubmit").button('reset');
+        $("#ucSendMessageBrowserNotificationSubmit").button('reset');
 
         $("#ucDeleteEmailTemplateBtn, #ucDeleteBrowserNotificationTemplateBtn").hide();
 
@@ -83,6 +85,8 @@ function UC_MessagingController()
         
         thisClass.quill.setText("");
         $('#ucSendMessageCodeEditor').val('');
+
+        thisClass.emailMessagingController.initSendTypeSettings();
 
         thisClass.emailMessagingController.getEmailTemplates();
 
@@ -127,7 +131,7 @@ function UC_MessagingController()
     /*
      * @desc Collects the filterId, inclusionList and exclusionList for send message
      */
-    this.sendMessageHandler = function(subject,message,template,link,blockDuplicate,messageType)
+    this.sendMessageHandler = function(subject,message,template,link,blockDuplicate,messageType,sendType,scheduleDatetime)
     {
         var filterId = null;
         var exclusionList = [];
@@ -157,13 +161,15 @@ function UC_MessagingController()
 
         //call the email trigger server function
 
-        $('#ucSendMessageAjaxLoader').show();
+        $("#ucSendMessageEmailSubmit").button('loading');
+        $("#ucSendMessageEmailSubmit").next(".dropdown-toggle").attr("disabled",true);
+        $("#ucSendMessageBrowserNotificationSubmit").button('loading');
 
-        UC_AJAX.call('MessagingManager/sendmessage',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,filterId:filterId,exclusionList:exclusionList,inclusionList:inclusionList,subject:subject,message:message,template:template,link:link,blockDuplicate:blockDuplicate,messageType:messageType},function(data,status,xhr){
+        UC_AJAX.call('MessagingManager/sendmessage',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,filterId:filterId,exclusionList:exclusionList,inclusionList:inclusionList,subject:subject,message:message,template:template,link:link,blockDuplicate:blockDuplicate,messageType:messageType,sendType:sendType,scheduleDatetime:scheduleDatetime},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {
-                    alert("Could not send emails, kindly check the Email Settings");
+                    alert("Could not send messages, kindly check the "+messageType+" Settings");
                 }
                 else if(data.status == "authenticationfailed")
                 {
@@ -174,7 +180,9 @@ function UC_MessagingController()
                     $("#ucSendMessageModal").modal("hide");
                 }
 
-                $('#ucSendMessageAjaxLoader').hide();
+                $("#ucSendMessageEmailSubmit").button('reset');
+                $("#ucSendMessageEmailSubmit").next(".dropdown-toggle").attr("disabled",false);
+                $("#ucSendMessageBrowserNotificationSubmit").button('reset');
             });
     };
     

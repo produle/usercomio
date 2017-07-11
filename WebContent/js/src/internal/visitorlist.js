@@ -46,6 +46,8 @@ function UC_VisitorListController()
     this.currentSortOrder = 1; //1 for ASC and -1 for DESC
 
     this.currentFilterTotalVisitors = 0;
+    
+    this.newVisitors = 0;
 
     this.displayFields = [];
 
@@ -251,6 +253,14 @@ function UC_VisitorListController()
             
         };
 
+        rivets.binders.lastseen = function (el, value) {
+            $(el).html(moment(value).format("Do MMM YY, HH:mm"));
+        };
+
+        rivets.binders.firstseen = function (el, value) {
+            $(el).html(moment(value).format("Do MMM YY, HH:mm"));
+        };
+
 		thisClass.rivetVisitorPlaceholderObj = rivets.bind(
             document.querySelector('#ucVisitorListPlaceholder'), {
                 display: true
@@ -303,12 +313,15 @@ function UC_VisitorListController()
                     thisClass.visitors = thisClass.visitors.concat(data.status);
                     thisClass.visitorListSkipIndex = thisClass.visitorListSkipIndex + data.status.length;
 
-                    if(data.status.length == 0)
+                    if(thisClass.visitors.length >= thisClass.currentFilterTotalVisitors)
                     {
                         thisClass.visitorListLoaded = true;
                     }
 
                     thisClass.listVisitors();
+
+                    $("#ucPredefinedFilterList").find("li[data-filterid="+filterId+"] .ucFilterListVisitorCount").text(thisClass.currentFilterTotalVisitors);
+                    $("#ucUserdefinedFilterList").find("li[data-filterid="+filterId+"] .ucFilterListVisitorCount").text(thisClass.currentFilterTotalVisitors);
                 }
 
                 $("#ucVisitorListAjaxLoader").hide();
@@ -322,8 +335,16 @@ function UC_VisitorListController()
 	this.listVisitors = function()
 	{
 
-        thisClass.rivetVisitorListObj.models.list = thisClass.visitors;
-
+		for(var i=0;i< thisClass.visitors.length;i++)
+		{
+			thisClass.visitors[i].isVisitorOnline = false;
+			thisClass.visitors[i].isVisitorOffline = true;
+		}
+        
+		thisClass.rivetVisitorListObj.models.list = thisClass.visitors;
+        
+        thisClass.checkVisitorPresence(thisClass.visitors);
+        
         thisClass.selectCurrentSort();
 
         //thisClass.reorderFieldsInUserlist();  //TODO Has issues in switch app, need to be fixed
@@ -513,6 +534,7 @@ function UC_VisitorListController()
                         visitorObj.displaySessionCount = visitorObj.sessions.length;
                         visitorObj.displayLastSeen = moment(visitorObj.visitorMetaInfo.lastSeen).format("DD MMM YYYY HH:mm:ss");
                         visitorObj.displayFirstSeen = moment(visitorObj.visitorMetaInfo.firstSeen).format("DD MMM YYYY HH:mm:ss");
+                       
 
                         thisClass.rivetVisitorDetailsObj = rivets.bind(
                             document.querySelector('#ucVisitorDetail'), {
@@ -679,7 +701,9 @@ function UC_VisitorListController()
                     {value:"browser",label:"Browser"},
                     {value:"os",label:"Operating System"},
                     {value:"device",label:"Device"},
-                    {value:"country",label:"Country"}
+                    {value:"country",label:"Country"},
+                    {value:"lastseen",label:"Last Seen"},
+                    {value:"firstseen",label:"First Seen"}
                 ];
 
                 thisClass.rivetVisitorColumnListObj.models.fieldList = fieldListDropdown.concat(fieldList);
@@ -766,9 +790,10 @@ function UC_VisitorListController()
             for(var i = 0; i < fieldsOrder.length; i++)
             {
                 tmpOrderedHTML += $(popoverHTML).find("li[data-fieldid='"+fieldsOrder[i]+"']").prop('outerHTML') ;
+                $(popoverHTML).find("li[data-fieldid='"+fieldsOrder[i]+"']").remove();
             }
 
-            $(popoverHTML).find("#ucVisitorFieldList").html(tmpOrderedHTML);
+            $(popoverHTML).find("#ucVisitorFieldList").prepend(tmpOrderedHTML);
         }
 
         $(popoverHTML).find("#ucVisitorFieldList").removeAttr("id").addClass("ucVisitorFieldList");
@@ -829,4 +854,39 @@ function UC_VisitorListController()
         thisClass.resetPagination();
         thisClass.getAllVisitors(mongoFilter);
     };
+    
+    /*
+     * @desc Handles new visitor arrived after user has logged into usercomio dashboard
+     * @param newVisitorObj : visitor object
+     */
+    this.newVisitorAction = function(newVisitorObj)
+    {
+    	thisClass.newVisitors = thisClass.newVisitors + 1;
+    	
+    	$('.ucNewVisitorNotificationMsgCls').remove();
+    	$('.ucSearchBar').after("<p style='padding-left: 15px;font-size: 11px;color: #2b9af3;cursor:pointer' class='ucNewVisitorNotificationMsgCls'>"+thisClass.newVisitors+" user(s) have arrived since you have logged in.Click to refresh the visitor's list.</p>");
+    	
+    	$('.ucNewVisitorNotificationMsgCls').on('click',function(){
+    		thisClass.getAllVisitors();
+    		$(this).remove();
+    	});
+    }
+    
+    this.checkVisitorPresence = function(visitors)
+    {
+    	var visitorsToCheck = [];
+    	
+    	for(var i=0;i<visitors.length;i++)
+    	{
+    		var visitor = visitors[i].visitorData.email+"-"+uc_main.appController.currentAppId;
+    		
+    		visitorsToCheck.push(visitor);
+    	}
+    	
+    	var msg = {};
+    	msg.name = "userpresence";
+    	msg.visitors = visitorsToCheck;
+    	
+    	uc_main.rtcController.sendMessageToServer(JSON.stringify(msg));
+    }
 }

@@ -5,19 +5,20 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Create New App</h4>
       </div>
-      <div class="modal-body">
-        <div class="form-group" style="overflow:auto">
-<!-- 			<label for="inputEmail3" class="col-sm-2 control-label">App Name</label>
- -->			<div class="col-sm-10">
-				<input type="email" class="form-control" id="uc_create_newapp_nameinput" placeholder="App Name">
-			</div>
-		</div>
-   	  </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="uc_create_newapp_submitbtn" class="btn btn-primary">Create</button>
-        <div id="ucNewAppAjaxLoader" class='ucAjaxLoader'><div></div></div>
-      </div>
+        <form action="">
+          <div class="modal-body">
+            <div class="form-group" style="overflow:auto">
+    <!-- 			<label for="inputEmail3" class="col-sm-2 control-label">App Name</label>
+     -->			<div class="col-sm-10">
+                    <input type="email" class="form-control" id="uc_create_newapp_nameinput" placeholder="App Name">
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" id="uc_create_newapp_submitbtn" class="btn btn-primary" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Creating">Create</button>
+          </div>
+        </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -30,35 +31,37 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Update App Information</h4>
       </div>
-      <div class="modal-body">
-      		<input type="hidden" id="ucapp_update_appid" />
+        <form action="">
+          <div class="modal-body">
+                <input type="hidden" id="ucapp_update_appid" />
 
-          <div class="row">
-              <div class="col-md-12">
-                  App ID: <span id="ucapp_update_appid_display"></span>
+              <div class="row">
+                  <div class="col-md-12">
+                      App ID: <span id="ucapp_update_appid_display"></span>
+                  </div>
               </div>
+              <br/>
+            <div class="form-group" style="overflow:auto">
+    <!-- 			<label for="inputEmail3" class="col-sm-2 control-label">App Name</label>
+     -->			<div class="col-sm-10">
+                    <input type="email" class="form-control" id="ucapp_update_nameinput" placeholder="App Name">
+                </div>
+            </div>
+            <div class="form-group" style="overflow:auto">
+                <label for="ucapp_update_trackingcode" class="col-sm-12 control-label">Tracking Code</label>
+                <div class="col-sm-12">
+                    <textarea class="form-control" id="ucapp_update_trackingcode" rows="15" readonly>
+                    </textarea>
+                </div>
+            </div>
           </div>
-          <br/>
-        <div class="form-group" style="overflow:auto">
-<!-- 			<label for="inputEmail3" class="col-sm-2 control-label">App Name</label>
- -->			<div class="col-sm-10">
-				<input type="email" class="form-control" id="ucapp_update_nameinput" placeholder="App Name">
-			</div>
-		</div>
-        <div class="form-group" style="overflow:auto">
- 			<label for="ucapp_update_trackingcode" class="col-sm-12 control-label">Tracking Code</label>
- 			<div class="col-sm-12">
-				<textarea class="form-control" id="ucapp_update_trackingcode" rows="15" readonly>
-                </textarea>
-			</div>
-		</div>
-   	  </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" id="ucDeleteAppBtn">Delete</button>
-        <button type="button" id="ucupdate_app_submitbtn" class="btn btn-primary">Update</button>
-        <div id="ucUpdateAppAjaxLoader" class='ucAjaxLoader'><div></div></div>
-      </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" id="ucAppGenerateTrackjs" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Generating">Re-generate Trackjs</button>
+            <button type="button" class="btn btn-danger" id="ucDeleteAppBtn">Delete</button>
+            <button type="submit" id="ucupdate_app_submitbtn" class="btn btn-primary" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Updating">Update</button>
+          </div>
+        </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -71,31 +74,32 @@
             <div class="modal-body">
                <img src="/images/app/modal/userIcon.png" alt=""/>
                <h2>Edit Profile</h2>
-                <div class="row">
-                  <div class="col-sm-10 col-sm-offset-1">
-                    <div class="input-group">
-                      <span class="input-group-btn">
-                        <label>First Name</label>
-                      </span>
-                      <input type="text" class="form-control" id="uceditprofile_firstname">
-                    </div>
-                   </div>
+                <form action="">
+                    <div class="row">
+                      <div class="col-sm-10 col-sm-offset-1">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <label>First Name</label>
+                          </span>
+                          <input type="text" class="form-control" id="uceditprofile_firstname">
+                        </div>
+                       </div>
 
-                   <div class="col-sm-10 col-sm-offset-1">
-                    <div class="input-group">
-                      <span class="input-group-btn">
-                        <label>Last Name</label>
-                      </span>
-                      <input type="text" class="form-control" id="uceditprofile_lastname">
-                    </div>
-                   </div>
+                       <div class="col-sm-10 col-sm-offset-1">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <label>Last Name</label>
+                          </span>
+                          <input type="text" class="form-control" id="uceditprofile_lastname">
+                        </div>
+                       </div>
 
-                </div>
-                <div class="ucButtonWrapper">
-                    <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
-                    <button type="button" id="uceditprofile_submit" class="btn ucSaveBtn">Save</button>
-                    <div id="ucEditProfileAjaxLoader" class='ucAjaxLoader'><div></div></div>
-                </div>
+                    </div>
+                    <div class="ucButtonWrapper">
+                        <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                        <button type="submit" id="uceditprofile_submit" class="btn ucSaveBtn" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Saving">Save</button>
+                    </div>
+                </form>
             </div>
 
         </div>
@@ -110,32 +114,33 @@
             <div class="modal-body">
                <img src="/images/app/modal/passwordIcon.png" alt=""/>
                <h2>Change Password</h2>
-                <div class="row">
+                <form action="">
+                    <div class="row">
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>New Password</label>
-                              </span>
-                              <input type="password" class="form-control" id="ucchangepassword_password" placeholder="********">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>New Password</label>
+                                  </span>
+                                  <input type="password" class="form-control" id="ucchangepassword_password" placeholder="********">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>Confirm Password</label>
-                              </span>
-                              <input type="password" class="form-control" id="ucchangepassword_confirmpassword" placeholder="********">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>Confirm Password</label>
+                                  </span>
+                                  <input type="password" class="form-control" id="ucchangepassword_confirmpassword" placeholder="********">
+                                </div>
                             </div>
-                        </div>
 
-                </div>
-                <div class="ucButtonWrapper">
-                    <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
-                    <button type="button" id="ucchangepassword_submit" class="btn ucSaveBtn">Save</button>
-                    <div id="ucEditPasswordAjaxLoader" class='ucAjaxLoader'><div></div></div>
-                </div>
+                    </div>
+                    <div class="ucButtonWrapper">
+                        <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                        <button type="submit" id="ucchangepassword_submit" class="btn ucSaveBtn" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Saving">Save</button>
+                    </div>
+                </form>
             </div>
 
         </div>
@@ -149,127 +154,128 @@
 
             <div class="modal-body">
                <img src="/images/app/modal/smtpIcon.png" alt=""/>
-               <h2>Email Settings for <span id="ucEmailSettings_App"></span></h2>
+               <h2>Email Settings for <span id="ucEmailSettings_App" rv-text="appName"></span></h2>
 
-                <div class="btn-group ucTabBtnGroup" id="ucEditEmailTypeTabGroup" role="group">
-                    <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditEmailContainer" data-tabgroup-tabid="ucEditEmailSMTPContainer" data-emailType="SMTP">SMTP</button>
-                    <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditEmailContainer" data-tabgroup-tabid="ucEditEmailMailgunContainer" data-emailType="Mailgun">Mailgun</button>
-                    <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditEmailContainer" data-tabgroup-tabid="ucEditEmailAmazonContainer" data-emailType="Amazon">Amazon SES</button>
-                </div>
+                <form action="">
+                    <div class="btn-group ucTabBtnGroup" id="ucEditEmailTypeTabGroup" role="group">
+                        <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditEmailContainer" data-tabgroup-tabid="ucEditEmailSMTPContainer" data-emailType="SMTP">SMTP</button>
+                        <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditEmailContainer" data-tabgroup-tabid="ucEditEmailMailgunContainer" data-emailType="Mailgun">Mailgun</button>
+                        <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditEmailContainer" data-tabgroup-tabid="ucEditEmailAmazonContainer" data-emailType="Amazon">Amazon SES</button>
+                    </div>
 
-                <div class="row ucEditEmailContainer" id="ucEditEmailSMTPContainer">
+                    <div class="row ucEditEmailContainer" id="ucEditEmailSMTPContainer">
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>SMTP Host</label>
-                              </span>
-                              <input type="text" class="form-control" id="uceditsmtp_host" placeholder="smtp.google.com">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>SMTP Host</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditsmtp_host" placeholder="smtp.google.com">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>SMTP Port</label>
-                              </span>
-                              <input type="text" class="form-control" id="uceditsmtp_port" placeholder="25">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>SMTP Port</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditsmtp_port" placeholder="25">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>SMTP Username</label>
-                              </span>
-                              <input type="text" class="form-control" id="uceditsmtp_user" placeholder="johndoe@gmail.com">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>SMTP Username</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditsmtp_user" placeholder="johndoe@gmail.com">
+                                </div>
                             </div>
-                        </div>
 
-                         <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>SMTP Password</label>
-                              </span>
-                              <input type="password" class="form-control" id="uceditsmtp_pass" placeholder="********">
+                             <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>SMTP Password</label>
+                                  </span>
+                                  <input type="password" class="form-control" id="uceditsmtp_pass" placeholder="********">
+                                </div>
                             </div>
-                        </div>
-                </div>
+                    </div>
 
-                <div class="row ucEditEmailContainer" id="ucEditEmailMailgunContainer">
+                    <div class="row ucEditEmailContainer" id="ucEditEmailMailgunContainer">
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>Mailgun Key</label>
-                              </span>
-                              <input type="text" class="form-control" id="uceditmailgun_key" placeholder="key-XXXXXXXXXXXXXXXXXXXXXXX">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>Mailgun Key</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditmailgun_key" placeholder="key-XXXXXXXXXXXXXXXXXXXXXXX">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>Mailgun Domain</label>
-                              </span>
-                              <input type="text" class="form-control" id="uceditmailgun_domain" placeholder="www.usercom.io">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>Mailgun Domain</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditmailgun_domain" placeholder="www.usercom.io">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>From email</label>
-                              </span>
-                              <input type="text" class="form-control" id="uceditmailgun_from" placeholder="info@usercom.io">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>From email</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditmailgun_from" placeholder="info@usercom.io">
+                                </div>
                             </div>
-                        </div>
-                </div>
+                    </div>
 
-                <div class="row ucEditEmailContainer" id="ucEditEmailAmazonContainer">
+                    <div class="row ucEditEmailContainer" id="ucEditEmailAmazonContainer">
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>Amazon SES Key</label>
-                              </span>
-                              <input type="text" class="form-control" id="uceditamazon_key" placeholder="Enter Amazon SES Key">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>Amazon SES Key</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditamazon_key" placeholder="Enter Amazon SES Key">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>Amazon Secret</label>
-                              </span>
-                              <input type="text" class="form-control" id="uceditamazon_secret" placeholder="Enter Amazon SES Secret">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>Amazon Secret</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditamazon_secret" placeholder="Enter Amazon SES Secret">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>Region</label>
-                              </span>
-                              <input type="text" class="form-control" id="uceditamazon_region" placeholder="us-east-1">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>Region</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditamazon_region" placeholder="us-east-1">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-10 col-sm-offset-1">
-                            <div class="input-group">
-                              <span class="input-group-btn">
-                                <label>From email</label>
-                              </span>
-                              <input type="text" class="form-control" id="uceditamazon_from" placeholder="info@usercom.io">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>From email</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditamazon_from" placeholder="info@usercom.io">
+                                </div>
                             </div>
-                        </div>
-                </div>
+                    </div>
 
-                <div class="ucButtonWrapper">
-                    <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
-                    <button type="button" id="uceditmail_submit" class="btn ucSaveBtn">Save</button>
-                    <div id="ucEditEmailAjaxLoader" class='ucAjaxLoader'><div></div></div>
-                </div>
+                    <div class="ucButtonWrapper">
+                        <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                        <button type="submit" id="uceditmail_submit" class="btn ucSaveBtn" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Saving">Save</button>
+                    </div>
+                </form>
             </div>
 
         </div>
@@ -283,58 +289,59 @@
 
             <div class="modal-body">
                <img src="/images/app/modal/browserNotificationIcon.png" alt=""/>
-               <h2>Browser Notification Settings for <span id="ucBrowserNotificationSettings_App"></span></h2>
+               <h2>Browser Notification Settings for <span id="ucBrowserNotificationSettings_App" rv-text="appName"></span></h2>
 
-                <div class="row">
+                <form action="">
+                    <div class="row">
 
-                    <div class="col-sm-10 col-sm-offset-1">
-                        <div class="input-group">
-                          <span class="input-group-btn">
-                            <label>FCM Secret Key</label>
-                          </span>
-                          <input type="text" class="form-control" id="uceditbrowsernotification_fcmkey" placeholder="Secret Key from Google FCM console">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>FCM Secret Key</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditbrowsernotification_fcmkey" placeholder="Secret Key from Google FCM console">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>FCM Sender ID</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditbrowsernotification_fcmsenderid" placeholder="Sender ID from Google FCM console">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>FCM App Name</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditbrowsernotification_fcmappname" placeholder="App Name from Google FCM console">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <label>Icon URL</label>
+                              </span>
+                              <input type="text" class="form-control" id="uceditbrowsernotification_icon" placeholder="URL of icon to be displayed in notification">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div style="color:#8ea4b1;">
+                                <a href="/tracking/usercom-service-worker.js" target="_blank">Download the service worker file</a> and place it in the root directory of your application.
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-sm-10 col-sm-offset-1">
-                        <div class="input-group">
-                          <span class="input-group-btn">
-                            <label>FCM Sender ID</label>
-                          </span>
-                          <input type="text" class="form-control" id="uceditbrowsernotification_fcmsenderid" placeholder="Sender ID from Google FCM console">
-                        </div>
+                    <div class="ucButtonWrapper">
+                        <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                        <button type="submit" id="uceditbrowsernotification_submit" class="btn ucSaveBtn" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Saving">Save</button>
                     </div>
-
-                    <div class="col-sm-10 col-sm-offset-1">
-                        <div class="input-group">
-                          <span class="input-group-btn">
-                            <label>FCM App Name</label>
-                          </span>
-                          <input type="text" class="form-control" id="uceditbrowsernotification_fcmappname" placeholder="App Name from Google FCM console">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-10 col-sm-offset-1">
-                        <div class="input-group">
-                          <span class="input-group-btn">
-                            <label>Icon URL</label>
-                          </span>
-                          <input type="text" class="form-control" id="uceditbrowsernotification_icon" placeholder="URL of icon to be displayed in notification">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-10 col-sm-offset-1">
-                        <div style="color:#8ea4b1;">
-                            <a href="/tracking/usercom-service-worker.js" target="_blank">Download the service worker file</a> and place it in the root directory of your application.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ucButtonWrapper">
-                    <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
-                    <button type="button" id="uceditbrowsernotification_submit" class="btn ucSaveBtn">Save</button>
-                    <div id="ucEditBrowserNotificationAjaxLoader" class='ucAjaxLoader'><div></div></div>
-                </div>
+                </form>
             </div>
 
         </div>
@@ -350,70 +357,71 @@
                <img src="/images/app/modal/dbIcon.png" alt=""/>
                <h2>Edit Database Settings</h2>
 
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <div class="btn-group ucTabBtnGroup" id="ucEditDatabaseTabGroup" role="group">
-                            <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditDatabaseContainer" data-tabgroup-tabid="ucEditDatabaseSimpleContainer" data-connectionType="Simple">Simple</button>
-                            <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditDatabaseContainer" data-tabgroup-tabid="ucEditDatabaseAdvancedContainer" data-connectionType="Advanced">Advanced</button>
+                <form action="">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <div class="btn-group ucTabBtnGroup" id="ucEditDatabaseTabGroup" role="group">
+                                <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditDatabaseContainer" data-tabgroup-tabid="ucEditDatabaseSimpleContainer" data-connectionType="Simple">Simple</button>
+                                <button type="button" class="btn btn-default uc_tab_trigger" data-tabgroup-class="ucEditDatabaseContainer" data-tabgroup-tabid="ucEditDatabaseAdvancedContainer" data-connectionType="Advanced">Advanced</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
+                    <div class="row">
 
-                    <div class="ucEditDatabaseContainer" id="ucEditDatabaseSimpleContainer">
-                       <div class="col-sm-10 col-sm-offset-1">
-                                <div class="input-group">
-                                  <span class="input-group-btn">
-                                    <label>MongoDB Host</label>
-                                  </span>
-                                  <input type="text" class="form-control" id="uceditdatabase_host" placeholder="127.0.0.1, localhost, etc">
+                        <div class="ucEditDatabaseContainer" id="ucEditDatabaseSimpleContainer">
+                           <div class="col-sm-10 col-sm-offset-1">
+                                    <div class="input-group">
+                                      <span class="input-group-btn">
+                                        <label>MongoDB Host</label>
+                                      </span>
+                                      <input type="text" class="form-control" id="uceditdatabase_host" placeholder="127.0.0.1, localhost, etc">
+                                    </div>
+                           </div>
+                           <div class="col-sm-10 col-sm-offset-1">
+                                    <div class="input-group">
+                                      <span class="input-group-btn">
+                                        <label>MongoDB Port</label>
+                                      </span>
+                                      <input type="text" class="form-control" id="uceditdatabase_port" placeholder="27017">
+                                    </div>
+                           </div>
+                           <div class="col-sm-10 col-sm-offset-1">
+                                    <div class="input-group">
+                                      <span class="input-group-btn">
+                                        <label>MongoDB Username</label>
+                                      </span>
+                                      <input type="text" class="form-control" id="uceditdatabase_user" placeholder="root">
+                                    </div>
+                           </div>
+                           <div class="col-sm-10 col-sm-offset-1">
+                                    <div class="input-group">
+                                      <span class="input-group-btn">
+                                        <label>MongoDB Password</label>
+                                      </span>
+                                      <input type="text" class="form-control" id="uceditdatabase_pass" placeholder="********">
+                                    </div>
+                           </div>
+                        </div>
+
+                        <div class="ucEditDatabaseContainer" id="ucEditDatabaseAdvancedContainer">
+                           <div class="col-sm-12">
+                                <div class="">
+                                    <span class="input-group-btn">
+                                        <label style="width: auto; padding: 7px;">MongoDB Connection String</label>
+                                    </span>
+
+                                    <br/>
+                                    <textarea rows="10" class="form-control" id="uceditdatabase_connectionstring" placeholder="Connection String (eg: mongodb://<USERNAME>:<PASSWORD>@cluster0-shard.mongodb.net:27017/<DATABASE>?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin)"></textarea>
                                 </div>
-                       </div>
-                       <div class="col-sm-10 col-sm-offset-1">
-                                <div class="input-group">
-                                  <span class="input-group-btn">
-                                    <label>MongoDB Port</label>
-                                  </span>
-                                  <input type="text" class="form-control" id="uceditdatabase_port" placeholder="27017">
-                                </div>
-                       </div>
-                       <div class="col-sm-10 col-sm-offset-1">
-                                <div class="input-group">
-                                  <span class="input-group-btn">
-                                    <label>MongoDB Username</label>
-                                  </span>
-                                  <input type="text" class="form-control" id="uceditdatabase_user" placeholder="root">
-                                </div>
-                       </div>
-                       <div class="col-sm-10 col-sm-offset-1">
-                                <div class="input-group">
-                                  <span class="input-group-btn">
-                                    <label>MongoDB Password</label>
-                                  </span>
-                                  <input type="text" class="form-control" id="uceditdatabase_pass" placeholder="********">
-                                </div>
-                       </div>
+                           </div>
+                        </div>
+
+                       <div class="ucButtonWrapper">
+                            <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                            <button type="submit" id="uceditdatabase_submit" class="btn ucSaveBtn" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Saving">Save</button>
+                        </div>
                     </div>
-
-                    <div class="ucEditDatabaseContainer" id="ucEditDatabaseAdvancedContainer">
-                       <div class="col-sm-12">
-                            <div class="">
-                                <span class="input-group-btn">
-                                    <label style="width: auto; padding: 7px;">MongoDB Connection String</label>
-                                </span>
-
-                                <br/>
-                                <textarea rows="10" class="form-control" id="uceditdatabase_connectionstring" placeholder="Connection String (eg: mongodb://<USERNAME>:<PASSWORD>@cluster0-shard.mongodb.net:27017/<DATABASE>?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin)"></textarea>
-                            </div>
-                       </div>
-                    </div>
-
-                   <div class="ucButtonWrapper">
-                        <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
-                        <button type="button" id="uceditdatabase_submit" class="btn ucSaveBtn">Save</button>
-                        <div id="ucEditDatabaseAjaxLoader" class='ucAjaxLoader'><div></div></div>
-                    </div>
-                </div>
+                </form>
             </div>
 
         </div>
@@ -421,30 +429,41 @@
 </div>
 
 
-<div id="ucEditSystemModal" class="modal ucModal fade" tabindex="-1" role="dialog">
+<div id="ucEditSystemModal" class="modal ucModal fade" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
 
             <div class="modal-body">
                <img src="/images/app/modal/settingsIcon.png" alt=""/>
                <h2>Edit System Settings</h2>
-                <div class="row">
+                <form action="">
+                    <div class="row">
 
-                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                    <label>Base URL with Port</label>
+                                  </span>
+                                  <input type="text" class="form-control" id="uceditsystem_baseurl" placeholder="http://localhost:3000">
+                                </div>
+                           </div>
+
+                           <div class="col-sm-10 col-sm-offset-1">
                             <div class="input-group">
                               <span class="input-group-btn">
-                                <label>Base URL with Port</label>
+                                <label>Timezone</label>
                               </span>
-                              <input type="text" class="form-control" id="uceditsystem_baseurl" placeholder="http://localhost:3000">
+                                <select class="form-control" id="uceditsystem_timezoneinput" style="width: 100%;">
+                                </select>
                             </div>
-                       </div>
-                 </div>
+                           </div>
+                     </div>
 
-                 <div class="ucButtonWrapper">
-                        <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
-                        <button type="button" id="uceditsystem_submit" class="btn ucSaveBtn">Save</button>
-                        <div id="ucEditSystemAjaxLoader" class='ucAjaxLoader'><div></div></div>
-                 </div>
+                     <div class="ucButtonWrapper">
+                            <button type="button" class="btn ucCancelBtn" data-dismiss="modal">Cancel</button>
+                            <button type="submit" id="uceditsystem_submit" class="btn ucSaveBtn" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Saving">Save</button>
+                     </div>
+                </form>
 
             </div>
 
@@ -519,97 +538,118 @@
                 <div class="row ucSendMessageContainer" id="ucSendMessageEmailContainer">
 	                
 	                <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <select class="form-control" id="ucSendMessageEmailTemplate">
-                                    <option value="new">New Template</option>
-                                    <option value="noTemplate">No Template</option>
-                                    <option rv-each-emailtemplate="emailTemplateList" rv-text="emailtemplate.subject" rv-data-templatebody="emailtemplate.message" rv-value="emailtemplate._id"></option>
-                                </select>
-                                <button type="button" class="ucListingFilterDeleteIcon" id="ucDeleteEmailTemplateBtn"></button>
-                            </div>
-                        </div>
-                        <div class="row uc_mt_small">
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="ucSendMessageEmailSubject" placeholder="Subject" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                            
-                                <div style="text-align: right;">
-                                    <span>Editor &nbsp;</span>
-                                	<label class="UctoggleSwitch" style="vertical-align: middle;">
-  										<input type="checkbox" id="ucEditorTogglebtn" checked>
- 									 	 <div class="UctoggleSlider round"></div>
-							    	</label>
-							    </div>
-									
-                                <div id="ucSendMessageEmailBodyWrapper">
-                               		 <div class="form-control" id="ucSendMessageEmailBody" style="height:150px" placeholder="Body of the message"></div> 
-                                </div>
-                                <textarea class="form-control" id="ucSendMessageCodeEditor" style="display:none;height:150px" placeholder="Enter Raw HTML"></textarea> 
-                                
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 text-left">
-                                <div class="checkbox">
-                                    <label class="ucCheckboxLabel">
-                                        <input type="checkbox" id="ucSendMessageEmailBlockDuplicate" checked> Exclude users who have already received this mail
-                                    </label>
+                        <form action="">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <select class="form-control" id="ucSendMessageEmailTemplate">
+                                        <option value="new">New Template</option>
+                                        <option value="noTemplate">No Template</option>
+                                        <option rv-each-emailtemplate="emailTemplateList" rv-text="emailtemplate.subject" rv-data-templatebody="emailtemplate.message" rv-value="emailtemplate._id"></option>
+                                    </select>
+                                    <button type="button" class="ucListingFilterDeleteIcon" id="ucDeleteEmailTemplateBtn"></button>
+                                    <div id="ucEmailTemplateDeleteAjaxLoader" class='ucAjaxLoader'><div></div></div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="row uc_mt_small">
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="ucSendMessageEmailSubject" placeholder="Subject" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
 
-                        <button type="button" id="ucSendMessageEmailSubmit" class="btn ucSendBtn">Send</button>
+                                    <div style="text-align: right;">
+                                        <span>Editor &nbsp;</span>
+                                        <label class="UctoggleSwitch" style="vertical-align: middle;">
+                                            <input type="checkbox" id="ucEditorTogglebtn" checked>
+                                             <div class="UctoggleSlider round"></div>
+                                        </label>
+                                    </div>
+
+                                    <div id="ucSendMessageEmailBodyWrapper">
+                                         <div class="form-control" id="ucSendMessageEmailBody" style="height:150px" placeholder="Body of the message"></div> 
+                                    </div>
+                                    <textarea class="form-control" id="ucSendMessageCodeEditor" style="display:none;height:150px" placeholder="Enter Raw HTML"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 text-left">
+                                    <div class="checkbox">
+                                        <label class="ucCheckboxLabel">
+                                            <input type="checkbox" id="ucSendMessageEmailBlockDuplicate" checked> Exclude users who have already received this mail
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6 text-left">
+                                    <div id="ucSendMessageEmailScheduleContainer">
+                                        <input type="text" class="form-control" id="ucSendMessageEmailScheduleDatetime" placeholder="Send On" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 text-right" style="margin-bottom: 100px;">
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn ucSendBtn" id="ucSendMessageEmailSubmit" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Sending">Send Now</button>
+                                        <button type="button" class="btn ucSendBtn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="#" class="ucSendMessageEmailSendTypeItem" data-sendtype="now">Send Now</a></li>
+                                            <li><a href="#" class="ucSendMessageEmailSendTypeItem" data-sendtype="later">Send Later</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
                 <div class="row ucSendMessageContainer" id="ucSendMessageBrowserNotificationContainer">
 
 	                <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <select class="form-control" id="ucSendMessageBrowserNotificationTemplate">
-                                    <option value="new">New Template</option>
-                                    <option rv-each-browsernotificationtemplate="browserNotificationTemplateList" rv-text="browsernotificationtemplate.subject" rv-data-templatelink="browsernotificationtemplate.link" rv-data-templatebody="browsernotificationtemplate.message" rv-value="browsernotificationtemplate._id"></option>
-                                </select>
-                                <button type="button" class="ucListingFilterDeleteIcon" id="ucDeleteBrowserNotificationTemplateBtn"></button>
-                            </div>
-                        </div>
-                        <div class="row uc_mt_small">
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="ucSendMessageBrowserNotificationTitle" placeholder="Title" />
-                            </div>
-                        </div>
-                        <div class="row uc_mt_small">
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="ucSendMessageBrowserNotificationLink" placeholder="Link to navigate on clicking the notification" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <textarea class="form-control" id="ucSendMessageBrowserNotificationBody" rows="5" placeholder="Body of the message"></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 text-left">
-                                <div class="checkbox">
-                                    <label class="ucCheckboxLabel">
-                                        <input type="checkbox" id="ucSendMessageBrowserNotificationBlockDuplicate" checked> Exclude users who have already received this notification
-                                    </label>
+                        <form action="">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <select class="form-control" id="ucSendMessageBrowserNotificationTemplate">
+                                        <option value="new">New Template</option>
+                                        <option rv-each-browsernotificationtemplate="browserNotificationTemplateList" rv-text="browsernotificationtemplate.subject" rv-data-templatelink="browsernotificationtemplate.link" rv-data-templatebody="browsernotificationtemplate.message" rv-value="browsernotificationtemplate._id"></option>
+                                    </select>
+                                    <button type="button" class="ucListingFilterDeleteIcon" id="ucDeleteBrowserNotificationTemplateBtn"></button>
+                                    <div id="ucBrowserNotificationTemplateDeleteAjaxLoader" class='ucAjaxLoader'><div></div></div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="row uc_mt_small">
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="ucSendMessageBrowserNotificationTitle" placeholder="Title" />
+                                </div>
+                            </div>
+                            <div class="row uc_mt_small">
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="ucSendMessageBrowserNotificationLink" placeholder="Link to navigate on clicking the notification" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <textarea class="form-control" id="ucSendMessageBrowserNotificationBody" rows="5" placeholder="Body of the message"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 text-left">
+                                    <div class="checkbox">
+                                        <label class="ucCheckboxLabel">
+                                            <input type="checkbox" id="ucSendMessageBrowserNotificationBlockDuplicate" checked> Exclude users who have already received this notification
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <button type="button" id="ucSendMessageBrowserNotificationSubmit" class="btn ucSendBtn">Send</button>
+                            <button type="submit" id="ucSendMessageBrowserNotificationSubmit" class="btn ucSendBtn" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Sending">Send</button>
+                        </form>
                     </div>
                 </div>
-                
-                
 
-                <div id="ucSendMessageAjaxLoader" class='ucAjaxLoader'><div></div></div>
             </div>
             </div>
             

@@ -7,12 +7,25 @@
 -->
            <h5 id="ucMainListing">Listing</h5>
            <ul id="ucPredefinedFilterList" class="ucListingOptions">
-               <li rv-each-filter="list" rv-data-filterid="filter._id" class="ucSwitchContentTrigger" switch-to="uc_tab_data_listuser"><span>{filter.name}</span></li>
+               <li rv-each-filter="list" rv-data-filterid="filter._id" class="ucSwitchContentTrigger" switch-to="uc_tab_data_listuser"><span>{filter.name}</span><span class="ucFilterListVisitorCount"></span></li>
            </ul>
-            <div id="ucPredefinedFilterAjaxLoader" class='ucAjaxLoader'><div></div></div>
+            <div id="ucPredefinedFilterAjaxLoader" class='ucAjaxLoader' style="display: none;"><div></div></div>
            
            <h5 id="ucCustomFilter">Custom Filter <span class="ucAddNewFilter ucAddFilterBtn" class="ucAddFilterBtn"><i class="ico-plus2"></i></span></h5>
            <ul id="ucUserdefinedFilterList" class="ucUserDefinedFilterOptions">
-               <li rv-each-filter="list" rv-data-filterid="filter._id" class="ucSwitchContentTrigger" switch-to="uc_tab_data_listuser"><i class="ico-settings"></i><span>{filter.name}</span><div class="ucFilterSettingBtn"><i class="ico-edit"></i><i class="ico-trash2"></i></div></li>
+               <li rv-each-filter="list" rv-data-filterid="filter._id" class="ucSwitchContentTrigger" switch-to="uc_tab_data_listuser">
+                   <i class="ico-settings"></i>
+                   <span class="ucFilterListName">{filter.name}</span>
+                   <div class="dropdown ucFilterSettingBtn">
+                        <span class="dropdown-toggle" type="button" id="ucFiltersListMoreOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                           <i class="fa fa-ellipsis-v"></i>
+                        </span>
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="ucFiltersListMoreOptions">
+                            <li><a href="#" class="ucFilterListEditBtn">Edit</a></li>
+                            <li><a href="#" class="ucFilterListDeleteBtn">Delete</a></li>
+                        </ul>
+                    </div>
+                   <span class="ucFilterListVisitorCount"></span>
+               </li>
            </ul>
-            <div id="ucUserdefinedFilterAjaxLoader" class='ucAjaxLoader'><div></div></div>
+            <div id="ucUserdefinedFilterAjaxLoader" class='ucAjaxLoader' style="display: none;"><div></div></div>

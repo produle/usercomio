@@ -168,7 +168,6 @@ h2
 .ucSidebar
 {
 	width: 270px;
-	height: 100vh;
 	background-color: #f9f9f9;
 	border-right: 1px solid #e9edee;
 	float:left;
@@ -238,7 +237,7 @@ h2
 	line-height: 40px;
     font-size: 12px;
     color: #777;
-    transition: all 0.5s ease;
+    transition: color 0.5s ease;
     cursor: pointer;
 }
 .ucSidebar ul li:hover
@@ -251,14 +250,21 @@ h2
 }
 
 
-.ucUserDefinedFilterOptions li span
+.ucUserDefinedFilterOptions li .ucFilterListName
 {
 	white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 140px;
+    width: 110px;
     position: absolute;
     
+}
+.ucListingOptions li .ucFilterListVisitorCount,
+.ucUserDefinedFilterOptions li .ucFilterListVisitorCount
+{
+	width: 30px;
+    float: right;
+
 }
 .ucSidebar ul li i
 {
@@ -484,9 +490,15 @@ h2
 	border-radius: 5px;
 	color: #333;
 	padding: 20px;
+<<<<<<< HEAD
 	width: 200px; 
     position: absolute;
     height: 100%;
+=======
+	width: 200px;
+    height: 655px;
+    position: relative;
+>>>>>>> upstream/master
     float: left;
     text-align: left;
     overflow-y: auto;
@@ -543,14 +555,14 @@ h2
 #ucPredefinedFilterList li .ucFilterSettingBtn,
 #ucUserdefinedFilterList li .ucFilterSettingBtn
 {
-    display: none;
+    display: inline-block;
     float: right;
 }
 
-#ucPredefinedFilterList li:hover .ucFilterSettingBtn,
-#ucUserdefinedFilterList li:hover .ucFilterSettingBtn
+#ucPredefinedFilterList li .ucFilterSettingBtn i,
+#ucUserdefinedFilterList li .ucFilterSettingBtn i
 {
-    display: inline-block;
+    font-weight: normal;
 }
 
 
@@ -597,6 +609,11 @@ h2
 .ucUserBaseDetails
 {
     cursor: pointer;
+    display:table;
+}
+.ucUserCurrentStatus 
+{
+	display:table-row;
 }
 #ucSendMessageModal .close
 {
@@ -610,7 +627,23 @@ h2
 }
 #ucSendMessageModal .ucSendBtn
 {
-	float:right;
+	padding: 10px 15px;
+    margin: 15px 0px 0px;
+}
+.btn-group .ucSendBtn:first-child
+{
+    padding-left: 25px;
+    border-top-left-radius: 22px;
+    border-bottom-left-radius: 22px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.btn-group .ucSendBtn.dropdown-toggle
+{
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 22px;
+    border-bottom-right-radius: 22px;
 }
 .ucExistTemplate
 {
@@ -626,6 +659,22 @@ h2
 	margin-right:0 !important;
 	float: right;
 }
+.ucLoaderContent {
+    color: #2B9AF3;
+    font-style: italic;
+}
+
+#ucEmailTemplateDeleteAjaxLoader,
+#ucBrowserNotificationTemplateDeleteAjaxLoader {
+    margin: 0px;
+    float: right;
+    height: 20px;
+    width: 20px;
+    transform: scale(0.4);
+    margin-right: 5px;
+}
+
+
 @media only screen and (max-width:992px) 
 {
 	.ucSidebar{width:0; position: fixed; padding:0;top:0; left:0; height: 100%; display:none; overflow: auto; }
@@ -635,13 +684,13 @@ h2
 	#ucHeader.navbar-default .navbar-toggle { background: #3e3c5a; border-color: transparent;}
 	#ucHeader.navbar-default .navbar-toggle .icon-bar{background-color: #dfdef5;}
 	.ucSideBarMenuTrigger { display: block; }
-	.ucSidebar.open{width:270px; padding:15px;position: fixed; top:0; left:0; height: 100%;display:block; z-index: 999;}
+	.ucSidebar.open{width:270px; padding:15px;position: fixed; top:0; left:0; height: 100% !important;display:block; z-index: 999;}
 	.ucMainContent.open{margin-left: 270px;}
 	.ucIndexPageWrapper.open{overflow:hidden;}
 	#ucHeader.open{margin-left: 270px;}
 	.ucSidebarCloseBtn{display: block;}
 	.ucMainContent.open:after {    content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index:99; }
-	.ucSearchWrapper{width:60%;}
+	.ucSearchWrapper , #ucVisitorSearchBtn, .ucSearchForm{/* width:60%; */ display:none;}
 	#ucSendMessageModal .modal-dialog { width:auto; }
 }
 @media only screen and (max-width:580px) 
@@ -654,7 +703,7 @@ h2
 }
 @media only screen and (max-width:480px) 
 {
-	.ucSearchBar .form-inline { width:100%; display: inline-block; margin-top: 10px;}
+	.ucSearchBar .form-inline { width:100%; /* display: inline-block; */, display:none; margin-top: 10px;}
 	.ucSearchWrapper {width: 65%; margin-right: 10px;}
 	.ucFilterModal .group-actions , .ucFilterModal .modal-footer .ucCancelBtn, .rules-list select.form-control { margin-bottom:10px !important;}
 	
@@ -894,9 +943,10 @@ h2
 {
     display: table-cell;
     border-bottom: 1px solid #ddd;
-    padding: 8px 5px;
-    vertical-align: middle; 
-}  
+    padding: 8px 18px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
 .ucTableRow:hover .ucTableCell
 {
     box-shadow: inset 0px -10px 18px -18px rgba(0,0,0,0.6);

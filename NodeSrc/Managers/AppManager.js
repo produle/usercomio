@@ -7,6 +7,10 @@
 
 var express = require("express");
 var app = require("../server").app;
+var fs = require("fs");
+var path = require('path');
+var uglify = require("uglify-js"); 
+const { URL } = require('url');
 var EmailManager = require("./EmailManager").EmailManager;
 var BrowserNotificationManager = require("./BrowserNotificationManager").BrowserNotificationManager;
 
@@ -22,6 +26,7 @@ class AppManager {
         this.router.post("/getAllUserApps",(req, res) => { this.getAllUserApps(req,res); });
         this.router.post("/updateAnAppDetails",(req, res) => { this.updateAnAppDetails(req,res); });
         this.router.post("/deleteAnApp",(req, res) => { this.deleteAnApp(req,res); });
+        this.router.post("/regeneratetrackjs",(req, res) => { this.regenerateTrackjs(req,res); });
     }
   	
   	/*
@@ -140,7 +145,11 @@ class AppManager {
 
                             });
 
+                            var appManagerObj = new AppManager();
+                            appManagerObj.generateTrackingCodeForApp(newApp._id);
+                            
                             return res.send({status:newApp});
+                            
                         }
 
 
@@ -306,7 +315,67 @@ class AppManager {
 
 
   	}
+  	
+  	/*
+  	 * @desc Generates tracking code for each app based on services enabled for it
+  	 */
+  	generateTrackingCodeForApp(appId)
+  	{
+  		var out = "Add Base URL";
+        var config = require('config');
+        var trackjscode = "";
+
+		if(config.has("baseURL"))
+        {
+            var baseTrackingCodePath = path.join(__dirname, '/../../WebContent/js/src/internal/tracking');
+            
+            var uglified = uglify.minify([baseTrackingCodePath+'/utils.js', baseTrackingCodePath+'/usercomio-core.js', baseTrackingCodePath+'/eventtrack-service.js',baseTrackingCodePath+'/browsernotification-service.js']);
+
+            out = uglified.code;
+           
+            out = out.replace("VARIABLE_APPID", appId);
+            
+            out = out.replace("VARIABLE_BASEURL", config.get("baseURL"));
+            
+            var apiBaseUrl = new URL(config.get("baseURL"));
+            
+            out = out.replace("VARIABLE_APIHOST",apiBaseUrl.hostname)
+            
+            //We can get the particular service a user has and add it.This gets executed after browser parses the script.
+            //Services are started after ping call inside UserCom.init().
+            out = out +  "SERVICES.push('trackElement,')";
+            
+            var trackjsFolderPath = path.join(__dirname, '/../../trackjs');
+            
+            fs.writeFile(trackjsFolderPath+'/track-'+appId+'.min.js',out,  function (err){
+	            if(err) {
+            	    console.log(err);
+            	  } else {
+            	    console.log("Trackjs script generated for appId:"+appId);
+            	  }      
+            	});
+        }
+	  };      	
+
+
+    /*
+     * @desc
+     */
+    regenerateTrackjs(req,res)
+    {
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
+        var appId = req.body.appId;
+
+        this.generateTrackingCodeForApp(appId);
+
+        return res.send({status:'success'});
+    }
 }
+
 
 
 module.exports.AppManager = AppManager;

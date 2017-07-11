@@ -55,13 +55,22 @@ class EmailManager {
     /*
      * @desc Initializes email configuration
      */
-    initMailConfig(appId,user)
+    initMailConfig(appId,companyId,callbackObj,callback)
     {
-        this.getEmailSettingByCompany(appId,user.company,function(emailSettingObj){
+        this.getEmailSettingByCompany(appId,companyId,function(emailSettingObj){
+
+            var sendCallback = true;
 
             emailSetting = emailSettingObj;
             if(emailSetting.emailType && emailSetting.emailType == "SMTP")
             {
+                //Validate if SMTP setting is made
+                if(emailSetting.smtp.host == "" || emailSetting.smtp.port == "" || emailSetting.smtp.user == "" || emailSetting.smtp.pass == "")
+                {
+                    sendCallback = false;
+                    callback(false);
+                }
+
                 if(typeof app.mailer == "undefined")
                 {
                     mailer.extend(app, {
@@ -96,6 +105,11 @@ class EmailManager {
                         "region": emailSetting.amazon.region
                     });
                 }
+            }
+
+            if(sendCallback)
+            {
+                callback(callbackObj);
             }
 
         });
@@ -381,6 +395,10 @@ class EmailManager {
             emailSetting,
             { upsert: false }
         )
+
+        //Regenerate tracking code for the app
+        var appManagerObj = global.controllerList["AppManager"];
+        appManagerObj.generateTrackingCodeForApp(emailSetting.appId);
 
         return res.send({status:'success'});
     }

@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -23,10 +22,13 @@ module.exports = SocksProxyAgent;
  * @api public
  */
 
-function SocksProxyAgent (opts) {
+function SocksProxyAgent(opts) {
   if (!(this instanceof SocksProxyAgent)) return new SocksProxyAgent(opts);
   if ('string' == typeof opts) opts = url.parse(opts);
-  if (!opts) throw new Error('a SOCKS proxy server `host` and `port` must be specified!');
+  if (!opts)
+    throw new Error(
+      'a SOCKS proxy server `host` and `port` must be specified!'
+    );
   Agent.call(this, connect);
 
   var proxy = extend({}, opts);
@@ -52,21 +54,28 @@ function SocksProxyAgent (opts) {
   switch (proxy.protocol) {
     case 'socks4:':
       proxy.lookup = true;
-      // pass through
+    // pass through
     case 'socks4a:':
       proxy.version = 4;
       break;
     case 'socks5:':
       proxy.lookup = true;
-      // pass through
+    // pass through
     case 'socks:': // no version specified, default to 5h
     case 'socks5h:':
       proxy.version = 5;
       break;
     default:
-      throw new TypeError('A "socks" protocol must be specified! Got: ' + proxy.protocol);
+      throw new TypeError(
+        'A "socks" protocol must be specified! Got: ' + proxy.protocol
+      );
   }
 
+  if (proxy.auth) {
+    var auth = proxy.auth.split(':');
+    proxy.authentication = { username: auth[0], password: auth[1] };
+    proxy.userid = auth[0];
+  }
   this.proxy = proxy;
 }
 inherits(SocksProxyAgent, Agent);
@@ -78,12 +87,11 @@ inherits(SocksProxyAgent, Agent);
  * @api public
  */
 
-function connect (req, opts, fn) {
-
+function connect(req, opts, fn) {
   var proxy = this.proxy;
 
   // called once the SOCKS proxy has connected to the specified remote endpoint
-  function onhostconnect (err, socket) {
+  function onhostconnect(err, socket) {
     if (err) return fn(err);
     var s = socket;
     if (opts.secureEndpoint) {
@@ -96,13 +104,13 @@ function connect (req, opts, fn) {
       opts.hostname = null;
       opts.port = null;
       s = tls.connect(opts);
-      socket.resume();
     }
+    socket.resume();
     fn(null, s);
   }
 
   // called for the `dns.lookup()` callback
-  function onlookup (err, ip, type) {
+  function onlookup(err, ip) {
     if (err) return fn(err);
     options.target.host = ip;
     SocksClient.createConnection(options, onhostconnect);
@@ -119,13 +127,16 @@ function connect (req, opts, fn) {
     },
     command: 'connect'
   };
+  if (proxy.authentication) {
+    options.proxy.authentication = proxy.authentication;
+    options.proxy.userid = proxy.userid;
+  }
 
   if (proxy.lookup) {
     // client-side DNS resolution for "4" and "5" socks proxy versions
     dns.lookup(opts.host, onlookup);
   } else {
     // proxy hostname DNS resolution for "4a" and "5h" socks proxy servers
-    options.target.host = opts.host;
-    SocksClient.createConnection(options, onhostconnect);
+    onlookup(null, opts.host);
   }
 }

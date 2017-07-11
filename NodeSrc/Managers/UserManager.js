@@ -25,6 +25,8 @@ class UserManager {
         this.router.post("/saveUserProfile",(req, res) => { this.saveUserProfile(req,res); });
         this.router.post("/saveUserPassword",(req, res) => { this.saveUserPassword(req,res); });
         this.router.post("/updateAppPreference",(req, res) => { this.updateAppPreference(req,res); });
+        this.router.post("/getconfig",(req, res) => { this.getConfig(req,res); });
+        this.router.post("/updateTimezone",(req, res) => { this.updateTimezone(req,res); });
     }
 
   	/*
@@ -40,7 +42,6 @@ class UserManager {
           newUser._id = newUser.username;
           newUser.createDate = new Date();
           newUser.password = utils.encrypt(newUser.password);
-          newUser.timeZone = moment().format('Z');
           
           var status = "success";
           
@@ -251,7 +252,8 @@ class UserManager {
                     { $set :
                         {
                             firstName: updateUser.firstName,
-                            lastName: updateUser.lastName
+                            lastName: updateUser.lastName,
+                            timeZone: updateUser.timeZone
                         }
                     },
                     { upsert: true },
@@ -452,6 +454,128 @@ class UserManager {
 
         });
     }
+
+    /*
+     * @desc Return the config data
+     */
+    getConfig(req,res)
+    {
+        if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
+        delete require.cache[require.resolve('config')];
+        var config = require('config');
+
+        return res.send({config:config});
+    }
+
+  	/*
+  	 * @desc Updates timezone of user's company
+  	 */
+    updateTimezone(req,res)
+    {
+        var config = require('config');
+
+  		if(config.has("setupCompleted") && config.get("setupCompleted") == 1 && !req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+
+        // Get the documents collection
+        var companyCollection = global.db.collection('companies');
+
+        var updateUser = req.body.user;
+        var timezone = req.body.timezone;
+
+        companyCollection.findOne({ _id: updateUser.company },function(err,company)
+        {
+            if(err)
+            {
+                res.status(500);
+                return res.send({status:'failure'});
+            }
+
+            if(company)
+            {
+                companyCollection.update(
+                    { _id:  company._id},
+                    { $set :
+                        {
+                            timezone: timezone
+                        }
+                    },
+                    { upsert: true },
+                    function(updateErr)
+                    {
+                        if(updateErr)
+                        {
+                            res.status(500);
+                            return res.send({status:'failure'});
+                        }
+                    }
+                )
+            }
+            else
+            {
+                res.status(500);
+                return res.send({status:'failure'});
+            }
+
+        });
+
+        //Regenerate tracking code for the app
+        var appManagerObj = global.controllerList["AppManager"];
+        var appCollection = global.db.collection('apps');
+
+        //Obtaining App list
+        appCollection.find().toArray(function(err,apps)
+        {
+            if(err)
+            {
+                console.log("ERROR:"+err);
+            }
+
+            if(apps)
+            {
+                for(var i = 0 ; i < apps.length; i++)
+                {
+                    appManagerObj.generateTrackingCodeForApp(apps[i]._id);
+                }
+            }
+        });
+
+        res.send({status:"success"});
+    };
+
+  	/*
+  	 * @desc Returns the company object based on ID
+  	 */
+    getCompanyByID(companyID,callback)
+    {
+        // Get the documents collection
+        var companyCollection = global.db.collection('companies');
+
+        companyCollection.findOne({ _id: companyID },function(err,company)
+        {
+            if(err)
+            {
+                callback(false);
+            }
+
+            if(company)
+            {
+                callback(company);
+            }
+            else
+            {
+                callback(false);
+            }
+
+        });
+
+    };
 
 }
 

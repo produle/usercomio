@@ -26,12 +26,12 @@ function UC_FilterController()
         {
             thisClass.listPredefinedFilters();
 
-            $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li span",thisClass.changeFilterHandler);
+            $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li .ucFilterListName",thisClass.changeFilterHandler);
             $(document).on("click",".ucAddFilterBtn",thisClass.addFilterHandler);
             $(document).on("click","#ucEditFilterSubmit",thisClass.saveFilterHandler);
             $(document).on("click","#ucEditFilterDraftBtn",thisClass.draftFilterHandler);
-            $(document).on("click",".ucFilterSettingBtn .ico-edit",thisClass.editFilterHandler);
-            $(document).on("click",".ucFilterSettingBtn .ico-trash2",thisClass.deleteFilterHandler);
+            $(document).on("click",".ucFilterSettingBtn .ucFilterListEditBtn",thisClass.editFilterHandler);
+            $(document).on("click",".ucFilterSettingBtn .ucFilterListDeleteBtn",thisClass.deleteFilterHandler);
 
             $("#ucUserdefinedFilterList").sortable({
                 update: thisClass.updateFilterOrder
@@ -66,7 +66,7 @@ function UC_FilterController()
      */
     this.listPredefinedFilters = function()
     {
-        $('#ucPredefinedFilterAjaxLoader').show();
+        //$('#ucPredefinedFilterAjaxLoader').show();
         UC_AJAX.call('FilterManager/listpredefined',{user:UC_UserSession.user},function(data,status,xhr){
 
             if(data.status == "failure")
@@ -82,7 +82,7 @@ function UC_FilterController()
                 thisClass.predefinedFiltersList = data.status;
                 thisClass.rivetPredefinedFiltersListObj.models.list = thisClass.predefinedFiltersList;
             }
-            $('#ucPredefinedFilterAjaxLoader').hide();
+            //$('#ucPredefinedFilterAjaxLoader').hide();
         });
     };
 
@@ -92,7 +92,7 @@ function UC_FilterController()
     this.listUserdefinedFilters = function()
     {
         thisClass.rivetUserdefinedFiltersListObj.models.list = [];
-        $('#ucUserdefinedFilterAjaxLoader').show();
+        //$('#ucUserdefinedFilterAjaxLoader').show();
 
         UC_AJAX.call('FilterManager/listuserdefined',{user:UC_UserSession.user,appid:uc_main.appController.currentAppId},function(data,status,xhr){
 
@@ -148,7 +148,7 @@ function UC_FilterController()
                     $("#ucPredefinedFilterList li[data-filterid="+uc_main.visitorListController.currentFilterId+"],#ucUserdefinedFilterList li[data-filterid="+uc_main.visitorListController.currentFilterId+"]").addClass("ucCurrentPage");
                 }
             }
-            $('#ucUserdefinedFilterAjaxLoader').hide();
+            //$('#ucUserdefinedFilterAjaxLoader').hide();
         });
     };
 
@@ -207,7 +207,7 @@ function UC_FilterController()
      */
     this.editFilterHandler = function()
     {
-        var filterObj = thisClass.getFilterById($(this).closest("li").attr("data-filterid"));
+        var filterObj = thisClass.getFilterById($(this).closest(".ucSwitchContentTrigger").attr("data-filterid"));
 
         thisClass.filterOnEdit = filterObj;
 
@@ -322,7 +322,7 @@ function UC_FilterController()
             }
             else
             {
-                UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterObj._id] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:[]};
+                UC_UserSession.user.app[uc_main.appController.currentAppId].filterOrder[filterObj._id] = {currentSortColumn:"visitorMetaInfo.lastSeen",currentSortOrder:1,displayFields:["browser", "os", "device", "country"]};
             }
 
             thisClass.saveAppPreference();

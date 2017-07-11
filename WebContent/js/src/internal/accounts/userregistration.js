@@ -11,7 +11,7 @@ function UC_UserRegistrationController()
 
     this.setupappId = "";
 
-    //this.timezoneList = "";
+    this.timezoneList = [];
 
   this.constructor = function()
   {
@@ -20,7 +20,7 @@ function UC_UserRegistrationController()
       //$("#UC_Setup_Database").show();
      $("#UC_Setup_Welcome_Page").show();
 
-      //thisClass.constructTimezoneArray();
+      thisClass.constructTimezoneArray();
 
       $(".uc_tab_trigger").on("click",thisClass.toggleTabs);
 
@@ -44,7 +44,7 @@ function UC_UserRegistrationController()
 	  $(".ucSetupProgressSteps li").removeClass("active");
 	  $(".uc_database_details").addClass("active");
 
-      $('#ucSetupDatabaseAjaxLoader').hide();
+      $("#ucsetup_dbsubmitbtn").button('reset');
   }
   /*
   *  @desc Handles click event of login button
@@ -124,7 +124,7 @@ function UC_UserRegistrationController()
 
       if(!isRedirect)
       {
-          $('#ucSetupUserAjaxLoader').show();
+          $("#ucsetup_usersubmitbtn").button('loading');
       }
 
 	  UC_AJAX.call('UserManager/registerUser',{user:newUser},function(data,status,xhr)
@@ -155,8 +155,8 @@ function UC_UserRegistrationController()
                	  	 $(".uc_user_settings").addClass("active");
                      $("#UC_Setup_Progress_Step").text("3");
 
-                     $('#ucSetupUserAjaxLoader').hide();
-                     $('#ucSetupAppAjaxLoader').hide();
+                     $("#ucsetup_usersubmitbtn").button('reset');
+                     $("#ucsetup_appsubmitbtn").button('reset');
 
                  }
 			 }
@@ -170,8 +170,10 @@ function UC_UserRegistrationController()
   /*
   *  @desc Handles database connection validation and saving to config
   */
-  this.handleSetupDBAction = function()
+  this.handleSetupDBAction = function(e)
   {
+      e.preventDefault();
+
 	var dbhost  = $('#ucsetup_dbhostinput').val(),
 	      dbport  = $('#ucsetup_dbportinput').val(),
 	      dbuser  = $('#ucsetup_dbuserinput').val(),
@@ -190,7 +192,7 @@ function UC_UserRegistrationController()
     	return;
     }
 
-    $('#ucSetupDatabaseAjaxLoader').show();
+    $("#ucsetup_dbsubmitbtn").button('loading');
 
     UC_AJAX.call('UserManager/verifydbconnection',{dbhost:dbhost,dbport:dbport,dbuser:dbuser,dbpass:dbpass,dbname:dbname,dbconnectionstring:dbconnectionstring,dbconnectiontype:dbconnectiontype},function(data,status,xhr)
 	  {
@@ -216,7 +218,7 @@ function UC_UserRegistrationController()
                  $(".ucSetupProgressSteps li").removeClass("active");
                  $(".uc_admin_details").addClass("active");
 
-                 $('#ucSetupEmailAjaxLoader').hide();
+                 $("#ucsetup_usersubmitbtn").button('reset');
 
 			 }
 			 else if(data.status == "failure")
@@ -228,7 +230,7 @@ function UC_UserRegistrationController()
 				 alert("An Error accured while saving data. Try again!");
 			 }
 
-             $('#ucSetupDatabaseAjaxLoader').hide();
+             $("#ucsetup_dbsubmitbtn").button('reset');
 		 }
 
 	  });
@@ -237,8 +239,10 @@ function UC_UserRegistrationController()
   /*
   *  @desc Handles SMTP data and saves it to the config
   */
-  this.handleSetupSMTPAction = function()
+  this.handleSetupSMTPAction = function(e)
   {
+      e.preventDefault();
+
       var smtphost  = $('#ucsetup_smtphostinput').val(),
 	      smtpport  = $('#ucsetup_smtpportinput').val(),
 	      smtpuser  = $('#ucsetup_smtpuserinput').val(),
@@ -259,6 +263,8 @@ function UC_UserRegistrationController()
 
       var emailSettings;
 
+      $("#ucsetup_smtpsubmitbtn").button('loading');
+
       UC_AJAX.call('EmailManager/getemailsetting',{appId:thisClass.setupappId,company:user.company },function(data,status,xhr)
     		  {
     			 if(data)
@@ -269,8 +275,10 @@ function UC_UserRegistrationController()
     				 }
     				 else
     				 {
-    					 emailSettings = data.emailsetting;
-    				      UC_AJAX.call('EmailManager/saveemailsetting',{user:user,emailSetting:emailSettings},function(data,status,xhr)
+                         newEmailSetting = data.emailsetting
+    					 newEmailSetting.smtp = emailSettings.smtp;
+
+    				      UC_AJAX.call('EmailManager/saveemailsetting',{user:user,emailSetting:newEmailSetting},function(data,status,xhr)
     				    		  {
     				    			 if(data)
     				    			 {
@@ -279,14 +287,13 @@ function UC_UserRegistrationController()
     				    	                 alert("Error in adding Email settings");
 
     				    				 }
-    				    	             else if(data.status == "authenticationfailed")
+    				    	             else
     				    	             {
-    				    	                 location.href="/";
+                                             thisClass.config.setupCompleted = 1;
+                                             thisClass.saveConfig(function(){
+    				    	                       location.href="/";
+                                             });
     				    	             }
-    				    				 else
-    				    				 {
-    				    					 thisClass.saveConfig(true);
-    				    				  }
     				    			 }
     				     });
     				 }
@@ -298,9 +305,9 @@ function UC_UserRegistrationController()
   /*
   *  @desc Handles the user credential validation and sends it to server
   */
-  this.handleSetupUserAction = function()
+  this.handleSetupUserAction = function(e)
   {
-
+      e.preventDefault();
 
 	var email = $('#ucsetup_emailinput').val(),
 		password = $('#ucsetup_passwordinput').val(),
@@ -331,10 +338,13 @@ function UC_UserRegistrationController()
   /*
   *  @desc Handles app info validation and saves it to server
   */
-  this.handleSetupAppAction = function()
+  this.handleSetupAppAction = function(e)
   {
+      e.preventDefault();
+
 	var baseurl = $('#ucsetup_baseurlinput').val(),
-		appName = $('#ucsetup_appnameinput').val();
+		appName = $('#ucsetup_appnameinput').val(),
+		timezone  = $('#ucsetup_timezoneinput').val();
 
 
     var validationResult = thisClass.validateSetupAppInputs();
@@ -352,7 +362,6 @@ function UC_UserRegistrationController()
     }
 
     thisClass.config.baseURL= baseurl;
-    thisClass.config.setupCompleted = 1;
 
     var newApp = new UC_App();
     var user = UC_UserSession.user;
@@ -364,33 +373,63 @@ function UC_UserRegistrationController()
 
     thisClass.setupappId =  newApp._id;
 
-    $('#ucSetupAppAjaxLoader').show();
+    $("#ucsetup_appsubmitbtn").button('loading');
 
-    UC_AJAX.call('AppManager/createNewApp',{newApp:newApp,user:user},function(data,status,xhr){
+    thisClass.saveConfig(function(){
+        UC_AJAX.call('AppManager/createNewApp',{newApp:newApp,user:user},function(data,status,xhr){
 
-        if(data.status == "appexists")
-         {
-             alert("App with this name already exists !");
-         }
-         else if(data.status == "authenticationfailed")
-         {
-             location.href="/";
-         }
-         else if(data.status == "failure")
-         {
-             alert("An Error accured while saving data !");
-         }
-         else
-         {
-			 $(".UC_SetupContainerCls").hide();
-             $("#UC_Setup_SMTP").show();
-             $("#UC_Setup_Progress_Step").text("4");
-             $(".ucSetupProgressSteps li").removeClass("active");
-             $(".uc_smtp_details").addClass("active");
-             UC_UserSession.user.company = data.status.clientId;
-         }
-         $('#ucSetupAppAjaxLoader').hide();
+            if(data.status == "appexists")
+             {
+                 alert("App with this name already exists !");
+             }
+             else if(data.status == "authenticationfailed")
+             {
+                 location.href="/";
+             }
+             else if(data.status == "failure")
+             {
+                 alert("An Error accured while saving data !");
+             }
+             else
+             {
+
+
+
+                 UC_UserSession.user.company = data.status.clientId;
+
+                 //Timeout provided as the server restarts on saving the track file for the app, proceeding immediately will lead to Service Not Found error
+                 setTimeout(function(){
+                     UC_AJAX.call('UserManager/updateTimezone',{user:user,timezone:timezone},function(data,status,xhr){
+
+                        if(data.status == "authenticationfailed")
+                         {
+                             location.href="/";
+                         }
+                         else if(data.status == "failure")
+                         {
+                             alert("An Error accured while saving data !");
+                         }
+                         else
+                         {
+                             $(".UC_SetupContainerCls").hide();
+                             $("#UC_Setup_SMTP").show();
+                             $("#UC_Setup_Progress_Step").text("4");
+                             $(".ucSetupProgressSteps li").removeClass("active");
+                             $(".uc_smtp_details").addClass("active");
+                             $("#ucsetup_smtpsubmitbtn").button('reset');
+                         }
+
+                         $("#ucsetup_appsubmitbtn").button('reset');
+                    });
+                 },3000);
+
+
+             }
+
+        });
     });
+
+
   }
 
   /*
@@ -495,6 +534,7 @@ function UC_UserRegistrationController()
 
 	  var baseurl  = $('#ucsetup_baseurlinput').val(),
 	      appname  = $('#ucsetup_appnameinput').val(),
+          timezone  = $('#ucsetup_timezoneinput').val(),
 	  	  msg = "";
 
       if(baseurl.substr(baseurl.length - 1) == "/")
@@ -510,6 +550,10 @@ function UC_UserRegistrationController()
 	  {
 		  msg = "Invalid App Name !";
 	  }
+	  else if($.trim(timezone) == "")
+      {
+	  	msg = "Select a Timezone";
+      }
 
 	  if(msg != "")
 	  {
@@ -523,7 +567,7 @@ function UC_UserRegistrationController()
   /*
   *  @desc Saves the config data to the server
   */
-  this.saveConfig = function(isRedirect)
+  this.saveConfig = function(callback)
   {
 
 	  UC_AJAX.call('UserManager/saveconfig',{config:thisClass.config},function(data,status,xhr)
@@ -534,15 +578,16 @@ function UC_UserRegistrationController()
 			 {
 				 alert("An Error accured while saving config file!");
 			 }
-			 else if(isRedirect)
+			 else if(callback)
              {
                  //Timeout provided as the server restarts on saving config file, redirecting immediately will lead to Service Not Found error
                  setTimeout(function(){
-                     location.href = "/";
-                 },2000);
+                     callback();
+                 },3000);
+
              }
 		 }
-          $('#ucSetupUserAjaxLoader').hide();
+          $("#ucsetup_usersubmitbtn").button('reset');
 
 	  });
 
@@ -554,12 +599,14 @@ function UC_UserRegistrationController()
      */
     this.constructTimezoneArray = function()
     {
-        var timezoneNameArray = thisClass.timezoneList.split(",");
-        for(var i = 0; i < timezoneNameArray.length; i++)
+        $("#ucsetup_timezoneinput").html("");
+        $("#ucsetup_timezoneinput").append('<option value="">Select a Timezone</option>');
+        for(var i = 0; i < thisClass.timezoneList.length; i++)
         {
-            console.log(moment.tz(timezoneNameArray[i]).format("Z"));
+            $("#ucsetup_timezoneinput").append('<option value="'+thisClass.timezoneList[i]+'">'+thisClass.timezoneList[i]+' ('+moment.tz(thisClass.timezoneList[i]).format("Z")+')</option>');
         }
 
+        $("#ucsetup_timezoneinput").select2();
     }
 
     /**

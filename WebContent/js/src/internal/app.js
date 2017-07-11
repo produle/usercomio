@@ -37,6 +37,8 @@ function UC_AppController()
             }
 
         });
+
+        $(document).on("click","#ucAppGenerateTrackjs",thisClass.regenerateTrackjs);
 	};
 
     /*
@@ -55,14 +57,16 @@ function UC_AppController()
 	{
 		$(document).on('click','#uc_create_newapp_modalopen_btn',function(){
 			$('#uc_newapp_creation_modal').modal('show');
-			$('#ucNewAppAjaxLoader').hide();
+			$("#uc_create_newapp_submitbtn").button('reset');
 		});
 		
-		$('#uc_create_newapp_submitbtn').on('click',function(){
+		$('#uc_create_newapp_submitbtn').on('click',function(e){
+            e.preventDefault();
 			thisClass.createNewApp();
 		});
 		
 		$('#ucupdate_app_submitbtn').on('click',function(e){
+			e.preventDefault();
 			e.stopImmediatePropagation();
 			thisClass.updateAppDetails();
 		})
@@ -117,7 +121,7 @@ function UC_AppController()
 			newApp._id = UC_Utils.guidGenerator();
 			newApp.clientId = user.company;
 			
-            $('#ucNewAppAjaxLoader').show();
+            $("#uc_create_newapp_submitbtn").button('loading');
 
 			UC_AJAX.call('AppManager/createNewApp',{newApp:newApp,user:user},function(data,status,xhr){
 				
@@ -142,7 +146,7 @@ function UC_AppController()
                      thisClass.switchApp(thisClass.apps[0],false);
 				 }
 
-                $('#ucNewAppAjaxLoader').hide();
+                $("#uc_create_newapp_submitbtn").button('reset');
 				
 			});
 			
@@ -187,7 +191,7 @@ function UC_AppController()
 			$('#ucapp_update_modal').modal('show');
 			var appid = $(this).attr('data-appid');
 			thisClass.fillAppInformationInUpdateModal(appid);
-            $('#ucUpdateAppAjaxLoader').hide();
+            $("#ucupdate_app_submitbtn").button('reset');
 		});
 		
 		$('#ucDeleteAppBtn').on('click',function(e){
@@ -212,7 +216,7 @@ function UC_AppController()
 			var app = thisClass.apps[appIndex];
 			app.name = editedAppName;
 			
-            $('#ucUpdateAppAjaxLoader').show();
+            $("#ucupdate_app_submitbtn").button('loading');
 
 			UC_AJAX.call('AppManager/updateAnAppDetails',{app:app},function(data,status,xhr){
 				
@@ -239,7 +243,7 @@ function UC_AppController()
 					 $('#ucapp_update_modal').modal('hide');
 				 }
 
-                $('#ucUpdateAppAjaxLoader').hide();
+                $("#ucupdate_app_submitbtn").button('reset');
 			});
 		}
 		
@@ -342,7 +346,7 @@ function UC_AppController()
 				$('#ucapp_update_nameinput').val(app.name);
 				$('#ucapp_update_appid').val(app._id);
 				$('#ucapp_update_appid_display').text(app._id);
-				$('#ucDeleteAppBtn').attr("data-appid",app._id);
+				$('#ucDeleteAppBtn,#ucAppGenerateTrackjs').attr("data-appid",app._id);
 
                 var trackingSnippet = '<script type="text/javascript" src="'+uc_main.userController.config.baseURL+'/tracking/track.js?appid='+app._id+'"></script>\n'+
                     '<script>\n'+
@@ -414,10 +418,50 @@ function UC_AppController()
             uc_main.filterController.listUserdefinedFilters();
             uc_main.visitorListController.getFieldsList();
         }
+        
         else if(!isInit)
         {
             location.href="/";
         }
 
+        
+        //update it websocket client list
+        if(uc_main.rtcController.socket)
+        {
+        	 var msg = {};
+     		msg.name = "establishappconnection";
+     		msg.key =  thisClass.currentAppId;
+     		msg  = JSON.stringify(msg);
+     		uc_main.rtcController.sendMessageToServer(msg);
+        }
+       
+
+    };
+
+    /*
+     * @desc Calls the server to regenerate the tracking js file for the application
+     */
+    this.regenerateTrackjs = function()
+    {
+        var appId = $(this).attr('data-appid');
+
+        $("#ucAppGenerateTrackjs").button('loading');
+
+        UC_AJAX.call('AppManager/regeneratetrackjs',{user:UC_UserSession.user,appId:appId},function(data,status,xhr){
+
+			if(data.status == "failure")
+			 {
+				 alert("An Error accured while generating trackjs");
+			 }
+            else if(data.status == "authenticationfailed")
+            {
+                location.href="/";
+            }
+			else
+			{
+				alert("Trackjs re-generated successfully");
+			}
+            $("#ucAppGenerateTrackjs").button('reset');
+		});
     };
 }

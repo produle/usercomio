@@ -117,6 +117,7 @@
     _id : String //Auto generated id
     name : String //name of the company
     createDate : Date //Datetime of when the record is created
+    timezone : String // eg "Asia/Kolkata" provided by user in setup
 
 // Collection name: usercompany
     _id : String //Auto generated id
