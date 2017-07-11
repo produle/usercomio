@@ -145,8 +145,6 @@ function UC_MainController()
     		$('.ucSidebar').height($(window).height()-$('.ucSidebar').offset().top-30);
     		}
     	
-    	 
-    	 
     	 var sidebarWidth = 0;
     	 if($('.ucSidebar').css("display") == "block")
     	{
