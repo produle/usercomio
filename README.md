@@ -48,6 +48,7 @@ It is optional to use nginx in front of the NodeJS server, as it helps improving
         
         .....
         .....
+    }
     ```
     
 3. Restart Nginx server using `sudo nginx -s reload`
@@ -80,6 +81,37 @@ It is optional to use nginx in front of the NodeJS server, as it helps improving
         
         ....
         ....
+    }
+        
+    #Proxy for WebSocket at 8001
+    upstream websocket {
+        server localhost:8001;
+    }
+    server {
+        listen       8002 ssl;
+        server_name  localhost;
+        
+        ssl_certificate      local.example.com.crt; #Path of certificate relative to nginx installation directory
+        ssl_certificate_key  local.example.com;	#Path of key file relative to nginx installation directory
+        
+        ssl_session_cache    shared:SSL:1m;
+        ssl_session_timeout  5m;
+        
+        ssl_ciphers  HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers  on;
+        
+        location / {
+                proxy_pass http://websocket;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+        
+        ....
+        ....
+     }
     ```
 3. You can also include verified certificate in the `ssl_certificate` config
 4. Restart Nginx server using `sudo nginx -s reload`
