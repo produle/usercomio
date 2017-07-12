@@ -19,11 +19,13 @@ function UC_RTCController()
 	this.connect = function()
 	{
         var protocol = "ws";
+        var port = "8001";
         if(location.protocol == "https:")
         {
             protocol = "wss";
+            port = "8002";
         }
-		thisClass.socket =  new WebSocket(protocol+"://"+location.hostname+":8001/echo");
+		thisClass.socket =  new WebSocket(protocol+"://"+location.hostname+":"+port+"/echo");
 		
 		
 		// on connection to server, ask for user's name with an anonymous callback
