@@ -583,7 +583,7 @@ function UC_UserRegistrationController()
                  //Timeout provided as the server restarts on saving config file, redirecting immediately will lead to Service Not Found error
                  setTimeout(function(){
                      callback();
-                 },3000);
+                 },6000);
 
              }
 		 }
