@@ -115,8 +115,6 @@ class FilterManager {
 
         var filter = req.body.filter;
 
-        filter.createDate = new Date();
-
         var filterCollection = global.db.collection('filters');
 
         filterCollection.remove(

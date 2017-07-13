@@ -375,7 +375,7 @@ function UC_FilterController()
     	$("#uc_tab_data_dashboard").hide();
         $("#uc_tab_data_listuser").show();
         
-        var filterId = $(this).closest("li").attr("data-filterid");
+        var filterId = $(this).closest(".ucSwitchContentTrigger").attr("data-filterid");
 
         thisClass.changeCurrentFilter(filterId);
 
@@ -388,7 +388,7 @@ function UC_FilterController()
      */
     this.deleteFilterHandler = function()
     {
-        var filterObj = thisClass.getFilterById($(this).closest("li").attr("data-filterid"));
+        var filterObj = thisClass.getFilterById($(this).closest(".ucSwitchContentTrigger").attr("data-filterid"));
 
         if(confirm("Are you sure that you want to delete the filter?"))
         {
