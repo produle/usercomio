@@ -4,7 +4,7 @@
 A Open-Source platform to track, engage and convert users of your application, record events performed by them to improve usability with the help of reported metrics.
 
 ## Requirements
- - NodeJS v4.6+ [[Installation Guide](https://nodejs.org/en/download/package-manager/)]
+ - NodeJS v7+ [[Installation Guide](https://nodejs.org/en/download/package-manager/)]
  - MongoDB v2.2+ [[Installation Guide](https://docs.mongodb.com/manual/installation/)]
  
 ## Installation
