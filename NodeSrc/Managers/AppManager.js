@@ -9,8 +9,8 @@ var express = require("express");
 var app = require("../server").app;
 var fs = require("fs");
 var path = require('path');
-var uglify = require("uglify-js"); 
-var URL  = require('url').Url;
+var uglify = require("uglify-js");
+const { URL } = require('url');
 var EmailManager = require("./EmailManager").EmailManager;
 var BrowserNotificationManager = require("./BrowserNotificationManager").BrowserNotificationManager;
 
