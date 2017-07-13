@@ -760,7 +760,7 @@ function UC_VisitorListController()
 
         thisClass.reorderFieldsInUserlist();
 
-        thisClass.toggleVisitorListFields();
+        thisClass.toggleVisitorListFields(); 
     };
 
     /*
@@ -774,6 +774,8 @@ function UC_VisitorListController()
         {
             $(".ucVisitorListToggleField_"+thisClass.displayFields[i]).show();
         };
+        
+        $('.mfTooltip').tooltip(); 
     };
 
     /*
