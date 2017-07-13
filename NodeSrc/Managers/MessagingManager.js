@@ -71,6 +71,10 @@ class MessagingManager {
                             MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType,sendType,scheduleDatetime);
                         });
                     }
+                    else if(template == "noTemplate")
+                    { 
+                        MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,null,link,blockDuplicate,messageType,sendType,scheduleDatetime); 
+                    }
                     else
                     {
                         EmailManagerObj.getTemplateById(appId,template,function(templateObj){
@@ -86,26 +90,7 @@ class MessagingManager {
                     return res.send({status:"failure"});
                 }
 
-            });
-
-
-            if(template == "new")
-            {
-                EmailManagerObj.saveNewTemplate(appId,user,subject,message,function(templateObj){
-                    MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType);
-                });
-            }
-            else if(template == "noTemplate")
-            { 
-                  MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,null,link,blockDuplicate,messageType); 
-            }
-            else 
-            {
-                EmailManagerObj.getTemplateById(appId,template,function(templateObj){
-                    EmailManagerObj.updateTemplate(appId,user,subject,message,templateObj);
-                    MessagingManagerObj.processMessage(appId,user.company,filterId,exclusionList,inclusionList,subject,message,templateObj,link,blockDuplicate,messageType);
-                });
-            }
+            }); 
         }
         else if(messageType == "browsernotification")
         {
