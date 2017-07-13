@@ -358,9 +358,7 @@ function UC_VisitorListController()
         else
         {
             thisClass.rivetVisitorPlaceholderObj.models.display = false;
-        }
-        
-        $('.mfTooltip').tooltip(); 
+        } 
 	};
 
     /*
