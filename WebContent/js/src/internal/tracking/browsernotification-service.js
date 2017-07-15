@@ -6,7 +6,7 @@
  */
  
 
-function createServiceWorker()
+function browserNotification()
 {
 	navigator.serviceWorker.register(DEFAULT_CONFIG.serviceWorkerFile)
         .then(function(registration) {

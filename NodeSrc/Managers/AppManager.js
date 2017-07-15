@@ -343,7 +343,7 @@ class AppManager {
             
             //We can get the particular service a user has and add it.This gets executed after browser parses the script.
             //Services are started after ping call inside UserCom.init().
-            //out = out +  "SERVICES.push('trackElement')";
+            out = out +  "SERVICES.push('browserNotification')";
 
             
             var trackjsFolderPath = path.join(__dirname, '/../../trackjs');
