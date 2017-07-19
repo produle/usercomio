@@ -243,7 +243,7 @@ class ViewRenderer
                 out = 'importScripts("'+config.get("baseURL")+'/js/src/internal/tracking/usercom-service-worker.js");';
             }
 
-            res.setHeader('Content-disposition', 'attachment; filename=usercom-service-worker.js');
+            res.setHeader('Content-disposition', 'attachment; filename=usercom-sw.js');
             res.setHeader('Content-type', 'text/javascript');
             res.write(out);
             res.end();
