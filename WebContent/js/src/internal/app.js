@@ -350,7 +350,7 @@ function UC_AppController()
 
                 var trackingSnippet = '<script type="text/javascript" src="'+uc_main.userController.config.baseURL+'/tracking/track.js?appid='+app._id+'"></script>\n'+
                     '<script>\n'+
-                    '\tif (typeof(Usercom) != "undefined") {\n'+
+                    '\ttry {\n'+
                         '\t\tUsercom.init({\n'+
                             '\t\t\tname: "John Smith",   /* Fullname of the visitor */\n'+
                             '\t\t\temail: "jsmith@usercom.io",   /* Email Address of the visitor */\n'+
@@ -360,7 +360,7 @@ function UC_AppController()
                             '\t\t\tgender: "male", /* possible values ("male","female","other") */\n'+
                             '\t\t\tprofilepicture: "", /* a valid profile picture url */\n'+
                         '\t\t});\n'+
-                    '\t}\n'+
+                    '\t}catch(error){console.log(error);}\n'+
                     '</script>\n';
 				$('#ucapp_update_trackingcode').text(trackingSnippet);
 			}
