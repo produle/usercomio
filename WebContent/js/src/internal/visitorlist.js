@@ -325,6 +325,7 @@ function UC_VisitorListController()
                 }
 
                 $("#ucVisitorListAjaxLoader").hide();
+                $("#ucPageLoader").hide();
             });
         }
 	};

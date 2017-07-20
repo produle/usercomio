@@ -26,7 +26,7 @@ function UC_FilterController()
         {
             thisClass.listPredefinedFilters();
 
-            $(document).on("click","#ucPredefinedFilterList li span, #ucUserdefinedFilterList li .ucFilterListName",thisClass.changeFilterHandler);
+            $(document).on("click","#ucPredefinedFilterList li, #ucUserdefinedFilterList li",thisClass.changeFilterHandler);
             $(document).on("click",".ucAddFilterBtn",thisClass.addFilterHandler);
             $(document).on("click","#ucEditFilterSubmit",thisClass.saveFilterHandler);
             $(document).on("click","#ucEditFilterDraftBtn",thisClass.draftFilterHandler);
@@ -147,8 +147,7 @@ function UC_FilterController()
                     $(".ucSwitchContentTrigger").removeClass("ucCurrentPage");
                     $("#ucPredefinedFilterList li[data-filterid="+uc_main.visitorListController.currentFilterId+"],#ucUserdefinedFilterList li[data-filterid="+uc_main.visitorListController.currentFilterId+"]").addClass("ucCurrentPage");
                 }
-            }
-            //$('#ucUserdefinedFilterAjaxLoader').hide();
+            } 
         });
     };
 
