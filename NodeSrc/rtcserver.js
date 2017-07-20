@@ -22,6 +22,7 @@ wss.on('connection', function connection(ws, req) {
 		if(msg.name == "establishappconnection")
 		{
 			wsClients[msg.key] = ws;
+			ws["clientkey"] = msg.key;
 		}
 		
 		if(msg.name == "establishvisitorconnection")
@@ -88,14 +89,22 @@ wss.on('connection', function connection(ws, req) {
 				msg.name = "visitordisconnected";
 				msg.visitorKey = key;
 				
+                delete wsVisitors[visitorkey];
+
 				if(wsClients[appid])
 				{	
 					wsClients[appid].send(JSON.stringify(msg));
-					delete wsVisitors[visitorkey];
 				}
 				///store session close into db here
 				
 				
+		    }
+		    else if(typeof ws["clientkey"] != "undefined")
+		    {
+		    	var clientkey  = ws["clientkey"];
+
+                delete wsClients[clientkey];
+
 		    }
 		    else
 		    {
