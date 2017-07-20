@@ -18,6 +18,12 @@ body
 	cursor:pointer;
 }
 
+.ucapp_editbtncls
+{
+   position: absolute;
+   right: 13px;
+}
+
 .btn:focus
 {
     outline: none !important;
@@ -225,7 +231,7 @@ h2
 	color:#777;
 	font-weight: bold;
 }
-.ucSidebar ul
+.ucSidebar>ul
 {
 	padding:0 0 15px;
 	margin:0 0 20px;
@@ -753,7 +759,19 @@ h2
 }
 /**
  * CSS Loader animation - End
-**/
+**/ 
+ 
+/**
+ * Main content CSS Loader
+ */ 
+#ucPageLoader
+{
+	height: 100%;
+    width: calc(100% - 270px);
+    background-color: #fff;
+    position: absolute;
+    top: 70px;
+} 
 
 /**
  * Div Table Global styles - Start
@@ -767,6 +785,11 @@ h2
 #ucUserTabContentMessaging .ucTable
 { 
     table-layout: fixed;
+}
+#ucUserTabContentMessaging .ucTableCell
+{
+	vertical-align: top;
+    white-space: inherit;
 }
 
 .ucTableRow
@@ -796,9 +819,9 @@ h2
 }
 .ucTableRow:hover .ucTableCell
 {
-    box-shadow: inset 0px -10px 18px -18px rgba(0,0,0,0.6);
-    -webkit-box-shadow: inset 0px -12px 18px -18px rgba(0,0,0,0.6);
-    -moz-box-shadow: inset 0px -10px 18px -18px rgba(0,0,0,0.6);
+    box-shadow: inset 0px 10px 18px -18px rgba(0,0,0,0.6);
+    -webkit-box-shadow: inset 0px 12px 18px -18px rgba(0,0,0,0.6); 
+    -moz-box-shadow: inset 0px 10px 18px -18px rgba(0,0,0,0.6);
 }
 
 .ucTableHead
