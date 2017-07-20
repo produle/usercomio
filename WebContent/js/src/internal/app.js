@@ -350,15 +350,17 @@ function UC_AppController()
 
                 var trackingSnippet = '<script type="text/javascript" src="'+uc_main.userController.config.baseURL+'/tracking/track.js?appid='+app._id+'"></script>\n'+
                     '<script>\n'+
-                    '\tUsercom.init({\n'+
-                        '\t\tname: "John Smith",   /* Fullname of the visitor */\n'+
-                        '\t\temail: "jsmith@usercom.io",   /* Email Address of the visitor */\n'+
-                        '\t\tcreated_at: new Date().getTime(), /* Current timestamp */\n'+
-                        '\t\tpaid: true, /* Boolean */\n'+
-                        '\t\tbirthdate: "1990-01-01", /* Date in format YYYY-MM-DD */\n'+
-                        '\t\tgender: "male", /* possible values ("male","female","other") */\n'+
-                        '\t\tprofilepicture: "", /* a valid profile picture url */\n'+
-                    '\t});\n'+
+                    '\tif (typeof(Usercom) != "undefined") {\n'+
+                        '\t\tUsercom.init({\n'+
+                            '\t\t\tname: "John Smith",   /* Fullname of the visitor */\n'+
+                            '\t\t\temail: "jsmith@usercom.io",   /* Email Address of the visitor */\n'+
+                            '\t\t\tcreated_at: new Date().getTime(), /* Current timestamp */\n'+
+                            '\t\t\tpaid: true, /* Boolean */\n'+
+                            '\t\t\tbirthdate: "1990-01-01", /* Date in format YYYY-MM-DD */\n'+
+                            '\t\t\tgender: "male", /* possible values ("male","female","other") */\n'+
+                            '\t\t\tprofilepicture: "", /* a valid profile picture url */\n'+
+                        '\t\t});\n'+
+                    '\t}\n'+
                     '</script>\n';
 				$('#ucapp_update_trackingcode').text(trackingSnippet);
 			}
