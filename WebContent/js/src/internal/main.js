@@ -39,7 +39,7 @@ function UC_MainController()
         $(document).on("click",".ucSwitchContentTrigger",thisClass.switchContent);
         
         $(".ucSwitchContentContainer").hide();
-        $("#uc_tab_data_dashboard").show();
+        $("#ucPageLoader").show();
         $("#ucMainDashboard").addClass("ucCurrentPage");
         
         $(".ucSideBarMenuTrigger").on("click",thisClass.menuContainer);
@@ -96,7 +96,10 @@ function UC_MainController()
     	var divID = $(this).attr("switch-to");
         $(".ucSwitchContentContainer").hide();
         $("#"+divID).show();
-        
+        if(divID!="uc_tab_data_dashboard")
+        {
+        	$('#ucPageLoader').show();
+        }
         $(".ucSwitchContentTrigger").removeClass("ucCurrentPage");
         $(this).addClass("ucCurrentPage");
         
