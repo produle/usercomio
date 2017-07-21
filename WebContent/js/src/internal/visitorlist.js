@@ -43,7 +43,7 @@ function UC_VisitorListController()
 
     this.currentSortColumn = "visitorMetaInfo.lastSeen";
 
-    this.currentSortOrder = 1; //1 for ASC and -1 for DESC
+    this.currentSortOrder = -1; //1 for ASC and -1 for DESC
 
     this.currentFilterTotalVisitors = 0;
     

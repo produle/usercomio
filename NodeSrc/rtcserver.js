@@ -95,8 +95,11 @@ wss.on('connection', function connection(ws, req) {
 				{	
 					wsClients[appid].send(JSON.stringify(msg));
 				}
-				///store session close into db here
 				
+                //On session close update sessionEnd
+                var VisitorTrackingManager = require("./Managers/VisitorTrackingManager").VisitorTrackingManager;
+				var VisitorTrackingManagerObj = new VisitorTrackingManager();
+                VisitorTrackingManagerObj.handleLogout(visitorkey.split("-")[2],visitorkey.split("-")[0]);
 				
 		    }
 		    else if(typeof ws["clientkey"] != "undefined")

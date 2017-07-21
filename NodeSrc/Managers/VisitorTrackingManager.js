@@ -33,7 +33,6 @@ class VisitorTrackingManager {
         this.router.post("/ping",(req, res) => { this.handlePing(req,res); });
         this.router.post("/event",(req, res) => { this.handleEvents(req,res); });
         this.router.post("/error",(req, res) => { this.handleError(req,res); });
-        this.router.post("/logout",(req, res) => { this.handleLogout(req,res); });
         this.router.post("/register",(req, res) => { this.handleRegistration(req,res); });
         
     }
@@ -331,7 +330,7 @@ class VisitorTrackingManager {
   	/*
   	 * @desc Handle the logout call from client
   	 */
-  	handleLogout(req,res)
+  	handleLogout(sessionId,email)
   	{
 
         var sessionCollection = global.db.collection('sessions');
@@ -348,8 +347,8 @@ class VisitorTrackingManager {
             },
             { $match :
                 { "$and": [
-                    { "_id" : req.body.sessionId},
-                    { "visitors.visitorData.email" : req.body.userdata.email }
+                    { "_id" : sessionId},
+                    { "visitors.visitorData.email" : email }
                   ]
                 }
             }
@@ -357,8 +356,7 @@ class VisitorTrackingManager {
         {
             if(err)
             {
-      		    res.status(500);
-                return res.send({status:'failure'});
+      		    return false;
             }
 
             if(session && session.length == 1)

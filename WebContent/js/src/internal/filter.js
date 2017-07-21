@@ -193,7 +193,11 @@ function UC_FilterController()
             type: 'string'
           },{
             id: 'sessions.geoLocationInfo.country',
-            label: 'Country',
+            label: 'Country Code',
+            type: 'string'
+          },{
+            id: 'sessions.geoLocationInfo.countryName',
+            label: 'Country Name',
             type: 'string'
           }],
 
