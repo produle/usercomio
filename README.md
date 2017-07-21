@@ -127,16 +127,18 @@ It is optional to use nginx in front of the NodeJS server, as it helps improving
     ```
     <script type="text/javascript" src="{serverpath}/tracking/track.js?appid={appID}"></script>
     <script>
-    Usercom.init({
-        name: "Jane Doe",   /* Fullname of the visitor */
-        email: "janedoe@example.com",   /* Email Address of the visitor */
-        created_at: 1312182000, /* Current timestamp */
-        paid: true, /* Boolean */
-        birthdate: "1990-01-01", /* Date in format YYYY-MM-DD */
-        gender: "male", /* possible values ("male","female","other") */
-        profilepicture: "", /* a valid profile picture url */
-        rating:'5'  /* Sample Custom Data */
-    })
+        try {
+            Usercom.init({
+                name: "Jane Doe",   /* Fullname of the visitor */
+                email: "janedoe@example.com",   /* Email Address of the visitor */
+                created_at: 1312182000, /* Current timestamp */
+                paid: true, /* Boolean */
+                birthdate: "1990-01-01", /* Date in format YYYY-MM-DD */
+                gender: "male", /* possible values ("male","female","other") */
+                profilepicture: "", /* a valid profile picture url */
+                rating:'5'  /* Sample Custom Data */
+            });
+        }catch(error){console.log(error);}
     </script>
     ``` 
 ## Using event tracking code inside the application
@@ -145,7 +147,9 @@ It is optional to use nginx in front of the NodeJS server, as it helps improving
 2. The event details can be viewed under activities in user details view page
 
 	```
-	UsercomLib.track("View Product",{"product_id":1});   /* 1-Event Name(String) , 2-Event Properties(Object of any time)*/
+	try {
+        UsercomLib.track("View Product",{"product_id":1});   /* 1-Event Name(String) , 2-Event Properties(Object of any time)*/
+    }catch(error){console.log(error);}
 	```
     
 ## Email Notification
