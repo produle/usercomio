@@ -51,9 +51,7 @@
 				usercomlib.appid = appid;
 				
 				usercomlib.userdata = userComSettings;
-				
-				thisClass.establishSocketConnection(usercomlib);
-				
+
 				thisClass.bindGlobalErrorHandler(usercomlib);
 				
 				thisClass.props.appid = appid;
@@ -79,6 +77,8 @@
                     usercomlib.sessionId = response.sessionId;
                     
                     usercomlib.visitorId = response.status._id;
+
+				    thisClass.establishSocketConnection(usercomlib);
                     	
                     thisClass.initServices();
 				});
@@ -100,7 +100,7 @@
 				{
 						var msg = {};
 						msg.name = "establishvisitorconnection";
-						msg.key = usercomlib.userdata.email +'-'+ usercomlib.appid;
+						msg.key = usercomlib.userdata.email +'-'+ usercomlib.appid +'-'+ usercomlib.sessionId;
 						msg  = JSON.stringify(msg);
 						ws.send(msg);
 				}
