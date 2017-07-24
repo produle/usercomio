@@ -1,19 +1,8 @@
-    <% include partials/header.ejs %>
-    <!-- external scripts -->
-    <% include partials/commoncss.ejs %>
-
-    <% include partials/commonscripts.ejs %>
-
-</head>
-<body>
-
-    <% include partials/navigation.ejs %>
-
     <div class="container uc_mt_large">
 
         <div class="row">
             <div class="col-md-12">
-                <a class="btn btn-primary" href="/"><i class="fa fa-chevron-left"></i> Back</a>
+                <button class="btn btn-primary" id="ucVisitorPageBackBtn"><i class="fa fa-chevron-left"></i> Back</button>
             </div>
         </div>
 
@@ -105,17 +94,17 @@
                     <div role="tabpanel" class="tab-pane" id="ucUserTabContentActivities">
                            <div class="ucTable" id="ucVisitorActivity">
                            <div class="ucTableRow">
-                                <div class="ucTableHead text-center">Date &amp; Time</div>  
+                                <div class="ucTableHead text-center">Date &amp; Time</div>
                                 <div class="ucTableHead text-center">Type</div>
-                                <div class="ucTableHead text-center">Additional Info</div> 
+                                <div class="ucTableHead text-center">Additional Info</div>
                             </div>
                             <div class="ucTableRow" rv-each-session="ActivityList">
-                                <div class="ucTableCell" rv-text="session.sessions.agentInfo.sessionStart"></div> 
-                                <div class="ucTableCell" rv-text="session.eventName"></div> 
+                                <div class="ucTableCell" rv-text="session.sessions.agentInfo.sessionStart"></div>
+                                <div class="ucTableCell" rv-text="session.eventName"></div>
                                 <div class="ucTableCell" rv-text="session.eventType"></div>
 						    </div>
                             </div>
-                            
+
                              <div id="ucVisitorActivityAjaxLoader" class='ucAjaxLoader'>
                                 <img alt="Loading..." src="/images/app/ajax-loader.gif"   />
                             </div>
@@ -126,22 +115,3 @@
         </div>
 
     </div>
-
-    <% include partials/dialogs.ejs %>
-
-    <script>
-
-        UC_UserSession.user = <%- JSON.stringify(user) %>;
-        var uc_main = new UC_MainController();
-
- 	    uc_main.appController.renderVisitors = false;
-
-        uc_main.constructor();
-
-        uc_main.visitorListController.getVisitorDetails("<%- visitorid %>");
-
-
-    </script>
-
-</body>
-</html>

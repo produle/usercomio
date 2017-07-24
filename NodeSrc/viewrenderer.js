@@ -45,7 +45,7 @@ class ViewRenderer
 		/*
 		 * @desc Renders main(index) page
 		 */
-		app.get('/', function(req, res)
+		app.get(['/','/visitor/:visitorid'], function(req, res)
 		{
 
 
@@ -133,48 +133,6 @@ class ViewRenderer
             }
             res.render('setup');
 		});
-
-		/*
-		 * @desc Renders user profile page
-		 */
-		app.get('/visitor/:visitorid', isLoggedIn, function(req, res)
-		{
-
-            var config = require('config');
-
-            if(config.has("database")) {
-
-                if (req.isAuthenticated())
-                {
-                    var uname = req.cookies.uname;
-                    if(uname)
-                    {
-
-                        var userManagerObj = new userManager();
-
-                        var user = userManagerObj.getUserByUsername(uname,function(user){
-
-                            delete user.password; //To avoid the encrypted password transmitted to client
-                            res.render('visitor',{user:user,moment:moment,visitorid:req.params.visitorid});
-
-                        });
-                    }
-                    else
-                    {
-                        res.redirect('/login');
-                    }
-                }
-                else
-                {
-                    res.redirect('/login');
-                }
-            }
-            else {
-                res.redirect('/setup');
-            }
-
-
-		 });
 
 		/*
 		 * @desc Renders unsubscribe page

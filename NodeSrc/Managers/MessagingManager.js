@@ -236,7 +236,7 @@ class MessagingManager {
                     if(messageType == "email" && sendType == "now")
                     {
                         //Set the unsubscribe link in the email
-                        parsedMessage = parsedMessage + "\r\n\r\n\r\nClick the link below to unsubscribe emails\r\n"+baseURL+"/unsubscribe/"+appId+"/"+recipientSingle.id;
+                        parsedMessage = parsedMessage + '<br/><br/><a href="'+baseURL+'/unsubscribe/'+appId+'/'+recipientSingle.id+'">Click here</a> to unsubscribe emails';
 
                         var EmailManagerObj = new EmailManager();
 
