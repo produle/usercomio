@@ -642,7 +642,7 @@ function UC_VisitorListController()
                 	  for(var i = 0; i < ActivityList.length; i++)
                       {
                 		  ActivityList[i].sessions = ActivityList[i].sessions[0];
-                		  ActivityList[i].sessions.agentInfo.sessionStart = moment(ActivityList[i].sessions.agentInfosessionStart).format("DD MMM YYYY HH:mm:ss");
+                		  ActivityList[i].sessions.agentInfo.sessionStart = moment(ActivityList[i].sessions.agentInfo.sessionStart).format("DD MMM YYYY HH:mm:ss");
                 		  if(ActivityList[i].eventName == "Logged In")
                 		  {
                 			  ActivityList[i].eventType =   ActivityList[i].sessions.agentInfo.device + "-" + ActivityList[i].sessions.agentInfo.platform +"-"+  ActivityList[i].sessions.agentInfo.os  +"-"+  ActivityList[i].sessions.agentInfo.browser  +"-"+  ActivityList[i].sessions.agentInfo.version;

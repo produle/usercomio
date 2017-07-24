@@ -148,7 +148,7 @@ It is optional to use nginx in front of the NodeJS server, as it helps improving
 
 	```
 	try {
-        UsercomLib.track("View Product",{"product_id":1});   /* 1-Event Name(String) , 2-Event Properties(Object of any time)*/
+        Usercom.track("View Product",{"product_id":1});   /* 1-Event Name(String) , 2-Event Properties(Object of any time)*/
     }catch(error){console.log(error);}
 	```
     
