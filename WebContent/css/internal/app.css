@@ -819,7 +819,7 @@ h2
     vertical-align: middle;
     white-space: nowrap;
 }
-.ucTableRow:hover .ucTableCell
+#uc_visitor_list>.ucTableRow:hover .ucTableCell
 {
     box-shadow: inset 0px 10px 18px -18px rgba(0,0,0,0.6);
     -webkit-box-shadow: inset 0px 12px 18px -18px rgba(0,0,0,0.6); 

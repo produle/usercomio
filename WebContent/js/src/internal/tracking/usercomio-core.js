@@ -81,8 +81,23 @@
 				    thisClass.establishSocketConnection(usercomlib);
                     	
                     thisClass.initServices();
+                    
+                    usercomlib.trackEvent("Logged In",{});
 				});
 			},
+			
+			track : function(eventName,properties)
+			{
+				if(window.usercomlib.trackEvent){
+					 usercomlib.trackEvent(eventName,properties);
+				}
+				else
+				{  
+					setTimeout(function(){
+						Usercom.track(eventName,properties);
+					},500);
+				}
+    		},
 			
 			establishSocketConnection : function(usercomlib)
 			{
