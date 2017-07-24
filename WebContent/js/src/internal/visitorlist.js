@@ -68,6 +68,8 @@ function UC_VisitorListController()
 
             $(document).on("click",".ucVisitorPageTrigger",thisClass.openVisitorProfile);
 
+            $(document).on("click","#ucVisitorPageBackBtn",thisClass.closeVisitorProfile);
+
             $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-up").hide();
             $("#uc_visitor_list .ucUserListSortableColumn .fa-caret-down").hide();
 
@@ -266,6 +268,18 @@ function UC_VisitorListController()
                 display: false
             }
         );
+
+        thisClass.rivetVisitorMessagesObj = rivets.bind(
+            document.querySelector('#ucVisitorMessages'), {
+                messageList: []
+            }
+        );
+
+	    thisClass.rivetVisitorSessionsObj = rivets.bind(
+	       document.querySelector("#ucVisitorActivity"), {
+	           ActivityList: [],
+	       }
+	    );
 	};
 
 	/*
@@ -433,7 +447,20 @@ function UC_VisitorListController()
      */
     this.openVisitorProfile = function()
     {
-        location.href="/visitor/"+$(this).attr("data-visitorid");
+        thisClass.getVisitorDetails($(this).attr("data-visitorid"));
+        $(".ucVisitorPageWrapper").show();
+        $(".ucIndexPageWrapper").hide();
+        history.pushState("", document.title, window.location.pathname + window.location.search + "visitor/" + $(this).attr("data-visitorid"));
+    };
+
+    /*
+     * @desc Closes the visitor profile page and opens the list
+     */
+    this.closeVisitorProfile = function()
+    {
+        $(".ucIndexPageWrapper").show();
+        $(".ucVisitorPageWrapper").hide();
+        history.pushState("", document.title, "/");
     };
 
     /*
@@ -520,7 +547,7 @@ function UC_VisitorListController()
                 {
                     alert("An Error accured while fetching user details !");
                 }
-                else if(data.status == "authenticationfailed")
+                else if(data.status == "authenticationfailed" || data.status == "notfound")
                 {
                     location.href="/";
                 }
@@ -574,11 +601,7 @@ function UC_VisitorListController()
                             messageList[i].displayDate = moment(messageList[i].sentOn).format("DD MMM YYYY HH:mm:ss");
                         }
 
-                        thisClass.rivetVisitorMessagesObj = rivets.bind(
-                            document.querySelector('#ucVisitorMessages'), {
-                                messageList: messageList
-                            }
-                        );
+                        thisClass.rivetVisitorMessagesObj.models.messageList = messageList;
                     }
 
                     $("#ucVisitorMessageAjaxLoader").hide();
@@ -598,13 +621,7 @@ function UC_VisitorListController()
                 }
             }
          });
-        
-	     thisClass.rivetVisitorSessionsObj = rivets.bind(
-	       		  document.querySelector("#ucVisitorActivity"), {
-	               	  ActivityList: thisClass.activities,
-	                 }
-	    );
-        
+
         thisClass.getVisitorActivity(visitorId);
     };
     

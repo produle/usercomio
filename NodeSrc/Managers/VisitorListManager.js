@@ -194,6 +194,10 @@ class VisitorListManager {
                     {
                         return res.send({status:'failure'});
                     }
+                    else if(visitor.length == 0)
+                    {
+                        return res.send({status:'notfound'});
+                    }
                     else
                     {
                         return res.send({status:'success',visitor:visitor[0]});

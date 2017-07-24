@@ -437,7 +437,13 @@ function UC_AppController()
      		uc_main.rtcController.sendMessageToServer(msg);
         }
        
-
+        var currentPath = window.location.pathname.split("/");
+        if(currentPath.length == 3 && currentPath[1] == "visitor")
+        {
+            uc_main.visitorListController.getVisitorDetails(currentPath[2]);
+            $(".ucVisitorPageWrapper").show();
+            $(".ucIndexPageWrapper").hide();
+        }
     };
 
     /*
