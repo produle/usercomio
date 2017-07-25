@@ -66,9 +66,7 @@
 				
 				xhr.raw(DEFAULT_CONFIG.api_baseurl+'/VisitorTrackingManager/ping', JSON.stringify(requestObj),function(data){
 					
-					console.log(data);
-
-                    var response = JSON.parse(data);
+					var response = JSON.parse(data);
                    
                     thisClass.props.sessionId = response.sessionId;
                    
@@ -152,7 +150,7 @@
 					}
 					
 					xhr.raw(DEFAULT_CONFIG.api_baseurl+'/VisitorTrackingManager/error', JSON.stringify(requestObj),function(data){
-						console.log(data);
+						//Error posted
 					});
 					
 					return false;

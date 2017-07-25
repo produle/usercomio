@@ -30,7 +30,7 @@ function trackEvent()
 		}
 		
 		xhr.raw(DEFAULT_CONFIG.api_baseurl+'/VisitorTrackingManager/event', JSON.stringify(requestObj),function(data){
-			console.log(data);
+			//Event tracking posted successfully
 		})
 	}
 	
