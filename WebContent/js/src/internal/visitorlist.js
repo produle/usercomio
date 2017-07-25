@@ -51,6 +51,8 @@ function UC_VisitorListController()
 
     this.displayFields = [];
 
+    this.visitorListInProcess = false;
+
     this.constructor = function()
 	{
         if(uc_main.appController.renderVisitors)
@@ -293,8 +295,10 @@ function UC_VisitorListController()
             mongoFilterQuery = null;
         }
 
-        if(uc_main.appController.currentAppId)
+        if(uc_main.appController.currentAppId && !thisClass.visitorListInProcess)
         {
+            thisClass.visitorListInProcess = true;
+
             var filterId = thisClass.currentFilterId;
             if(filterId == 'dashboard')
             {
@@ -340,6 +344,8 @@ function UC_VisitorListController()
 
                 $("#ucVisitorListAjaxLoader").hide();
                 $("#ucPageLoader").hide();
+
+                thisClass.visitorListInProcess = false;
             });
         }
 	};
