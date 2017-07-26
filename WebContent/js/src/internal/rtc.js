@@ -54,7 +54,6 @@ function UC_RTCController()
 	  
 	this.peerRTC = function(msg)
 	{
-		console.log(msg);
 		// On new user
 		if(msg.name === 'newvisitor')
 		{

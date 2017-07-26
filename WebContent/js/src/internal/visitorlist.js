@@ -51,6 +51,8 @@ function UC_VisitorListController()
 
     this.displayFields = [];
 
+    this.visitorListInProcess = false;
+
     this.constructor = function()
 	{
         if(uc_main.appController.renderVisitors)
@@ -293,8 +295,10 @@ function UC_VisitorListController()
             mongoFilterQuery = null;
         }
 
-        if(uc_main.appController.currentAppId)
+        if(uc_main.appController.currentAppId && !thisClass.visitorListInProcess)
         {
+            thisClass.visitorListInProcess = true;
+
             var filterId = thisClass.currentFilterId;
             if(filterId == 'dashboard')
             {
@@ -340,6 +344,8 @@ function UC_VisitorListController()
 
                 $("#ucVisitorListAjaxLoader").hide();
                 $("#ucPageLoader").hide();
+
+                thisClass.visitorListInProcess = false;
             });
         }
 	};
@@ -622,6 +628,8 @@ function UC_VisitorListController()
             }
          });
 
+        thisClass.resetActivities();
+
         thisClass.getVisitorActivity(visitorId);
     };
     
@@ -681,7 +689,21 @@ function UC_VisitorListController()
                } 
         });
     	
-    }; 
+    };
+
+    /*
+     * @desc Reset activity list when a fresh visitor is selected
+     */
+    this.resetActivities = function()
+    {
+        thisClass.activities = [];
+
+        thisClass.rivetVisitorSessionsObj.models.ActivityList = thisClass.activities;
+
+        thisClass.activityListSkipIndex = 0;
+
+        thisClass.activityListloaded = false;
+    }
     
     /*
      * @desc Obtains the list of fields for the app
