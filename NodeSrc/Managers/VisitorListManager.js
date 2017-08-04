@@ -8,6 +8,7 @@
 var express = require("express");
 var app = require("../server").app;
 var moment = require("moment");
+var deepcopy = require("deepcopy");
 
 class VisitorListManager {
 
@@ -120,10 +121,10 @@ class VisitorListManager {
                   ]
                 }
             }
-        ];
-
-        var aggregateWithLimit = JSON.parse(JSON.stringify(aggregateArray));
-        var aggregateWithCount = JSON.parse(JSON.stringify(aggregateArray));
+        ]; 
+         
+        var aggregateWithLimit = deepcopy(aggregateArray);  
+        var aggregateWithCount =  deepcopy(aggregateArray); 
 
         if(pageLimit != null)
         {

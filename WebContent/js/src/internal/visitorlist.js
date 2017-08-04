@@ -57,8 +57,8 @@ function UC_VisitorListController()
 	{
         if(uc_main.appController.renderVisitors)
         {
-            $(window).scroll(function() {
-               if($(window).scrollTop() + $(window).height() == $(document).height()) {
+        	$('.ucTableWrapper').scroll(function() {
+               if( ($('.ucTableWrapper').offset().top - $('#uc_visitor_list').offset().top) == ($('#uc_visitor_list').height() - $('.ucTableWrapper').height()) + 1 ) {
                    if(!thisClass.visitorListLoaded)
                    {
                        thisClass.getAllVisitors();
@@ -305,7 +305,6 @@ function UC_VisitorListController()
                 filterId = '1';
             }
 
-            thisClass.rivetVisitorListObj.models.list = [];
             $("#ucVisitorListAjaxLoader").show();
 
             UC_AJAX.call('VisitorListManager/visitorlist',{appid:uc_main.appController.currentAppId,skipindex:thisClass.visitorListSkipIndex,pagelimit:thisClass.visitorListPageLimit,filterid:filterId,sortColumn:thisClass.currentSortColumn,sortOrder:thisClass.currentSortOrder,mongoFilterQuery:mongoFilterQuery},function(data,status,xhr){
@@ -336,12 +335,13 @@ function UC_VisitorListController()
                         thisClass.visitorListLoaded = true;
                     }
 
-                    thisClass.listVisitors();
+                    thisClass.listVisitors(data.status);
 
                     $("#ucPredefinedFilterList").find("li[data-filterid="+filterId+"] .ucFilterListVisitorCount").text(thisClass.currentFilterTotalVisitors);
                     $("#ucUserdefinedFilterList").find("li[data-filterid="+filterId+"] .ucFilterListVisitorCount").text(thisClass.currentFilterTotalVisitors);
                 }
 
+                thisClass.updateRecipientCount();
                 $("#ucVisitorListAjaxLoader").hide();
                 $("#ucPageLoader").hide();
 
@@ -353,16 +353,15 @@ function UC_VisitorListController()
 	/*
 	 * @desc List visitor entries to UI
 	 */
-	this.listVisitors = function()
+	this.listVisitors = function(newVisitors)
 	{
 
 		for(var i=0;i< thisClass.visitors.length;i++)
 		{
 			thisClass.visitors[i].isVisitorOnline = false;
 			thisClass.visitors[i].isVisitorOffline = true;
-		}
-        
-		thisClass.rivetVisitorListObj.models.list = thisClass.visitors;
+		} 
+		thisClass.rivetVisitorListObj.models.list = thisClass.rivetVisitorListObj.models.list.concat(newVisitors);
         
         thisClass.checkVisitorPresence(thisClass.visitors);
         
@@ -446,6 +445,8 @@ function UC_VisitorListController()
         $("#uc-all-user-select").prop("checked",false);
 
         thisClass.rivetVisitorPlaceholderObj.models.display = false;
+        
+        thisClass.rivetVisitorListObj.models.list = [];
     };
 
     /*
@@ -511,7 +512,8 @@ function UC_VisitorListController()
      */
     this.updateRecipientCount = function()
     {
-        var recipientCount = 0;
+        var recipientCount = 0; 
+       
         if($("#uc-all-user-select").is(":checked"))
         {
             recipientCount = thisClass.currentFilterTotalVisitors;
@@ -532,6 +534,13 @@ function UC_VisitorListController()
                 }
             });
         }
+        
+        if(recipientCount != 0)
+        {
+            $('#ucSendMessageGroupBtn').prop("disabled", false);
+        }
+        else
+        	 $('#ucSendMessageGroupBtn').prop("disabled", true);
 
         $("#ucSendMessageGroupBtn,#ucSendMessageEmailSubmit,#ucSendMessageBrowserNotificationSubmit").text("Send to "+recipientCount+" users");
     };
