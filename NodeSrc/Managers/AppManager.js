@@ -137,7 +137,8 @@ class AppManager {
                                     fcmSenderId : "",
                                     fcmAppName : "",
                                     icon : "",
-                                    appId : newApp._id
+                                    appId : newApp._id,
+                                    enabled : false
                                 };
 
                             var BrowserNotificationManagerObj = new BrowserNotificationManager();
@@ -329,36 +330,60 @@ class AppManager {
         {
             var baseTrackingCodePath = path.join(__dirname, '/../../WebContent/js/src/internal/tracking');
             
-            var uglified = uglify.minify([baseTrackingCodePath+'/utils.js', baseTrackingCodePath+'/usercomio-core.js', baseTrackingCodePath+'/eventtrack-service.js',baseTrackingCodePath+'/browsernotification-service.js']);
+            var serviceList = ["trackEvent"];
+            
+            var browserNotificationManagerObj = global.controllerList["BrowserNotificationManager"];
+            browserNotificationManagerObj.getBrowserNotificationSettingByCompany(appId,"",function(browserNotificationSetting){
 
-            out = uglified.code;
-           
-            out = out.replace("VARIABLE_APPID", appId);
-            
-            out = out.replace("VARIABLE_BASEURL", config.get("baseURL"));
-            
-            var apiBaseUrl = new URL(config.get("baseURL"));
-            
-            out = out.replace("VARIABLE_APIHOST",apiBaseUrl.hostname)
-            
-            //We can get the particular service a user has and add it.This gets executed after browser parses the script.
-            //Services are started after ping call inside UserCom.init().
-            out = out +  "SERVICES.push('browserNotification')";
+                if(browserNotificationSetting != null && browserNotificationSetting.hasOwnProperty('enabled') && browserNotificationSetting.enabled)
+                {
+                    serviceList.push("browserNotification");
+                }
 
-            
-            var trackjsFolderPath = path.join(__dirname, '/../../trackjs');
+                var uglifyList = [baseTrackingCodePath+'/utils.js',baseTrackingCodePath+'/usercomio-core.js'];
 
-            if (!fs.existsSync(trackjsFolderPath)){
-                fs.mkdirSync(trackjsFolderPath);
-            }
-            
-            fs.writeFile(trackjsFolderPath+'/track-'+appId+'.min.js',out,  function (err){
-	            if(err) {
-            	    console.log(err);
-            	  } else {
-            	    console.log("Trackjs script generated for appId:"+appId);
-            	  }      
-            	});
+                for(var i = 0; i < serviceList.length; i++)
+                {
+                    uglifyList.push(baseTrackingCodePath+'/services/'+serviceList[i]+'.js');
+                }
+
+                var uglified = uglify.minify(uglifyList);
+
+                out = uglified.code;
+
+                out = out.replace("VARIABLE_APPID", appId);
+
+                out = out.replace("VARIABLE_BASEURL", config.get("baseURL"));
+
+                var apiBaseUrl = new URL(config.get("baseURL"));
+
+                out = out.replace("VARIABLE_APIHOST",apiBaseUrl.hostname)
+
+                //We can get the particular service a user has and add it.This gets executed after browser parses the script.
+                //Services are started after ping call inside UserCom.init().
+                for(var i = 0; i < serviceList.length; i++)
+                {
+                    out = out +  "SERVICES.push('"+serviceList[i]+"');";
+                }
+
+
+
+                var trackjsFolderPath = path.join(__dirname, '/../../trackjs');
+
+                if (!fs.existsSync(trackjsFolderPath)){
+                    fs.mkdirSync(trackjsFolderPath);
+                }
+
+                fs.writeFile(trackjsFolderPath+'/track-'+appId+'.min.js',out,  function (err){
+                    if(err) {
+                        console.log(err);
+                      } else {
+                        console.log("Trackjs script generated for appId:"+appId);
+                      }
+                    });
+
+            });
+
         }
 	  };      	
 

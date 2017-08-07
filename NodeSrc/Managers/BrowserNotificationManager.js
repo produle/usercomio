@@ -302,9 +302,9 @@ class BrowserNotificationManager {
         var browserNotificationSettingsCollection = global.db.collection('browsernotificationsettings').aggregate([
                 { $match :
                     { "$and": [
-                        {
-                          clientId:clientId
-                        },
+//                        {
+//                          clientId:clientId
+//                        },
                         {
                             appId:appId
                         }
@@ -353,7 +353,7 @@ class BrowserNotificationManager {
             { _id:  browserNotificationSetting._id},
             browserNotificationSetting,
             { upsert: false }
-        )
+        );
 
         //Regenerate tracking code for the app
         var appManagerObj = global.controllerList["AppManager"];

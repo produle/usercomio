@@ -4,7 +4,7 @@
  * @desc UserComIO browser notification.This function is run once which activates the browser service worker.
  *
  */
- 
+
 
 function browserNotification()
 {
