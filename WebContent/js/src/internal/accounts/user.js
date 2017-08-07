@@ -49,6 +49,13 @@ function UC_UserController()
                 appName: ""
             }
         );
+
+        $(document).on("click","#uceditbrowsernotification_helptoggle",function(){
+            $("#uceditbrowsernotification_helpcontainer").slideToggle({
+                duration: 400
+            });
+        });
+
 	};
 
     /*
@@ -359,6 +366,15 @@ function UC_UserController()
                     $('#uceditbrowsernotification_fcmsenderid').val(thisClass.browserNotificationSetting.fcmSenderId);
                     $('#uceditbrowsernotification_fcmappname').val(thisClass.browserNotificationSetting.fcmAppName);
                     $('#uceditbrowsernotification_icon').val(thisClass.browserNotificationSetting.icon);
+
+                    if (thisClass.browserNotificationSetting.hasOwnProperty('enabled') && thisClass.browserNotificationSetting.enabled) {
+                        $('#uceditbrowsernotification_enabled').prop('checked',true);
+                    }
+                    else
+                    {
+                        $('#uceditbrowsernotification_enabled').prop('checked',false);
+                    }
+
                     $("#ucEditBrowserNotificationModal").modal();
 
                     $("#uceditbrowsernotification_submit").button('reset');
@@ -486,12 +502,28 @@ function UC_UserController()
         var fcmKey = $('#uceditbrowsernotification_fcmkey').val(),
             fcmSenderId = $('#uceditbrowsernotification_fcmsenderid').val(),
             fcmAppName = $('#uceditbrowsernotification_fcmappname').val(),
-            iconUrl = $('#uceditbrowsernotification_icon').val();
+            iconUrl = $('#uceditbrowsernotification_icon').val(),
+            enabled = false;
+
+        if ($('#uceditbrowsernotification_enabled').is(':checked')) {
+
+            var validationResult = thisClass.validateBrowserNotificationInputs();
+
+            if(validationResult.status == "failure")
+            {
+                alert(validationResult.msg);
+                return;
+            }
+
+            enabled = true;
+
+        }
 
         thisClass.browserNotificationSetting.fcmKey = fcmKey;
         thisClass.browserNotificationSetting.fcmSenderId = fcmSenderId;
         thisClass.browserNotificationSetting.fcmAppName = fcmAppName;
         thisClass.browserNotificationSetting.icon = iconUrl;
+        thisClass.browserNotificationSetting.enabled = enabled;
 
         thisClass.browserNotificationSetting.appId = uc_main.appController.currentAppId;
 
@@ -614,6 +646,41 @@ function UC_UserController()
         else if($.trim(amazonfrom) == "")
         {
             msg = "Invalid From Email !";
+        }
+
+        if(msg != "")
+        {
+            result.status = "failure";
+            result.msg = msg;
+        }
+
+        return result;
+    };
+
+    /*
+     * @desc Validate browser notification data
+     */
+    this.validateBrowserNotificationInputs  = function()
+    {
+        var result = {status:"success",msg:""};
+
+        var fcmKey = $('#uceditbrowsernotification_fcmkey').val(),
+            fcmSenderId = $('#uceditbrowsernotification_fcmsenderid').val(),
+            fcmAppName = $('#uceditbrowsernotification_fcmappname').val(),
+            iconUrl = $('#uceditbrowsernotification_icon').val(),
+            msg = "";
+
+        if($.trim(fcmKey) == "")
+        {
+            msg = "FCM Secret Key is required";
+        }
+        else if($.trim(fcmSenderId) == "")
+        {
+            msg = "FCM Sender ID is required";
+        }
+        else if($.trim(fcmAppName) == "")
+        {
+            msg = "FCM App Name is required";
         }
 
         if(msg != "")
