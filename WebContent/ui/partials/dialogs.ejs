@@ -294,7 +294,12 @@
                 <form action="">
                     <div class="row">
 
-                        <div class="col-sm-10 col-sm-offset-1">
+                        <div class="col-sm-5 col-sm-offset-1">
+                            <div id="uceditbrowsernotification_helptoggle">
+                                <span>Help &nbsp;<i class="fa fa-chevron-down"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-5 col-sm-offset-1">
                             <div style="text-align: right;">
                                 <span>Enable &nbsp;</span>
                                 <label class="UctoggleSwitch" style="vertical-align: middle;">
@@ -302,6 +307,17 @@
                                     <div class="UctoggleSlider round"></div>
                                 </label>
                             </div>
+                        </div>
+
+                        <div class="col-sm-10 col-sm-offset-1" id="uceditbrowsernotification_helpcontainer">
+                            <ol>
+                                <li>Login to <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a> and create a project if you do not have any</li>
+                                <li>Goto Project Settings > Cloud Messaging tab to obtain the required info.</li>
+                                <li>FCM Secret Key - Server key in FCM</li>
+                                <li>FCM Sender ID - Sender IDin FCM</li>
+                                <li>FCM App Name - Project Name in FCM</li>
+                                <li>Icon URL - Publicly accessible URL which will be used to render the icon in the notification</li>
+                            </ol>
                         </div>
 
                         <div class="col-sm-10 col-sm-offset-1">

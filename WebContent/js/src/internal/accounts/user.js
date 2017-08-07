@@ -49,6 +49,13 @@ function UC_UserController()
                 appName: ""
             }
         );
+
+        $(document).on("click","#uceditbrowsernotification_helptoggle",function(){
+            $("#uceditbrowsernotification_helpcontainer").slideToggle({
+                duration: 400
+            });
+        });
+
 	};
 
     /*

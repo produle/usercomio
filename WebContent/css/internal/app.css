@@ -753,6 +753,25 @@ h2
 {
     word-break: break-word;
 }
+
+#uceditbrowsernotification_helptoggle
+{
+    text-align: left;
+    padding-left: 11px;
+    color: #999;
+    cursor: pointer;
+}
+#uceditbrowsernotification_helpcontainer
+{
+    display: none;
+    border:1px solid #CCCCCC;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: left;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #999999;
+}
 /**
  * CSS Loader animation - Start
  */
