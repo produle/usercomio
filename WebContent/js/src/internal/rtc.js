@@ -72,8 +72,11 @@ function UC_RTCController()
 			{
 				var visitor = $.grep(uc_main.visitorListController.visitors, function(e){ return e.visitorData.email == email });
 				
-				visitor[0].isVisitorOffline = false;
-				visitor[0].isVisitorOnline = true;
+                if(visitor.length == 1)
+                {
+				    visitor[0].isVisitorOffline = false;
+				    visitor[0].isVisitorOnline = true;
+                }
 			}
 			
 			
@@ -89,8 +92,11 @@ function UC_RTCController()
 			
 				var visitor = $.grep(uc_main.visitorListController.visitors, function(e){ return e.visitorData.email == email });
 				
-				visitor[0].isVisitorOffline = true;
-				visitor[0].isVisitorOnline = false;
+				if(visitor.length == 1)
+                {
+				    visitor[0].isVisitorOffline = true;
+				    visitor[0].isVisitorOnline = false;
+                }
 			}
 			
 		}

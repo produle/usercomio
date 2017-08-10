@@ -918,7 +918,8 @@ function UC_VisitorListController()
     	$('.ucSearchBar').after("<p style='padding-left: 15px;font-size: 11px;color: #2b9af3;cursor:pointer' class='ucNewVisitorNotificationMsgCls'>"+thisClass.newVisitors+" user(s) have arrived since you have logged in.Click to refresh the visitor's list.</p>");
     	
     	$('.ucNewVisitorNotificationMsgCls').on('click',function(){
-    		thisClass.getAllVisitors();
+    		thisClass.resetPagination();
+            thisClass.getAllVisitors();
     		$(this).remove();
     	});
     }
