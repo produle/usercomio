@@ -113,7 +113,8 @@
 				{
 						var msg = {};
 						msg.name = "establishvisitorconnection";
-						msg.key = usercomlib.userdata.email +'-'+ usercomlib.appid +'-'+ usercomlib.sessionId;
+						msg.key = usercomlib.userdata.email +'-'+ usercomlib.appid ;
+						msg.sessionId = usercomlib.sessionId ;
 						msg  = JSON.stringify(msg);
 						ws.send(msg);
 				}

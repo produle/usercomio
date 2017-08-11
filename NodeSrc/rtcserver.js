@@ -29,6 +29,7 @@ wss.on('connection', function connection(ws, req) {
 		{
 			wsVisitors[msg.key] = ws;
 			ws["visitorkey"] = msg.key;
+			ws["sessionId"] = msg.sessionId;
 			
 			var appid = msg.key.split("-")[1];
 			var key = msg.key;
@@ -82,6 +83,7 @@ wss.on('connection', function connection(ws, req) {
 		    if(typeof ws["visitorkey"] != "undefined")
 		    {
 		    	var visitorkey  = ws["visitorkey"]; 
+		    	var sessionId  = ws["sessionId"];
 		    	var appid = visitorkey.split("-")[1];
 				var key = visitorkey;
 			
@@ -99,7 +101,7 @@ wss.on('connection', function connection(ws, req) {
                 //On session close update sessionEnd
                 var VisitorTrackingManager = require("./Managers/VisitorTrackingManager").VisitorTrackingManager;
 				var VisitorTrackingManagerObj = new VisitorTrackingManager();
-                VisitorTrackingManagerObj.handleLogout(visitorkey.split("-")[2],visitorkey.split("-")[0]);
+                VisitorTrackingManagerObj.handleLogout(sessionId,visitorkey.split("-")[0]);
 				
 		    }
 		    else if(typeof ws["clientkey"] != "undefined")
