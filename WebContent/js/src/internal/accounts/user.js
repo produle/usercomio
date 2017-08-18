@@ -362,6 +362,8 @@ function UC_UserController()
                     var appIndex = UC_Utils.searchObjArray(uc_main.appController.apps,'_id',currentAppId);
                     thisClass.rivetAppNameBrowserNotificationObj.models.appName = uc_main.appController.apps[appIndex].name;
 
+                    $('#uceditbrowsernotification_baseurl').text(uc_main.userController.config.baseURL);
+                    $('#uceditbrowsernotification_appid').text(currentAppId);
                     $('#uceditbrowsernotification_fcmkey').val(thisClass.browserNotificationSetting.fcmKey);
                     $('#uceditbrowsernotification_fcmsenderid').val(thisClass.browserNotificationSetting.fcmSenderId);
                     $('#uceditbrowsernotification_fcmappname').val(thisClass.browserNotificationSetting.fcmAppName);
