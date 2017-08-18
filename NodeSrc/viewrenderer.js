@@ -227,6 +227,39 @@ class ViewRenderer
             
         });
 
+        app.get('/tracking/manifest.json', function(req, res) {
+
+        	try
+        	{
+        		var browserNotificationManagerObj = global.controllerList["BrowserNotificationManager"];
+                browserNotificationManagerObj.getBrowserNotificationSettingByCompany(req.query.appid,"",function(browserNotificationSetting){
+
+                    if(browserNotificationSetting != null)
+                    {
+                        var manifestcode = '{"gcm_sender_id":"'+browserNotificationSetting.fcmSenderId+'"}';
+
+                        res.setHeader('Content-type', 'application/json');
+
+                        res.write(manifestcode);
+
+                        res.end();
+                    }
+                    else
+                    {
+                        res.status(404).end();
+                    }
+                });
+
+
+        	}
+        	catch(err)
+        	{
+        		res.status(404).end();
+        	}
+
+
+        });
+
 
 	}
 	

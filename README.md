@@ -165,6 +165,11 @@ You can send browser notifications to multiple users through Usercom, by complet
 3. Enter the above details in the `Edit Browser Notification Settings`, which is available in the top-right corner dropdown.
 4. Save the settings
 5. Download the service worker file and move it to your root directory (usercom-service-worker.js). This file is required in order to send browser notifications.
+6. In your code, add the below line in the `<head>` section
+
+	```
+	<link rel="manifest" href="{serverpath}/tracking/manifest.json?appid={appID}">;
+	```
 
 ## Copyright and license
 
