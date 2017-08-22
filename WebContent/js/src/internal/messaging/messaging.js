@@ -133,31 +133,8 @@ function UC_MessagingController()
      */
     this.sendMessageHandler = function(subject,message,template,link,blockDuplicate,messageType,sendType,scheduleDatetime)
     {
-        var filterId = null;
-        var exclusionList = [];
-        var inclusionList = [];
-
-        if($("#uc-all-user-select").is(":checked"))
-        {
-            filterId = uc_main.visitorListController.currentFilterId;
-
-            $(".uc-user-select").each(function(){
-                if(!$(this).is(":checked"))
-                {
-                    exclusionList.push($(this).attr("data-visitorid"));
-                }
-            });
-        }
-        else
-        {
-            $(".uc-user-select").each(function(){
-                if($(this).is(":checked"))
-                {
-                    inclusionList.push($(this).attr("data-visitorid"));
-                }
-            });
-        }
-
+    	// Get the selected visitors
+         var data = uc_main.visitorListController.getSelectedVisitors();
 
         //call the email trigger server function
 
@@ -165,7 +142,7 @@ function UC_MessagingController()
         $("#ucSendMessageEmailSubmit").next(".dropdown-toggle").attr("disabled",true);
         $("#ucSendMessageBrowserNotificationSubmit").button('loading');
 
-        UC_AJAX.call('MessagingManager/sendmessage',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,filterId:filterId,exclusionList:exclusionList,inclusionList:inclusionList,subject:subject,message:message,template:template,link:link,blockDuplicate:blockDuplicate,messageType:messageType,sendType:sendType,scheduleDatetime:scheduleDatetime},function(data,status,xhr){
+        UC_AJAX.call('MessagingManager/sendmessage',{appid:uc_main.appController.currentAppId,user:UC_UserSession.user,filterId: data.filterId,exclusionList: data.exclusionList,inclusionList:data.inclusionList,subject:subject,message:message,template:template,link:link,blockDuplicate:blockDuplicate,messageType:messageType,sendType:sendType,scheduleDatetime:scheduleDatetime},function(data,status,xhr){
 
                 if(data.status == "failure")
                 {
@@ -183,6 +160,8 @@ function UC_MessagingController()
                 $("#ucSendMessageEmailSubmit").button('reset');
                 $("#ucSendMessageEmailSubmit").next(".dropdown-toggle").attr("disabled",false);
                 $("#ucSendMessageBrowserNotificationSubmit").button('reset');
+                $('#uc_visitor_list :checkbox').prop('checked', false);
+                $('#ucSendMessageGroupBtn').hide();
             });
     };
     
