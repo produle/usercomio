@@ -299,37 +299,44 @@ class BrowserNotificationManager {
      */
     getBrowserNotificationSettingByCompany(appId,clientId,callback)
     {
-        var browserNotificationSettingsCollection = global.db.collection('browsernotificationsettings').aggregate([
-                { $match :
-                    { "$and": [
-//                        {
-//                          clientId:clientId
-//                        },
-                        {
-                            appId:appId
+        try
+        {
+            var browserNotificationSettingsCollection = global.db.collection('browsernotificationsettings').aggregate([
+                    { $match :
+                        { "$and": [
+    //                        {
+    //                          clientId:clientId
+    //                        },
+                            {
+                                appId:appId
+                            }
+                          ]
                         }
-                      ]
-                    }
-                 }
-            ]).toArray(function(err,browserNotificationSetting)
-                {
-                    if(err)
+                     }
+                ]).toArray(function(err,browserNotificationSetting)
                     {
-                        callback(null);
-                    }
-                    else
-                    {
-                        if(browserNotificationSetting.length == 1)
-                        {
-                            callback(browserNotificationSetting[0]);
-                        }
-                        else
+                        if(err)
                         {
                             callback(null);
                         }
+                        else
+                        {
+                            if(browserNotificationSetting.length == 1)
+                            {
+                                callback(browserNotificationSetting[0]);
+                            }
+                            else
+                            {
+                                callback(null);
+                            }
+                        }
                     }
-                }
-            );
+                );
+        }
+        catch(err)
+        {
+            console.log(err);
+        }
     }
 
     /*
