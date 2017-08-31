@@ -305,32 +305,24 @@ class VisitorListManager {
         if(appId)
     	{
 
-            var visitorsCollection = global.db.collection('visitors').aggregate([
-                { $match :
-                    { appId: appId }
-                },
-                { $limit : 1 }
-            ]).toArray(function(err,visitors)
+            var appCollection = global.db.collection('apps');
+            appCollection.findOne({ "_id": appId },function(err,app)
+            {
+                if(err)
                 {
-                    if(err)
-                    {
-                        return res.send({status:'failure'});
-                    }
-                    else if(visitors.length > 0)
-                    {
-                        var fieldList = [];
-                        for (var fieldSingle in visitors[0].visitorData)
-                        {
-                            fieldList.push(fieldSingle);
-                        }
-                        return res.send({status:'success',fields:fieldList});
-                    }
-                    else
-                    {
-                        return res.send({status:'success',fields:[]});
-                    }
+                    return res.send({status:'failure'});
                 }
-            );
+                else if(app)
+                {
+                    if(typeof app.customFieldList == "undefined")
+                    {
+                        app.customFieldList = [];
+                    }
+
+                    return res.send({status:'success',fields:app.customFieldList});
+                }
+
+            });
     	}
 
   	}

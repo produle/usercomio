@@ -17,6 +17,7 @@ var geoip = require("geoip-lite");
 var fs = require("fs");
 var path = require('path');
 var RTCManager = require("./RTCManager").RTCManager;
+const arrayUnion = require('array-union');
 
 class VisitorTrackingManager {
 
@@ -223,6 +224,32 @@ class VisitorTrackingManager {
                         }
 
                         	
+                    });
+
+                    //Update the customFieldList of the app
+                    var appCollection = global.db.collection('apps');
+                    appCollection.findOne({ "_id": req.body.appid },function(err,app)
+                    {
+                        if(typeof app.customFieldList == "undefined")
+                        {
+                            app.customFieldList = [];
+                        }
+
+                        var visitorFieldList = Object.keys(visitorDetail["visitorData"]);
+
+                        var unionArray = arrayUnion(app.customFieldList, visitorFieldList);
+
+                        if(unionArray.length > app.customFieldList.length)
+                        {
+                            appCollection.update({_id:app._id},{$set:{customFieldList:unionArray}},function(err,count,result)
+                            {
+                                if (err)
+                                {
+                                    return res.send({status:'failure'});
+                                }
+                            });
+                        }
+
                     });
 
                 });

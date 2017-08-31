@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "accept-language": "^3.0.15",
+    "array-union": "^1.0.2",
     "aws-sdk": "^2.45.0",
     "body-parser": "^1.15.2",
     "config": "^1.25.1",
