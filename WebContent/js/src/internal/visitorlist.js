@@ -853,8 +853,11 @@ function UC_VisitorListController()
 
             for(var i = 0; i < fieldsOrder.length; i++)
             {
-                tmpOrderedHTML += $(popoverHTML).find("li[data-fieldid='"+fieldsOrder[i]+"']").prop('outerHTML') ;
-                $(popoverHTML).find("li[data-fieldid='"+fieldsOrder[i]+"']").remove();
+                if($(popoverHTML).find("li[data-fieldid='"+fieldsOrder[i]+"']").length > 0)
+                {
+                    tmpOrderedHTML += $(popoverHTML).find("li[data-fieldid='"+fieldsOrder[i]+"']").prop('outerHTML') ;
+                    $(popoverHTML).find("li[data-fieldid='"+fieldsOrder[i]+"']").remove();
+                }
             }
 
             $(popoverHTML).find("#ucVisitorFieldList").prepend(tmpOrderedHTML);

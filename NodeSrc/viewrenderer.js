@@ -254,6 +254,7 @@ class ViewRenderer
         	}
         	catch(err)
         	{
+                console.log(err);
         		res.status(404).end();
         	}
 
