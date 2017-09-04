@@ -23,6 +23,7 @@ class VisitorListManager {
         this.router.post("/getvisitormessages",(req, res) => { this.getVisitorMessages(req,res); });
         this.router.post("/getvisitorsessions",(req, res) => { this.getVisitorSessions(req,res); });
         this.router.post("/getfieldslist",(req, res) => { this.getFieldsList(req,res); });
+        this.router.post("/deletevisitors",(req, res) => { this.getDeleteVisitorsData(req,res); });
     }
 
   	/*
@@ -334,6 +335,128 @@ class VisitorListManager {
     	}
 
   	}
+  	
+  	/*
+  	 * @desc Gets the selected visitors based on selection
+  	 */
+  	getDeleteVisitorsData(req,res)
+  	{
+  		if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+   		 
+  		var VisitorListManagerObj = new VisitorListManager();  
+        var appId = req.body.appid; 
+        var filterId = req.body.filterId;
+        var exclusionList = req.body.exclusionList;
+        var inclusionList = req.body.inclusionList;
+         
+        if(filterId != null)
+        {    
+        	  VisitorListManagerObj.getFilterData(appId,filterId,"visitorMetaInfo.lastSeen",1,0,null,exclusionList,function(response,totalcount){
+
+            	VisitorListManagerObj.deleteVisitors(response,appId,function(response){
+                    return res.send({ status:response });
+                }); 
+            });
+        }
+        else
+        { 
+        	 var visitorCollection = global.db.collection('visitors').aggregate([
+	                 { $match :
+	                     { "$and": [
+	                         {
+	                           appId:appId
+	                         },
+	                         { _id: {"$in": inclusionList}}
+	                       ]
+	                     }
+	                 }
+	             ]).toArray(function(err,response)
+	             {
+	                 if(err)
+	                 {
+	                     console.log("ERROR: "+err);
+	                 }
+	
+	                 VisitorListManagerObj.deleteVisitors(response,appId,function(response){
+	                     return res.send({ status:response });
+	                 });
+	             }
+	         );
+        	
+        } 
+  	};
+  	
+	/*
+  	 * @desc Delete the selected visitors in related tables
+  	 */
+  	
+  	deleteVisitors(response,appId,callback)
+  	{
+  		var visitors = response; 
+  		
+  		for(var i = 0; i < visitors.length; i++)
+        {
+        	// Delete visitor in visitor table
+            global.db.collection('visitors').remove({_id:visitors[i]._id},function(err,numberOfRemovedDocs)
+           {
+                 if(err)
+                {
+                      console.log(err);
+                }
+           });
+           
+           // Delete visitor in visitor events table
+            global.db.collection('visitorevents').remove({visitorId:visitors[i]._id},function(err,numberOfRemovedDocs)
+           {
+                 if(err)
+                {
+                      console.log(err);
+                }
+            });
+            
+           // Delete visitor in sessions table
+            global.db.collection('sessions').remove({visitorId:visitors[i]._id},function(err,numberOfRemovedDocs)
+            {
+                if(err)
+                {
+                      console.log(err);
+                }
+            });
+            
+            // Delete visitor in messages table
+            global.db.collection('messages').remove({visitorId:visitors[i]._id},function(err,numberOfRemovedDocs)
+            {
+                if(err)
+                {
+                      console.log(err);
+               }
+            });
+        
+            // Remove visitor id from recipiantList array in Emailtemplates table    
+            
+           global.db.collection('emailtemplates').update(
+            		{ appId: appId},
+            		{ $pull: { recipientList : { $in: [visitors[i]._id] } } },  
+            		{ multi: true }
+           		);
+            
+           // Remove visitor id from  unsubscribelist array in Emailsettings table    
+        	
+            global.db.collection('emailsettings').update(
+            		{ appId: appId},
+            		{ $pull: { unsubscribeList : { $in:  [visitors[i]._id] } } },  
+            		{ multi: true }
+            		);
+        } 
+
+        callback({status:"deleted"});
+  		
+  	}
+  	
+  	
 }
 
 

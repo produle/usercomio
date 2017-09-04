@@ -101,6 +101,8 @@ function UC_VisitorListController()
             $(document).on("click","#ucVisitorFieldsPopoverSubmit",thisClass.saveFieldsListHandler);
 
             $(document).on("click","#ucVisitorSearchBtn",thisClass.searchHandler);
+            
+            $(document).on("click","#ucDeleteVisitorBtn",thisClass.deleteVisitors);
         };
 	};
 
@@ -379,6 +381,14 @@ function UC_VisitorListController()
         {
             thisClass.rivetVisitorPlaceholderObj.models.display = false;
         } 
+        
+        if($("#uc-all-user-select").is(":checked"))
+        { 
+	    	$.each(newVisitors, function (index, value) {  
+	    		$('#uc-user-select-'+value._id).prop('checked',true) 
+	        }); 
+        }
+         
 	};
 
     /*
@@ -537,11 +547,14 @@ function UC_VisitorListController()
         
         if(recipientCount != 0)
         {
-            $('#ucSendMessageGroupBtn').prop("disabled", false);
+            $('#ucSendMessageGroupBtn').show();
+            $('#ucDeleteVisitorBtn').show();
         }
         else
-        	 $('#ucSendMessageGroupBtn').prop("disabled", true);
-
+        {
+        	 $('#ucSendMessageGroupBtn').hide();
+        	 $('#ucDeleteVisitorBtn').hide();
+        }
         $("#ucSendMessageGroupBtn,#ucSendMessageEmailSubmit,#ucSendMessageBrowserNotificationSubmit").text("Send to "+recipientCount+" users");
     };
 
@@ -940,5 +953,80 @@ function UC_VisitorListController()
     	msg.visitors = visitorsToCheck;
     	
     	uc_main.rtcController.sendMessageToServer(JSON.stringify(msg));
-    }
+    };
+    
+    // Get the visitors based on selection type
+    
+    this.getSelectedVisitors = function()
+    {
+    	 var filterId = null;        
+    	 var exclusionList = [];	 
+         var inclusionList = [];
+         
+    	 if($("#uc-all-user-select").is(":checked"))
+         {  
+    		 // Active filter id
+    		 filterId = uc_main.visitorListController.currentFilterId;
+    		 
+             $(".uc-user-select").each(function(){
+                 if(!$(this).is(":checked"))
+                 { 
+                	 // Visitor id's unchecked from all visitors
+                     exclusionList.push($(this).attr("data-visitorid"));
+                 }
+             });
+         }
+         else
+         {
+             $(".uc-user-select").each(function(){
+                 if($(this).is(":checked"))
+                 {
+                	 // Selected visitor id's
+                     inclusionList.push($(this).attr("data-visitorid"));
+                 }
+             });
+         }
+    	 
+    	 var data =  {
+    			 filterId : filterId,
+    			 exclusionList : exclusionList,
+    			 inclusionList : inclusionList 
+    	 }
+    	 
+    	 return data; 
+    };
+    
+    this.deleteVisitors = function()
+    {
+    	 if(confirm("Are you sure that you want to delete the visitor(s)?"))
+         {
+    		 
+    		 // Get the selected visitors
+             var data = thisClass.getSelectedVisitors(); 
+	         
+	         $("#ucPageLoader").show();
+	         
+	         UC_AJAX.call('VisitorListManager/deletevisitors',{ appid:uc_main.appController.currentAppId, filterId: data.filterId, exclusionList: data.exclusionList,inclusionList:data.inclusionList},function(data,status,xhr)
+	                 {
+	                      if(data)
+	                      {
+	                          if(data.status == "failure")
+	                          {
+	                              alert("An Error accured while deleting");
+	                          }
+	                          else if(data.status == "authenticationfailed")
+	                          {
+	                              location.href="/";
+	                          }
+	                          else
+	                          {  
+	                        	  thisClass.getFieldsList();
+	                          }
+	                      }
+
+	                 });
+	         
+	         
+         } 
+    }; 
 }
