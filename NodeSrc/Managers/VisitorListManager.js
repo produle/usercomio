@@ -385,10 +385,8 @@ class VisitorListManager {
   	 * @desc Delete the selected visitors in related tables
   	 */
   	
-  	deleteVisitors(response,appId,callback)
-  	{
-  		var visitors = response; 
-  		
+  	deleteVisitors(visitors,appId,callback) 
+  	{	
   		for(var i = 0; i < visitors.length; i++)
         {
         	// Delete visitor in visitor table
@@ -430,6 +428,14 @@ class VisitorListManager {
             // Remove visitor id from recipiantList array in Emailtemplates table    
             
            global.db.collection('emailtemplates').update(
+            		{ appId: appId},
+            		{ $pull: { recipientList : { $in: [visitors[i]._id] } } },  
+            		{ multi: true }
+           		);
+           
+           // Remove visitor id from recipiantList array in Browsernotificationtemplates table    
+           
+           global.db.collection('browsernotificationtemplates').update(
             		{ appId: appId},
             		{ $pull: { recipientList : { $in: [visitors[i]._id] } } },  
             		{ multi: true }
