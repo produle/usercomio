@@ -124,7 +124,8 @@ function UC_MainController()
     	    	$("html, body").css({"overflow": "hidden"}); 
     	    	
     	    }
-    
+    	    $( ".ucSideBarMenuTriggerWrapper .logo" ).hide();
+    	    thisClass.interfaceResize(e);
     };
     /**
      * @desc Closing the sidebar
@@ -135,8 +136,8 @@ function UC_MainController()
     		e.stopPropagation();
     		$( ".ucSidebar,.ucMainContent,.ucIndexPageWrapper, body , #ucHeader" ).removeClass( "open" );
     		$("html, body").css({"overflow": "auto"}); 
-    		
-    		
+    		$( ".ucSideBarMenuTriggerWrapper .logo" ).show();
+    		thisClass.interfaceResize(e);
     };
     /**
      * @desc Resize Div layouts by calculating current window size so we have a fixed window size application like a desktop app
@@ -145,7 +146,7 @@ function UC_MainController()
 	{
     	if($('.ucSidebar').length==1)
     		{
-    		$('.ucSidebar').height($(window).height()-$('.ucSidebar').offset().top-30);
+    		$('.ucSidebar').height($(window).height());
     		}
     	
     	 var sidebarWidth = 0;
@@ -156,6 +157,18 @@ function UC_MainController()
     	}
     	 
     	 $('.ucTableWrapper').height($(window).height()-195); 
-    	 $('.ucTableWrapper').width($(window).width()-sidebarWidth-20);
+    	 $('.ucTableWrapper').width($(window).width()-sidebarWidth);
+    	 
+    	 $('#ucUserdefinedFilterList').height($(window).height() - ($('#ucUserdefinedFilterList').offset().top + 60)); 
+    	 
+    	 if($('#ucUserdefinedFilterList').get(0).scrollHeight > $('#ucUserdefinedFilterList').height())
+    		 {
+    		  $('#ucUserdefinedFilterList li .ucFilterSettingBtn'). css ('margin-right','5px');
+    		  $('#ucUserdefinedFilterList li .badge'). css ('right','35px');
+    		 }
+    	 else{
+    		 $('#ucUserdefinedFilterList li .ucFilterSettingBtn'). css ('margin-right','10px');
+    		 $('#ucUserdefinedFilterList li .badge'). css ('right','40px');
+    	 	}
 	};
 }
