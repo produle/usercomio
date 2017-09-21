@@ -894,6 +894,7 @@ h2
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: center;
 }
 .ucVisitorPageWrapper .ucUserEmail
 {
@@ -902,6 +903,7 @@ h2
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: center;
 }
 .ucVisitorPageWrapper .ucIconDetailsWrapper
 {
