@@ -1,117 +1,130 @@
-    <div class="container uc_mt_large">
-
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-primary" id="ucVisitorPageBackBtn"><i class="fa fa-chevron-left"></i> Back</button>
-            </div>
+      <div id="ucVisitorDetail">
+			<div class="ucSideBarMenuTriggerWrapper" id="ucVisitorShortData">
+				
+                <div class="ucUserPic">
+                   <div class="ucUserPicWrapper" rv-profilepicture="visitor.visitorData">
+                       <img class="ucUserProfileImage" src="" alt="" style="display: none;">
+                       <div class="ucUserProfileIntial"></div>
+                   </div>
+                   <div class="ucUserName" id="ucVisitorName"> </div>
+                   <div class="ucUserEmail" id="ucVisitorEmailId"></div>
+                </div>
+				<div class="ucSideBarMenuTrigger">
+				    <button class="btn btn-primary">User Details</button>
+				</div>
+			</div>
+        <div class="ucUserDetails">
+         <div class="ucSidebarCloseBtn"><i class="ico-close"></i></div>
+          
+              <div class="ucUserPic">
+                   <div class="ucUserPicWrapper" rv-profilepicture="visitor.visitorData">
+                       <img class="ucUserProfileImage" src="" alt="" style="display: none;">
+                       <div class="ucUserProfileIntial" style="background-color: rgb(38, 166, 91);">U</div>
+                   </div>
+              </div>
+              <div class="ucUserName" rv-text="visitor.visitorData.name"> </div>
+              <div class="ucUserEmail" rv-text="visitor.visitorData.email"></div>
+              <div class="ucUserFullDetails">
+                  <div class="ucUserDetailsSection">
+                      <div class="ucIconIndication"><img src="../images/app/visitordetails/userIDIcon.png"/></div>
+                      <div class="ucIconDetailsWrapper">
+                          <div class="ucIconTitleName">User ID</div>
+                          <div class="ucIconDetails" rv-text="visitor.displayId"></div>
+                      </div>
+                  </div>
+                  <div class="ucUserDetailsSection">
+                      <div class="ucIconIndication"><img src="../images/app/visitordetails/sessionIcon.png"/></div>
+                      <div class="ucIconDetailsWrapper">
+                          <div class="ucIconTitleName">Session</div>
+                          <div class="ucIconDetails" rv-text="visitor.displaySessionCount"></div>
+                      </div>
+                  </div>
+                  <div class="ucUserDetailsSection">
+                      <div class="ucIconIndication"><img src="../images/app/visitordetails/firstLoginIcon.png"/></div>
+                      <div class="ucIconDetailsWrapper">
+                          <div class="ucIconTitleName">First Login</div>
+                          <div class="ucIconDetails date" rv-text="visitor.displayFirstSeenDate"></div>
+                          <div class="ucIconDetails time" rv-text="visitor.displayFirstSeenTime"></div>
+                      </div>
+                  </div>
+                  <div class="ucUserDetailsSection">
+                      <div class="ucIconIndication"><img src="../images/app/visitordetails/lastLoginIcon.png"/></div>
+                      <div class="ucIconDetailsWrapper">
+                          <div class="ucIconTitleName">Last Login</div>
+                          <div class="ucIconDetails date" rv-text="visitor.displayLastSeenDate"></div>
+                          <div class="ucIconDetails time" rv-text="visitor.displayLastSeenTime"></div>
+                      </div>
+                  </div>
+              </div>
+          
         </div>
-
-        <div class="row uc_mt_medium">
-            <div class="col-md-4">
-
-                <div class="ucUserProfileMetaContainer" id="ucVisitorDetail">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="ucUserProfileHeading">
-                                <h3 class="display-4"><i class="fa fa-user"></i> User Info</h3>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
+          </div>
+        <div class="ucMainContent">
+           <div class="container-fluid">
+           
+                <div class="row">
+            
                         <div class="col-md-12">
 
-                            <br/>
-                            <div class="ucTable ucTableStripped" id="ucVisitorDetailTable" style="display:none;">
-                                <div class="ucTableRow">
-                                    <div class="ucTableCell text-center">Name</div>
-                                    <div class="ucTableCell text-center" rv-text="visitor.visitorData.name"></div>
-                                </div>
-                                <div class="ucTableRow">
-                                    <div class="ucTableCell text-center">ID</div>
-                                    <div class="ucTableCell text-center" rv-text="visitor.displayId"></div>
-                                </div>
-                                <div class="ucTableRow">
-                                    <div class="ucTableCell text-center">Email</div>
-                                    <div class="ucTableCell text-center" rv-text="visitor.visitorData.email"></div>
-                                </div>
-                                <div class="ucTableRow">
-                                    <div class="ucTableCell text-center">Sessions</div>
-                                    <div class="ucTableCell text-center" rv-text="visitor.displaySessionCount"></div>
-                                </div>
-                                <div class="ucTableRow">
-                                    <div class="ucTableCell text-center">Last Login</div>
-                                    <div class="ucTableCell text-center" rv-text="visitor.displayLastSeen"></div>
-                                </div>
-                                <div class="ucTableRow">
-                                    <div class="ucTableCell text-center">First Login</div>
-                                    <div class="ucTableCell text-center" rv-text="visitor.displayFirstSeen"></div>
-                                </div>
-                            </div>
+                        <ul class="nav nav-tabs" id="ucVisitorDetailsTab" role="tablist">
+                            <li role="presentation" class="active"><a href="#ucUserTabContentMessaging" aria-controls="ucUserTabContentMessaging" role="tab" data-toggle="tab">Messaging</a></li>
+                            <li role="presentation"><a href="#ucUserTabContentAnalysis" aria-controls="ucUserTabContentAnalysis" role="tab" data-toggle="tab">Analysis</a></li>
+                            <li role="presentation"><a href="#ucUserTabContentActivities" aria-controls="ucUserTabContentActivities" role="tab" data-toggle="tab">Activities</a></li>
+                        </ul>
 
-                            <div id="ucVisitorDetailAjaxLoader" class='ucAjaxLoader'>
-                                <img alt="Loading..." src="/images/app/ajax-loader.gif"   />
-                            </div>
+                        <div class="tab-content ucVisitorDetailsTabContent">
+                            <div role="tabpanel" class="tab-pane active" id="ucUserTabContentMessaging">
 
+                                <br/>
+                                <div class="ucTableWrapper">
+                                    <div class="ucTable" id="ucVisitorMessages">
+                                        <div class="ucTableRow">
+                                            <div class="ucTableHead  ">Date</div>
+                                            <div class="ucTableHead  ">Time</div>
+                                            <div class="ucTableHead  ">Subject</div>
+                                            <div class="ucTableHead  ">Message</div>
+                                        </div>
+                                        <div class="ucTableRow" rv-each-message="messageList">
+                                            <div class="ucTableCell" rv-text="message.displayDate"></div>
+                                            <div class="ucTableCell" rv-text="message.displayTime"></div>
+                                            <div class="ucTableCell" rv-text="message.subject"></div>
+                                            <div class="ucTableCell" rv-html="message.message"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="ucVisitorMessageAjaxLoader" class='ucAjaxLoader'>
+                                    <img alt="Loading..." src="/images/app/ajax-loader.gif"   />
+                                </div>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="ucUserTabContentAnalysis">
+                                Analysis Content
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="ucUserTabContentActivities">
+                                   <div class="ucTable" id="ucVisitorActivity">
+                                   <div class="ucTableRow">
+                                        <div class="ucTableHead text-center">Date &amp; Time</div>
+                                        <div class="ucTableHead text-center">Type</div>
+                                        <div class="ucTableHead text-center">Additional Info</div>
+                                    </div>
+                                    <div class="ucTableRow" rv-each-session="ActivityList">
+                                        <div class="ucTableCell" rv-text="session.sessions.agentInfo.sessionStart"></div>
+                                        <div class="ucTableCell" rv-text="session.eventName"></div>
+                                        <div class="ucTableCell" rv-text="session.eventType"></div>
+                                    </div>
+                                    </div>
+
+                                     <div id="ucVisitorActivityAjaxLoader" class='ucAjaxLoader'>
+                                        <img alt="Loading..." src="/images/app/ajax-loader.gif"   />
+                                    </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
-
-            </div>
-            <div class="col-md-8">
-
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#ucUserTabContentMessaging" aria-controls="ucUserTabContentMessaging" role="tab" data-toggle="tab">Messaging</a></li>
-                    <li role="presentation"><a href="#ucUserTabContentAnalysis" aria-controls="ucUserTabContentAnalysis" role="tab" data-toggle="tab">Analysis</a></li>
-                    <li role="presentation"><a href="#ucUserTabContentActivities" aria-controls="ucUserTabContentActivities" role="tab" data-toggle="tab">Activities</a></li>
-                </ul>
-
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="ucUserTabContentMessaging">
-
-                        <br/>
-                        <div class="ucTable" id="ucVisitorMessages">
-                            <div class="ucTableRow">
-                                <div class="ucTableHead text-center">Date &amp; Time</div>
-                                <div class="ucTableHead text-center">Subject</div>
-                                <div class="ucTableHead text-center">Message</div>
-                            </div>
-                            <div class="ucTableRow" rv-each-message="messageList">
-                                <div class="ucTableCell" rv-text="message.displayDate"></div>
-                                <div class="ucTableCell" rv-text="message.subject"></div>
-                                <div class="ucTableCell" rv-html="message.message"></div>
-                            </div>
-                        </div>
-
-                        <div id="ucVisitorMessageAjaxLoader" class='ucAjaxLoader'>
-                            <img alt="Loading..." src="/images/app/ajax-loader.gif"   />
-                        </div>
-
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="ucUserTabContentAnalysis">
-                        Analysis Content
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="ucUserTabContentActivities">
-                           <div class="ucTable" id="ucVisitorActivity">
-                           <div class="ucTableRow">
-                                <div class="ucTableHead text-center">Date &amp; Time</div>
-                                <div class="ucTableHead text-center">Type</div>
-                                <div class="ucTableHead text-center">Additional Info</div>
-                            </div>
-                            <div class="ucTableRow" rv-each-session="ActivityList">
-                                <div class="ucTableCell" rv-text="session.sessions.agentInfo.sessionStart"></div>
-                                <div class="ucTableCell" rv-text="session.eventName"></div>
-                                <div class="ucTableCell" rv-text="session.eventType"></div>
-						    </div>
-                            </div>
-
-                             <div id="ucVisitorActivityAjaxLoader" class='ucAjaxLoader'>
-                                <img alt="Loading..." src="/images/app/ajax-loader.gif"   />
-                            </div>
-                    </div>
-                </div>
-
-            </div>
+            
         </div>
-
+        <button class="btn btn-primary" id="ucVisitorPageBackBtn">Back</button>
     </div>
+    
+

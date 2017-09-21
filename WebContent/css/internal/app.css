@@ -190,12 +190,12 @@ h2
     box-shadow: none;
 }
 /**** Index Page Styles Starts****/
-.ucIndexPageWrapper
+.ucIndexPageWrapper, .ucVisitorPageWrapper
 {
 	width: 100%;
 	float:left;
 }
-.ucSidebar
+.ucSidebar, .ucUserDetails
 {
 	width: 270px;
 	background-color: #1a1d30;
@@ -218,10 +218,15 @@ h2
 #ucSettingsMenu > ul
 {
 	width: 100%;
+	margin:0;
 }
 #ucSettingsMenu > ul > li:first-child 
 {
 	width:220px;
+}
+#ucSettingsMenu > ul > li
+{
+	float: left;
 }
 #ucSettingsMenu > ul > li > a
 {
@@ -267,6 +272,10 @@ h2
 	padding:0 20px;
 	display: inline-block;
     width: 100%;
+}
+#ucAppMenu ul
+{
+	float:right;
 }
 #ucAppMenu .navbar-nav li>a
 {
@@ -786,20 +795,13 @@ h2
     top: 7px;
 }
 
-.ucUserProfileMetaContainer
-{
-    border: 1px solid #DDD;
-}
 
 .ucUserProfileHeading
 {
     padding : 0px 30px;
 }
 
-.ucUserProfileMetaContainer .table
-{
-    margin-bottom: 0px;
-}
+
 
 .ucUserBaseDetails
 {
@@ -868,11 +870,184 @@ h2
     transform: scale(0.4);
     margin-right: 5px;
 }
-
+#ucVisitorDetail
+{
+	text-align: center;
+}
+.ucUserDetails
+{
+	padding: 50px 40px 0;
+	box-sizing: border-box;
+}
+.ucVisitorPageWrapper .ucUserPic
+{
+	display: inline-block;
+	margin-bottom: 15px;
+}
+.ucVisitorPageWrapper .ucUserName
+{
+	display: block;
+    font-size: 18px;
+    color: #fff;
+    font-weight: normal;
+    width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ucVisitorPageWrapper .ucUserEmail
+{
+	color: #939399;
+	width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ucVisitorPageWrapper .ucIconDetailsWrapper
+{
+	float: left;
+    padding-left: 15px;
+    text-align: left;
+}
+.ucUserDetailsSection
+{
+	display: block;
+    float: left;
+    margin-bottom: 30px;
+}
+.ucIconIndication
+{
+	width: 42px;
+	height: 42px;
+	background-color: #121420;
+	border-radius: 10px;
+	float: left;
+	padding: 9px;
+}
+.ucIconTitleName
+{
+	font-size: 13px;
+	font-weight: bold;
+	text-transform: uppercase;
+	color:#fff;
+}
+.ucIconDetails
+{
+	font-size: 13px;
+	color: #939399;
+	width: 132px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ucIconDetails.date
+{
+	background: url('../../images/app/visitordetails/dateIcon.png') no-repeat left center;
+	padding-left: 24px;
+    margin: 5px 0;
+}
+.ucIconDetails.time
+{
+	background: url('../../images/app/visitordetails/timeIcon.png') no-repeat left center;
+	padding-left: 24px;
+}
+.ucVisitorPageWrapper .ucUserProfileIntial
+{
+	border-radius: 50%;
+    height: 100%;
+    padding: 6px 13px;
+    font-size: 35px;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 70px;
+}
+.ucUserFullDetails
+{
+	margin-top: 50px;
+}
+.ucVisitorPageWrapper .ucUserPicWrapper, .ucVisitorPageWrapper .ucUserPicWrapper img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #ccc;
+}
+.ucVisitorPageWrapper .ucMainContent
+{
+	padding: 30px;
+	box-sizing: border-box;
+}
+#ucVisitorDetailsTab li a
+{
+	color: #333;	
+}
+#ucVisitorDetailsTab li
+{
+	margin-right: 40px;
+}
+#ucVisitorDetailsTab li.active a , #ucVisitorDetailsTab li.active a:hover, #ucVisitorDetailsTab li.active a:focus
+{
+	color: #2b9af3;	
+	border: none;
+	border-bottom: 2px solid #2b9af3;
+}
+#ucVisitorDetailsTab li a , #ucVisitorDetailsTab li a:hover, #ucVisitorDetailsTab li a:focus
+{
+	background: none;
+	border: none;
+	outline: none;
+}
+#ucVisitorPageBackBtn
+{
+	position: absolute;
+    top: 15px;
+    right: 45px;
+    background: transparent;
+    border: 1px solid #2b9af3;
+    color: #2b9af3;
+}
+#ucVisitorPageBackBtn:focus
+{
+	box-shadow: none;
+}
+#ucVisitorMessages .ucTableHead
+{
+	text-align: left;
+	padding: 14px 18px;
+}
+#ucVisitorMessages .ucSmallWidth
+{
+	width: 15%;
+}
+#ucVisitorMessages .ucMediumWidth
+{
+	width: 25%;
+}
+#ucVisitorMessages .ucLargeWidth
+{
+	width: 45%;
+}
+#ucVisitorShortData .ucSideBarMenuTrigger
+{
+	width: auto;
+	height: auto;
+}
+#ucVisitorShortData .ucUserPicWrapper
+{
+	    margin: 0 12px 0 0;
+}
+#ucVisitorShortData button
+{
+	background: #2B9AEF;
+	border: none;
+    font-size: 13px;
+    margin-top: 5px;
+}
 
 @media only screen and (max-width:992px) 
 {
 	.ucSidebar{width:0; position: fixed; padding:0;top:0; left:0; height: 100%; display:none; overflow: auto; }
+	.ucUserDetails{width:0; position: fixed; top:0; left:0; height: 100%; display:none; overflow: auto;}
+	.ucVisitorPageWrapper .ucMainContent {margin-top: 70px;}
 	.ucMainContent{width: 100%; }
 	.ucSearchWrapper .form-group {margin-bottom: 0;}
 	.navbar-collapse {box-shadow: none; border-color:#3e3c5a; margin-top: 10px;}
@@ -880,7 +1055,7 @@ h2
 	#ucHeader.navbar-default .navbar-toggle { background: #3e3c5a; border-color: transparent;}
 	#ucHeader.navbar-default .navbar-toggle .icon-bar{background-color: #dfdef5;}
 	.ucSideBarMenuTrigger { display: block; }
-	.ucSidebar.open{width:270px; position: fixed; top:0; left:0; height: 100% !important;display:block; z-index: 999;}
+	.ucSidebar.open, .ucUserDetails.open{width:270px; position: fixed; top:0; left:0; height: 100% !important;display:block; z-index: 999;}
 	.ucMainContent.open{margin-left: 270px;}
 	.ucIndexPageWrapper.open{overflow:hidden;}
 	#ucHeader.open{}
@@ -892,6 +1067,7 @@ h2
 	.ucSearchWrapper , #ucVisitorSearchBtn, .ucSearchForm{/* width:60%; */ display:none;}
 	#ucSendMessageModal .modal-dialog { width:auto; }
 	.uc_tile {margin-bottom: 70px;}
+	#ucVisitorPageBackBtn {top:80px;}
 }
 @media only screen and (max-width:580px) 
 {
@@ -900,6 +1076,7 @@ h2
 	.ucNoteSection ul li:after { content:','; padding: 0 3px;}
 	.ucNoteSection ul li:last-child:after { content:''; }
 	.ucSendMessageSection{ width:100%;}
+	#ucVisitorDetailsTab li {margin-right: 10px;}
 }
 @media only screen and (max-width:480px) 
 {
@@ -950,6 +1127,8 @@ h2
 #ucVisitorMessages .ucTableCell
 {
     word-break: break-word;
+    padding: 14px 18px;
+    font-size: 13px;
 }
 
 #uceditbrowsernotification_helptoggle

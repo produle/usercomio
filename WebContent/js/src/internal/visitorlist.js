@@ -586,10 +586,12 @@ function UC_VisitorListController()
 
                         var visitorObj = data.visitor;
 
-                        visitorObj.displayId = (visitorObj._id.substring(0,10))+"...";
+                        visitorObj.displayId = (visitorObj._id);
                         visitorObj.displaySessionCount = visitorObj.sessions.length;
-                        visitorObj.displayLastSeen = moment(visitorObj.visitorMetaInfo.lastSeen).format("DD MMM YYYY HH:mm:ss");
-                        visitorObj.displayFirstSeen = moment(visitorObj.visitorMetaInfo.firstSeen).format("DD MMM YYYY HH:mm:ss");
+                        visitorObj.displayLastSeenDate = moment(visitorObj.visitorMetaInfo.lastSeen).format("DD MMM YYYY");
+                        visitorObj.displayLastSeenTime = moment(visitorObj.visitorMetaInfo.lastSeen).format("HH:mm:ss");
+                        visitorObj.displayFirstSeenDate = moment(visitorObj.visitorMetaInfo.firstSeen).format("DD MMM YYYY");
+                        visitorObj.displayFirstSeenTime = moment(visitorObj.visitorMetaInfo.firstSeen).format("HH:mm:ss");
                        
 
                         thisClass.rivetVisitorDetailsObj = rivets.bind(
@@ -600,6 +602,10 @@ function UC_VisitorListController()
                     }
 
                     $("#ucVisitorDetailAjaxLoader").hide();
+                    var visitorShortData = uc_main.visitorListController.rivetVisitorDetailsObj.models.visitor.visitorData;
+                    $("#ucVisitorName").text(visitorShortData.name);
+                    $("#ucVisitorEmailId").text(visitorShortData.email);
+                    
                     $("#ucVisitorDetailTable").show();
                 }
             });
@@ -626,7 +632,8 @@ function UC_VisitorListController()
 
                         for(var i = 0; i < messageList.length; i++)
                         {
-                            messageList[i].displayDate = moment(messageList[i].sentOn).format("DD MMM YYYY HH:mm:ss");
+                            messageList[i].displayDate = moment(messageList[i].sentOn).format("DD MMM YYYY");
+                            messageList[i].displayTime = moment(messageList[i].sentOn).format("HH:mm:ss");
                         }
 
                         thisClass.rivetVisitorMessagesObj.models.messageList = messageList;
