@@ -52,19 +52,45 @@ btn
 {
     margin-top: 50px;
 }
-
+.uc_tile_icon
+{
+	width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    top: -40px;
+    right: 0;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+}
 .uc_tile
 {
-    height: 100px;
-    background-color: #e7e7e7;
-    color: #777;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    color: #3d3d3d;
     cursor: pointer;
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.1);
+	box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.1);
 }
-
+.uc_current_users_icon
+{
+	background: url('../../images/app/dashboard/currentUsersIcon.png') no-repeat center center #4dd0e1;
+}
+.uc_all_users_icon
+{
+	background: url('../../images/app/dashboard/allUsersIcon.png') no-repeat center center #81c784;
+}
+.uc_slipping_users_icon
+{
+	background: url('../../images/app/dashboard/slippingAwayUsersIcon.png') no-repeat center center #7986cb;
+}
 .uc_tile_heading
 {
     font-size: 18px;
-    margin: 15px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -73,8 +99,6 @@ btn
 .uc_tile_value
 {
     font-size: 49px;
-    text-align: right;
-    margin: 15px;
 }
 
 .uc_tile_primary
@@ -166,31 +190,71 @@ h2
     box-shadow: none;
 }
 /**** Index Page Styles Starts****/
-.ucIndexPageWrapper
+.ucIndexPageWrapper, .ucVisitorPageWrapper
 {
 	width: 100%;
 	float:left;
 }
-.ucSidebar
+.ucSidebar, .ucUserDetails
 {
 	width: 270px;
-	background-color: #f9f9f9;
-	border-right: 1px solid #e9edee;
+	background-color: #1a1d30;
 	float:left;
-	padding: 15px;
 	transition: 0.2s;
+	position: fixed;
+	box-sizing: border-box;
+}
+.ucSidebarSettingsSection
+{
+	width:100%;
+	position : absolute;
+	bottom: 0px;
+	background: rgba(0,0,0,0.2);
+}
+#ucSettingsMenu
+{
+	padding:0;
+}
+#ucSettingsMenu > ul
+{
+	width: 100%;
+	margin:0;
+}
+#ucSettingsMenu > ul > li:first-child 
+{
+	width:220px;
+}
+#ucSettingsMenu > ul > li
+{
+	float: left;
+}
+#ucSettingsMenu > ul > li > a
+{
+	padding: 15px;
+}
+#ucSettingsMenu > ul > li.open > a
+{
+	background-color: transparent !important;
+}
+#ucSettingsMenu > ul > li > a span
+{
+	color: #fff;
+	opacity: 0.5;
+}
+#ucSettingsMenu ul li a:hover, #ucSettingsMenu ul li a:focus, #ucSettingsMenu > ul > li > a:hover, #ucSettingsMenu > ul > li > a:focus
+{
+	background-color: transparent;
 }
 .ucMainContent
 {
 	width: calc(100% - 270px);
-	float: left;
+	float: right;
 	transition: margin-left .2s;
 }
 #ucMainDashboard
 {
 	padding: 3px 0 15px 0px;
     margin: 10px 0 20px;
-    border-bottom: 1px solid #e9edee;
     cursor: pointer;
 }
 #uc_tab_data_dashboard
@@ -202,21 +266,112 @@ h2
 	margin-right: 10px;
 	font-weight: bold;
 }
+#ucAppMenu
+{
+	margin:0;
+	padding:0 20px;
+	display: inline-block;
+    width: 100%;
+}
+#ucAppMenu ul
+{
+	float:right;
+}
+#ucAppMenu .navbar-nav li>a
+{
+	color:rgba(255,255,255,0.5);
+}
+#ucAppMenu .navbar-nav li.open>a
+{
+	background-color: transparent !important; 
+}
+#uc_app_list, .uc_currentuser_submenu
+{
+	width: 260px;
+}
+#ucUserdefinedFilterList
+{
+	overflow: auto;
+	margin-right: -10px;
+}
+/* #ucUserdefinedFilterList:hover
+{
+	overflow: auto;
+} */
+#ucUserdefinedFilterList:hover .ucFilterSettingBtn
+{
+	margin-right: 5px;
+}
+/* #ucUserdefinedFilterList:hover .ucFilterListVisitorCount
+{
+	right : 35px;
+} */
+#ucUserdefinedFilterList::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 5px;
+}
+ 
+#ucUserdefinedFilterList::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 5px;
+}
+ 
+#ucUserdefinedFilterList::-webkit-scrollbar-thumb {
+  background-color: #0e0f15;
+  border-radius: 10px;
+}
+#uc_app_list li a i
+{
+	color: #333;
+	padding:0;
+}
+#uc_currentapp_name
+{	
+	max-width: 190px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    float: left;
+    text-align: right;
+    margin-right: 5px;
+}
+#ucAppMenu .navbar-nav li>a:hover, #ucAppMenu .navbar-nav li>a:focus
+{
+	background-color: transparent;
+}
+
+
+.ucSidebarWrapper
+{
+	padding: 0 20px;
+}
+.ucSidebarWrapper>ul
+{
+	padding:0;
+}
+#ucPredefinedFilterList li, #ucUserdefinedFilterList li
+{
+	
+}
+#ucPredefinedFilterList li:hover, #ucUserdefinedFilterList li:hover
+{
+	
+}
 #ucMainListing
 {
-	background: url('../../images/app/listing/ucListingIcon.png') no-repeat left top;
-	padding-left: 30px;
+	/* background: url('../../images/app/listing/ucListingIcon.png') no-repeat left top;
+	padding-left: 30px; */
 }
 #ucCustomFilter
 {
-	background: url('../../images/app/listing/ucFilterIcon.png') no-repeat left top;
-	padding-left: 30px;
+	/* background: url('../../images/app/listing/ucFilterIcon.png') no-repeat left top;
+	padding-left: 30px; */
 }
 .ucSidebar h5
 {
 	font-size: 16px;
     font-weight: 400;
-    color: #3d4c53;
+    color: #fff;
     margin: 20px 0 10px;
 }
 .ucAddNewFilter
@@ -244,14 +399,13 @@ h2
 	list-style: none;
 	line-height: 40px;
     font-size: 12px;
-    color: #777;
+    color: #fff;
+    
+    position: relative;
     transition: color 0.5s ease;
     cursor: pointer;
 }
-.ucSidebar ul li:hover
-{
-	color: #111;
-}
+
 .ucUserDefinedFilterOptions li .ico-settings
 {
 	cursor: default;
@@ -265,18 +419,38 @@ h2
     text-overflow: ellipsis;
     width: 110px;
     position: absolute;
-    
+    opacity: 0.5;
 }
-.ucListingOptions li .ucFilterListVisitorCount,
+.ucPredefinedFilterName
+{
+	opacity:0.5;
+}
+.ucListingOptions li .ucFilterListVisitorCount
+{
+	padding: 4px 10px;
+    top: 10px;
+    right: 0;
+    position: absolute;
+    font-weight: normal;
+    background: rgba(0,0,0,0.8);
+}
 .ucUserDefinedFilterOptions li .ucFilterListVisitorCount
 {
-	width: 30px;
-    float: right;
-
+	padding: 4px 10px;
+    top: 10px;
+    right: 40px;
+    position: absolute;
+    font-weight: normal;
+    background: rgba(0,0,0,0.8);
+}
+.ucCurrentPage .ucFilterListVisitorCount, .ucCurrentPage .ucFilterListVisitorCount
+{
+	background: #2b9af3 !important;
 }
 .ucSidebar ul li i
 {
-	color: #777;
+	color: #fff;
+	opacity: 0.5;
     padding-right: 10px;
     display: inline-block;
     vertical-align: middle;
@@ -290,14 +464,31 @@ h2
 {
 	cursor: pointer;
 }
-.ucCurrentPage, .ucCurrentPage .ico-settings
+#ucDashboardMetricsContainer
+{
+	padding-top: 50px;
+}
+.ucCurrentPage, .ucCurrentPage .ico-settings, .ucCurrentPage, .ucCurrentPage .ucFilterListName, .ucCurrentPage .ucPredefinedFilterName
 {
 	color: #2b9af3 !important;
 	font-weight: bold;
+	opacity:1 !important;
+}
+.ucSideBarMenuTriggerWrapper
+{
+	width:100%;
+	position: fixed;
+    float: left;
+    height: 63px;
+    z-index: 9;
+    padding: 6px 10px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-bottom: solid 1px #f1f1f1;
+    display: none;
 }
 .ucSearchBar 
 {
-	background: #6e6d84;
     border-bottom: 1px solid #e9edee;
     width: 100%;
     min-height: 50px;
@@ -373,7 +564,7 @@ h2
 .ucSendMessageWrapper
 {
 	position:absolute;
-	top: 15px;
+	top: 8px;
 	right: 10px;
 }
 .ucSearchBar #ucDeleteVisitorBtn,
@@ -386,6 +577,7 @@ h2
     transition: 0.5s all ease;
     position: relative;
     top: 2px;
+    margin: 0 5px;
 }
 
 .ucSearchBar #ucDeleteVisitorBtn:hover,
@@ -398,8 +590,8 @@ h2
 {
 	width: 40px;
     height: 40px;
-    float: left;
-    margin-right: 20px;
+    float: right;
+    margin-top: 5px;
     display: none;
     position: relative;
     z-index: 9;
@@ -407,8 +599,12 @@ h2
 }
 .ucSideBarMenuTrigger i
 {
-	color: #fff;
+	color: #333;
 	font-size: 35px;
+}
+.ucSideBarMenuTriggerWrapper .logo
+{
+	display: inline-block;
 }
 .ucSidebarCloseBtn
 {
@@ -564,6 +760,7 @@ h2
 {
     display: inline-block;
     float: right;
+    margin-right: 10px;
 }
 
 #ucPredefinedFilterList li .ucFilterSettingBtn i,
@@ -598,20 +795,13 @@ h2
     top: 7px;
 }
 
-.ucUserProfileMetaContainer
-{
-    border: 1px solid #DDD;
-}
 
 .ucUserProfileHeading
 {
     padding : 0px 30px;
 }
 
-.ucUserProfileMetaContainer .table
-{
-    margin-bottom: 0px;
-}
+
 
 .ucUserBaseDetails
 {
@@ -680,25 +870,206 @@ h2
     transform: scale(0.4);
     margin-right: 5px;
 }
-
+#ucVisitorDetail
+{
+	text-align: center;
+}
+.ucUserDetails
+{
+	padding: 50px 40px 0;
+	box-sizing: border-box;
+}
+.ucVisitorPageWrapper .ucUserPic
+{
+	display: inline-block;
+	margin-bottom: 15px;
+}
+.ucVisitorPageWrapper .ucUserName
+{
+	display: block;
+    font-size: 18px;
+    color: #fff;
+    font-weight: normal;
+    width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+.ucVisitorPageWrapper .ucUserEmail
+{
+	color: #939399;
+	width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+.ucVisitorPageWrapper .ucIconDetailsWrapper
+{
+	float: left;
+    padding-left: 15px;
+    text-align: left;
+}
+.ucUserDetailsSection
+{
+	display: block;
+    float: left;
+    margin-bottom: 30px;
+}
+.ucIconIndication
+{
+	width: 42px;
+	height: 42px;
+	background-color: #121420;
+	border-radius: 10px;
+	float: left;
+	padding: 9px;
+}
+.ucIconTitleName
+{
+	font-size: 13px;
+	font-weight: bold;
+	text-transform: uppercase;
+	color:#fff;
+}
+.ucIconDetails
+{
+	font-size: 13px;
+	color: #939399;
+	width: 132px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ucIconDetails.date
+{
+	background: url('../../images/app/visitordetails/dateIcon.png') no-repeat left center;
+	padding-left: 24px;
+    margin: 5px 0;
+}
+.ucIconDetails.time
+{
+	background: url('../../images/app/visitordetails/timeIcon.png') no-repeat left center;
+	padding-left: 24px;
+}
+.ucVisitorPageWrapper .ucUserProfileIntial
+{
+	border-radius: 50%;
+    height: 100%;
+    padding: 6px 13px;
+    font-size: 35px;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 70px;
+}
+.ucUserFullDetails
+{
+	margin-top: 50px;
+}
+.ucVisitorPageWrapper .ucUserPicWrapper, .ucVisitorPageWrapper .ucUserPicWrapper img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #ccc;
+}
+.ucVisitorPageWrapper .ucMainContent
+{
+	padding: 30px;
+	box-sizing: border-box;
+}
+#ucVisitorDetailsTab li a
+{
+	color: #333;	
+}
+#ucVisitorDetailsTab li
+{
+	margin-right: 40px;
+}
+#ucVisitorDetailsTab li.active a , #ucVisitorDetailsTab li.active a:hover, #ucVisitorDetailsTab li.active a:focus
+{
+	color: #2b9af3;	
+	border: none;
+	border-bottom: 2px solid #2b9af3;
+}
+#ucVisitorDetailsTab li a , #ucVisitorDetailsTab li a:hover, #ucVisitorDetailsTab li a:focus
+{
+	background: none;
+	border: none;
+	outline: none;
+}
+#ucVisitorPageBackBtn
+{
+	position: absolute;
+    top: 15px;
+    right: 45px;
+    background: transparent;
+    border: 1px solid #2b9af3;
+    color: #2b9af3;
+}
+#ucVisitorPageBackBtn:focus
+{
+	box-shadow: none;
+}
+#ucVisitorMessages .ucTableHead
+{
+	text-align: left;
+	padding: 14px 18px;
+}
+#ucVisitorMessages .ucSmallWidth
+{
+	width: 15%;
+}
+#ucVisitorMessages .ucMediumWidth
+{
+	width: 25%;
+}
+#ucVisitorMessages .ucLargeWidth
+{
+	width: 45%;
+}
+#ucVisitorShortData .ucSideBarMenuTrigger
+{
+	width: auto;
+	height: auto;
+}
+#ucVisitorShortData .ucUserPicWrapper
+{
+	    margin: 0 12px 0 0;
+}
+#ucVisitorShortData button
+{
+	background: #2B9AEF;
+	border: none;
+    font-size: 13px;
+    margin-top: 5px;
+}
 
 @media only screen and (max-width:992px) 
 {
 	.ucSidebar{width:0; position: fixed; padding:0;top:0; left:0; height: 100%; display:none; overflow: auto; }
+	.ucUserDetails{width:0; position: fixed; top:0; left:0; height: 100%; display:none; overflow: auto;}
+	.ucVisitorPageWrapper .ucMainContent {margin-top: 70px;}
 	.ucMainContent{width: 100%; }
 	.ucSearchWrapper .form-group {margin-bottom: 0;}
 	.navbar-collapse {box-shadow: none; border-color:#3e3c5a; margin-top: 10px;}
+	.ucSidebarSettingsSection .navbar-collapse {box-shadow: none; border-color:#3e3c5a; margin-top: 0; }
 	#ucHeader.navbar-default .navbar-toggle { background: #3e3c5a; border-color: transparent;}
 	#ucHeader.navbar-default .navbar-toggle .icon-bar{background-color: #dfdef5;}
 	.ucSideBarMenuTrigger { display: block; }
-	.ucSidebar.open{width:270px; padding:15px;position: fixed; top:0; left:0; height: 100% !important;display:block; z-index: 999;}
+	.ucSidebar.open, .ucUserDetails.open{width:270px; position: fixed; top:0; left:0; height: 100% !important;display:block; z-index: 999;}
 	.ucMainContent.open{margin-left: 270px;}
 	.ucIndexPageWrapper.open{overflow:hidden;}
-	#ucHeader.open{margin-left: 270px;}
-	.ucSidebarCloseBtn{display: block;}
+	#ucHeader.open{}
+	.ucSidebarCloseBtn{display: block; color: #fff;}
+	.ucSideBarMenuTriggerWrapper {display: block;}
+	#uc_tab_data_dashboard  { padding-top: 80px;}
+	#uc_tab_data_listuser {padding-top: 60px;}
 	.ucMainContent.open:after {    content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index:99; }
 	.ucSearchWrapper , #ucVisitorSearchBtn, .ucSearchForm{/* width:60%; */ display:none;}
 	#ucSendMessageModal .modal-dialog { width:auto; }
+	.uc_tile {margin-bottom: 70px;}
+	#ucVisitorPageBackBtn {top:80px;}
 }
 @media only screen and (max-width:580px) 
 {
@@ -707,6 +1078,7 @@ h2
 	.ucNoteSection ul li:after { content:','; padding: 0 3px;}
 	.ucNoteSection ul li:last-child:after { content:''; }
 	.ucSendMessageSection{ width:100%;}
+	#ucVisitorDetailsTab li {margin-right: 10px;}
 }
 @media only screen and (max-width:480px) 
 {
@@ -716,7 +1088,7 @@ h2
 	
 }
 
-
+.ucSidebarSettingsSection
 .ucCurrentFilter
 {
     color: #000 !important;
@@ -757,6 +1129,8 @@ h2
 #ucVisitorMessages .ucTableCell
 {
     word-break: break-word;
+    padding: 14px 18px;
+    font-size: 13px;
 }
 
 #uceditbrowsernotification_helptoggle

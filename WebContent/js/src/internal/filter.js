@@ -147,6 +147,7 @@ function UC_FilterController()
                     $(".ucSwitchContentTrigger").removeClass("ucCurrentPage");
                     $("#ucPredefinedFilterList li[data-filterid="+uc_main.visitorListController.currentFilterId+"],#ucUserdefinedFilterList li[data-filterid="+uc_main.visitorListController.currentFilterId+"]").addClass("ucCurrentPage");
                 }
+                uc_main.interfaceResize();
             } 
         });
     };

@@ -1,4 +1,24 @@
            <div class="ucSidebarCloseBtn"><i class="ico-close"></i></div>
+           <div id="ucHeader">
+               <a class="logo" href="/"><img src="/images/app/header/usercom_logo.png" /></a>
+           </div>
+           
+           <div  id="ucAppMenu">
+	            <ul class="nav navbar-nav navbar-right">
+	                <li>
+	                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><div id="uc_currentapp_name" rv-text="currentAppName">Select an App</div> <span class="caret"></span></a>
+	                    <ul class="uc_app_submenu dropdown-menu" id="uc_app_list">
+	                        <li rv-each-app="list.appList" rv-data-appid="app._id">
+	                            <a href="javascript:void(0);" class="uc_app_selector">{app.name}<span class="pull-right ucapp_editbtncls" rv-data-appid="app._id" rv-data-appname="app.name"><i class="fa fa-cog"></i></span></a>
+	                        </li>
+	                        <li class="ucAddNewAppBtn"><a href="javascript:void(0);" id="uc_create_newapp_modalopen_btn">Add New App</a></li>
+	                    </ul>
+	                </li>
+	            </ul>
+            </div>
+            
+           <div class="ucSidebarWrapper">
+           
            <h5 id="ucMainDashboard" class="ucSwitchContentTrigger" switch-to="uc_tab_data_dashboard"><i class="ico-pie_chart"></i>Dashboard</h5>
 <!--
            <ul class="ucMainMenu">
@@ -7,7 +27,7 @@
 -->
            <h5 id="ucMainListing">Listing</h5>
            <ul id="ucPredefinedFilterList" class="ucListingOptions">
-               <li rv-each-filter="list" rv-data-filterid="filter._id" class="ucSwitchContentTrigger" switch-to="uc_tab_data_listuser"><span>{filter.name}</span><span class="ucFilterListVisitorCount"></span></li>
+               <li rv-each-filter="list" rv-data-filterid="filter._id" class="ucSwitchContentTrigger" switch-to="uc_tab_data_listuser"><span class="ucPredefinedFilterName">{filter.name}</span><span class="badge ucFilterListVisitorCount"></span></li>
            </ul>
             <div id="ucPredefinedFilterAjaxLoader" class='ucAjaxLoader' style="display: none;">
                 <img alt="Loading..." src="/images/app/ajax-loader.gif"   />
@@ -27,9 +47,29 @@
                             <li><a href="#" class="ucFilterListDeleteBtn">Delete</a></li>
                         </ul>
                     </div>
-                   <span class="ucFilterListVisitorCount"></span>
+                   <span class="badge ucFilterListVisitorCount"></span>
                </li>
            </ul>
             <div id="ucUserdefinedFilterAjaxLoader" class='ucAjaxLoader' style="display: none;">
                 <img alt="Loading..." src="/images/app/ajax-loader.gif"   />
+            </div>
+            </div>
+            <div class="ucSidebarSettingsSection">
+                <div id="ucSettingsMenu">
+	            <ul class="nav navbar-nav">
+	                <li class="dropup">
+	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i><span id="uc_currentuser_name" rv-text="currentUserName">My Account</span> </a>
+	                    <ul class="uc_currentuser_submenu dropdown-menu">
+	                        <li><a class="ucEditProfile" href="#">Edit Profile</a></li>
+	                        <li><a class="ucChangePassword" href="#">Change Password</a></li>
+	                        <li><a class="ucEditMail" href="#">Edit Email Settings</a></li>
+	                        <li><a class="ucEditBrowserNotification" href="#">Edit Browser Notification Settings</a></li>
+	                        <li><a class="ucEditDatabase" href="#">Edit Database Settings</a></li>
+	                        <li><a class="ucEditSystem" href="#">Edit System Settings</a></li>
+	                        
+	                    </ul>
+	                </li>
+	                <li class="ucLogoutBtn"><a href="/logout"></a></li>
+	            </ul>
+            </div>
             </div>

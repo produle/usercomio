@@ -42,7 +42,7 @@ function UC_MainController()
         $("#ucPageLoader").show();
         $("#ucMainDashboard").addClass("ucCurrentPage");
         
-        $(".ucSideBarMenuTrigger").on("click",thisClass.menuContainer);
+        $(".ucSideBarMenuTrigger, .ucUserDetails").on("click",thisClass.menuContainer);
         $(".ucSidebarCloseBtn").on("click",thisClass.closeMenuContainer);
 
 
@@ -113,18 +113,19 @@ function UC_MainController()
     {
     		e.stopPropagation();
     	
-    	    if($('.ucSidebar,.ucMainContent,.ucIndexPageWrapper, body,  #ucHeader').hasClass('open'))
+    	    if($('.ucSidebar,.ucMainContent,.ucIndexPageWrapper, body,  #ucHeader,.ucUserDetails').hasClass('open'))
     	    {
-    	    	$( ".ucSidebar,.ucMainContent,.ucIndexPageWrapper, body , #ucHeader" ).removeClass( "open" );
+    	    	$( ".ucSidebar,.ucMainContent,.ucIndexPageWrapper, body , #ucHeader, .ucUserDetails" ).removeClass( "open" );
     	    	$("html, body").css({"overflow": "auto"}); 
     	    	
     	    	
     	    } else {
-    	    	$( ".ucSidebar,.ucMainContent, .ucIndexPageWrapper, body , #ucHeader" ).addClass( "open" );
+    	    	$( ".ucSidebar,.ucMainContent, .ucIndexPageWrapper, body , #ucHeader,.ucUserDetails" ).addClass( "open" );
     	    	$("html, body").css({"overflow": "hidden"}); 
     	    	
     	    }
-    
+    	    $( ".ucSideBarMenuTriggerWrapper .logo" ).hide();
+    	    thisClass.interfaceResize(e);
     };
     /**
      * @desc Closing the sidebar
@@ -133,10 +134,10 @@ function UC_MainController()
     this.closeMenuContainer = function(e)
     {
     		e.stopPropagation();
-    		$( ".ucSidebar,.ucMainContent,.ucIndexPageWrapper, body , #ucHeader" ).removeClass( "open" );
+    		$( ".ucSidebar,.ucMainContent,.ucIndexPageWrapper, body , #ucHeader, .ucUserDetails" ).removeClass( "open" );
     		$("html, body").css({"overflow": "auto"}); 
-    		
-    		
+    		$( ".ucSideBarMenuTriggerWrapper .logo" ).show();
+    		thisClass.interfaceResize(e);
     };
     /**
      * @desc Resize Div layouts by calculating current window size so we have a fixed window size application like a desktop app
@@ -145,7 +146,8 @@ function UC_MainController()
 	{
     	if($('.ucSidebar').length==1)
     		{
-    		$('.ucSidebar').height($(window).height()-$('.ucSidebar').offset().top-30);
+    		$('.ucSidebar').height($(window).height());
+    		$('.ucTableWrapper').width($(window).width()-sidebarWidth);
     		}
     	
     	 var sidebarWidth = 0;
@@ -154,8 +156,20 @@ function UC_MainController()
     		 sidebarWidth = $('.ucSidebar').width() + 40;
     		 
     	}
-    	 
+    	 $('.ucUserDetails').height($(window).height());
     	 $('.ucTableWrapper').height($(window).height()-195); 
-    	 $('.ucTableWrapper').width($(window).width()-sidebarWidth-20);
+    	 
+    	 
+    	 $('#ucUserdefinedFilterList').height($(window).height() - ($('#ucUserdefinedFilterList').offset().top + 60)); 
+    	 
+    	 if($('#ucUserdefinedFilterList').get(0).scrollHeight > $('#ucUserdefinedFilterList').height())
+    		 {
+    		  $('#ucUserdefinedFilterList li .ucFilterSettingBtn'). css ('margin-right','5px');
+    		  $('#ucUserdefinedFilterList li .badge'). css ('right','35px');
+    		 }
+    	 else{
+    		 $('#ucUserdefinedFilterList li .ucFilterSettingBtn'). css ('margin-right','10px');
+    		 $('#ucUserdefinedFilterList li .badge'). css ('right','40px');
+    	 	}
 	};
 }
