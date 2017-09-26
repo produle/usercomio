@@ -70,6 +70,11 @@ class VisitorListManager {
 
             function(err,filter)
             {
+                if(err)
+                {console.log("Filter Data Error:");
+                    console.log(err);
+                }
+
                 var filterQuery = JSON.parse(filter.mongoFilter);
 
                 if(filterId == "2")
@@ -136,7 +141,7 @@ class VisitorListManager {
         var visitorCollection = global.db.collection('visitors').aggregate(aggregateWithLimit).toArray(function(err,visitors)
             {
                 if(err)
-                {
+                {console.log("Visitor Collection Error:");console.log(err);
                     callback('failure');
                 }
                 else
@@ -146,7 +151,7 @@ class VisitorListManager {
                     var visitorRecordCollection = global.db.collection('visitors').aggregate(aggregateWithCount).toArray(function(err,totalcount)
                         {
                             if(err)
-                            {
+                            {console.log("Visitor Record Collection Error:");console.log(err);
                                 callback('failure');
                             }
                             else
