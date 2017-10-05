@@ -52,6 +52,21 @@ function UC_VisitorListController()
     this.displayFields = [];
 
     this.visitorListInProcess = false;
+    
+    this.defaultFieldList = [
+                             {value:"browser",label:"Browser"},
+                             {value:"os",label:"Operating System"},
+                             {value:"device",label:"Device"},
+                             {value:"country",label:"Country"},
+                             {value:"lastseen",label:"Last Seen"},
+                             {value:"firstseen",label:"First Seen"},
+                             {value:"email",label:"Email"},
+                             {value:"created_at",label:"Created at"},
+                             {value:"paid",label:"Paid"},
+                             {value:"birthdate",label:"Birthdate"},
+                             {value:"gender",label:"Gender"},
+                             {value:"profilepicture",label:"Profilepicture"}, 
+                         ];
 
     this.constructor = function()
 	{
@@ -93,12 +108,31 @@ function UC_VisitorListController()
             $("#ucVisitorFieldsPopover").on('shown.bs.popover', function () {
                 for(var i = 0; i < thisClass.displayFields.length; i++)
                 {
-                    $(".ucVisitorFieldList").find('[data-fieldid="'+thisClass.displayFields[i]+'"]').prop("checked",true);
+                    $(".ucVisitorFieldList").find('[data-fieldid="'+thisClass.displayFields[i]+'"]').prop("checked",true);  
+                   
                 };
+                
+                var fieldList = uc_main.visitorListController.rivetVisitorColumnListObj.models.fieldList;
+                
+                for(var i = 0; i < fieldList.length; i++)
+                {
+    	            var fieldIndex = UC_Utils.searchObjArray(thisClass.defaultFieldList,'value',fieldList[i].value);
+    				
+    	            if(fieldIndex != -1)
+    	            {
+    	            	 $(".ucVisitorFieldList").find('[data-fieldid="'+fieldList[i].value+'"]').find('.ucDeleteFieldBtn').remove();
+    	            }
+    	            else
+    	            {
+    	            	$(".ucVisitorFieldList").find('[data-fieldid="'+fieldList[i].value+'"]').find('.ucDeleteFieldBtn').show();
+    	             }
+                }
 
-            })
-
+            }) 
+            
             $(document).on("click","#ucVisitorFieldsPopoverSubmit",thisClass.saveFieldsListHandler);
+            
+            $(document).on("click",".ucDeleteFieldBtn",thisClass.deleteFieldsListHandler);
 
             $(document).on("click","#ucVisitorSearchBtn",thisClass.searchHandler);
             
@@ -829,6 +863,45 @@ function UC_VisitorListController()
 
         thisClass.toggleVisitorListFields(); 
     };
+    
+    /*
+     * @desc Deletes the field list for the visitors
+     */
+    this.deleteFieldsListHandler = function()
+    {
+    	  
+    	 if(confirm("Are you sure that you want to delete the field '"+ $(this).attr('data-fieldtext') +"' ?"))
+         {   
+             var data = thisClass.getSelectedVisitors(); 
+             
+             $('#ucVisitorFieldsPopover').click();
+            
+	         $("#ucPageLoader").show();
+	         
+	         var currentField = $(this).parent().attr('data-fieldid');
+	         
+	         UC_AJAX.call('VisitorListManager/deletefield',{ appid:uc_main.appController.currentAppId, fieldname: currentField},function(data,status,xhr)
+	         {
+	                      if(data)
+	                      {
+	                          if(data.status == "failure")
+	                          {
+	                              alert("An Error accured while deleting");
+	                          }
+	                          else if(data.status == "authenticationfailed")
+	                          {
+	                              location.href="/";
+	                          }
+	                          else
+	                          {  
+	                        	  alert("The field has been removed succesfully");
+	                        	  thisClass.getFieldsList();
+	                          }
+	                      }
+
+	            });  
+         } 
+    }
 
     /*
      * @desc List the corresponding fields in visitorlist as per selection
@@ -1034,9 +1107,7 @@ function UC_VisitorListController()
 	                          }
 	                      }
 
-	                 });
-	         
-	         
+	                 }); 
          } 
     }; 
 }

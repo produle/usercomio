@@ -24,6 +24,7 @@ class VisitorListManager {
         this.router.post("/getvisitorsessions",(req, res) => { this.getVisitorSessions(req,res); });
         this.router.post("/getfieldslist",(req, res) => { this.getFieldsList(req,res); });
         this.router.post("/deletevisitors",(req, res) => { this.getDeleteVisitorsData(req,res); });
+        this.router.post("/deletefield",(req, res) => { this.deleteField(req,res); });
     }
 
   	/*
@@ -459,6 +460,55 @@ class VisitorListManager {
   		
   	}
   	
+  	
+  	/*
+  	 * @desc Deletes the selected field
+  	 */
+  	
+  	deleteField(req,res)
+  	{
+  		if(!req.isAuthenticated())
+        {
+            return res.send({status:'authenticationfailed'});
+        }
+   		
+	  	  var appId = req.body.appid; 
+	      var fieldname = req.body.fieldname;  
+	      
+	  	  // Delete field name from customFieldList array in apps table
+	  		
+	  	  global.db.collection('apps').update(
+	      		{ _id: appId},
+	      		{ $pull: { customFieldList : { $in: [fieldname] } } },  
+	      		{ multi: true },
+	      		function(err,response)
+	      		{ 
+	      			if(err)
+	      			{
+	      				return res.send({ status:'failure' });
+	      			}
+	      			 
+	      			else
+	      			{   
+	      				// Delete field name from customFieldList array in apps table
+	      				var fieldName = JSON.parse('{"visitorData.'+fieldname+'": ""}');
+	    
+	      				global.db.collection('visitors').update(
+	      						{ appId: appId},  
+	      						{$unset: fieldName}, 
+	      						{ multi: true }, 
+	      						function(err,response)
+	      						{
+	      							if(err)
+	      							{
+	      								return res.send({ status:'failure' });
+	      							}
+	      							return res.send({ status:'success'});
+	      						}); 
+	      			} 
+	                     
+	             }); 
+  	} 
   	
 }
 
