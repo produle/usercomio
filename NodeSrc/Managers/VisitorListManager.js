@@ -127,6 +127,23 @@ class VisitorListManager {
                     filterQuery
                   ]
                 }
+            },
+            {
+                $project:
+                {
+                    visitorData: 1,
+                    visitorMetaInfo: 1,
+                    sessions:
+                    {
+                      $filter:
+                      {
+                        input: "$sessions",
+                        as: "session",
+                        cond: { $eq: [ "$$session.agentInfo.sessionStart", { $max: "$sessions.agentInfo.sessionStart" } ] }
+                      }
+                    },
+                    sessionCount: { $size: "$sessions" }
+                }
             }
         ]; 
          
