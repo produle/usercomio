@@ -161,8 +161,8 @@ function UC_VisitorListController()
 
         rivets.binders.latestbrowser = function (el, value) {
 
-            var browserName = value[0].agentInfo.browser;
-            var browserVersion = value[0].agentInfo.version;
+            var browserName = value.agentInfo.browser;
+            var browserVersion = value.agentInfo.version;
             var broswerVersionArr = browserVersion.split(".");
             if(broswerVersionArr.length > 2)
             {
@@ -171,27 +171,27 @@ function UC_VisitorListController()
 
             var browserIcon = "chrome"; //TODO Change default icon
 
-            if(value[0].agentInfo.rawAgentData.isChrome)
+            if(value.agentInfo.rawAgentData.isChrome)
             {
                 browserIcon = "chrome";
             }
 
-            if(value[0].agentInfo.rawAgentData.isSafari)
+            if(value.agentInfo.rawAgentData.isSafari)
             {
                 browserIcon = "safari";
             }
 
-            if(value[0].agentInfo.rawAgentData.isFirefox)
+            if(value.agentInfo.rawAgentData.isFirefox)
             {
                 browserIcon = "firefox";
             }
 
-            if(value[0].agentInfo.rawAgentData.isEdge)
+            if(value.agentInfo.rawAgentData.isEdge)
             {
                 browserIcon = "edge";
             }
 
-            if(value[0].agentInfo.rawAgentData.isIE)
+            if(value.agentInfo.rawAgentData.isIE)
             {
                 browserIcon = "ie";
             }
@@ -203,25 +203,25 @@ function UC_VisitorListController()
 
         rivets.binders.latestplatform = function (el, value) {
 
-            var platformName = value[0].agentInfo.os;
+            var platformName = value.agentInfo.os;
             var platformIcon = "windows"; //TODO Change default icon
 
-            if(value[0].agentInfo.rawAgentData.isWindows)
+            if(value.agentInfo.rawAgentData.isWindows)
             {
                 platformIcon = "windows";
             }
 
-            if(value[0].agentInfo.rawAgentData.isMac || value[0].agentInfo.rawAgentData.isiPad || value[0].agentInfo.rawAgentData.isiPod || value[0].agentInfo.rawAgentData.isiPhone)
+            if(value.agentInfo.rawAgentData.isMac || value.agentInfo.rawAgentData.isiPad || value.agentInfo.rawAgentData.isiPod || value.agentInfo.rawAgentData.isiPhone)
             {
                 platformIcon = "ios";
             }
 
-            if(value[0].agentInfo.rawAgentData.isLinux || value[0].agentInfo.rawAgentData.isLinux64)
+            if(value.agentInfo.rawAgentData.isLinux || value.agentInfo.rawAgentData.isLinux64)
             {
                 platformIcon = "linux";
             }
 
-            if(value[0].agentInfo.rawAgentData.isAndroid)
+            if(value.agentInfo.rawAgentData.isAndroid)
             {
                 platformIcon = "android";
             }
@@ -284,8 +284,8 @@ function UC_VisitorListController()
 
         rivets.binders.country = function (el, value) {
             
-        	if(value[0].geoLocationInfo.country !="") {
-        		$(el).html( "<span data-toggle='tooltip' data-placement='left'  class='mfTooltip flag "+ value[0].geoLocationInfo.country.toLowerCase()+"' data-original-title='"+value[0].geoLocationInfo.countryName+"'></span>" ); 
+        	if(value.geoLocationInfo.country !="") {
+        		$(el).html( "<span data-toggle='tooltip' data-placement='left'  class='mfTooltip flag "+ value.geoLocationInfo.country.toLowerCase()+"' data-original-title='"+value.geoLocationInfo.countryName+"'></span>" );
         	}
         	else {
         		$(el).html('');
