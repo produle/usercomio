@@ -112,7 +112,7 @@ class VisitorListManager {
                   from: "sessions",
                   localField: "_id",
                   foreignField: "visitorId",
-                  as: "sessions"
+                  as: "sessionData"
                 }
             },
             { $sort :
@@ -129,20 +129,29 @@ class VisitorListManager {
                 }
             },
             {
+                "$addFields": {
+                    "sessions": {
+                        "$arrayElemAt": [
+                            {
+                                "$filter": {
+                                    "input": "$sessionData",
+                                    "as": "session",
+                                    "cond": {
+                                        $eq: [ "$$session.agentInfo.sessionStart", { $max: "$sessionData.agentInfo.sessionStart" } ]
+                                    }
+                                }
+                            }, 0
+                        ]
+                    }
+                }
+            },
+            {
                 $project:
                 {
                     visitorData: 1,
                     visitorMetaInfo: 1,
-                    sessions:
-                    {
-                      $filter:
-                      {
-                        input: "$sessions",
-                        as: "session",
-                        cond: { $eq: [ "$$session.agentInfo.sessionStart", { $max: "$sessions.agentInfo.sessionStart" } ] }
-                      }
-                    },
-                    sessionCount: { $size: "$sessions" }
+                    sessions: 1,
+                    sessionCount: { $size: "$sessionData" }
                 }
             }
         ]; 
