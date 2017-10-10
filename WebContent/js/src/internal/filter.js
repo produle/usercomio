@@ -186,7 +186,7 @@ function UC_FilterController()
             type: 'string'
           },{
             id: 'sessions.agentInfo.os',
-            label: 'Operatig System',
+            label: 'Operating System',
             type: 'string'
           },{
             id: 'sessions.agentInfo.device',

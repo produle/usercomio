@@ -53,6 +53,14 @@ class VisitorListManager {
         }
         else
         {
+
+            //Temporary fix
+            var filterQueryString = JSON.stringify(mongoFilterQuery);
+            filterQueryString = filterQueryString.replace(/visitorData/g, 'visitorDetails.visitorData');
+            filterQueryString = filterQueryString.replace(/visitorMetaInfo/g, 'visitorDetails.visitorMetaInfo');
+            filterQueryString = filterQueryString.replace(/sessions./g, '');
+            mongoFilterQuery = JSON.parse(filterQueryString);
+
             this.getAllVisitorsFromDB(appId,mongoFilterQuery,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response,totalcount){
                 return res.send({status:response,totalcount:totalcount});
             });
@@ -76,18 +84,24 @@ class VisitorListManager {
                     console.log(err);
                 }
 
-                var filterQuery = JSON.parse(filter.mongoFilter);
+                //Temporary fix
+                var filterQueryString = filter.mongoFilter;
+                filterQueryString = filterQueryString.replace(/visitorData/g, 'visitorDetails.visitorData');
+                filterQueryString = filterQueryString.replace(/visitorMetaInfo/g, 'visitorDetails.visitorMetaInfo');
+                filterQueryString = filterQueryString.replace(/sessions./g, '');
+
+                var filterQuery = JSON.parse(filterQueryString);
 
                 if(filterId == "2")
                 {
                     var date30DaysAgo = new Date(moment( moment().subtract(30, 'days') ).format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
-                    filterQuery = {"visitorMetaInfo.firstSeen" : {"$gte":date30DaysAgo }};
+                    filterQuery = {"visitorDetails.visitorMetaInfo.firstSeen" : {"$gte":date30DaysAgo }};
                 }
 
                 if(filterId == "3")
                 {
                     var date30DaysAgo = new Date(moment( moment().subtract(30, 'days') ).format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
-                    filterQuery = {"visitorMetaInfo.lastSeen" : {"$lte":date30DaysAgo }};
+                    filterQuery = {"visitorDetails.visitorMetaInfo.lastSeen" : {"$lte":date30DaysAgo }};
                 }
 
                 var VisitorListManagerObj = new VisitorListManager();
@@ -106,13 +120,24 @@ class VisitorListManager {
         var sortQuery = JSON.parse('{"'+sortColumn+'":'+sortOrder+'}');
 
         var aggregateArray = [
+            {"$sort": { visitorId: 1, "agentInfo.sessionStart": -1 }},
+            {"$group": {
+                "_id": "$visitorId",
+                "count": {"$sum": 1},
+                "agentInfo": { $first: "$agentInfo" },
+                "geoLocationInfo": { $first: "$geoLocationInfo" },
+                "ipAddress": { $first: "$ipAddress" },
+                "appId": { $first: "$appId" },
+                "clientId": { $first: "$clientId" },
+                "sessionId": { $first: "$_id" },
+            }},
             {
               $lookup:
                 {
-                  from: "sessions",
+                  from: "visitors",
                   localField: "_id",
-                  foreignField: "visitorId",
-                  as: "sessionData"
+                  foreignField: "_id",
+                  as: "visitorDetails"
                 }
             },
             { $sort :
@@ -129,29 +154,23 @@ class VisitorListManager {
                 }
             },
             {
-                "$addFields": {
-                    "sessions": {
-                        "$arrayElemAt": [
-                            {
-                                "$filter": {
-                                    "input": "$sessionData",
-                                    "as": "session",
-                                    "cond": {
-                                        $eq: [ "$$session.agentInfo.sessionStart", { $max: "$sessionData.agentInfo.sessionStart" } ]
-                                    }
-                                }
-                            }, 0
-                        ]
-                    }
-                }
-            },
-            {
                 $project:
                 {
-                    visitorData: 1,
-                    visitorMetaInfo: 1,
-                    sessions: 1,
-                    sessionCount: { $size: "$sessionData" }
+                    visitorData: { $arrayElemAt: [ "$visitorDetails.visitorData" , 0 ] },
+                    visitorMetaInfo: { $arrayElemAt: [ "$visitorDetails.visitorMetaInfo" , 0 ] },
+                    appId: { $arrayElemAt: [ "$visitorDetails.appId" , 0 ] },
+                    clientId: { $arrayElemAt: [ "$visitorDetails.clientId" , 0 ] },
+                    sessions:
+                    {
+                        _id: "$sessionId",
+                        agentInfo: "$agentInfo",
+                        geoLocationInfo: "$geoLocationInfo",
+                        visitorId: "$_id",
+                        ipAddress: "$ipAddress",
+                        appId: "$appId",
+                        clientId: "$clientId"
+                    },
+                    sessionCount: "$count"
                 }
             }
         ]; 
@@ -165,17 +184,17 @@ class VisitorListManager {
             aggregateWithLimit.push({ $limit : pageLimit });
         }
 
-        var visitorCollection = global.db.collection('visitors').aggregate(aggregateWithLimit).toArray(function(err,visitors)
+        var sessionCollection = global.db.collection('sessions').aggregate(aggregateWithLimit).toArray(function(err,sessions)
             {
                 if(err)
-                {console.log("Visitor Collection Error:");console.log(err);
+                {console.log("Session Collection Error:");console.log(err);
                     callback('failure');
                 }
                 else
                 {
                     aggregateWithCount.push({$count: "count"});
 
-                    var visitorRecordCollection = global.db.collection('visitors').aggregate(aggregateWithCount).toArray(function(err,totalcount)
+                    var sessionRecordCollection = global.db.collection('sessions').aggregate(aggregateWithCount).toArray(function(err,totalcount)
                         {
                             if(err)
                             {console.log("Visitor Record Collection Error:");console.log(err);
@@ -183,7 +202,7 @@ class VisitorListManager {
                             }
                             else
                             {
-                                callback(visitors,totalcount);
+                                callback(sessions,totalcount);
                             }
                         }
                     );
