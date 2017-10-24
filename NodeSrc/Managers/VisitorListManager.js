@@ -61,6 +61,10 @@ class VisitorListManager {
             filterQueryString = filterQueryString.replace(/sessions./g, '');
             mongoFilterQuery = JSON.parse(filterQueryString);
 
+            sortColumn = sortColumn.replace(/visitorData/g, 'visitorDetails.visitorData');
+            sortColumn = sortColumn.replace(/visitorMetaInfo/g, 'visitorDetails.visitorMetaInfo');
+            sortColumn = sortColumn.replace(/sessions./g, '');
+
             this.getAllVisitorsFromDB(appId,mongoFilterQuery,sortColumn,sortOrder,skipIndex,pageLimit,[],function(response,totalcount){
                 return res.send({status:response,totalcount:totalcount});
             });
@@ -91,6 +95,10 @@ class VisitorListManager {
                 filterQueryString = filterQueryString.replace(/sessions./g, '');
 
                 var filterQuery = JSON.parse(filterQueryString);
+
+                sortColumn = sortColumn.replace(/visitorData/g, 'visitorDetails.visitorData');
+                sortColumn = sortColumn.replace(/visitorMetaInfo/g, 'visitorDetails.visitorMetaInfo');
+                sortColumn = sortColumn.replace(/sessions./g, '');
 
                 if(filterId == "2")
                 {
