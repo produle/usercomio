@@ -4,13 +4,16 @@
  * @desc Styles included across the application
  *
  */
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 
 body
 {
 	width:100%;
 	height:100%;
 	font-family: 'Open Sans', sans-serif;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .ucapp_editbtncls,.ucapp_deletebtncls
@@ -137,7 +140,7 @@ input[type="text"], input[type="email"], input[type="password"]
 	border-bottom: 1px solid #e8eced;
     box-shadow: none;
     border-radius: 0;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 13px;
     text-align: left;
     margin-bottom: 5px;
@@ -148,7 +151,7 @@ textarea.form-control
 	border-bottom: 1px solid #e8eced;
     box-shadow: none;
     border-radius: 0;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 13px;
     text-align: left;
     margin-bottom: 5px;
@@ -513,7 +516,7 @@ h2
     border-color: #dddedf; */
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 12px;
     padding: 0px;
     -webkit-appearance: none;
@@ -530,7 +533,7 @@ h2
 {
     box-shadow: none;
     border-radius: 0;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 13px;
     height: 35px;
     border: 0;
@@ -723,7 +726,7 @@ h2
 .ucNoteSection ul li
 {
 	
-	font-weight: 300;
+	font-weight: 400;
 	color: #777;
 	padding: 3px 0;
 }
